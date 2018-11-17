@@ -4,8 +4,8 @@ package(
     default_visibility = ["//visibility:public"],
 )
 
-load("@rules_protobuf//cpp:rules.bzl", "cc_proto_library")
-load("@rules_protobuf//python:rules.bzl", "py_proto_library")
+load("@org_pubref_rules_protobuf//cpp:rules.bzl", "cc_proto_library")
+load("@org_pubref_rules_protobuf//python:rules.bzl", "py_proto_library")
 
 filegroup(
     name = "srcs",

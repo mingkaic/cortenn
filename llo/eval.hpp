@@ -22,7 +22,7 @@ struct Evaluator final : public ade::iTraveler
 	/// Implementation of iTraveler
 	void visit (ade::Tensor* leaf) override
 	{
-		const char* data = leaf->data();
+		const char* data = (const char*) leaf->data();
 		age::_GENERATED_DTYPE dtype = (age::_GENERATED_DTYPE) leaf->type_code();
 		const ade::Shape& shape = leaf->shape();
 		out_ = GenericData(shape, dtype_);

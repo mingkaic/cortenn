@@ -22,7 +22,7 @@ cc_binary(
     copts = ["-std=c++14"],
     deps = [
         "//rocnnet/modl:modl",
-        "//dbg:dbg",
+        "@com_github_mingkaic_tenncor//dbg:dbg",
         "//pbm:pbm",
     ],
 )
@@ -33,7 +33,7 @@ cc_binary(
     copts = ["-std=c++14"],
     deps = [
         "//rocnnet/modl:modl",
-        "//dbg:dbg",
+        "@com_github_mingkaic_tenncor//dbg:dbg",
         "//pbm:pbm",
     ],
 )

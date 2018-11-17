@@ -13,7 +13,7 @@ void save_data (tenncor::Source* out, ade::Tensor* in)
 {
 	const ade::Shape& shape = in->shape();
 	out->set_shape(std::string(shape.begin(), shape.end()));
-	char* data = in->data();
+	char* data = (char*) in->data();
 	age::_GENERATED_DTYPE dtype = (age::_GENERATED_DTYPE) in->type_code();
 	size_t nelems = shape.n_elems();
 	switch (dtype)

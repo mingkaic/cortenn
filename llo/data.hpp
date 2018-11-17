@@ -64,7 +64,7 @@ struct Variable final : public ade::Tensor
 	Variable (const Variable& other) :
 		label_(other.label_), data_(other.shape(), (age::_GENERATED_DTYPE) other.type_code())
 	{
-		std::memcpy(data_.data_.get(), other.data(), nbytes());
+		std::memcpy((char*) data_.data_.get(), (const char*) other.data(), nbytes());
 	}
 
 	Variable (Variable&& other) :
@@ -76,7 +76,7 @@ struct Variable final : public ade::Tensor
 		{
 			label_ = other.label_;
 			data_ = GenericData(other.shape(), (age::_GENERATED_DTYPE) other.type_code());
-			std::memcpy(data_.data_.get(), other.data(), nbytes());
+			std::memcpy((char*) data_.data_.get(), (const char*) other.data(), nbytes());
 		}
 		return *this;
 	}
@@ -128,12 +128,12 @@ struct Variable final : public ade::Tensor
 		return label_ + "(" + data_.shape_.to_string() + ")";
 	}
 
-	char* data (void) override
+	void* data (void) override
 	{
 		return data_.data_.get();
 	}
 
-	const char* data (void) const override
+	const void* data (void) const override
 	{
 		return data_.data_.get();
 	}

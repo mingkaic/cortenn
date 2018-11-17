@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+option go_package = "github.com/mingkaic/tenncor/pbm";
+
+package tenncor;
+
+message ByteArr { bytes data = 1; }
+message DoubleArr { repeated double data = 1; }
+message FloatArr { repeated float data = 1; }
+message Int32Arr { repeated int32 data = 1; }
+message Int64Arr { repeated int64 data = 1; }
+message Uint32Arr { repeated uint32 data = 1; }
+message Uint64Arr { repeated uint64 data = 1; }
+
+message Source
+{
+    string label = 1;
+	bytes shape = 2;
+    oneof data {
+        ByteArr sbyte_arrs = 3;
+        ByteArr ubyte_arrs = 4;
+        DoubleArr double_arrs = 5;
+        FloatArr float_arrs = 6;
+        Int32Arr sshort_arrs = 7;
+        Int32Arr sint_arrs = 8;
+        Int64Arr slong_arrs = 9;
+        Uint32Arr ushort_arrs = 10;
+        Uint32Arr uint_arrs = 11;
+        Uint64Arr ulong_arrs = 12;
+    }
+}
+
+message NodeArg
+{
+    uint32 idx = 1;
+    repeated double coord = 2 [packed = true];
+}
+
+message Functor
+{
+    string opname = 1;
+    // indices of args in graph
+    repeated NodeArg args = 2;
+}
+
+message Node
+{
+    oneof detail {
+        Source source = 1;
+        Functor functor = 2;
+    }
+}
+
+message Graph
+{
+	string id = 1;
+	repeated Node nodes = 2;
+}

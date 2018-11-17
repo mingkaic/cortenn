@@ -1,0 +1,32 @@
+sudo: required
+
+services:
+  - docker
+
+jobs:
+  include:
+    - stage: build docker image
+      script:
+        - git checkout ${TRAVIS_BRANCH}
+        - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+        - docker build -t $DOCKER_USERNAME/cortenn-test:travis-$(git rev-parse --short HEAD) .
+        - docker images
+        - docker push $DOCKER_USERNAME/cortenn-test:travis-$(git rev-parse --short HEAD)
+    - stage: test
+      script:
+        - docker run -e COVERALLS_TOKEN=${COVERALLS_TOKEN}
+          --rm $DOCKER_USERNAME/cortenn-test:travis-$(git rev-parse --short HEAD)
+
+notifications:
+  email: false
+
+branches:
+  except:
+  - legacy
+
+# safelist
+branches:
+  only:
+  - master
+  - experimental
+  - stable

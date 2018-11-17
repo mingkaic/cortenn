@@ -1,0 +1,82 @@
+licenses(["notice"])
+
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+load("@rules_protobuf//cpp:rules.bzl", "cc_proto_library")
+load("@rules_protobuf//python:rules.bzl", "py_proto_library")
+
+filegroup(
+    name = "srcs",
+    srcs = glob([
+        "*.hpp",
+        "src/*.cpp",
+    ]) + [":protos", "BUILD.bazel"],
+)
+
+filegroup(
+    name = "test_srcs",
+    srcs = glob([
+        "test/*.hpp",
+        "test/*.cpp",
+    ]),
+)
+
+filegroup(
+    name = "protos",
+    srcs = glob(["*.proto"]),
+)
+
+filegroup(
+    name = "test_data",
+    srcs = glob([
+        "data/*.pb",
+        "data/*.txt",
+    ]),
+)
+
+######### LIBRARY #########
+
+proto_library(
+    name = "proto_lib",
+    srcs = ["//pbm:protos"],
+)
+
+cc_proto_library(
+    name = "cc_proto",
+    protos = ["//pbm:protos"],
+    with_grpc = False,
+)
+
+py_proto_library(
+    name = "py_proto",
+    protos = ["//pbm:protos"],
+    with_grpc = False,
+)
+
+cc_library(
+    name = "pbm",
+    hdrs = glob(["*.hpp"]),
+    srcs = glob(["src/*.cpp"]),
+    copts = ["-std=c++14"],
+    deps = [
+        "//llo:llo",
+        "//pbm:cc_proto",
+    ],
+)
+
+######### TEST #########
+
+cc_test(
+    name = "test",
+    size = "small",
+    srcs = [":test_srcs"],
+    deps = [
+        "//dbg:dbg",
+        "//pbm:pbm",
+        "@com_google_googletest//:gtest",
+    ],
+    copts = ["-std=c++14"],
+    data = ["//pbm:test_data"],
+)

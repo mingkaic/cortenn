@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+option go_package = "github.com/mingkaic/tenncor/graphmgr";
+
+import "google/protobuf/empty.proto";
+
+import "pbm/graph.proto";
+
+package graphmgr;
+
+message ListRequest {
+	repeated string gids = 1;
+}
+
+message ListResponse {
+	repeated tenncor.Graph results = 1;
+}
+
+message CreateRequest {
+	tenncor.Graph payload = 1;
+}
+
+message RemoveRequest {
+	repeated string gids = 1;
+}
+
+message HealthCheckResponse {
+	enum Status {
+        UNKNOWN = 0;
+        SERVING = 1;
+        NOT_SERVING = 2;
+    }
+    Status status = 1;
+}
+
+service Graphmgr {
+	rpc ListGraphs(ListRequest) returns (ListResponse) {}
+
+	rpc CreateGraph(CreateRequest) returns (google.protobuf.Empty) {}
+
+	rpc RemoveGraphPb(RemoveRequest) returns (google.protobuf.Empty) {}
+
+	rpc CheckHealth(google.protobuf.Empty) returns (HealthCheckResponse) {}
+}

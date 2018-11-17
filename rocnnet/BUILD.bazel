@@ -1,0 +1,48 @@
+licenses(["notice"])
+
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "srcs",
+    srcs = glob(["demo/*.cpp"]) + [
+        "//eqns:srcs",
+        "//layr:srcs",
+        "//modl:srcs",
+        "BUILD.bazel",
+    ],
+)
+
+######### DEMOS #########
+
+cc_binary(
+    name = "gd_demo",
+    srcs = ["demo/gd_demo.cpp"],
+    copts = ["-std=c++14"],
+    deps = [
+        "//rocnnet/modl:modl",
+        "//dbg:dbg",
+        "//pbm:pbm",
+    ],
+)
+
+cc_binary(
+    name = "tcr_sample",
+    srcs = ["test/sample.cpp"],
+    copts = ["-std=c++14"],
+    deps = [
+        "//rocnnet/modl:modl",
+        "//dbg:dbg",
+        "//pbm:pbm",
+    ],
+)
+
+py_binary(
+    name = "tf_sample",
+    main = "test/sample.py",
+    srcs = ["test/sample.py"],
+    deps = [
+        "//pbm:py_proto",
+    ],
+)

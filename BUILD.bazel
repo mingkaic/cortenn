@@ -1,0 +1,41 @@
+licenses(["notice"])
+
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+######### GENERAL SOURCE #########
+
+filegroup(
+    name = "srcs",
+    srcs = [
+        "//llo:srcs",
+        "//pbm:srcs",
+        "//rocnnet:srcs",
+        "//graphmgr:srcs",
+        "BUILD.bazel",
+    ],
+)
+
+filegroup(
+    name = "test_srcs",
+    srcs = [
+        "//llo:test_srcs",
+        "//pbm:test_srcs",
+        "//test_gen:srcs",
+        "//testutil:srcs",
+    ],
+)
+
+filegroup(
+    name = "credentials",
+    srcs = [
+        "certs/server.key",
+        "certs/server.crt",
+    ],
+)
+
+filegroup(
+    name = "scripts",
+    srcs = glob(["scripts/*"]),
+)

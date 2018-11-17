@@ -1,0 +1,75 @@
+licenses(["notice"])
+
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "srcs",
+    srcs = glob([
+        "*.hpp",
+        "src/*.cpp",
+    ]) + ["BUILD.bazel"],
+)
+
+filegroup(
+    name = "test_srcs",
+    srcs = glob([
+        "test/**/*.hpp",
+        "test/**/*.cpp",
+    ]),
+)
+
+######### LIBRARY #########
+
+genrule(
+    name = "generated_llo",
+    srcs = ["cfg/llo.json"],
+    outs = [
+        "generated/api.hpp",
+        "generated/api.cpp",
+        "generated/codes.hpp",
+        "generated/codes.cpp",
+        "generated/grader.hpp",
+        "generated/grader.cpp",
+        "generated/opmap.hpp",
+        "generated/opmap.cpp",
+    ],
+    tools = ["@com_github_mingkaic_tenncor//age:agen"],
+    cmd = "$(location @com_github_mingkaic_tenncor//age:agen) --cfg $(location :cfg/llo.json) --out $(@D)/generated --strip_prefix=$$(dirname $(@D))",
+)
+
+cc_library(
+    name = "llo",
+    hdrs = glob(["*.hpp"]) + [":generated_llo"],
+    srcs = glob(["src/*.cpp"]) + [":generated_llo"],
+    copts = ["-std=c++14"],
+    deps = ["@com_github_mingkaic_tenncor//bwd:bwd"],
+)
+
+######### TEST #########
+
+cc_test(
+    name = "test",
+    size = "medium",
+    srcs = glob(["test/*.cpp"]),
+    copts = ["-std=c++14"],
+    deps = [
+        "//llo:llo",
+        "//testutil:testutil",
+    ],
+    data = ["//:credentials"],
+)
+
+cc_test(
+    name = "test_regress",
+    size = "medium",
+    srcs = glob(["regress/*.cpp"]),
+    copts = ["-std=c++14"],
+    deps = [
+        "//llo:llo",
+        "//testutil:testutil",
+        "@com_github_mingkaic_testify//anteroc:anteroc",
+    ],
+    data = ["//:credentials"],
+)

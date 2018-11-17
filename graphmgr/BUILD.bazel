@@ -1,0 +1,52 @@
+licenses(["notice"])
+
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+load("@rules_protobuf//cpp:rules.bzl", "cc_proto_library")
+load("@rules_protobuf//python:rules.bzl", "py_proto_library")
+
+filegroup(
+    name = "srcs",
+    srcs = [":protos", "BUILD.bazel"],
+)
+
+filegroup(
+    name = "protos",
+    srcs = glob(["*.proto"]),
+)
+
+proto_library(
+    name = "proto_lib",
+    srcs = ["//graphmgr:protos"],
+    deps = [
+        "//pbm:proto_lib",
+        "@com_google_protobuf//:any_proto",
+        "@com_google_protobuf//:empty_proto",
+    ],
+)
+
+cc_proto_library(
+    name = "cc_grpc",
+    protos = ["//pbm:protos"],
+    imports = ["external/com_google_protobuf/src"],
+    proto_deps = ["//pbm:cc_proto"],
+    inputs = [
+        "//pbm:proto_lib",
+        "@com_google_protobuf//:well_known_protos",
+    ],
+    with_grpc = True,
+)
+
+py_proto_library(
+    name = "py_grpc",
+    protos = ["//pbm:protos"],
+    imports = ["external/com_google_protobuf/src"],
+    proto_deps = ["//pbm:py_proto"],
+    inputs = [
+        "//pbm:proto_lib",
+        "@com_google_protobuf//:well_known_protos",
+    ],
+    with_grpc = True,
+)

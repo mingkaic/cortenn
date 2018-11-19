@@ -7,9 +7,6 @@ P3 - implement better fallback strategy when test server is unavailable
 transparency:
 P4 - investigate llo api: experiment with top-level code
 
-structure:
-P2 - create cython interface for llo + examples
-
 performance:
 P4 - implement optimization options to decrease equation graph size
 P4 - implement optimization options to increase data accuracy

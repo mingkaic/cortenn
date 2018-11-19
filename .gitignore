@@ -75,3 +75,4 @@ CMakeFiles
 !.dockerignore
 !.gitmodules
 !.astylerc
+!.bazelrc

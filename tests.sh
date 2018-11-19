@@ -11,7 +11,6 @@ set -e
 echo "===== TESTS =====";
 
 make
-make asan
 
 # ===== Check Docs Directory =====
 echo "===== CHECK DOCUMENT EXISTENCE =====";

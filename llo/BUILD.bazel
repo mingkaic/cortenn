@@ -1,22 +1,27 @@
 licenses(["notice"])
 
-package(
-    default_visibility = ["//visibility:public"],
-)
-
 filegroup(
     name = "srcs",
     srcs = glob([
         "*.hpp",
         "src/*.cpp",
     ]) + ["BUILD.bazel"],
+    visibility = ["//visibility:public"],
 )
 
 filegroup(
     name = "test_srcs",
     srcs = glob([
-        "test/**/*.hpp",
-        "test/**/*.cpp",
+        "test/*.hpp",
+        "test/*.cpp",
+    ]),
+)
+
+filegroup(
+    name = "regress_srcs",
+    srcs = glob([
+        "regress/*.hpp",
+        "regress/*.cpp",
     ]),
 )
 
@@ -45,6 +50,7 @@ cc_library(
     srcs = glob(["src/*.cpp"]) + [":generated_llo"],
     copts = ["-std=c++14"],
     deps = ["@com_github_mingkaic_tenncor//bwd:bwd"],
+    visibility = ["//visibility:public"],
 )
 
 ######### TEST #########
@@ -52,7 +58,7 @@ cc_library(
 cc_test(
     name = "test",
     size = "medium",
-    srcs = glob(["test/*.cpp"]),
+    srcs = [":test_srcs"],
     copts = ["-std=c++14"],
     deps = [
         "//llo:llo",
@@ -64,7 +70,7 @@ cc_test(
 cc_test(
     name = "test_regress",
     size = "medium",
-    srcs = glob(["regress/*.cpp"]),
+    srcs = [":regress_srcs"],
     copts = ["-std=c++14"],
     deps = [
         "//llo:llo",

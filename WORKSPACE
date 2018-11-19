@@ -1,16 +1,5 @@
 workspace(name = "com_github_mingkaic_cortenn")
 
-load("//:cortenn.bzl", "dependencies")
-
-# pbm dependencies
-
-dependencies()
-
-load("@org_pubref_rules_protobuf//cpp:rules.bzl", "cpp_proto_repositories")
-
-cpp_proto_repositories()
-
-
 # test dependencies
 
 git_repository(
@@ -26,6 +15,16 @@ dependencies()
 load("@com_github_raggledodo_dora//:dora.bzl", "dependencies")
 
 dependencies()
+
+# pbm dependencies
+
+load("//:cortenn.bzl", "dependencies")
+
+dependencies()
+
+load("@org_pubref_rules_protobuf//cpp:rules.bzl", "cpp_proto_repositories")
+
+cpp_proto_repositories()
 
 load("@org_pubref_rules_protobuf//python:rules.bzl", "py_proto_repositories")
 

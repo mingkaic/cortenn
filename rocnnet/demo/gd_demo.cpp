@@ -140,9 +140,10 @@ int main (int argc, char** argv)
 
 	llo::Variable* testin = llo::get_variable(
 		std::vector<double>(n_in), ade::Shape({n_in}), "testin");
-	auto untrained_out = untrained_brain(testin);
-	auto trained_out = brain(testin);
-	// auto pretrained_out = pretrained_brain(testin);
+	ade::Tensorptr shared_in(testin);
+	auto untrained_out = untrained_brain(shared_in);
+	auto trained_out = brain(shared_in);
+	// auto pretrained_out = pretrained_brain(shared_in);
 	for (size_t i = 0; i < n_test; i++)
 	{
 		if (i % show_every_n == show_every_n-1)
@@ -193,7 +194,6 @@ int main (int argc, char** argv)
 // 		to_csv<double>(trained_gdn.get_error());
 // }
 // #endif /* CSV_RCD */
-
 	google::protobuf::ShutdownProtobufLibrary();
 
 	return exit_status;

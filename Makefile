@@ -1,5 +1,3 @@
-GTEST_REPEAT := 50
-
 COVERAGE_INFO_FILE := coverage.info
 
 LLO_TEST := //llo:test
@@ -8,31 +6,13 @@ REGRESS_TEST := //llo:test_regress
 
 PBM_TEST := //pbm:test
 
+TEST := bazel test
 
-COMMON_BZL_FLAGS := --test_output=all --cache_test_results=no
+COVER := bazel cover
 
-GTEST_FLAGS := --action_env="GTEST_SHUFFLE=1" --action_env="GTEST_BREAK_ON_FAILURE=1"
-
-REP_BZL_FLAGS := --action_env="GTEST_REPEAT=$(GTEST_REPEAT)"
-
-VALGRIND_CMD := valgrind --leak-check=full
-
-VAL_BZL_FLAGS := --run_under="$(VALGRIND_CMD)"
-
-ASAN_BZL_FLAGS := --linkopt -fsanitize=address
+C_FLAGS := --config asan --config gtest
 
 COVERAGE_IGNORE := 'external/*' '**/test/*' 'testutil/*' '**/genfiles/*' 'dbg/*'
-
-
-BUILD := bazel build
-
-RUN := bazel run
-
-TEST := bazel test $(COMMON_BZL_FLAGS)
-
-GTEST := $(TEST) $(GTEST_FLAGS)
-
-COVER := bazel coverage --test_output=all $(GTEST_FLAGS) # we want cache result for coverage
 
 COVERAGE_PIPE := ./scripts/merge_cov.sh $(COVERAGE_INFO_FILE)
 
@@ -40,45 +20,23 @@ TMP_LOGFILE := /tmp/cortenn-test.log
 
 all: test
 
-# all tests
 
 test: test_llo test_pbm
 
 test_llo:
-	$(GTEST) $(REP_BZL_FLAGS) $(LLO_TEST)
+	$(TEST) $(C_FLAGS) --config grepeat $(LLO_TEST)
 
 test_pbm:
-	$(GTEST) $(PBM_TEST)
+	$(TEST) $(C_FLAGS) $(PBM_TEST)
 
-# valgrind unit tests
-
-valgrind: valgrind_llo valgrind_pbm
-
-valgrind_llo:
-	$(GTEST) $(VAL_BZL_FLAGS) --action_env="GTEST_REPEAT=5" $(LLO_TEST)
-
-valgrind_pbm:
-	$(GTEST) $(VAL_BZL_FLAGS) $(PBM_TEST)
-
-# asan unit tests
-
-asan: asan_llo asan_pbm
-
-asan_llo:
-	$(GTEST) $(ASAN_BZL_FLAGS) $(REP_BZL_FLAGS) $(LLO_TEST)
-
-asan_pbm:
-	$(GTEST) $(ASAN_BZL_FLAGS) $(PBM_TEST)
-
-# coverage unit tests
 
 coverage: cover_llo cover_pbm
 
 cover_llo:
-	$(COVER) $(REP_BZL_FLAGS) --instrumentation_filter= $(LLO_TEST)
+	$(COVER) $(C_FLAGS) --config grepeat $(LLO_TEST)
 
 cover_pbm:
-	$(COVER) --instrumentation_filter= $(PBM_TEST)
+	$(COVER) $(C_FLAGS) $(PBM_TEST)
 
 # generated coverage files
 
@@ -110,7 +68,7 @@ gen_test: dora_run
 	bazel run //test_gen:tfgen
 
 test_regress: gen_test
-	$(GTEST) $(REGRESS_TEST)
+	$(TEST) $(C_FLAGS) $(REGRESS_TEST)
 
 # deployment
 

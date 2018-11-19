@@ -114,6 +114,7 @@ struct Variable final : public ade::Tensor
 				age::name_type(data.dtype_).c_str(), age::name_type(data_.dtype_).c_str());
 		}
 		std::memcpy(data_.data_.get(), data.data_, nbytes());
+		return *this;
 	}
 
 	/// Implementation of iTensor

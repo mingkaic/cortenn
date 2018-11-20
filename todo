@@ -1,4 +1,5 @@
 correctness:
+P2 - test convolution
 P2 - test complicate equations
 P3 - test travelling, and pruning algorithms
 P3 - verify rocnnet correctness using automated test
@@ -12,5 +13,4 @@ P4 - implement optimization options to decrease equation graph size
 P4 - implement optimization options to increase data accuracy
 
 features:
-P2 - implement convolution
 P2 - implement api to eigen

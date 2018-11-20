@@ -307,12 +307,12 @@
         {
             "name": "matmul",
             "args": ["ade::Tensorptr arg1", "ade::Tensorptr arg2"],
-            "out": "reduce_sum(mul(permute(extend(arg1,2,{arg2->shape().at(0)}),{2,1,0}),permute(extend(arg2,2,{arg1->shape().at(1)}),{0,2,1})),2)"
+            "out": "llo::matmul(arg1, arg2)"
         },
         {
             "name": "convolute",
             "args": ["ade::Tensorptr arg1", "ade::Tensorptr arg2"],
-            "out": "ade::Tensorptr(nullptr)"
+            "out": "llo::convolve(arg1, arg2)"
         }
     ]
 }

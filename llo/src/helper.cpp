@@ -61,50 +61,72 @@ ade::Tensorptr matmul (ade::Tensorptr a, ade::Tensorptr b)
 		), 2);
 }
 
+// specifications according to https://www.tensorflow.org/api_docs/python/tf/nn/conv2d
+// this is to avoid changing rocnnet too much
+// (todo: consider simplification after experimenting with rocnnet)
 ade::Tensorptr convolve (ade::Tensorptr img, ade::Tensorptr kernel)
 {
 	const ade::Shape& imgshape = img->shape();
 	const ade::Shape& kernelshape = kernel->shape();
 
-	size_t M = imgshape.at(0);
-	size_t N = imgshape.at(1);
-	size_t m = kernelshape.at(0);
-	size_t n = kernelshape.at(1);
-	if (M * N != imgshape.n_elems())
+	uint8_t nbatch = imgshape.at(0);
+	uint8_t in_width = imgshape.at(1);
+	uint8_t in_height = imgshape.at(2);
+	uint8_t in_channels = imgshape.at(3);
+
+	uint8_t kernel_width = kernelshape.at(0);
+	uint8_t kernel_height = kernelshape.at(1);
+	uint8_t out_channels = kernelshape.at(3);
+	if (in_channels != kernelshape.at(2))
 	{
-		err::fatalf("cannot convolve image shape %s of dimension "
-			"higher than 2-D", imgshape.to_string().c_str());
+		err::fatalf("cannot convolve with mismatch img %s and kernel %s "
+			"in_channel (dim=3 for img, dim=2 for kernel)",
+			imgshape.to_string().c_str(), kernelshape.to_string().c_str());
 	}
-	if (m * n != kernelshape.n_elems())
+	if (in_width < kernel_width || in_height < kernel_height)
 	{
-		err::fatalf("cannot convolve kernel shape %s of dimension "
-			"higher than 2-D", imgshape.to_string().c_str());
-	}
-	if (M < m || N < m)
-	{
-		err::fatalf("cannot convolve kernel %s against a smaller image %s "
-			"in first 2-D", imgshape.to_string().c_str(),
-			kernelshape.to_string().c_str());
+		err::fatalf("cannot convolve kernel %s against a smaller image %s",
+			kernelshape.to_string().c_str(),
+			imgshape.to_string().c_str());
 	}
 
-	uint8_t resm = M - m;
-	uint8_t resn = N - n;
+	uint8_t out_width = in_width - kernel_width;
+	uint8_t out_height = in_height - kernel_height;
+
+	// map img to shape <nbatch, in_width, in_height, ?(out_channels),
+	//		?(kernel_width), ?(kernel_height), in_channels>
 	ade::CoordPtrT img_mapper(new ade::CoordMap(
 		[&](ade::MatrixT fwd)
 		{
-			fwd[0][0] = fwd[1][1] = fwd[2][0] = fwd[3][1] = 1;
-			fwd[2][2] = (double) 1 / resm;
-			fwd[3][3] = (double) 1 / resn;
-			for (size_t i = 4; i < ade::mat_dim; ++i)
+			fwd[0][0] = fwd[1][1] = fwd[2][2] = fwd[3][6] = 1;
+			fwd[4][3] = out_channels;
+			fwd[5][4] = kernel_width;
+			fwd[6][5] = kernel_height;
+			for (uint8_t i = 7; i < ade::mat_dim; ++i)
 			{
 				fwd[i][i] = 1;
 			}
 		}));
 
-	ade::Tensorptr res = ade::Functor::get(ade::Opcode{"PROD", age::PROD},
-		{{img_mapper, img}, {ade::extend(2, {resm, resn}), kernel}});
+	// map kernel to shape <?(nbatch), ?(in_width), ?(in_height), out_channels,
+	//		kernel_width, kernel_height, in_channels>
+	ade::CoordPtrT kernel_mapper(new ade::CoordMap(
+		[&](ade::MatrixT fwd)
+		{
+			fwd[0][3] = fwd[1][4] = fwd[2][5] = fwd[3][6] = 1;
+			fwd[4][0] = nbatch;
+			fwd[5][1] = in_width;
+			fwd[6][2] = in_height;
+			for (uint8_t i = 7; i < ade::mat_dim; ++i)
+			{
+				fwd[i][i] = 1;
+			}
+		}));
 
-	return age::reduce_sum(age::permute(res, {2, 3, 0, 1}), 2);
+	ade::Tensorptr prod = ade::Functor::get(ade::Opcode{"PROD", age::PROD}, {
+		{img_mapper, img}, {kernel_mapper, kernel}});
+
+	return age::reduce_sum(prod, 4);
 }
 
 }

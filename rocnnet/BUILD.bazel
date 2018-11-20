@@ -23,7 +23,7 @@ cc_binary(
     deps = [
         "//rocnnet/modl:modl",
         "@com_github_mingkaic_tenncor//dbg:dbg",
-        "//pbm:pbm",
+        "@com_github_mingkaic_cortenn//pbm:pbm",
     ],
 )
 
@@ -34,7 +34,7 @@ cc_binary(
     deps = [
         "//rocnnet/modl:modl",
         "@com_github_mingkaic_tenncor//dbg:dbg",
-        "//pbm:pbm",
+        "@com_github_mingkaic_cortenn//pbm:pbm",
     ],
 )
 
@@ -43,6 +43,6 @@ py_binary(
     main = "test/sample.py",
     srcs = ["test/sample.py"],
     deps = [
-        "//pbm:py_proto",
+        "@com_github_mingkaic_cortenn//pbm:py_proto",
     ],
 )

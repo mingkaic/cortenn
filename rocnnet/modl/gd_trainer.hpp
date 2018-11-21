@@ -1,8 +1,8 @@
 #include "llo/eval.hpp"
 
-#include "rocnnet/modl/mlp.hpp"
-
 #include "rocnnet/eqns/err_approx.hpp"
+
+#include "rocnnet/modl/mlp.hpp"
 
 // GDTrainer does not own anything
 struct GDTrainer

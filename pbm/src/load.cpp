@@ -30,22 +30,24 @@ static ade::CoordPtrT load_coord (
 		});
 }
 
-LabelTensT load_graph (const tenncor::Graph& in, DataLoaderPtrT dataloader)
+LoadVecsT load_graph (const tenncor::Graph& in, DataLoaderPtrT dataloader)
 {
 	auto nodes = in.nodes();
-	TensT outvec;
-	LabelTensT outmap;
+	TensT invec;
+	LoadVecsT outvec;
 	for (const tenncor::Node& node : nodes)
 	{
-		std::string label = node.label();
+		auto pb_labels = node.labels();
 		if (node.has_source())
 		{
+			std::string src_label = *(pb_labels.rbegin());
 			const tenncor::Source& source = node.source();
-			ade::Tensorptr leaf = dataloader->load(source);
-			outvec.push_back(leaf);
-			if (false == label.empty())
+			ade::Tensorptr leaf = dataloader->load(source, src_label);
+			invec.push_back(leaf);
+			if (false == pb_labels.empty())
 			{
-				outmap.emplace(label, leaf);
+				StringsT labels(pb_labels.begin(), pb_labels.end());
+				outvec.push_back({leaf, labels});
 			}
 		}
 		else
@@ -56,18 +58,19 @@ LabelTensT load_graph (const tenncor::Graph& in, DataLoaderPtrT dataloader)
 			for (auto nodearg : nodeargs)
 			{
 				ade::CoordPtrT coord = load_coord(nodearg.coord());
-				args.push_back({coord, outvec[nodearg.idx()]});
+				args.push_back({coord, invec[nodearg.idx()]});
 			}
 			ade::Tensorptr f = ade::Functor::get(
 				ade::Opcode{func.opname(), func.opcode()}, args);
-			outvec.push_back(f);
-			if (false == label.empty())
+			invec.push_back(f);
+			if (false == pb_labels.empty())
 			{
-				outmap.emplace(label, f);
+				StringsT labels(pb_labels.begin(), pb_labels.end());
+				outvec.push_back({f, labels});
 			}
 		}
 	}
-	return outmap;
+	return outvec;
 }
 
 }

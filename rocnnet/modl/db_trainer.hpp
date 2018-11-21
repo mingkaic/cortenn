@@ -1,13 +1,12 @@
-#include "rocnnet/layr/fc_layer.hpp"
-
+#include "rocnnet/modl/fc_layer.hpp"
 #include "rocnnet/modl/rbm.hpp"
 
 using PretrainsT = std::vector<DeltasNCostT>;
 
-struct DBTrainer
+struct DBTrainer final
 {
 	DBTrainer (uint8_t n_input, std::vector<uint8_t> hiddens, std::string label) :
-		label_(label), n_input_(n_input), n_output_(hiddens.back()),
+		label_("db_" + label), n_input_(n_input), n_output_(hiddens.back()),
         log_layer_({n_input}, hiddens.back(), label + ":logres")
 	{
         if (hiddens.empty())
@@ -18,7 +17,7 @@ struct DBTrainer
         {
             uint8_t n_out = hiddens[level];
             layers_.push_back(RBM(n_input, n_out,
-                label + err::sprintf(":rbm_%d", level)));
+                err::sprintf("rbm_%d", level)));
             n_input = n_out;
         }
 	}
@@ -118,6 +117,25 @@ struct DBTrainer
 	uint8_t get_noutput (void) const
 	{
         return n_output_;
+	}
+
+	void parse_from (pbm::LoadVecsT labels)
+	{
+		pbm::LoadVecsT relevant;
+		std::copy_if(labels.begin(), labels.end(), std::back_inserter(relevant),
+			[&](pbm::LoadTensT& pairs)
+			{
+				return pairs.second.size() > 0 &&
+					this->label_ == pairs.second.front();
+			});
+		for (pbm::LoadTensT& pairs : relevant)
+		{
+			pairs.second.pop_front();
+		}
+		for (RBM& rlayer : layers_)
+		{
+            rlayer.parse_from(relevant);
+		}
 	}
 
 private:

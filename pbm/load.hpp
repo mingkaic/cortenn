@@ -14,10 +14,12 @@
 namespace pbm
 {
 
-using LabelTensT = std::unordered_map<std::string,ade::Tensorptr>;
+using LoadTensT = std::pair<ade::Tensorptr,StringsT>;
+
+using LoadVecsT = std::vector<LoadTensT>;
 
 /// Return all nodes in graph unmarshalled from protobuf object
-LabelTensT load_graph (const tenncor::Graph& in, DataLoaderPtrT dataloader);
+LoadVecsT load_graph (const tenncor::Graph& in, DataLoaderPtrT dataloader);
 
 }
 

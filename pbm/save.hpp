@@ -17,7 +17,7 @@
 namespace pbm
 {
 
-using TensLabelT = std::unordered_map<ade::iTensor*,std::string>;
+using TensLabelT = std::unordered_map<ade::iTensor*,StringsT>;
 
 struct GraphSaver final : public ade::iTraveler
 {
@@ -69,7 +69,7 @@ private:
         const ade::CoordPtrT& mapper);
 
     /// Marshal llo::iSource to tenncor::Source
-    void save_data (tenncor::Source* out, ade::Tensor* in)
+    void save_data (tenncor::Node* out, ade::Tensor* in)
     {
         saver_->save(*out, in);
     }

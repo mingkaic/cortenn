@@ -6,6 +6,8 @@
 /// Define functions for marshaling equation graph
 ///
 
+#include <list>
+
 #include "ade/itensor.hpp"
 #include "ade/traveler.hpp"
 
@@ -23,19 +25,22 @@ struct iDataSaver
 {
     virtual ~iDataSaver (void) = default;
 
-    virtual void save (tenncor::Source& out, ade::Tensor* tens) = 0;
+    virtual void save (tenncor::Node& out, ade::Tensor* tens) = 0;
 };
 
 struct iDataLoader
 {
     virtual ~iDataLoader (void) = default;
 
-    virtual ade::Tensorptr load (const tenncor::Source& source) = 0;
+    virtual ade::Tensorptr load (const tenncor::Source& source,
+        std::string label) = 0;
 };
 
 using DataSaverPtrT = std::unique_ptr<iDataSaver>;
 
 using DataLoaderPtrT = std::unique_ptr<iDataLoader>;
+
+using StringsT = std::list<std::string>;
 
 }
 

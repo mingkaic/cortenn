@@ -1,7 +1,7 @@
 #include <functional>
 #include <memory>
 
-#include "rocnnet/layr/fc_layer.hpp"
+#include "rocnnet/modl/fc_layer.hpp"
 
 using HiddenFunc = std::function<ade::Tensorptr(ade::Tensorptr)>;
 
@@ -11,22 +11,10 @@ struct LayerInfo
 	HiddenFunc hidden_;
 };
 
-struct HiddenLayer
-{
-	ade::Tensorptr operator () (ade::Tensorptr& input)
-	{
-		auto hypothesis = layer_({input});
-		return hidden_(hypothesis);
-	}
-
-	FCLayer layer_;
-	HiddenFunc hidden_;
-};
-
-struct MLP
+struct MLP final
 {
 	MLP (uint8_t n_input, std::vector<LayerInfo> layers, std::string label) :
-		label_(label)
+		label_("mlp_" + label)
 	{
 		for (size_t i = 0, n = layers.size(); i < n; ++i)
 		{
@@ -40,19 +28,16 @@ struct MLP
 		}
 	}
 
-	MLP (std::vector<HiddenLayer> layers, std::string label) :
-		label_(label), layers_(layers) {}
-
-	MLP (const MLP& other, std::string label_prefix = "copied_")
+	MLP (const MLP& other)
 	{
-		copy_helper(other, label_prefix);
+		copy_helper(other);
 	}
 
 	MLP& operator = (const MLP& other)
 	{
 		if (this != &other)
 		{
-			copy_helper(other, "copied_");
+			copy_helper(other);
 		}
 		return *this;
 	}
@@ -93,19 +78,49 @@ struct MLP
 		return layers_.back().layer_.get_noutput();
 	}
 
-private:
-	void copy_helper (const MLP& other, std::string prefix)
+	void parse_from (pbm::LoadVecsT labels)
 	{
-		label_ = prefix + other.label_;
+		pbm::LoadVecsT relevant;
+		std::copy_if(labels.begin(), labels.end(), std::back_inserter(relevant),
+			[&](pbm::LoadTensT& pairs)
+			{
+				return pairs.second.size() > 0 &&
+					this->label_ == pairs.second.front();
+			});
+		for (pbm::LoadTensT& pairs : relevant)
+		{
+			pairs.second.pop_front();
+		}
+		for (HiddenLayer& olayer : layers_)
+		{
+			olayer.layer_.parse_from(relevant);
+		}
+	}
+
+private:
+	void copy_helper (const MLP& other)
+	{
+		label_ = other.label_;
 		layers_.clear();
 		for (const HiddenLayer& olayer : other.layers_)
 		{
 			layers_.push_back(HiddenLayer{
-				FCLayer(olayer.layer_, prefix),
-				olayer.hidden_
+				FCLayer(olayer.layer_), olayer.hidden_
 			});
 		}
 	}
+
+	struct HiddenLayer
+	{
+		ade::Tensorptr operator () (ade::Tensorptr& input)
+		{
+			auto hypothesis = layer_({input});
+			return hidden_(hypothesis);
+		}
+
+		FCLayer layer_;
+		HiddenFunc hidden_;
+	};
 
 	std::string label_;
 

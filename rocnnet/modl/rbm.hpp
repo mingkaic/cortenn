@@ -3,8 +3,6 @@
 
 #include "llo/operator.hpp"
 
-#include "rocnnet/layr/ilayer.hpp"
-
 using DeltasNCostT = std::pair<DeltasT,ade::Tensorptr>;
 
 ade::Tensorptr one_binom (ade::Tensorptr a)
@@ -18,7 +16,7 @@ ade::Tensorptr extended_add (ade::Tensorptr bigger, ade::Tensorptr smaller)
     return age::add(bigger, age::extend(ade::Tensorptr(smaller), 1, {cdim}));
 }
 
-struct RBM
+struct RBM final : public Unmarshaler
 {
 	RBM (uint8_t n_input, uint8_t n_hidden, std::string label) :
 		label_(label), n_input_(n_input), n_hidden_(n_hidden)
@@ -192,6 +190,11 @@ struct RBM
 	uint8_t get_noutput (void) const
 	{
 		return n_hidden_;
+	}
+
+	void parse_from (pbm::LoadVecsT labels)
+	{
+		//
 	}
 
 private:

@@ -7,9 +7,6 @@
 
 #include "dbg/ade.hpp"
 
-#include "pbm/save.hpp"
-#include "pbm/load.hpp"
-
 #include "llo/source.hpp"
 
 #include "rocnnet/eqns/activations.hpp"
@@ -81,16 +78,17 @@ int main (int argc, char** argv)
 		LayerInfo{n_out, sigmoid}
 	};
 	MLP brain(n_in, hiddens, "brain");
-	MLP untrained_brain(brain, "untrained_");
+	MLP untrained_brain(brain);
+	MLP pretrained_brain(brain);
 	// todo: implement
 	std::ifstream loadstr(loadpath);
 	if (loadstr.is_open())
 	{
 		tenncor::Graph graph;
 		graph.ParseFromIstream(&loadstr);
-		pbm::LabelTensT vars = pbm::load_graph(graph,
+		pbm::LoadVecsT vars = pbm::load_graph(graph,
 			pbm::DataLoaderPtrT(new llo::DataLoader));
-		// MLP pretrained_brain(loadpath);
+		pretrained_brain.parse_from(vars);
 	}
 
 	uint8_t n_batch = 3;

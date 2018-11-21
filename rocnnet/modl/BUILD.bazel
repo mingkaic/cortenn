@@ -20,7 +20,6 @@ cc_library(
     srcs = glob(["src/*.cpp"]),
     copts = ["-std=c++14"],
     deps = [
-        "//rocnnet/layr:layr",
         "//rocnnet/eqns:eqns",
     ],
 )

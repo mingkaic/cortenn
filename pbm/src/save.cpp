@@ -33,13 +33,14 @@ void GraphSaver::save (tenncor::Graph& out, TensLabelT labels)
         ordermap[tens] = i;
 
         tenncor::Node* pb_node = out.add_nodes();
+        save_data(pb_node, tens);
         auto it = labels.find(tens);
         if (labels.end() != it)
         {
-            pb_node->set_label(it->second);
+            google::protobuf::RepeatedPtrField<std::string> vec(
+                it->second.begin(), it->second.end());
+            pb_node->mutable_labels()->Swap(&vec);
         }
-        tenncor::Source* src = pb_node->mutable_source();
-        save_data(src, tens);
     }
     for (size_t i = 0, n = funcs.size(); i < n; ++i)
     {
@@ -50,7 +51,9 @@ void GraphSaver::save (tenncor::Graph& out, TensLabelT labels)
         auto it = labels.find(f);
         if (labels.end() != it)
         {
-            pb_node->set_label(it->second);
+            google::protobuf::RepeatedPtrField<std::string> vec(
+                it->second.begin(), it->second.end());
+            pb_node->mutable_labels()->Swap(&vec);
         }
         tenncor::Functor* func = pb_node->mutable_functor();
         ade::Opcode opcode = f->get_opcode();

@@ -1,14 +1,14 @@
+#include "pbm/load.hpp"
+
 #include "llo/operator.hpp"
 
-#include "rocnnet/layr/ilayer.hpp"
+#ifndef MODL_FC_LAYER_HPP
+#define MODL_FC_LAYER_HPP
 
-#ifndef LAYR_FC_LAYER_HPP
-#define LAYR_FC_LAYER_HPP
-
-struct FCLayer : public iLayer
+struct FCLayer
 {
 	FCLayer (std::vector<uint8_t> n_inputs, uint8_t n_output, std::string label) :
-		iLayer(label)
+		label_("fc_" + label)
 	{
 		size_t n = n_inputs.size();
 		if (n == 0)
@@ -30,17 +30,15 @@ struct FCLayer : public iLayer
 			std::generate(data.begin(), data.end(), gen);
 
 			llo::VarptrT weight(
-				llo::get_variable(data, shape, "weight"));
+				llo::get_variable(data, shape, err::sprintf("weight_%d", i)));
 			llo::VarptrT bias(
-				llo::data<double>(0, ade::Shape({n_output}), "bias"));
+				llo::data<double>(0, ade::Shape({n_output}), err::sprintf("bias_%d", i)));
 			weight_bias_.push_back({weight, bias});
 		}
 	}
 
-	virtual ~FCLayer (void) {}
-
-	FCLayer (const FCLayer& other, std::string label_prefix = "copied_") :
-		iLayer(label_prefix + other.label_)
+	FCLayer (const FCLayer& other) :
+		label_(other.label_)
 	{
 		copy_helper(other);
 	}
@@ -49,26 +47,15 @@ struct FCLayer : public iLayer
 	{
 		if (this != &other)
 		{
-			label_ = "copied_" + other.label_;
+			other.label_;
 			copy_helper(other);
 		}
 		return *this;
 	}
 
-	FCLayer (FCLayer&& other) : iLayer(other.label_)
-	{
-		weight_bias_ = std::move(other.weight_bias_);
-	}
+	FCLayer (FCLayer&& other) = default;
 
-	FCLayer& operator = (FCLayer&& other)
-	{
-		if (this != &other)
-		{
-			label_ = std::move(other.label_);
-			weight_bias_ = std::move(other.weight_bias_);
-		}
-		return *this;
-	}
+	FCLayer& operator = (FCLayer&& other) = default;
 
 
 	ade::Tensorptr operator () (age::TensT inputs)
@@ -90,7 +77,7 @@ struct FCLayer : public iLayer
 		return age::sum(args);
 	}
 
-	std::vector<llo::VarptrT> get_variables (void) const override
+	std::vector<llo::VarptrT> get_variables (void) const
 	{
 		std::vector<llo::VarptrT> out;
 		for (const WbPairT& wb : weight_bias_)
@@ -111,12 +98,51 @@ struct FCLayer : public iLayer
 		return weight_bias_[0].first->shape().at(0);
 	}
 
-protected:
+	void parse_from (pbm::LoadVecsT labels)
+	{
+		std::unordered_map<std::string,ade::Tensorptr> relevant;
+		for (pbm::LoadTensT& pairs : labels)
+		{
+			if (pairs.second.size() == 2 &&
+				label_ == pairs.second.front())
+			{
+				relevant.emplace(pairs.second.back(), pairs.first);
+			}
+		}
+		for (size_t i = 0, n = weight_bias_.size(); i < n; ++i)
+		{
+			std::string weight_label = err::sprintf("weight_%d", i);
+			std::string bias_label = err::sprintf("bias_%d", i);
+			auto wit = relevant.find(weight_label);
+			if (relevant.end() == wit)
+			{
+				err::warn(weight_label + " not found in protobuf");
+			}
+			else
+			{
+				wit->second;
+	            weight_bias_[i].first;
+			}
+			auto bit = relevant.find(bias_label);
+			if (relevant.end() == wit)
+			{
+				err::warn(bias_label + " not found in protobuf");
+			}
+			else
+			{
+				bit->second;
+            	weight_bias_[i].second;
+			}
+		}
+	}
+
+private:
 	using WbPairT = std::pair<llo::VarptrT,llo::VarptrT>;
 
 	std::vector<WbPairT> weight_bias_;
 
-private:
+	std::string label_;
+
 	void copy_helper (const FCLayer& other)
 	{
 		weight_bias_.clear();
@@ -129,4 +155,4 @@ private:
 	}
 };
 
-#endif // LAYR_FC_LAYER_HPP
+#endif // MODL_FC_LAYER_HPP

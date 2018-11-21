@@ -7,11 +7,18 @@
 
 #include "dbg/ade.hpp"
 
-#include "pbm/graph.hpp"
+#include "pbm/save.hpp"
+#include "pbm/load.hpp"
+
+#include "llo/source.hpp"
 
 #include "rocnnet/eqns/activations.hpp"
 
 #include "rocnnet/modl/gd_trainer.hpp"
+
+#include "rocnnet/demo/options.hpp"
+
+Options options;
 
 // user-side generator
 static std::default_random_engine rnd_device(std::time(NULL));
@@ -44,28 +51,26 @@ static std::vector<double> avgevry2 (std::vector<double>& in)
 int main (int argc, char** argv)
 {
 	GOOGLE_PROTOBUF_VERIFY_VERSION;
+
 	int exit_status = 0;
 	std::clock_t start;
 	double duration;
-	std::string outdir = "data";
-	size_t n_train = 3000;
-	size_t n_test = 500;
-	// size_t seed_val;
-	bool seed = false;
-	bool save = false;
-	std::string serialname = "gd_test.pbx";
-	std::string serialpath = outdir + "/" + serialname;
 
-	// todo: hookup option parser
-
-	if (seed)
+	if (false == options.parse(argc, argv))
 	{
-		// rnd_device.seed(seed_val);
-		// seed_generator(seed_val);
+		return 1;
 	}
-	else
+
+	std::string savepath = options.savefile_.string();
+	std::string loadpath = options.loadfile_.string();
+	size_t n_train = options.n_train_;
+	size_t n_test = options.n_test_;
+
+	if (options.seed_)
 	{
-		// seed by time
+		size_t seed = options.seedval_;
+		std::cout << "seeding " << seed << '\n';
+		llo::get_engine().seed(seed);
 	}
 
 	uint8_t n_in = 10;
@@ -78,7 +83,15 @@ int main (int argc, char** argv)
 	MLP brain(n_in, hiddens, "brain");
 	MLP untrained_brain(brain, "untrained_");
 	// todo: implement
-	// MLP pretrained_brain(serialpath);
+	std::ifstream loadstr(loadpath);
+	if (loadstr.is_open())
+	{
+		tenncor::Graph graph;
+		graph.ParseFromIstream(&loadstr);
+		pbm::LabelTensT vars = pbm::load_graph(graph,
+			pbm::DataLoaderPtrT(new llo::DataLoader));
+		// MLP pretrained_brain(loadpath);
+	}
 
 	uint8_t n_batch = 3;
 	size_t show_every_n = 500;
@@ -99,12 +112,12 @@ int main (int argc, char** argv)
 	peq.labels_[trainer.error_.get()] = "error";
 	peq.labels_[trainer.train_in_.get()] = "train_in";
 	peq.print(std::cout, trainer.error_);
-	std::cout << "\n";
+	std::cout << '\n';
 #if 0
 	for (auto deltas : trainer.updates_)
 	{
 		peq.print(std::cout, deltas.second);
-		std::cout << "\n";
+		std::cout << '\n';
 	}
 #endif
 
@@ -121,15 +134,15 @@ int main (int argc, char** argv)
 		{
 			llo::GenericData trained_derr = llo::eval(trainer.error_, age::DOUBLE);
 			double* trained_err_res = (double*) trained_derr.data_.get();
-			std::cout << "training " << i+1 << std::endl;
-			std::cout << "trained error: " << err::to_string(trained_err_res, trained_err_res + n_out) << std::endl;
+			std::cout << "training " << i+1 << '\n';
+			std::cout << "trained error: " << err::to_string(trained_err_res, trained_err_res + n_out) << '\n';
 		}
 		std::vector<double> batch = batch_generate(n_in, n_batch);
 		std::vector<double> batch_out = avgevry2(batch);
 		trainer.train(batch, batch_out);
 	}
 	duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
-	std::cout << "training time: " << duration << " seconds" << std::endl;
+	std::cout << "training time: " << duration << " seconds" << '\n';
 
 	// exit code:
 	//	0 = fine
@@ -148,7 +161,7 @@ int main (int argc, char** argv)
 	{
 		if (i % show_every_n == show_every_n-1)
 		{
-			std::cout << "testing " << i+1 << "\n";
+			std::cout << "testing " << i+1 << '\n';
 		}
 		std::vector<double> batch = batch_generate(n_in, 1);
 		std::vector<double> batch_out = avgevry2(batch);
@@ -182,18 +195,16 @@ int main (int argc, char** argv)
 	std::cout << "trained mlp error rate: " << trained_err * 100 << "%\n";
 	// std::cout << "pretrained mlp error rate: " << pretrained_err * 100 << "%\n";
 
-	if (exit_status == 0 && save)
+	// try to save
+	if (exit_status == 0)
 	{
-		// trained_gdn.save(serialpath, "gd_demo");
+		std::ofstream savestr(savepath);
+		if (savestr.is_open())
+		{
+			// trained_gdn.save(serialpath, "gd_demo");
+		}
 	}
 
-// #ifdef CSV_RCD
-// if (rocnnet_record::record_status::rec_good)
-// {
-// 	static_cast<rocnnet_record::csv_record*>(rocnnet_record::record_status::rec.get())->
-// 		to_csv<double>(trained_gdn.get_error());
-// }
-// #endif /* CSV_RCD */
 	google::protobuf::ShutdownProtobufLibrary();
 
 	return exit_status;

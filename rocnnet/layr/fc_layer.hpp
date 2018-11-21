@@ -101,6 +101,16 @@ struct FCLayer : public iLayer
 		return out;
 	}
 
+	uint8_t get_ninput (void) const
+	{
+		return weight_bias_[0].first->shape().at(1);
+	}
+
+	uint8_t get_noutput (void) const
+	{
+		return weight_bias_[0].first->shape().at(0);
+	}
+
 protected:
 	using WbPairT = std::pair<llo::VarptrT,llo::VarptrT>;
 

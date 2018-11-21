@@ -49,7 +49,10 @@ cc_library(
     hdrs = glob(["*.hpp"]) + [":generated_llo"],
     srcs = glob(["src/*.cpp"]) + [":generated_llo"],
     copts = ["-std=c++14"],
-    deps = ["@com_github_mingkaic_tenncor//bwd:bwd"],
+    deps = [
+        "//pbm:pbm",
+        "@com_github_mingkaic_tenncor//bwd:bwd",
+    ],
     visibility = ["//visibility:public"],
 )
 

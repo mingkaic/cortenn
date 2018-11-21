@@ -62,7 +62,7 @@ cc_library(
     srcs = glob(["src/*.cpp"]),
     copts = ["-std=c++14"],
     deps = [
-        "//llo:llo",
+        "@com_github_mingkaic_tenncor//ade:ade",
         "//pbm:cc_proto",
     ],
     visibility = ["//visibility:public"],

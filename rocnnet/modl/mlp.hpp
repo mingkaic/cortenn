@@ -11,24 +11,37 @@ struct LayerInfo
 	HiddenFunc hidden_;
 };
 
+struct HiddenLayer
+{
+	ade::Tensorptr operator () (ade::Tensorptr& input)
+	{
+		auto hypothesis = layer_({input});
+		return hidden_(hypothesis);
+	}
+
+	FCLayer layer_;
+	HiddenFunc hidden_;
+};
+
 struct MLP
 {
 	MLP (uint8_t n_input, std::vector<LayerInfo> layers, std::string label) :
-		label_(label), n_input_(n_input)
+		label_(label)
 	{
 		for (size_t i = 0, n = layers.size(); i < n; ++i)
 		{
-			n_output_ = layers[i].n_out_;
-			std::stringstream ss;
-			ss << label << ":hidden_" << i;
-			layers_.push_back(Layer{
-				std::make_unique<FCLayer>(
-					std::vector<uint8_t>{n_input}, n_output_, ss.str()),
+			size_t n_output = layers[i].n_out_;
+			layers_.push_back(HiddenLayer{
+				FCLayer(std::vector<uint8_t>{n_input}, n_output,
+					err::sprintf("hidden_%d", i)),
 				layers[i].hidden_
 			});
-			n_input = n_output_;
+			n_input = n_output;
 		}
 	}
+
+	MLP (std::vector<HiddenLayer> layers, std::string label) :
+		label_(label), layers_(layers) {}
 
 	MLP (const MLP& other, std::string label_prefix = "copied_")
 	{
@@ -44,26 +57,15 @@ struct MLP
 		return *this;
 	}
 
-	MLP (MLP&& other)
-	{
-		move_helper(std::move(other));
-	}
+	MLP (MLP&& other) = default;
 
-	MLP& operator = (MLP&& other)
-	{
-		if (this != &other)
-		{
-			label_ = other.label_;
-			move_helper(std::move(other));
-		}
-		return *this;
-	}
+	MLP& operator = (MLP&& other) = default;
 
 
 	ade::Tensorptr operator () (ade::Tensorptr input)
 	{
 		ade::Tensorptr out = input;
-		for (Layer& layer : layers_)
+		for (HiddenLayer& layer : layers_)
 		{
 			out = layer(out);
 		}
@@ -73,9 +75,9 @@ struct MLP
 	std::vector<llo::VarptrT> get_variables (void) const
 	{
 		std::vector<llo::VarptrT> out;
-		for (const Layer& layer : layers_)
+		for (const HiddenLayer& layer : layers_)
 		{
-			auto temp = layer.layer_->get_variables();
+			auto temp = layer.layer_.get_variables();
 			out.insert(out.end(), temp.begin(), temp.end());
 		}
 		return out;
@@ -83,54 +85,29 @@ struct MLP
 
 	uint8_t get_ninput (void) const
 	{
-		return n_input_;
+		return layers_.front().layer_.get_ninput();
 	}
 
 	uint8_t get_noutput (void) const
 	{
-		return n_output_;
+		return layers_.back().layer_.get_noutput();
 	}
 
 private:
 	void copy_helper (const MLP& other, std::string prefix)
 	{
 		label_ = prefix + other.label_;
-		n_input_ = other.n_input_;
-		n_output_ = other.n_output_;
 		layers_.clear();
-		for (const Layer& olayer : other.layers_)
+		for (const HiddenLayer& olayer : other.layers_)
 		{
-			layers_.push_back(Layer{
-				std::make_unique<FCLayer>(*(olayer.layer_.get()), prefix),
+			layers_.push_back(HiddenLayer{
+				FCLayer(olayer.layer_, prefix),
 				olayer.hidden_
 			});
 		}
 	}
 
-	void move_helper (MLP&& other)
-	{
-		label_ = std::move(other.label_);
-		n_input_ = std::move(other.n_input_);
-		n_output_ = std::move(other.n_output_);
-		layers_ = std::move(other.layers_);
-	}
-
 	std::string label_;
-	uint8_t n_input_;
-	uint8_t n_output_;
 
-	struct Layer
-	{
-		ade::Tensorptr operator () (ade::Tensorptr& input)
-		{
-			auto hypothesis = (*layer_)({input});
-			return hidden_(hypothesis);
-		}
-
-		std::unique_ptr<FCLayer> layer_;
-		HiddenFunc hidden_;
-	};
-
-	std::vector<Layer> layers_;
+	std::vector<HiddenLayer> layers_;
 };
-

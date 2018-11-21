@@ -80,7 +80,7 @@ TEST(LOAD, LoadGraph)
 		trim(line);
 		if (line.size() > 0)
 		{
-			expect += line + "\n";
+			expect += line + '\n';
 		}
 	}
 	for (llo::Variable& root : roots)
@@ -90,14 +90,14 @@ TEST(LOAD, LoadGraph)
 		artist.print(gotstr, root.tensor_);
 
 #if 0
-		std::cout << gotstr.str() << std::endl;
+		std::cout << gotstr.str() << '\n';
 #endif
 		while (std::getline(gotstr, line))
 		{
 			trim(line);
 			if (line.size() > 0)
 			{
-				got += line + "\n";
+				got += line + '\n';
 			}
 		}
 	}

@@ -39,20 +39,22 @@ message NodeArg
 message Functor
 {
     string opname = 1;
+    uint32 opcode = 2;
     // indices of args in graph
-    repeated NodeArg args = 2;
+    repeated NodeArg args = 3;
 }
 
 message Node
 {
+    string label = 1;
     oneof detail {
-        Source source = 1;
-        Functor functor = 2;
+        Source source = 2;
+        Functor functor = 3;
     }
 }
 
 message Graph
 {
-	string id = 1;
+	string label = 1;
 	repeated Node nodes = 2;
 }

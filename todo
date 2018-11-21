@@ -1,9 +1,13 @@
 correctness:
 P2 - test convolution
-P2 - test complicate equations
+P2 - test complicate equations (generate random valid equations)
 P3 - test travelling, and pruning algorithms
 P3 - verify rocnnet correctness using automated test
 P3 - implement better fallback strategy when test server is unavailable
+
+structure:
+P2 - generalize prune for any ade extension and move to its own "optimization module"
+P4 - after llo api experimentation, move rocnnet to its own repo
 
 transparency:
 P4 - investigate llo api: experiment with top-level code
@@ -13,4 +17,4 @@ P4 - implement optimization options to decrease equation graph size
 P4 - implement optimization options to increase data accuracy
 
 features:
-P2 - implement api to eigen
+P2 - implement llo-like api with eigen

@@ -305,6 +305,16 @@
             "out": "reduce_max(arg1,0)"
         },
         {
+            "name": "transpose",
+            "args": ["ade::Tensorptr arg1"],
+            "out": "permute(arg1, {1, 0})"
+        },
+        {
+            "name": "reduce_mean",
+            "args": ["ade::Tensorptr arg1"],
+            "out": "div(reduce_sum(arg1), n_elems(arg1))"
+        },
+        {
             "name": "matmul",
             "args": ["ade::Tensorptr arg1", "ade::Tensorptr arg2"],
             "out": "llo::matmul(arg1, arg2)"

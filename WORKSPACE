@@ -29,3 +29,13 @@ cpp_proto_repositories()
 load("@org_pubref_rules_protobuf//python:rules.bzl", "py_proto_repositories")
 
 py_proto_repositories()
+
+# rocnnet dependencies
+
+load("//rocnnet:rocnnet.bzl", "dependencies")
+
+dependencies()
+
+load("@com_github_nelhage_rules_boost//:boost/boost.bzl", "boost_deps")
+
+boost_deps()

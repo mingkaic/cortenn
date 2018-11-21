@@ -5,7 +5,7 @@
 
 #include "llo/shear.hpp"
 
-#include "pbm/graph.hpp"
+#include "pbm/save.hpp"
 
 #include "rocnnet/eqns/activations.hpp"
 
@@ -48,12 +48,12 @@ int main (int argc, char** argv)
 
 		llo::GenericData gdata = llo::eval(pruned, age::DOUBLE);
 		double* gdptr = (double*) gdata.data_.get();
-		std::cout << err::to_string(gdptr, gdptr + gdata.shape_.n_elems()) << std::endl;
+		std::cout << err::to_string(gdptr, gdptr + gdata.shape_.n_elems()) << '\n';
 	}
 
 	llo::GenericData data = llo::eval(root, age::DOUBLE);
 	double* dptr = (double*) data.data_.get();
-	std::cout << err::to_string(dptr, dptr + data.shape_.n_elems()) << std::endl;
+	std::cout << err::to_string(dptr, dptr + data.shape_.n_elems()) << '\n';
 
 	tenncor::Graph graph;
 	std::vector<ade::Tensorptr> roots = {trainer.error_};

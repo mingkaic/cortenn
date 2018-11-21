@@ -18,9 +18,14 @@ filegroup(
 
 cc_binary(
     name = "gd_demo",
-    srcs = ["demo/gd_demo.cpp"],
+    srcs = [
+        "demo/options.hpp",
+        "demo/gd_demo.cpp",
+    ],
     copts = ["-std=c++14"],
     deps = [
+        "@boost//:filesystem",
+        "@boost//:program_options",
         "//rocnnet/modl:modl",
         "@com_github_mingkaic_tenncor//dbg:dbg",
         "@com_github_mingkaic_cortenn//pbm:pbm",

@@ -9,6 +9,8 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include "llo/generated/grader.hpp"
+
 #include "llo/data.hpp"
 
 #ifndef LLO_SHEAR_HPP
@@ -25,7 +27,7 @@ struct LabelFinder final : public ade::iTraveler
 	LabelFinder (std::string label) : target_(label) {}
 
 	/// Implementation of iTraveler
-	void visit (ade::Tensor* leaf) override
+	void visit (ade::iLeaf* leaf) override
 	{
 		auto data = static_cast<Variable*>(leaf);
 		if (target_ == data->label_)
@@ -44,7 +46,7 @@ struct LabelFinder final : public ade::iTraveler
 			std::unordered_set<size_t> path;
 			for (size_t i = 0; i < n; ++i)
 			{
-				ade::Tensorptr tens = children[i].tensor_;
+				ade::TensptrT tens = children[i].tensor_;
 				tens->accept(*this);
 				if (parents_.end() != parents_.find(tens.get()) ||
 					labelled_.end() != labelled_.find(tens.get()))
@@ -70,7 +72,9 @@ struct LabelFinder final : public ade::iTraveler
 
 /// Return tree that prunes zero branches in input according to OPCODE
 /// For example, add(x, 0) is converted to simply x, while mul(x, 0) is 0
-ade::Tensorptr zero_prune (ade::Tensorptr root);
+ade::TensptrT zero_prune (ade::TensptrT root);
+
+ade::TensptrT derive (ade::TensptrT root, ade::TensptrT target);
 
 }
 

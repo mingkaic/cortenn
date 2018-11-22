@@ -45,7 +45,7 @@ TEST_F(DATA, SourceRetype)
 
 	size_t n = shape.n_elems();
 	std::vector<double> data = sess->get_double("data", n);
-	ade::Tensorptr ptr = llo::get_variable<double>(data, shape);
+	ade::TensptrT ptr = llo::get_variable<double>(data, shape);
 
 	llo::GenericData gd = llo::eval(ptr, age::UINT16);
 	ASSERT_EQ(age::UINT16, gd.dtype_);
@@ -69,7 +69,7 @@ TEST_F(DATA, PlaceHolder)
 	size_t n = shape.n_elems();
 	llo::VarptrT pl(llo::get_variable<double>(shape));
 
-	llo::GenericData uninit_gd = llo::eval(ade::Tensorptr(pl), age::DOUBLE);
+	llo::GenericData uninit_gd = llo::eval(ade::TensptrT(pl), age::DOUBLE);
 	ASSERT_EQ(age::DOUBLE, uninit_gd.dtype_);
 	std::vector<ade::DimT> uninit_slist(uninit_gd.shape_.begin(), uninit_gd.shape_.end());
 	EXPECT_ARREQ(slist, uninit_slist);
@@ -82,7 +82,7 @@ TEST_F(DATA, PlaceHolder)
 
 	std::vector<double> data = sess->get_double("data", n);
 	*pl = data;
-	llo::GenericData gd = llo::eval(ade::Tensorptr(pl), age::DOUBLE);
+	llo::GenericData gd = llo::eval(ade::TensptrT(pl), age::DOUBLE);
 	ASSERT_EQ(age::DOUBLE, gd.dtype_);
 	std::vector<ade::DimT> gotslist(gd.shape_.begin(), gd.shape_.end());
 	EXPECT_ARREQ(slist, gotslist);

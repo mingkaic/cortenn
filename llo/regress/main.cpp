@@ -7,6 +7,7 @@
 #include "llo/generated/api.hpp"
 #include "llo/data.hpp"
 #include "llo/eval.hpp"
+#include "llo/shear.hpp"
 
 
 void EXPECT_DATA_EQ (std::string name, std::vector<double> expect, std::vector<double> got)
@@ -77,7 +78,7 @@ static std::vector<double> get_output_data (testify::GeneratedCase& gcase, std::
 
 
 static void unary_op (antero::Testament* test, std::string tname,
-	std::function<ade::Tensorptr(ade::Tensorptr&)> op)
+	std::function<ade::TensptrT(ade::TensptrT&)> op)
 {
 	testify::GeneratedCase gcase = test->get("REGRESS::" + tname);
 	ade::Shape shape = get_shape(gcase);
@@ -85,9 +86,9 @@ static void unary_op (antero::Testament* test, std::string tname,
 	std::vector<double> resdata = get_output_data(gcase, "unary_out");
 	std::vector<double> gresdata = get_output_data(gcase, "unary_ga");
 
-	ade::Tensorptr leaf = llo::get_variable<double>(data, shape);
-	ade::Tensorptr res = op(leaf);
-	ade::Tensorptr gres = age::derive(res, leaf.get());
+	ade::TensptrT leaf = llo::get_variable<double>(data, shape);
+	ade::TensptrT res = op(leaf);
+	ade::TensptrT gres = llo::derive(res, leaf);
 
 	llo::GenericData resgd = llo::eval(res, age::DOUBLE);
 	llo::GenericData gresgd = llo::eval(gres, age::DOUBLE);
@@ -104,7 +105,7 @@ static void unary_op (antero::Testament* test, std::string tname,
 
 
 static void binary_op (antero::Testament* test, std::string tname,
-	std::function<ade::Tensorptr(ade::Tensorptr&,ade::Tensorptr&)> op)
+	std::function<ade::TensptrT(ade::TensptrT&,ade::TensptrT&)> op)
 {
 	testify::GeneratedCase gcase = test->get("REGRESS::" + tname);
 	ade::Shape shape = get_shape(gcase);
@@ -114,11 +115,11 @@ static void binary_op (antero::Testament* test, std::string tname,
 	std::vector<double> gresdata = get_output_data(gcase, "binary_ga");
 	std::vector<double> gresdata2 = get_output_data(gcase, "binary_gb");
 
-	ade::Tensorptr leaf = llo::get_variable<double>(data, shape);
-	ade::Tensorptr leaf2 = llo::get_variable<double>(data2, shape);
-	ade::Tensorptr res = op(leaf, leaf2);
-	ade::Tensorptr gres = age::derive(res, leaf.get());
-	ade::Tensorptr gres2 = age::derive(res, leaf2.get());
+	ade::TensptrT leaf = llo::get_variable<double>(data, shape);
+	ade::TensptrT leaf2 = llo::get_variable<double>(data2, shape);
+	ade::TensptrT res = op(leaf, leaf2);
+	ade::TensptrT gres = llo::derive(res, leaf);
+	ade::TensptrT gres2 = llo::derive(res, leaf2);
 
 	llo::GenericData resgd = llo::eval(res, age::DOUBLE);
 	llo::GenericData gresgd = llo::eval(gres, age::DOUBLE);
@@ -159,7 +160,7 @@ struct REGRESS : public antero::Testament {};
 
 TEST_F(REGRESS, Abs)
 {
-	unary_op(this, "Abs", [](ade::Tensorptr& a)
+	unary_op(this, "Abs", [](ade::TensptrT& a)
 	{
 		return age::abs(a);
 	});
@@ -168,7 +169,7 @@ TEST_F(REGRESS, Abs)
 
 TEST_F(REGRESS, Neg)
 {
-	unary_op(this, "Neg", [](ade::Tensorptr& a)
+	unary_op(this, "Neg", [](ade::TensptrT& a)
 	{
 		return age::neg(a);
 	});
@@ -177,7 +178,7 @@ TEST_F(REGRESS, Neg)
 
 TEST_F(REGRESS, Sin)
 {
-	unary_op(this, "Sin", [](ade::Tensorptr& a)
+	unary_op(this, "Sin", [](ade::TensptrT& a)
 	{
 		return age::sin(a);
 	});
@@ -186,7 +187,7 @@ TEST_F(REGRESS, Sin)
 
 TEST_F(REGRESS, Cos)
 {
-	unary_op(this, "Cos", [](ade::Tensorptr& a)
+	unary_op(this, "Cos", [](ade::TensptrT& a)
 	{
 		return age::cos(a);
 	});
@@ -194,7 +195,7 @@ TEST_F(REGRESS, Cos)
 
 TEST_F(REGRESS, Tan)
 {
-	unary_op(this, "Tan", [](ade::Tensorptr& a)
+	unary_op(this, "Tan", [](ade::TensptrT& a)
 	{
 		return age::tan(a);
 	});
@@ -203,7 +204,7 @@ TEST_F(REGRESS, Tan)
 
 TEST_F(REGRESS, Exp)
 {
-	unary_op(this, "Exp", [](ade::Tensorptr& a)
+	unary_op(this, "Exp", [](ade::TensptrT& a)
 	{
 		return age::exp(a);
 	});
@@ -212,7 +213,7 @@ TEST_F(REGRESS, Exp)
 
 TEST_F(REGRESS, Log)
 {
-	unary_op(this, "Log", [](ade::Tensorptr& a)
+	unary_op(this, "Log", [](ade::TensptrT& a)
 	{
 		return age::log(a);
 	});
@@ -221,7 +222,7 @@ TEST_F(REGRESS, Log)
 
 TEST_F(REGRESS, Sqrt)
 {
-	unary_op(this, "Sqrt", [](ade::Tensorptr& a)
+	unary_op(this, "Sqrt", [](ade::TensptrT& a)
 	{
 		return age::sqrt(a);
 	});
@@ -230,7 +231,7 @@ TEST_F(REGRESS, Sqrt)
 
 TEST_F(REGRESS, Pow)
 {
-	binary_op(this, "Pow", [](ade::Tensorptr& a, ade::Tensorptr& b)
+	binary_op(this, "Pow", [](ade::TensptrT& a, ade::TensptrT& b)
 	{
 		return age::pow(a, b);
 	});
@@ -239,7 +240,7 @@ TEST_F(REGRESS, Pow)
 
 TEST_F(REGRESS, Add)
 {
-	binary_op(this, "Add", [](ade::Tensorptr& a, ade::Tensorptr& b)
+	binary_op(this, "Add", [](ade::TensptrT& a, ade::TensptrT& b)
 	{
 		return age::add(a, b);
 	});
@@ -248,7 +249,7 @@ TEST_F(REGRESS, Add)
 
 TEST_F(REGRESS, Sub)
 {
-	binary_op(this, "Sub", [](ade::Tensorptr& a, ade::Tensorptr& b)
+	binary_op(this, "Sub", [](ade::TensptrT& a, ade::TensptrT& b)
 	{
 		return age::sub(a, b);
 	});
@@ -257,7 +258,7 @@ TEST_F(REGRESS, Sub)
 
 TEST_F(REGRESS, Mul)
 {
-	binary_op(this, "Mul", [](ade::Tensorptr& a, ade::Tensorptr& b)
+	binary_op(this, "Mul", [](ade::TensptrT& a, ade::TensptrT& b)
 	{
 		return age::mul(a, b);
 	});
@@ -266,7 +267,7 @@ TEST_F(REGRESS, Mul)
 
 TEST_F(REGRESS, Div)
 {
-	binary_op(this, "Div", [](ade::Tensorptr& a, ade::Tensorptr& b)
+	binary_op(this, "Div", [](ade::TensptrT& a, ade::TensptrT& b)
 	{
 		return age::div(a, b);
 	});
@@ -308,11 +309,11 @@ TEST_F(REGRESS, Matmul)
 	std::vector<double> gresdata = get_output_data(gcase, "matmul_ga");
 	std::vector<double> gresdata2 = get_output_data(gcase, "matmul_gb");
 
-	ade::Tensorptr leaf = llo::get_variable<double>(data, ashape);
-	ade::Tensorptr leaf2 = llo::get_variable<double>(data2, bshape);
-	ade::Tensorptr res = age::matmul(leaf, leaf2);
-	ade::Tensorptr gres = age::derive(res, leaf.get());
-	ade::Tensorptr gres2 = age::derive(res, leaf2.get());
+	ade::TensptrT leaf = llo::get_variable<double>(data, ashape);
+	ade::TensptrT leaf2 = llo::get_variable<double>(data2, bshape);
+	ade::TensptrT res = age::matmul(leaf, leaf2);
+	ade::TensptrT gres = llo::derive(res, leaf);
+	ade::TensptrT gres2 = llo::derive(res, leaf2);
 
 	llo::GenericData resgd = llo::eval(res, age::DOUBLE);
 	llo::GenericData gresgd = llo::eval(gres, age::DOUBLE);

@@ -30,7 +30,7 @@ static ade::CoordPtrT load_coord (
 		});
 }
 
-LoadVecsT load_graph (const tenncor::Graph& in, DataLoaderPtrT dataloader)
+LoadVecsT load_graph (const tenncor::Graph& in, iDataLoader& dataloader)
 {
 	auto nodes = in.nodes();
 	TensT invec;
@@ -42,7 +42,7 @@ LoadVecsT load_graph (const tenncor::Graph& in, DataLoaderPtrT dataloader)
 		{
 			std::string src_label = *(pb_labels.rbegin());
 			const tenncor::Source& source = node.source();
-			ade::Tensorptr leaf = dataloader->load(source, src_label);
+			ade::TensptrT leaf = dataloader.load(source, src_label);
 			invec.push_back(leaf);
 			if (false == pb_labels.empty())
 			{
@@ -60,8 +60,8 @@ LoadVecsT load_graph (const tenncor::Graph& in, DataLoaderPtrT dataloader)
 				ade::CoordPtrT coord = load_coord(nodearg.coord());
 				args.push_back({coord, invec[nodearg.idx()]});
 			}
-			ade::Tensorptr f = ade::Functor::get(
-				ade::Opcode{func.opname(), func.opcode()}, args);
+			ade::TensptrT f(ade::Functor::get(
+				ade::Opcode{func.opname(), func.opcode()}, args));
 			invec.push_back(f);
 			if (false == pb_labels.empty())
 			{

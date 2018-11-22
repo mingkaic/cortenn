@@ -6,7 +6,7 @@
 /// Define functions for marshal and unmarshal data sources
 ///
 
-#include "ade/tensor.hpp"
+#include "ade/ileaf.hpp"
 
 #include "pbm/data.hpp"
 
@@ -26,7 +26,7 @@ arr->mutable_data()->Swap(&vec);
 /// Marshal iSource to tenncor::Source
 struct DataSaver final : public pbm::iDataSaver
 {
-    void save (tenncor::Node& node, ade::Tensor* in) override
+    void save (tenncor::Node& node, ade::iLeaf* in) override
     {
         std::string* label = node.add_labels();
         *label = static_cast<Variable*>(in)->label_;
@@ -115,12 +115,12 @@ struct DataSaver final : public pbm::iDataSaver
 
 #define UNPACK_SOURCE(TYPE)\
 auto vec = arr.data();\
-return get_variable(std::vector<TYPE>(vec.begin(), vec.end()), shape, label);
+return ade::TensptrT(get_variable(std::vector<TYPE>(vec.begin(), vec.end()), shape, label));
 
 /// Unmarshal tenncor::Source as Variable containing context of source
 struct DataLoader final : public pbm::iDataLoader
 {
-    ade::Tensorptr load (const tenncor::Source& source,
+    ade::TensptrT load (const tenncor::Source& source,
         std::string label) override
     {
         std::string sstr = source.shape();

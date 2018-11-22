@@ -36,7 +36,7 @@
         },
         "NEG": {
             "operation": "llo::neg((T*)out,llo::to_ref<T>(in[0]))",
-            "derivative": "neg(data(1,args[0]->shape()))"
+            "derivative": "neg(llo::data(1,args[0]->shape()))"
         },
         "SIN": {
             "operation": "llo::sin((T*)out,llo::to_ref<T>(in[0]))",
@@ -48,7 +48,7 @@
         },
         "TAN": {
             "operation": "llo::tan((T*)out,llo::to_ref<T>(in[0]))",
-            "derivative": "div(data(1,args[0]->shape()),pow(cos(args[0]),data(2,args[0]->shape())))"
+            "derivative": "div(llo::data(1,args[0]->shape()),pow(cos(args[0]),llo::data(2,args[0]->shape())))"
         },
         "EXP": {
             "operation": "llo::exp((T*)out,llo::to_ref<T>(in[0]))",
@@ -56,27 +56,27 @@
         },
         "LOG": {
             "operation": "llo::log((T*)out,llo::to_ref<T>(in[0]))",
-            "derivative": "div(data(1,args[0]->shape()),args[0])"
+            "derivative": "div(llo::data(1,args[0]->shape()),args[0])"
         },
         "SQRT": {
             "operation": "llo::sqrt((T*)out,llo::to_ref<T>(in[0]))",
-            "derivative": "div(data(1,args[0]->shape()),mul(data(2,args[0]->shape()),sqrt(args[0])))"
+            "derivative": "div(llo::data(1,args[0]->shape()),mul(llo::data(2,args[0]->shape()),sqrt(args[0])))"
         },
         "ROUND": {
             "operation": "llo::round((T*)out,llo::to_ref<T>(in[0]))",
-            "derivative": "data(1,args[0]->shape())"
+            "derivative": "llo::data(1,args[0]->shape())"
         },
         "POW": {
             "operation": "llo::pow((T*)out,shape,llo::to_ref<T>(in[0]),llo::to_ref<T>(in[1]))",
-            "derivative": "idx == 0 ? mul(args[1],pow(args[0],sub(args[1],data(1,args[0]->shape())))) : mul(log(args[0]),pow(args[0],args[1]))"
+            "derivative": "idx == 0 ? mul(args[1],pow(args[0],sub(args[1],llo::data(1,args[0]->shape())))) : mul(log(args[0]),pow(args[0],args[1]))"
         },
         "SUM": {
             "operation": "llo::add((T*)out,shape,llo::to_refs<T>(in))",
-            "derivative": "data(1,args[0]->shape())"
+            "derivative": "llo::data(1,args[0]->shape())"
         },
         "SUB": {
             "operation": "llo::sub((T*)out,shape,llo::to_ref<T>(in[0]),llo::to_ref<T>(in[1]))",
-            "derivative": "idx == 0 ? data(1,args[0]->shape()) : neg(data(1,args[0]->shape()))"
+            "derivative": "idx == 0 ? llo::data(1,args[0]->shape()) : neg(llo::data(1,args[0]->shape()))"
         },
         "PROD": {
             "operation": "llo::mul((T*)out,shape,llo::to_refs<T>(in))",
@@ -84,7 +84,7 @@
         },
         "DIV": {
             "operation": "llo::div((T*)out,shape,llo::to_ref<T>(in[0]),llo::to_ref<T>(in[1]))",
-            "derivative": "idx == 0 ? div(data(1,args[0]->shape()),args[1]) : div(div(neg(args[0]),args[1]),args[1])"
+            "derivative": "idx == 0 ? div(llo::data(1,args[0]->shape()),args[1]) : div(div(neg(args[0]),args[1]),args[1])"
         },
         "MIN": {
             "operation": "llo::min((T*)out,shape,llo::to_refs<T>(in))",
@@ -96,232 +96,232 @@
         },
         "EQ": {
             "operation": "llo::eq((T*)out,shape,llo::to_ref<T>(in[0]),llo::to_ref<T>(in[1]))",
-            "derivative": "data(0,args[0]->shape())"
+            "derivative": "llo::data(0,args[0]->shape())"
         },
         "NEQ": {
             "operation": "llo::neq((T*)out,shape,llo::to_ref<T>(in[0]),llo::to_ref<T>(in[1]))",
-            "derivative": "data(0,args[0]->shape())"
+            "derivative": "llo::data(0,args[0]->shape())"
         },
         "LT": {
             "operation": "llo::lt((T*)out,shape,llo::to_ref<T>(in[0]),llo::to_ref<T>(in[1]))",
-            "derivative": "data(0,args[0]->shape())"
+            "derivative": "llo::data(0,args[0]->shape())"
         },
         "GT": {
             "operation": "llo::gt((T*)out,shape,llo::to_ref<T>(in[0]),llo::to_ref<T>(in[1]))",
-            "derivative": "data(0,args[0]->shape())"
+            "derivative": "llo::data(0,args[0]->shape())"
         },
         "RAND_BINO": {
             "operation": "llo::rand_binom((T*)out,shape,llo::to_ref<T>(in[0]),llo::to_ref<double>(in[1]))",
-            "derivative": "data(0,args[0]->shape())"
+            "derivative": "llo::data(0,args[0]->shape())"
         },
         "RAND_UNIF": {
             "operation": "llo::rand_uniform((T*)out,shape,llo::to_ref<T>(in[0]),llo::to_ref<T>(in[1]))",
-            "derivative": "data(0,args[0]->shape())"
+            "derivative": "llo::data(0,args[0]->shape())"
         },
         "RAND_NORM": {
             "operation": "llo::rand_normal((T*)out,shape,llo::to_ref<T>(in[0]),llo::to_ref<T>(in[1]))",
-            "derivative": "data(0,args[0]->shape())"
+            "derivative": "llo::data(0,args[0]->shape())"
         }
     },
     "apis": [
         {
             "name": "abs",
-            "args": ["ade::Tensorptr arg1"],
-            "out": "ade::Functor::get(ade::Opcode{\"ABS\",ABS},{{ade::identity,arg1}})"
+            "args": ["ade::TensptrT arg1"],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"ABS\",ABS},{{ade::identity,arg1}}))"
         },
         {
             "name": "neg",
-            "args": ["ade::Tensorptr arg1"],
-            "out": "ade::Functor::get(ade::Opcode{\"NEG\",NEG},{{ade::identity,arg1}})"
+            "args": ["ade::TensptrT arg1"],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"NEG\",NEG},{{ade::identity,arg1}}))"
         },
         {
             "name": "sin",
-            "args": ["ade::Tensorptr arg1"],
-            "out": "ade::Functor::get(ade::Opcode{\"SIN\",SIN},{{ade::identity,arg1}})"
+            "args": ["ade::TensptrT arg1"],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SIN\",SIN},{{ade::identity,arg1}}))"
         },
         {
             "name": "cos",
-            "args": ["ade::Tensorptr arg1"],
-            "out": "ade::Functor::get(ade::Opcode{\"COS\",COS},{{ade::identity,arg1}})"
+            "args": ["ade::TensptrT arg1"],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"COS\",COS},{{ade::identity,arg1}}))"
         },
         {
             "name": "tan",
-            "args": ["ade::Tensorptr arg1"],
-            "out": "ade::Functor::get(ade::Opcode{\"TAN\",TAN},{{ade::identity,arg1}})"
+            "args": ["ade::TensptrT arg1"],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"TAN\",TAN},{{ade::identity,arg1}}))"
         },
         {
             "name": "exp",
-            "args": ["ade::Tensorptr arg1"],
-            "out": "ade::Functor::get(ade::Opcode{\"EXP\",EXP},{{ade::identity,arg1}})"
+            "args": ["ade::TensptrT arg1"],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"EXP\",EXP},{{ade::identity,arg1}}))"
         },
         {
             "name": "log",
-            "args": ["ade::Tensorptr arg1"],
-            "out": "ade::Functor::get(ade::Opcode{\"LOG\",LOG},{{ade::identity,arg1}})"
+            "args": ["ade::TensptrT arg1"],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"LOG\",LOG},{{ade::identity,arg1}}))"
         },
         {
             "name": "sqrt",
-            "args": ["ade::Tensorptr arg1"],
-            "out": "ade::Functor::get(ade::Opcode{\"SQRT\",SQRT},{{ade::identity,arg1}})"
+            "args": ["ade::TensptrT arg1"],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SQRT\",SQRT},{{ade::identity,arg1}}))"
         },
         {
             "name": "round",
-            "args": ["ade::Tensorptr arg1"],
-            "out": "ade::Functor::get(ade::Opcode{\"ROUND\",ROUND},{{ade::identity,arg1}})"
+            "args": ["ade::TensptrT arg1"],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"ROUND\",ROUND},{{ade::identity,arg1}}))"
         },
         {
             "name": "flip",
-            "args": ["ade::Tensorptr arg1", "uint8_t arg2"],
-            "out": "ade::Functor::get(ade::Opcode{\"SUM\",SUM},{{ade::flip(arg2),arg1}})"
+            "args": ["ade::TensptrT arg1", "uint8_t arg2"],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SUM\",SUM},{{ade::flip(arg2),arg1}}))"
         },
         {
             "name": "pow",
-            "args": ["ade::Tensorptr arg1", "ade::Tensorptr arg2"],
-            "out": "ade::Functor::get(ade::Opcode{\"POW\",POW},{{ade::identity,arg1},{ade::identity,arg2}})"
+            "args": ["ade::TensptrT arg1", "ade::TensptrT arg2"],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"POW\",POW},{{ade::identity,arg1},{ade::identity,arg2}}))"
         },
         {
             "name": "add",
-            "args": ["ade::Tensorptr arg1", "ade::Tensorptr arg2"],
-            "out": "ade::Functor::get(ade::Opcode{\"SUM\",SUM},{{ade::identity,arg1},{ade::identity,arg2}})"
+            "args": ["ade::TensptrT arg1", "ade::TensptrT arg2"],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SUM\",SUM},{{ade::identity,arg1},{ade::identity,arg2}}))"
         },
         {
             "name": "sub",
-            "args": ["ade::Tensorptr arg1", "ade::Tensorptr arg2"],
-            "out": "ade::Functor::get(ade::Opcode{\"SUB\",SUB},{{ade::identity,arg1},{ade::identity,arg2}})"
+            "args": ["ade::TensptrT arg1", "ade::TensptrT arg2"],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SUB\",SUB},{{ade::identity,arg1},{ade::identity,arg2}}))"
         },
         {
             "name": "mul",
-            "args": ["ade::Tensorptr arg1", "ade::Tensorptr arg2"],
-            "out": "ade::Functor::get(ade::Opcode{\"PROD\",PROD},{{ade::identity,arg1},{ade::identity,arg2}})"
+            "args": ["ade::TensptrT arg1", "ade::TensptrT arg2"],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"PROD\",PROD},{{ade::identity,arg1},{ade::identity,arg2}}))"
         },
         {
             "name": "div",
-            "args": ["ade::Tensorptr arg1", "ade::Tensorptr arg2"],
-            "out": "ade::Functor::get(ade::Opcode{\"DIV\",DIV},{{ade::identity,arg1},{ade::identity,arg2}})"
+            "args": ["ade::TensptrT arg1", "ade::TensptrT arg2"],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"DIV\",DIV},{{ade::identity,arg1},{ade::identity,arg2}}))"
         },
         {
             "name": "eq",
-            "args": ["ade::Tensorptr arg1", "ade::Tensorptr arg2"],
-            "out": "ade::Functor::get(ade::Opcode{\"EQ\",EQ},{{ade::identity,arg1},{ade::identity,arg2}})"
+            "args": ["ade::TensptrT arg1", "ade::TensptrT arg2"],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"EQ\",EQ},{{ade::identity,arg1},{ade::identity,arg2}}))"
         },
         {
             "name": "neq",
-            "args": ["ade::Tensorptr arg1", "ade::Tensorptr arg2"],
-            "out": "ade::Functor::get(ade::Opcode{\"NEQ\",NEQ},{{ade::identity,arg1},{ade::identity,arg2}})"
+            "args": ["ade::TensptrT arg1", "ade::TensptrT arg2"],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"NEQ\",NEQ},{{ade::identity,arg1},{ade::identity,arg2}}))"
         },
         {
             "name": "lt",
-            "args": ["ade::Tensorptr arg1", "ade::Tensorptr arg2"],
-            "out": "ade::Functor::get(ade::Opcode{\"LT\",LT},{{ade::identity,arg1},{ade::identity,arg2}})"
+            "args": ["ade::TensptrT arg1", "ade::TensptrT arg2"],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"LT\",LT},{{ade::identity,arg1},{ade::identity,arg2}}))"
         },
         {
             "name": "gt",
-            "args": ["ade::Tensorptr arg1", "ade::Tensorptr arg2"],
-            "out": "ade::Functor::get(ade::Opcode{\"GT\",GT},{{ade::identity,arg1},{ade::identity,arg2}})"
+            "args": ["ade::TensptrT arg1", "ade::TensptrT arg2"],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"GT\",GT},{{ade::identity,arg1},{ade::identity,arg2}}))"
         },
         {
             "name": "rand_bino",
-            "args": ["ade::Tensorptr arg1", "ade::Tensorptr arg2"],
-            "out": "ade::Functor::get(ade::Opcode{\"RAND_BINO\",RAND_BINO},{{ade::identity,arg1},{ade::identity,arg2}})"
+            "args": ["ade::TensptrT arg1", "ade::TensptrT arg2"],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"RAND_BINO\",RAND_BINO},{{ade::identity,arg1},{ade::identity,arg2}}))"
         },
         {
             "name": "rand_unif",
-            "args": ["ade::Tensorptr arg1", "ade::Tensorptr arg2"],
-            "out": "ade::Functor::get(ade::Opcode{\"RAND_UNIF\",RAND_UNIF},{{ade::identity,arg1},{ade::identity,arg2}})"
+            "args": ["ade::TensptrT arg1", "ade::TensptrT arg2"],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"RAND_UNIF\",RAND_UNIF},{{ade::identity,arg1},{ade::identity,arg2}}))"
         },
         {
             "name": "rand_norm",
-            "args": ["ade::Tensorptr arg1", "ade::Tensorptr arg2"],
-            "out": "ade::Functor::get(ade::Opcode{\"RAND_NORM\",RAND_NORM},{{ade::identity,arg1},{ade::identity,arg2}})"
+            "args": ["ade::TensptrT arg1", "ade::TensptrT arg2"],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"RAND_NORM\",RAND_NORM},{{ade::identity,arg1},{ade::identity,arg2}}))"
         },
         {
             "name": "n_elems",
-            "args": ["ade::Tensorptr arg"],
-            "out": "llo::get_variable(std::vector<ade::NElemT>{arg->shape().n_elems()}, ade::Shape())"
+            "args": ["ade::TensptrT arg"],
+            "out": "llo::data(arg->shape().n_elems(), ade::Shape(), \"n_elems\")"
         },
         {
             "name": "n_dims",
-            "args": ["ade::Tensorptr arg, uint8_t rank"],
-            "out": "llo::get_variable(std::vector<ade::DimT>{arg->shape().at(rank)}, ade::Shape())"
+            "args": ["ade::TensptrT arg", "uint8_t rank"],
+            "out": "llo::data(arg->shape().at(rank), ade::Shape(), \"n_dims\")"
         },
         {
             "name": "sum",
             "args": ["age::TensT arg1"],
-            "out": "ade::Functor::get(ade::Opcode{\"SUM\",SUM},age::to_args(arg1))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SUM\",SUM},age::to_args(arg1)))"
         },
         {
             "name": "prod",
             "args": ["age::TensT arg1"],
-            "out": "ade::Functor::get(ade::Opcode{\"PROD\",PROD},age::to_args(arg1))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"PROD\",PROD},age::to_args(arg1)))"
         },
         {
             "name": "min",
             "args": ["age::TensT arg1"],
-            "out": "ade::Functor::get(ade::Opcode{\"MIN\",MIN},age::to_args(arg1))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"MIN\",MIN},age::to_args(arg1)))"
         },
         {
             "name": "max",
             "args": ["age::TensT arg1"],
-            "out": "ade::Functor::get(ade::Opcode{\"MAX\",MAX},age::to_args(arg1))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"MAX\",MAX},age::to_args(arg1)))"
         },
         {
             "name": "reduce_sum",
-            "args": ["ade::Tensorptr arg1", "uint8_t arg2"],
-            "out": "ade::Functor::get(ade::Opcode{\"SUM\",SUM},{{llo::reduce(arg2,arg1->shape()),arg1}})"
+            "args": ["ade::TensptrT arg1", "uint8_t arg2"],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SUM\",SUM},{{llo::reduce(arg2,arg1->shape()),arg1}}))"
         },
         {
             "name": "reduce_min",
-            "args": ["ade::Tensorptr arg1", "uint8_t arg2"],
-            "out": "ade::Functor::get(ade::Opcode{\"MIN\",MIN},{{llo::reduce(arg2,arg1->shape()),arg1}})"
+            "args": ["ade::TensptrT arg1", "uint8_t arg2"],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"MIN\",MIN},{{llo::reduce(arg2,arg1->shape()),arg1}}))"
         },
         {
             "name": "reduce_max",
-            "args": ["ade::Tensorptr arg1", "uint8_t arg2"],
-            "out": "ade::Functor::get(ade::Opcode{\"MAX\",MAX},{{llo::reduce(arg2,arg1->shape()),arg1}})"
+            "args": ["ade::TensptrT arg1", "uint8_t arg2"],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"MAX\",MAX},{{llo::reduce(arg2,arg1->shape()),arg1}}))"
         },
         {
             "name": "permute",
-            "args": ["ade::Tensorptr arg1", "std::vector<uint8_t> arg2"],
-            "out": "ade::Functor::get(ade::Opcode{\"SUM\",SUM},{{ade::permute(arg2),arg1}})"
+            "args": ["ade::TensptrT arg1", "std::vector<uint8_t> arg2"],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SUM\",SUM},{{ade::permute(arg2),arg1}}))"
         },
         {
             "name": "extend",
-            "args": ["ade::Tensorptr arg1", "uint8_t arg2", "std::vector<uint8_t> arg3"],
-            "out": "ade::Functor::get(ade::Opcode{\"SUM\",SUM},{{ade::extend(arg2,arg3),arg1}})"
+            "args": ["ade::TensptrT arg1", "uint8_t arg2", "std::vector<uint8_t> arg3"],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SUM\",SUM},{{ade::extend(arg2,arg3),arg1}}))"
         },
         {
             "name": "reduce_sum",
-            "args": ["ade::Tensorptr arg1"],
+            "args": ["ade::TensptrT arg1"],
             "out": "reduce_sum(arg1,0)"
         },
         {
             "name": "reduce_min",
-            "args": ["ade::Tensorptr arg1"],
+            "args": ["ade::TensptrT arg1"],
             "out": "reduce_min(arg1,0)"
         },
         {
             "name": "reduce_max",
-            "args": ["ade::Tensorptr arg1"],
+            "args": ["ade::TensptrT arg1"],
             "out": "reduce_max(arg1,0)"
         },
         {
             "name": "transpose",
-            "args": ["ade::Tensorptr arg1"],
+            "args": ["ade::TensptrT arg1"],
             "out": "permute(arg1, {1, 0})"
         },
         {
             "name": "reduce_mean",
-            "args": ["ade::Tensorptr arg1"],
+            "args": ["ade::TensptrT arg1"],
             "out": "div(reduce_sum(arg1), n_elems(arg1))"
         },
         {
             "name": "matmul",
-            "args": ["ade::Tensorptr arg1", "ade::Tensorptr arg2"],
+            "args": ["ade::TensptrT arg1", "ade::TensptrT arg2"],
             "out": "llo::matmul(arg1, arg2)"
         },
         {
             "name": "convolute",
-            "args": ["ade::Tensorptr arg1", "ade::Tensorptr arg2"],
+            "args": ["ade::TensptrT arg1", "ade::TensptrT arg2"],
             "out": "llo::convolve(arg1, arg2)"
         }
     ]

@@ -4,6 +4,9 @@
 
 #include "rocnnet/modl/mlp.hpp"
 
+#ifndef MODL_GD_TRAINER_HPP
+#define MODL_GD_TRAINER_HPP
+
 // GDTrainer does not own anything
 struct GDTrainer
 {
@@ -12,14 +15,21 @@ struct GDTrainer
 		label_(label), brain_(&brain), batch_size_(batch_size),
 		train_in_(llo::data<double>(0,
 			ade::Shape({brain.get_ninput(), batch_size}), "train_in")),
-		train_out_(brain(ade::Tensorptr(train_in_))),
+		train_out_(brain(ade::TensptrT(train_in_))),
 		expected_out_(llo::data<double>(0,
-			ade::Shape({brain.get_noutput(), batch_size}), "expected_out")),
-		// todo: move error out of initializer list to avoid confusing order of init
-		error_(age::pow(age::sub(ade::Tensorptr(expected_out_), train_out_),
-			age::data(2, expected_out_->shape())))
+			ade::Shape({brain.get_noutput(), batch_size}), "expected_out"))
 	{
-		updates_ = update(error_, brain.get_variables());
+		error_ = age::pow(age::sub(ade::TensptrT(expected_out_), train_out_),
+			ade::TensptrT(age::data(2, expected_out_->shape())));
+
+		std::vector<LabelVar> lvars = brain.get_variables();
+		VariablesT vars(lvars.size());
+		std::transform(lvars.begin(), lvars.end(), vars.begin(),
+			[](LabelVar& lvar)
+			{
+				return lvar.var_;
+			});
+		updates_ = update(error_, vars);
 	}
 
 	void train (std::vector<double>& train_in,
@@ -55,9 +65,11 @@ struct GDTrainer
 	MLP* brain_ = nullptr; // do not own this
 	uint8_t batch_size_;
 	llo::VarptrT train_in_;
-	ade::Tensorptr train_out_;
+	ade::TensptrT train_out_;
 	llo::VarptrT expected_out_;
-	ade::Tensorptr error_;
+	ade::TensptrT error_;
 
 	DeltasT updates_;
 };
+
+#endif // MODL_GD_TRAINER_HPP

@@ -42,7 +42,7 @@ struct DBTrainer final
 
 
     // input of shape <n_input, n_batch>
-	ade::Tensorptr prop_up (ade::Tensorptr input)
+	ade::TensptrT prop_up (ade::TensptrT input)
 	{
         // sanity check
         const ade::Shape& in_shape = input->shape();
@@ -51,7 +51,7 @@ struct DBTrainer final
             err::fatalf("cannot dbn with input shape %s against n_input %d",
                 in_shape.to_string().c_str(), n_input_);
         }
-        ade::Tensorptr output = input;
+        ade::TensptrT output = input;
         for (RBM& h : layers_)
         {
             output = h.prop_up(output);
@@ -62,7 +62,7 @@ struct DBTrainer final
     PretrainsT pretraining_functions (llo::VarptrT input,
 		double learning_rate = 1e-3, size_t n_cont_div = 10)
     {
-        ade::Tensorptr input_node = input;
+        ade::TensptrT input_node = input;
         PretrainsT pt_updates;
         for (RBM& h : layers_)
         {
@@ -75,22 +75,22 @@ struct DBTrainer final
 	DeltasNCostT build_finetune_functions (llo::VarptrT train_in,
 		llo::VarptrT train_out, double learning_rate = 1e-3)
     {
-        ade::Tensorptr out_dist = prop_up(ade::Tensorptr(train_in));
-        ade::Tensorptr finetune_cost = - age::reduce_mean(age::log(out_dist));
+        ade::TensptrT out_dist = prop_up(ade::TensptrT(train_in));
+        ade::TensptrT finetune_cost = - age::reduce_mean(age::log(out_dist));
 
         finetune_cost->set_label("finetune_cost(" + finetune_cost->get_label() + ")");
         nnet::iconnector<double>* ft_cost_icon = static_cast<nnet::iconnector<double>*>(finetune_cost.get());
 
-        ade::Tensorptr temp_diff = age::sub(out_dist, ade::Tensorptr(train_out));
-        ade::Tensorptr error = age::reduce_mean(age::pow(temp_diff, llo::data(2, temp_diff->shape(), "2"));
+        ade::TensptrT temp_diff = age::sub(out_dist, ade::TensptrT(train_out));
+        ade::TensptrT error = age::reduce_mean(age::pow(temp_diff, llo::data(2, temp_diff->shape(), "2"));
 
         std::vector<llo::VarptrT> gparams = this->get_variables();
         DeltasT errs;
         for (llo::VarptrT& gp : gparams)
         {
-            errs.emplace(gp.get(), age::sub(ade::Tensorptr(gp),
+            errs.emplace(gp.get(), age::sub(ade::TensptrT(gp),
                 age::mul(llo::data(learning_rate, gp->shape(), "learning_rate"),
-                    age::derive(finetune_cost, gp.get()))));
+                    llo::derive(finetune_cost, gp))));
         }
 
         return {errs, error};

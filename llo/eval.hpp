@@ -12,7 +12,7 @@ namespace llo
 
 /// Visitor implementation to evaluate ade nodes according to ctx and dtype
 /// Given a global context containing ade-llo association maps, get data from
-/// llo::Sources when possible, otherwise treat native ade::Tensors as zeroes
+/// llo::Sources when possible, otherwise treat native ade::iTensors as zeroes
 /// Additionally, Evaluator attempts to get meta-data from llo::FuncWrapper
 /// before checking native ade::Functor
 struct Evaluator final : public ade::iTraveler
@@ -20,7 +20,7 @@ struct Evaluator final : public ade::iTraveler
 	Evaluator (age::_GENERATED_DTYPE dtype) : dtype_(dtype) {}
 
 	/// Implementation of iTraveler
-	void visit (ade::Tensor* leaf) override
+	void visit (ade::iLeaf* leaf) override
 	{
 		const char* data = (const char*) leaf->data();
 		age::_GENERATED_DTYPE dtype = (age::_GENERATED_DTYPE) leaf->type_code();
@@ -75,7 +75,7 @@ private:
 	age::_GENERATED_DTYPE dtype_;
 };
 
-GenericData eval (ade::Tensorptr tens, age::_GENERATED_DTYPE dtype);
+GenericData eval (ade::TensptrT tens, age::_GENERATED_DTYPE dtype);
 
 }
 

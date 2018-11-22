@@ -24,12 +24,12 @@ cc_binary(
     ],
     copts = ["-std=c++14"],
     deps = [
+        "//rocnnet/modl:modl",
         "@boost//:filesystem",
         "@boost//:program_options",
-        "//rocnnet/modl:modl",
         "@com_github_mingkaic_tenncor//dbg:dbg",
-        "@com_github_mingkaic_cortenn//pbm:pbm",
     ],
+    data = glob(["pretrained/*"]),
 )
 
 cc_binary(

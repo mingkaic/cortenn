@@ -21,8 +21,11 @@ using TensLabelT = std::unordered_map<ade::iTensor*,StringsT>;
 
 struct GraphSaver final : public ade::iTraveler
 {
+	GraphSaver (iDataSaver* saver) :
+		saver_(saver) {}
+
     /// Implementation of iTraveler
-	void visit (ade::Tensor* leaf) override
+	void visit (ade::iLeaf* leaf) override
 	{
 		if (visited_.end() == visited_.find(leaf))
 		{
@@ -53,7 +56,7 @@ struct GraphSaver final : public ade::iTraveler
     void save (tenncor::Graph& out, TensLabelT labels = TensLabelT());
 
 	// List of leaves visited (left to right)
-	std::list<ade::Tensor*> leaves_;
+	std::list<ade::iLeaf*> leaves_;
 
 	// List of functions visited (by depth-first)
 	std::list<ade::iFunctor*> funcs_;
@@ -69,8 +72,12 @@ private:
         const ade::CoordPtrT& mapper);
 
     /// Marshal llo::iSource to tenncor::Source
-    void save_data (tenncor::Node* out, ade::Tensor* in)
+    void save_data (tenncor::Node* out, ade::iLeaf* in)
     {
+		if (nullptr == saver_)
+		{
+			err::fatal("cannot save tensor without datasaver");
+		}
         saver_->save(*out, in);
     }
 

@@ -29,10 +29,10 @@ struct ConvLayer final
 			llo::data<double>(0, ade::Shape({out_ncol}), "bias"));
 	}
 
-	ade::Tensorptr operator () (ade::Tensorptr input)
+	ade::TensptrT operator () (ade::TensptrT input)
 	{
-		return age::add(age::convolute(input, ade::Tensorptr(weight_)),
-			ade::Tensorptr(bias_));
+		return age::add(age::convolute(input, ade::TensptrT(weight_)),
+			ade::TensptrT(bias_));
 	}
 
 	std::vector<llo::VarptrT> get_variables (void) const

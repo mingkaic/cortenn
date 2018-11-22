@@ -5,10 +5,20 @@
 #ifndef MODL_FC_LAYER_HPP
 #define MODL_FC_LAYER_HPP
 
+const std::string fc_prefix = "fc_";
+const std::string weight_fmt = "weight_%d";
+const std::string bias_fmt = "bias_%d";
+
+struct LabelVar
+{
+	llo::VarptrT var_;
+	pbm::StringsT labels_;
+};
+
 struct FCLayer
 {
 	FCLayer (std::vector<uint8_t> n_inputs, uint8_t n_output, std::string label) :
-		label_("fc_" + label)
+		label_(fc_prefix + label)
 	{
 		size_t n = n_inputs.size();
 		if (n == 0)
@@ -29,16 +39,15 @@ struct FCLayer
 			std::vector<double> data(ndata);
 			std::generate(data.begin(), data.end(), gen);
 
-			llo::VarptrT weight(
-				llo::get_variable(data, shape, err::sprintf("weight_%d", i)));
-			llo::VarptrT bias(
-				llo::data<double>(0, ade::Shape({n_output}), err::sprintf("bias_%d", i)));
-			weight_bias_.push_back({weight, bias});
+			weight_bias_.push_back({
+				llo::VarptrT(llo::get_variable(data, shape,
+					err::sprintf(weight_fmt, i))),
+				llo::VarptrT(llo::data<double>(0, ade::Shape({n_output}),
+					err::sprintf(bias_fmt, i)))});
 		}
 	}
 
-	FCLayer (const FCLayer& other) :
-		label_(other.label_)
+	FCLayer (const FCLayer& other)
 	{
 		copy_helper(other);
 	}
@@ -47,7 +56,6 @@ struct FCLayer
 	{
 		if (this != &other)
 		{
-			other.label_;
 			copy_helper(other);
 		}
 		return *this;
@@ -58,7 +66,7 @@ struct FCLayer
 	FCLayer& operator = (FCLayer&& other) = default;
 
 
-	ade::Tensorptr operator () (age::TensT inputs)
+	ade::TensptrT operator () (age::TensT inputs)
 	{
 		size_t n = inputs.size();
 		if (n != weight_bias_.size())
@@ -70,20 +78,28 @@ struct FCLayer
 		{
 			ade::DimT cdim = inputs[i]->shape().at(1);
 			args.push_back(age::matmul(inputs[i],
-				ade::Tensorptr(weight_bias_[i].first)));
+				ade::TensptrT(weight_bias_[i].first)));
 			args.push_back(age::extend(
-				ade::Tensorptr(weight_bias_[i].second), 1, {cdim}));
+				ade::TensptrT(weight_bias_[i].second), 1, {cdim}));
 		}
 		return age::sum(args);
 	}
 
-	std::vector<llo::VarptrT> get_variables (void) const
+	std::vector<LabelVar> get_variables (void) const
 	{
-		std::vector<llo::VarptrT> out;
-		for (const WbPairT& wb : weight_bias_)
+		std::vector<LabelVar> out;
+		for (size_t i = 0, n = weight_bias_.size(); i < n; ++i)
 		{
-			out.push_back(wb.first);
-			out.push_back(wb.second);
+			std::string weight_label = err::sprintf(weight_fmt, i);
+			std::string bias_label = err::sprintf(bias_fmt, i);
+			out.push_back({
+				weight_bias_[i].first,
+				{label_, weight_label}
+			});
+			out.push_back({
+				weight_bias_[i].second,
+				{label_, bias_label}
+			});
 		}
 		return out;
 	}
@@ -100,19 +116,18 @@ struct FCLayer
 
 	void parse_from (pbm::LoadVecsT labels)
 	{
-		std::unordered_map<std::string,ade::Tensorptr> relevant;
+		std::unordered_map<std::string,ade::TensptrT> relevant;
 		for (pbm::LoadTensT& pairs : labels)
 		{
-			if (pairs.second.size() == 2 &&
-				label_ == pairs.second.front())
+			if (label_ == pairs.second.front())
 			{
 				relevant.emplace(pairs.second.back(), pairs.first);
 			}
 		}
 		for (size_t i = 0, n = weight_bias_.size(); i < n; ++i)
 		{
-			std::string weight_label = err::sprintf("weight_%d", i);
-			std::string bias_label = err::sprintf("bias_%d", i);
+			std::string weight_label = err::sprintf(weight_fmt, i);
+			std::string bias_label = err::sprintf(bias_fmt, i);
 			auto wit = relevant.find(weight_label);
 			if (relevant.end() == wit)
 			{
@@ -120,8 +135,9 @@ struct FCLayer
 			}
 			else
 			{
-				wit->second;
-	            weight_bias_[i].first;
+				llo::GenericData wdata = llo::eval(wit->second, age::DOUBLE);
+				double* wptr = (double*) wdata.data_.get();
+	            *(weight_bias_[i].first) = std::vector<double>(wptr, wptr + wdata.shape_.n_elems());
 			}
 			auto bit = relevant.find(bias_label);
 			if (relevant.end() == wit)
@@ -130,8 +146,9 @@ struct FCLayer
 			}
 			else
 			{
-				bit->second;
-            	weight_bias_[i].second;
+				llo::GenericData bdata = llo::eval(bit->second, age::DOUBLE);
+				double* bptr = (double*) bdata.data_.get();
+            	*(weight_bias_[i].second) = std::vector<double>(bptr, bptr + bdata.shape_.n_elems());
 			}
 		}
 	}
@@ -145,6 +162,7 @@ private:
 
 	void copy_helper (const FCLayer& other)
 	{
+		label_ = other.label_;
 		weight_bias_.clear();
 		for (const WbPairT& opair : other.weight_bias_)
 		{

@@ -3,17 +3,17 @@
 
 #include "llo/operator.hpp"
 
-using DeltasNCostT = std::pair<DeltasT,ade::Tensorptr>;
+using DeltasNCostT = std::pair<DeltasT,ade::TensptrT>;
 
-ade::Tensorptr one_binom (ade::Tensorptr a)
+ade::TensptrT one_binom (ade::TensptrT a)
 {
     return age::rand_bino(llo::data<double>(1.0, a->shape(), "1"), a);
 }
 
-ade::Tensorptr extended_add (ade::Tensorptr bigger, ade::Tensorptr smaller)
+ade::TensptrT extended_add (ade::TensptrT bigger, ade::TensptrT smaller)
 {
     ade::DimT cdim = bigger->shape().at(1);
-    return age::add(bigger, age::extend(ade::Tensorptr(smaller), 1, {cdim}));
+    return age::add(bigger, age::extend(ade::TensptrT(smaller), 1, {cdim}));
 }
 
 struct RBM final : public Unmarshaler
@@ -69,49 +69,49 @@ struct RBM final : public Unmarshaler
 
 
     // input of shape <n_input, n_batch>
-	ade::Tensorptr prop_up (ade::Tensorptr input)
+	ade::TensptrT prop_up (ade::TensptrT input)
 	{
         // prop forward
         // weight is <n_hidden, n_input>
         // in is <n_input, ?>
         // out = in @ weight, so out is <n_hidden, ?>
-        ade::Tensorptr weighed = age::matmul(input, weight_);
-        ade::Tensorptr pre_nl = extended_add(weighted, hbias_);
+        ade::TensptrT weighed = age::matmul(input, weight_);
+        ade::TensptrT pre_nl = extended_add(weighted, hbias_);
         return sigmoid(pre_nl);
 	}
 
     // input of shape <n_hidden, n_batch>
-	ade::Tensorptr prop_down (ade::Tensorptr hidden)
+	ade::TensptrT prop_down (ade::TensptrT hidden)
 	{
         // weight is <n_hidden, n_input>
         // in is <n_hidden, ?>
         // out = in @ weight.T, so out is <n_input, ?>
         ade::DimT cdim = input->shape().at(1);
-        ade::Tensorptr weighed = age::matmul(input, age::transpose(weight_));
-        ade::Tensorptr pre_nl = extended_add(weighted, vbias_);
+        ade::TensptrT weighed = age::matmul(input, age::transpose(weight_));
+        ade::TensptrT pre_nl = extended_add(weighted, vbias_);
         return sigmoid(pre_nl);
 	}
 
     // recreate input using hidden distribution
     // output shape of input->shape()
-	ade::Tensorptr reconstruct_visible (ade::Tensorptr input)
+	ade::TensptrT reconstruct_visible (ade::TensptrT input)
 	{
-        ade::Tensorptr hidden_dist = prop_up(input);
-        ade::Tensorptr hidden_sample = one_binom(hidden_dist);
+        ade::TensptrT hidden_dist = prop_up(input);
+        ade::TensptrT hidden_sample = one_binom(hidden_dist);
         return prop_down(hidden_sample);
 	}
 
-	ade::Tensorptr reconstruct_hidden (ade::Tensorptr hidden)
+	ade::TensptrT reconstruct_hidden (ade::TensptrT hidden)
 	{
-        ade::Tensorptr visible_dist = prop_down(hidden);
-        ade::Tensorptr visible_sample = one_binom(visible_dist);
+        ade::TensptrT visible_dist = prop_down(hidden);
+        ade::TensptrT visible_sample = one_binom(visible_dist);
         return prop_up(visible_sample);
 	}
 
 
     // todo: move this somewhere else
     // input a 2-D vector of shape <n_input, n_batch>
-	DeltasNCostT train (ade::Tensorptr input,
+	DeltasNCostT train (ade::TensptrT input,
 		llo::VarptrT persistent = nullptr,
 		double learning_rate = 1e-3,
 		size_t n_cont_div = 1)
@@ -128,36 +128,36 @@ struct RBM final : public Unmarshaler
         {
             chain_it = persistent;
         }
-        ade::Tensorptr chain(chain_it);
+        ade::TensptrT chain(chain_it);
 
         std::shared_ptr<iTensor> final_visible_dist;
         for (size_t i = 0; i < n_cont_div; i++)
         {
-            ade::Tensorptr hidden_dist = reconstruct_hidden(chain);
+            ade::TensptrT hidden_dist = reconstruct_hidden(chain);
 
             // use operational optimization to recover presig and vis nodes
-            ade::Tensorptr weighed = age::matmul(chain_it, age::transpose(weight_));
-            ade::Tensorptr presig_vis = extended_add(weighted, vbias_);
+            ade::TensptrT weighed = age::matmul(chain_it, age::transpose(weight_));
+            ade::TensptrT presig_vis = extended_add(weighted, vbias_);
             final_visible_dist = age::sigmoid(presig_vis);
 
             chain_it = one_binom(hidden_dist);
         }
-        ade::Tensorptr chain_end = one_binom(final_visible_dist);
+        ade::TensptrT chain_end = one_binom(final_visible_dist);
 
-        ade::Tensorptr cost = age::sub(
+        ade::TensptrT cost = age::sub(
             age::reduce_mean(free_energy(input)),
             age::reduce_mean(free_energy(chain_end)));
 
-        ade::Tensorptr dW = age::derive(cost, weight_.get());
-        ade::Tensorptr dhb = age::derive(cost, hbias_.get());
-        ade::Tensorptr dvb = age::derive(cost, vbias_.get());
+        ade::TensptrT dW = llo::derive(cost, weight_);
+        ade::TensptrT dhb = llo::derive(cost, hbias_);
+        ade::TensptrT dvb = llo::derive(cost, vbias_);
 
     	DeltasT errs;
-        errs.emplace(weight_.get(), age::sub(ade::Tensorptr(weight_),
+        errs.emplace(weight_.get(), age::sub(ade::TensptrT(weight_),
             age::mul(llo::data(learning_rate, dW->shape(), "learning_rate"), dW)));
-        errs.emplace(hbias_.get(), age::sub(ade::Tensorptr(hbias_),
+        errs.emplace(hbias_.get(), age::sub(ade::TensptrT(hbias_),
             age::mul(llo::data(learning_rate, dhb->shape(), "learning_rate"), dhb)));
-        errs.emplace(vbias_.get(), age::sub(ade::Tensorptr(vbias_),
+        errs.emplace(vbias_.get(), age::sub(ade::TensptrT(vbias_),
             age::mul(llo::data(learning_rate, dvb->shape(), "learning_rate"), dvb)));
 
         std::shared_ptr<iTensor> monitoring_cost;
@@ -218,41 +218,41 @@ private:
         vbias_ = std::move(other.vbias_);
 	}
 
-    ade::Tensorptr free_energy (ade::Tensorptr sample)
+    ade::TensptrT free_energy (ade::TensptrT sample)
     {
-        ade::Tensorptr vbias_term = age::matmul(sample, age::transpose(ade::Tensorptr(vbias_)));
+        ade::TensptrT vbias_term = age::matmul(sample, age::transpose(ade::TensptrT(vbias_)));
         // <x, y> @ <z, x> + z -> <z, y>
-        ade::Tensorptr weighed = age::matmul(sample, ade::Tensorptr(weight_));
-        ade::Tensorptr wx_b = extended_add(weighed, ade::Tensorptr(hbias_));
-        ade::Tensorptr hidden_term = age::reduce_sum(
+        ade::TensptrT weighed = age::matmul(sample, ade::TensptrT(weight_));
+        ade::TensptrT wx_b = extended_add(weighed, ade::TensptrT(hbias_));
+        ade::TensptrT hidden_term = age::reduce_sum(
             age::transpose(age::log(
                 age::add(llo::data(1.0, wx_b->shape(), "1"), age::exp(wx_b))
             )), 1);
         return ade::neg(ade::add(hidden_term, vbias_term));
     }
 
-    ade::Tensorptr get_pseudo_likelihood_cost (ade::Tensorptr input)
+    ade::TensptrT get_pseudo_likelihood_cost (ade::TensptrT input)
     {
         const ade::Shape& shape = input->shape();
         std::vector<double> zeros(shape.n_elems(), 0);
         zeros[0] = 1;
-        ade::Tensorptr one_i = llo::get_variable(zeros, shape);
+        ade::TensptrT one_i = llo::get_variable(zeros, shape);
 
-        ade::Tensorptr xi = age::round(input); // xi = [0|1, ...]
-        ade::Tensorptr xi_flip = age::sub(one_i, xi);
+        ade::TensptrT xi = age::round(input); // xi = [0|1, ...]
+        ade::TensptrT xi_flip = age::sub(one_i, xi);
 
-        ade::Tensorptr fe_xi = free_energy(xi);
-        ade::Tensorptr fe_xi_flip = free_energy(xi_flip);
+        ade::TensptrT fe_xi = free_energy(xi);
+        ade::TensptrT fe_xi_flip = free_energy(xi_flip);
 
         return age::reduce_mean(age::mul(
             llo::data<double>(n_input_, fe_xi->shape(), "n_input"),
             age::log(sigmoid(age::sub(fe_xi_flip, fe_xi)))));
     }
 
-	ade::Tensorptr get_reconstruction_cost (ade::Tensorptr input, ade::Tensorptr visible_dist)
+	ade::TensptrT get_reconstruction_cost (ade::TensptrT input, ade::TensptrT visible_dist)
     {
-        ade::Tensorptr p_success = age::mul(input, age::log(visible_dist));
-        ade::Tensorptr p_not = age::mul(
+        ade::TensptrT p_success = age::mul(input, age::log(visible_dist));
+        ade::TensptrT p_not = age::mul(
             age::sub(llo::data(1, input->shape(), "1"), input),
             age::log(age::sub(llo::data(1, visible_dist->shape(), "1"), visible_dist)));
         return age::reduce_mean(

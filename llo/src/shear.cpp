@@ -1,8 +1,7 @@
 #include <list>
+#include <cassert>
 
 #include "ade/functor.hpp"
-
-#include "llo/generated/grader.hpp"
 
 #include "llo/shear.hpp"
 
@@ -12,7 +11,7 @@ namespace llo
 {
 
 // todo: move somewhere else
-static ade::Tensorptr prune0 (bool& is_zero, ade::iFunctor* func,
+static ade::TensptrT prune0 (bool& is_zero, ade::iFunctor* func,
 	std::unordered_set<size_t> zeros, ade::ArgsT args)
 {
 	is_zero = false;
@@ -30,20 +29,20 @@ static ade::Tensorptr prune0 (bool& is_zero, ade::iFunctor* func,
 			case age::ROUND:
 			case age::PROD:
 				is_zero = true;
-				return age::data(0, func->shape());
+				return ade::TensptrT(age::data(0, func->shape()));
 			case age::COS:
 			case age::EXP:
-				return age::data(1, func->shape());
+				return ade::TensptrT(age::data(1, func->shape()));
 			case age::LOG:
 				err::fatal("cannot LOG by zero");
 			case age::POW:
 				if (zeros.end() != zeros.find(0))
 				{
 					is_zero = true;
-					return age::data(0, func->shape());
+					return ade::TensptrT(age::data(0, func->shape()));
 				}
 				// else if zeros.end() != zeros.find(1)
-				return age::data(1, func->shape());
+				return ade::TensptrT(age::data(1, func->shape()));
 			case age::SUM:
 			{
 				ade::ArgsT filtered;
@@ -57,19 +56,19 @@ static ade::Tensorptr prune0 (bool& is_zero, ade::iFunctor* func,
 				if (filtered.empty())
 				{
 					is_zero = true;
-					return age::data(0, func->shape());
+					return ade::TensptrT(age::data(0, func->shape()));
 				}
-				return ade::Functor::get(ade::Opcode{"SUM", age::SUM}, filtered);
+				return ade::TensptrT(ade::Functor::get(ade::Opcode{"SUM", age::SUM}, filtered));
 			}
 			case age::SUB:
 				if (2 == zeros.size())
 				{
 					is_zero = true;
-					return age::data(0, func->shape());
+					return ade::TensptrT(age::data(0, func->shape()));
 				}
 				else if (zeros.end() != zeros.find(0))
 				{
-					return ade::Functor::get(ade::Opcode{"NEG", age::NEG}, {args[1]});
+					return ade::TensptrT(ade::Functor::get(ade::Opcode{"NEG", age::NEG}, {args[1]}));
 				}
 				// else if zeros.end() != zeros.find(1)
 				return args[0].tensor_;
@@ -80,7 +79,7 @@ static ade::Tensorptr prune0 (bool& is_zero, ade::iFunctor* func,
 				}
 				// else if 0 == zeros.front()
 				is_zero = true;
-				return age::data(0, func->shape());
+				return ade::TensptrT(age::data(0, func->shape()));
 			case age::MIN:
 			case age::MAX:
 			case age::EQ:
@@ -95,10 +94,10 @@ static ade::Tensorptr prune0 (bool& is_zero, ade::iFunctor* func,
 				err::fatal("cannot prune unknown opcode");
 		}
 	}
-	return ade::Functor::get(ade::Opcode{age::name_op(opcode), opcode}, args);
+	return ade::TensptrT(ade::Functor::get(ade::Opcode{age::name_op(opcode), opcode}, args));
 }
 
-ade::Tensorptr zero_prune (ade::Tensorptr root)
+ade::TensptrT zero_prune (ade::TensptrT root)
 {
 	// assert that context will be unaffected by prune,
 	// since source will never be touched
@@ -128,7 +127,7 @@ ade::Tensorptr zero_prune (ade::Tensorptr root)
 	// start pruning according to each parent node in order
 	std::unordered_set<ade::iTensor*> zeros = finder.labelled_;
 
-	std::unordered_map<ade::iTensor*,ade::Tensorptr> mapping;
+	std::unordered_map<ade::iTensor*,ade::TensptrT> mapping;
 	std::unordered_map<ade::iTensor*,bool> zeromap;
 	for (ade::iFunctor* func : parents)
 	{
@@ -161,6 +160,15 @@ ade::Tensorptr zero_prune (ade::Tensorptr root)
 		err::fatal("something went wrong"); // todo: probably add context?
 	}
 	return it->second;
+}
+
+ade::TensptrT derive (ade::TensptrT root, ade::TensptrT target)
+{
+	age::Grader grader(target.get(), std::make_shared<age::RuleSet>());
+	root->accept(grader);
+	auto it = grader.derivatives_.find(root.get());
+	assert(grader.derivatives_.end() != it);
+	return zero_prune(it->second);
 }
 
 }

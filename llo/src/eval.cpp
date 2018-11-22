@@ -5,7 +5,7 @@
 namespace llo
 {
 
-GenericData eval (ade::Tensorptr tens, age::_GENERATED_DTYPE dtype)
+GenericData eval (ade::TensptrT tens, age::_GENERATED_DTYPE dtype)
 {
 	Evaluator eval(dtype);
 	tens->accept(eval);

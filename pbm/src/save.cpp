@@ -22,18 +22,17 @@ void GraphSaver::save (tenncor::Graph& out, TensLabelT labels)
         });
 
     std::vector<ade::iFunctor*> funcs(funcs_.begin(), funcs_.end());
-    std::vector<ade::Tensor*> leaves(leaves_.begin(), leaves_.end());
+    std::vector<ade::iLeaf*> leaves(leaves_.begin(), leaves_.end());
 
     // all nodes in leaf appear before funcs
     std::unordered_map<ade::iTensor*,size_t> ordermap;
     size_t nleaves = leaves.size();
     for (size_t i = 0; i < nleaves; ++i)
     {
-        ade::Tensor* tens = leaves[i];
+        ade::iLeaf* tens = leaves[i];
         ordermap[tens] = i;
 
         tenncor::Node* pb_node = out.add_nodes();
-        save_data(pb_node, tens);
         auto it = labels.find(tens);
         if (labels.end() != it)
         {
@@ -41,6 +40,7 @@ void GraphSaver::save (tenncor::Graph& out, TensLabelT labels)
                 it->second.begin(), it->second.end());
             pb_node->mutable_labels()->Swap(&vec);
         }
+        save_data(pb_node, tens);
     }
     for (size_t i = 0, n = funcs.size(); i < n; ++i)
     {

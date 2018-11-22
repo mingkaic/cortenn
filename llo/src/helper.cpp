@@ -7,18 +7,18 @@
 namespace llo
 {
 
-ade::Tensorptr grad_prod (size_t gradidx, age::TensT tens)
+ade::TensptrT grad_prod (size_t gradidx, age::TensT tens)
 {
 	tens.erase(tens.begin() + gradidx);
 	return age::prod(tens);
 }
 
-ade::Tensorptr grad_min (size_t gradidx, age::TensT tens)
+ade::TensptrT grad_min (size_t gradidx, age::TensT tens)
 {
 	return age::eq(age::min(tens), tens[gradidx]);
 }
 
-ade::Tensorptr grad_max (size_t gradidx, age::TensT tens)
+ade::TensptrT grad_max (size_t gradidx, age::TensT tens)
 {
 	return age::eq(age::max(tens), tens[gradidx]);
 }
@@ -29,7 +29,7 @@ ade::CoordPtrT reduce (uint8_t rank, const ade::Shape& shape)
 	return ade::reduce(rank, slist);
 }
 
-ade::Tensorptr matmul (ade::Tensorptr a, ade::Tensorptr b)
+ade::TensptrT matmul (ade::TensptrT a, ade::TensptrT b)
 {
 	const ade::Shape& ashape = a->shape();
 	const ade::Shape& bshape = b->shape();
@@ -64,7 +64,7 @@ ade::Tensorptr matmul (ade::Tensorptr a, ade::Tensorptr b)
 // specifications according to https://www.tensorflow.org/api_docs/python/tf/nn/conv2d
 // this is to avoid changing rocnnet too much
 // (todo: consider simplification after experimenting with rocnnet)
-ade::Tensorptr convolve (ade::Tensorptr img, ade::Tensorptr kernel)
+ade::TensptrT convolve (ade::TensptrT img, ade::TensptrT kernel)
 {
 	const ade::Shape& imgshape = img->shape();
 	const ade::Shape& kernelshape = kernel->shape();
@@ -89,9 +89,6 @@ ade::Tensorptr convolve (ade::Tensorptr img, ade::Tensorptr kernel)
 			kernelshape.to_string().c_str(),
 			imgshape.to_string().c_str());
 	}
-
-	uint8_t out_width = in_width - kernel_width;
-	uint8_t out_height = in_height - kernel_height;
 
 	// map img to shape <nbatch, in_width, in_height, ?(out_channels),
 	//		?(kernel_width), ?(kernel_height), in_channels>
@@ -123,8 +120,8 @@ ade::Tensorptr convolve (ade::Tensorptr img, ade::Tensorptr kernel)
 			}
 		}));
 
-	ade::Tensorptr prod = ade::Functor::get(ade::Opcode{"PROD", age::PROD}, {
-		{img_mapper, img}, {kernel_mapper, kernel}});
+	ade::TensptrT prod(ade::Functor::get(ade::Opcode{"PROD", age::PROD}, {
+		{img_mapper, img}, {kernel_mapper, kernel}}));
 
 	return age::reduce_sum(prod, 4);
 }

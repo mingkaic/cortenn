@@ -7,6 +7,8 @@
 
 #include "dbg/ade.hpp"
 
+#include "pbm/save.hpp"
+
 #include "llo/source.hpp"
 
 #include "rocnnet/eqns/activations.hpp"
@@ -14,6 +16,12 @@
 #include "rocnnet/modl/gd_trainer.hpp"
 
 #include "rocnnet/demo/options.hpp"
+
+#ifndef _GENERATED_GRADER_HPP
+
+std::shared_ptr<age::iRuleSet> age::Grader::default_rules = std::make_shared<age::RuleSet>();
+
+#endif
 
 Options options;
 
@@ -72,6 +80,7 @@ int main (int argc, char** argv)
 
 	uint8_t n_in = 10;
 	uint8_t n_out = n_in / 2;
+
 	std::vector<LayerInfo> hiddens = {
 		// use same sigmoid in static memory once models copy is established
 		LayerInfo{9, sigmoid},
@@ -80,20 +89,20 @@ int main (int argc, char** argv)
 	MLP brain(n_in, hiddens, "brain");
 	MLP untrained_brain(brain);
 	MLP pretrained_brain(brain);
-	// todo: implement
 	std::ifstream loadstr(loadpath);
 	if (loadstr.is_open())
 	{
 		tenncor::Graph graph;
 		graph.ParseFromIstream(&loadstr);
-		pbm::LoadVecsT vars = pbm::load_graph(graph,
-			pbm::DataLoaderPtrT(new llo::DataLoader));
+		llo::DataLoader loader;
+		pbm::LoadVecsT vars = pbm::load_graph(graph, loader);
 		pretrained_brain.parse_from(vars);
+		loadstr.close();
 	}
 
 	uint8_t n_batch = 3;
 	size_t show_every_n = 500;
-	ApproxFuncT approx = [](ade::Tensorptr& root, VariablesT leaves)
+	ApproxFuncT approx = [](ade::TensptrT& root, VariablesT leaves)
 	{
 		return sgd(root, leaves, 0.9); // learning rate = 0.9
 	};
@@ -149,12 +158,11 @@ int main (int argc, char** argv)
 	double trained_err = 0;
 	double pretrained_err = 0;
 
-	llo::Variable* testin = llo::get_variable(
+	llo::VarptrT testin = llo::get_variable(
 		std::vector<double>(n_in), ade::Shape({n_in}), "testin");
-	ade::Tensorptr shared_in(testin);
-	auto untrained_out = untrained_brain(shared_in);
-	auto trained_out = brain(shared_in);
-	// auto pretrained_out = pretrained_brain(shared_in);
+	auto untrained_out = untrained_brain(testin);
+	auto trained_out = brain(testin);
+	auto pretrained_out = pretrained_brain(testin);
 	for (size_t i = 0; i < n_test; i++)
 	{
 		if (i % show_every_n == show_every_n-1)
@@ -167,31 +175,31 @@ int main (int argc, char** argv)
 
 		llo::GenericData untrained_data = llo::eval(untrained_out, age::DOUBLE);
 		llo::GenericData trained_data = llo::eval(trained_out, age::DOUBLE);
-		// llo::GenericData pretrained_data = llo::eval(pretrained_out, llo::DOUBLE);
+		llo::GenericData pretrained_data = llo::eval(pretrained_out, age::DOUBLE);
 
 		double* untrained_res = (double*) untrained_data.data_.get();
 		double* trained_res = (double*) trained_data.data_.get();
-		// double* pretrained_res = (double*) pretrained_data.data_.get();
+		double* pretrained_res = (double*) pretrained_data.data_.get();
 
 		double untrained_avgerr = 0;
 		double trained_avgerr = 0;
-		// double pretrained_avgerr = 0;
+		double pretrained_avgerr = 0;
 		for (size_t i = 0; i < n_out; i++)
 		{
 			untrained_avgerr += std::abs(untrained_res[i] - batch_out[i]);
 			trained_avgerr += std::abs(trained_res[i] - batch_out[i]);
-			// pretrained_avgerr += std::abs(pretrained_res[i] - batch_out[i]);
+			pretrained_avgerr += std::abs(pretrained_res[i] - batch_out[i]);
 		}
 		untrained_err += untrained_avgerr / n_out;
 		trained_err += trained_avgerr / n_out;
-		// pretrained_err += pretrained_avgerr / n_out;
+		pretrained_err += pretrained_avgerr / n_out;
 	}
 	untrained_err /= (double) n_test;
 	trained_err /= (double) n_test;
-	// pretrained_err /= (double) n_test;
+	pretrained_err /= (double) n_test;
 	std::cout << "untrained mlp error rate: " << untrained_err * 100 << "%\n";
 	std::cout << "trained mlp error rate: " << trained_err * 100 << "%\n";
-	// std::cout << "pretrained mlp error rate: " << pretrained_err * 100 << "%\n";
+	std::cout << "pretrained mlp error rate: " << pretrained_err * 100 << "%\n";
 
 	// try to save
 	if (exit_status == 0)
@@ -199,7 +207,20 @@ int main (int argc, char** argv)
 		std::ofstream savestr(savepath);
 		if (savestr.is_open())
 		{
-			// trained_gdn.save(serialpath, "gd_demo");
+			pbm::GraphSaver saver(new llo::DataSaver());
+			trained_out->accept(saver);
+
+			std::vector<LabelVar> vars = brain.get_variables();
+			pbm::TensLabelT labels;
+			for (LabelVar& var : vars)
+			{
+				labels[var.var_.get()] = var.labels_;
+			}
+
+			tenncor::Graph graph;
+			saver.save(graph, labels);
+			graph.SerializeToOstream(&savestr);
+			savestr.close();
 		}
 	}
 

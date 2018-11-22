@@ -28,7 +28,7 @@ int main (int argc, char** argv)
 	MLP brain(n_in, hiddens, "brain");
 
 	uint8_t n_batch = 3;
-	ApproxFuncT approx = [](ade::Tensorptr& root, VariablesT leaves)
+	ApproxFuncT approx = [](ade::TensptrT& root, VariablesT leaves)
 	{
 		return sgd(root, leaves, 0.9); // learning rate = 0.9
 	};
@@ -39,11 +39,11 @@ int main (int argc, char** argv)
 	// 	1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
 	// 	1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
 	// 	1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-	ade::Tensorptr root = trainer.error_;
+	ade::TensptrT root = trainer.error_;
 
 	for (auto var : vars)
 	{
-		auto der = age::derive(root, var.get());
+		auto der = llo::derive(root, var);
 		auto pruned = llo::zero_prune(der);
 
 		llo::GenericData gdata = llo::eval(pruned, age::DOUBLE);
@@ -56,7 +56,7 @@ int main (int argc, char** argv)
 	std::cout << err::to_string(dptr, dptr + data.shape_.n_elems()) << '\n';
 
 	tenncor::Graph graph;
-	std::vector<ade::Tensorptr> roots = {trainer.error_};
+	std::vector<ade::TensptrT> roots = {trainer.error_};
 	save_graph(graph, roots);
 	std::fstream outstr(serialpath, std::ios::out | std::ios::trunc | std::ios::binary);
 	if (!graph.SerializeToOstream(&outstr))

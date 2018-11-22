@@ -3,7 +3,10 @@
 
 #include "rocnnet/modl/fc_layer.hpp"
 
-using HiddenFunc = std::function<ade::Tensorptr(ade::Tensorptr)>;
+#ifndef MODL_MLP_HPP
+#define MODL_MLP_HPP
+
+using HiddenFunc = std::function<ade::TensptrT(ade::TensptrT)>;
 
 struct LayerInfo
 {
@@ -47,9 +50,9 @@ struct MLP final
 	MLP& operator = (MLP&& other) = default;
 
 
-	ade::Tensorptr operator () (ade::Tensorptr input)
+	ade::TensptrT operator () (ade::TensptrT input)
 	{
-		ade::Tensorptr out = input;
+		ade::TensptrT out = input;
 		for (HiddenLayer& layer : layers_)
 		{
 			out = layer(out);
@@ -57,13 +60,17 @@ struct MLP final
 		return out;
 	}
 
-	std::vector<llo::VarptrT> get_variables (void) const
+	std::vector<LabelVar> get_variables (void) const
 	{
-		std::vector<llo::VarptrT> out;
+		std::vector<LabelVar> out;
 		for (const HiddenLayer& layer : layers_)
 		{
 			auto temp = layer.layer_.get_variables();
 			out.insert(out.end(), temp.begin(), temp.end());
+		}
+		for (LabelVar& lv : out)
+		{
+			lv.labels_.push_front(label_);
 		}
 		return out;
 	}
@@ -112,7 +119,7 @@ private:
 
 	struct HiddenLayer
 	{
-		ade::Tensorptr operator () (ade::Tensorptr& input)
+		ade::TensptrT operator () (ade::TensptrT& input)
 		{
 			auto hypothesis = layer_({input});
 			return hidden_(hypothesis);
@@ -126,3 +133,5 @@ private:
 
 	std::vector<HiddenLayer> layers_;
 };
+
+#endif // MODL_MLP_HPP

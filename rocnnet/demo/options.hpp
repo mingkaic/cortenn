@@ -18,7 +18,7 @@ struct Options
 		opt::options_description desc("Demo Options");
 		desc.add_options()
 			("help", "Display help message")
-			("load", opt::value<fs::path>(&loadfile_)->default_value(""),
+			("load", opt::value<fs::path>(&loadfile_)->default_value("rocnnet/pretrained/gdmodel.pbx"),
 				"filename to load pretrained model")
 			("save", opt::value<fs::path>(&savefile_)->default_value(""),
 				"filename to save model")

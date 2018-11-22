@@ -1,6 +1,6 @@
 #include <memory>
 
-#include "ade/tensor.hpp"
+#include "ade/ileaf.hpp"
 
 #include "llo/generated/codes.hpp"
 
@@ -52,7 +52,7 @@ struct GenericRef
 	age::_GENERATED_DTYPE dtype_;
 };
 
-struct Variable final : public ade::Tensor
+struct Variable final : public ade::iLeaf
 {
 	Variable (const char* data, age::_GENERATED_DTYPE dtype,
 		ade::Shape shape, std::string label) :
@@ -158,7 +158,7 @@ private:
 using VarptrT = std::shared_ptr<llo::Variable>;
 
 template <typename T>
-Variable* get_variable (std::vector<T> data, ade::Shape shape,
+VarptrT get_variable (std::vector<T> data, ade::Shape shape,
 	std::string label = "")
 {
 	if (data.size() != shape.n_elems())
@@ -166,17 +166,18 @@ Variable* get_variable (std::vector<T> data, ade::Shape shape,
 		err::fatalf("cannot create variable with data size %d "
 			"against shape %s", data.size(), shape.to_string().c_str());
 	}
-	return new Variable((char*) &data[0], age::get_type<T>(), shape, label);
+	return VarptrT(new Variable((char*) &data[0],
+		age::get_type<T>(), shape, label));
 }
 
 template <typename T>
-Variable* get_variable (ade::Shape shape, std::string label = "")
+VarptrT get_variable (ade::Shape shape, std::string label = "")
 {
 	return get_variable(std::vector<T>(shape.n_elems(), 0), shape, label);
 }
 
 template <typename T>
-Variable* data (T scalar, ade::Shape shape, std::string label)
+VarptrT data (T scalar, ade::Shape shape, std::string label = "")
 {
 	return llo::get_variable(std::vector<T>(shape.n_elems(),scalar),
 		shape, label);

@@ -114,10 +114,10 @@ struct FCLayer
 		return weight_bias_[0].first->shape().at(0);
 	}
 
-	void parse_from (pbm::LoadVecsT labels)
+	void parse_from (pbm::LabelledsT labels)
 	{
 		std::unordered_map<std::string,ade::TensptrT> relevant;
-		for (pbm::LoadTensT& pairs : labels)
+		for (pbm::LabelledTensT& pairs : labels)
 		{
 			if (label_ == pairs.second.front())
 			{

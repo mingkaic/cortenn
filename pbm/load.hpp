@@ -14,12 +14,20 @@
 namespace pbm
 {
 
-using LoadTensT = std::pair<ade::TensptrT,StringsT>;
+using LabelledTensT = std::pair<ade::TensptrT,StringsT>;
 
-using LoadVecsT = std::vector<LoadTensT>;
+using LabelledsT = std::vector<LabelledTensT>;
+
+struct GraphInfo final
+{
+    std::unordered_set<ade::TensptrT> roots_;
+
+    LabelledsT labelled_;
+};
 
 /// Return all nodes in graph unmarshalled from protobuf object
-LoadVecsT load_graph (const tenncor::Graph& in, iDataLoader& dataloader);
+void load_graph (GraphInfo& out, const tenncor::Graph& in,
+    iDataLoader& dataloader);
 
 }
 

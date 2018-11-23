@@ -40,7 +40,7 @@ void GraphSaver::save (tenncor::Graph& out, TensLabelT labels)
                 it->second.begin(), it->second.end());
             pb_node->mutable_labels()->Swap(&vec);
         }
-        save_data(pb_node, tens);
+        save_data(*pb_node->mutable_source(), tens);
     }
     for (size_t i = 0, n = funcs.size(); i < n; ++i)
     {

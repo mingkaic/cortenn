@@ -192,7 +192,7 @@ struct RBM final : public Unmarshaler
 		return n_hidden_;
 	}
 
-	void parse_from (pbm::LoadVecsT labels)
+	void parse_from (pbm::LabelledsT labels)
 	{
 		//
 	}

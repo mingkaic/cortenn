@@ -17,12 +17,6 @@
 
 #include "rocnnet/demo/options.hpp"
 
-#ifndef _GENERATED_GRADER_HPP
-
-std::shared_ptr<age::iRuleSet> age::Grader::default_rules = std::make_shared<age::RuleSet>();
-
-#endif
-
 Options options;
 
 // user-side generator
@@ -57,6 +51,15 @@ int main (int argc, char** argv)
 {
 	GOOGLE_PROTOBUF_VERIFY_VERSION;
 
+	std::string savepath;
+	std::string loadpath;
+
+	options.desc_.add_options()
+		("load", opt::value<std::string>(&loadpath)->default_value("rocnnet/pretrained/gdmodel.pbx"),
+			"filename to load pretrained model")
+		("save", opt::value<std::string>(&savepath)->default_value(""),
+			"filename to save model");
+
 	int exit_status = 0;
 	std::clock_t start;
 	double duration;
@@ -66,8 +69,6 @@ int main (int argc, char** argv)
 		return 1;
 	}
 
-	std::string savepath = options.savefile_.string();
-	std::string loadpath = options.loadfile_.string();
 	size_t n_train = options.n_train_;
 	size_t n_test = options.n_test_;
 
@@ -95,7 +96,9 @@ int main (int argc, char** argv)
 		tenncor::Graph graph;
 		graph.ParseFromIstream(&loadstr);
 		llo::DataLoader loader;
-		pbm::LoadVecsT vars = pbm::load_graph(graph, loader);
+		pbm::GraphInfo info;
+		pbm::load_graph(info, graph, loader);
+		pbm::LabelledsT vars = info.labelled_;
 		pretrained_brain.parse_from(vars);
 		loadstr.close();
 	}

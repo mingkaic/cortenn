@@ -50,16 +50,16 @@ struct ConvLayer final
 		return weight_->shape().at(0);
 	}
 
-	void parse_from (pbm::LoadVecsT labels)
+	void parse_from (pbm::LabelledsT labels)
 	{
-		pbm::LoadVecsT relevant;
+		pbm::LabelledsT relevant;
 		std::copy_if(labels.begin(), labels.end(), std::back_inserter(relevant),
-			[&](pbm::LoadTensT& pairs)
+			[&](pbm::LabelledTensT& pairs)
 			{
 				return pairs.second.size() > 0 &&
 					this->label_ == pairs.second.front();
 			});
-		for (pbm::LoadTensT& pairs : relevant)
+		for (pbm::LabelledTensT& pairs : relevant)
 		{
 			pairs.second.pop_front();
 		}

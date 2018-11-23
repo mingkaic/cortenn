@@ -72,13 +72,19 @@ private:
         const ade::CoordPtrT& mapper);
 
     /// Marshal llo::iSource to tenncor::Source
-    void save_data (tenncor::Node* out, ade::iLeaf* in)
+    void save_data (tenncor::Source& out, ade::iLeaf* in)
     {
 		if (nullptr == saver_)
 		{
 			err::fatal("cannot save tensor without datasaver");
 		}
-        saver_->save(*out, in);
+        const ade::Shape& shape = in->shape();
+        char* data = (char*) in->data();
+        size_t nelems = shape.n_elems();
+		size_t tcode = in->type_code();
+        out.set_shape(std::string(shape.begin(), shape.end()));
+		out.set_data(saver_->serialize(data, nelems, tcode));
+		out.set_typecode(tcode);
     }
 
     DataSaverPtrT saver_;

@@ -8,7 +8,21 @@
 
 #include "dbg/ade.hpp"
 
-#include "pbm/graph.hpp"
+#include "pbm/load.hpp"
+
+#include "pbm/test/common.hpp"
+
+
+struct MockLoader : public pbm::iDataLoader
+{
+    virtual ~MockLoader (void) = default;
+
+    virtual ade::TensptrT deserialize (const char* pb,
+        ade::Shape shape, size_t typecode, std::string label)
+	{
+		return ade::TensptrT(new MockTensor(shape));
+	}
+};
 
 
 const std::string testdir = "pbm/data";
@@ -45,29 +59,29 @@ TEST(LOAD, LoadGraph)
 		ASSERT_TRUE(graph.ParseFromIstream(&inputstr));
 	}
 
-	std::vector<llo::Variable> roots;
+	MockLoader loader;
+	pbm::GraphInfo graphinfo;
+	pbm::load_graph(graphinfo, graph, loader);
+
+	EXPECT_EQ(2, graphinfo.roots_.size());
+
+	ade::TensptrT tree1, tree2;
+	for (auto& lvar : graphinfo.labelled_)
 	{
-		std::vector<llo::Variable> nodes = load_graph(graph);
-		std::unordered_set<ade::iTensor*> have_parents;
-		for (auto it = nodes.begin(), et = nodes.end(); et != it; ++it)
+		std::string treeid = lvar.second.front();
+		std::string instid = lvar.second.back();
+
+		if (instid == "dest")
 		{
-			if (ade::iFunctor* func =
-				dynamic_cast<ade::iFunctor*>(it->tensor_.get()))
+			if (treeid == "subtree")
 			{
-				ade::ArgsT refs = func->get_children();
-				for (auto& ref : refs)
-				{
-					have_parents.emplace(ref.tensor_.get());
-				}
+				tree1 = lvar.first;
+			}
+			else if (treeid == "subtree2")
+			{
+				tree2 = lvar.first;
 			}
 		}
-
-		// filter out nodes with parents to find roots
-		std::copy_if(nodes.begin(), nodes.end(), std::back_inserter(roots),
-		[&](llo::Variable& node)
-		{
-			return have_parents.end() == have_parents.find(node.tensor_.get());
-		});
 	}
 
 	std::string expect;
@@ -83,24 +97,24 @@ TEST(LOAD, LoadGraph)
 			expect += line + '\n';
 		}
 	}
-	for (llo::Variable& root : roots)
-	{
-		PrettyEquation artist;
-		std::stringstream gotstr;
-		artist.print(gotstr, root.tensor_);
+
+	PrettyEquation artist;
+	std::stringstream gotstr;
+	artist.print(gotstr, tree1);
+	artist.print(gotstr, tree2);
 
 #if 0
-		std::cout << gotstr.str() << '\n';
+	std::cout << gotstr.str() << '\n';
 #endif
-		while (std::getline(gotstr, line))
+	while (std::getline(gotstr, line))
+	{
+		trim(line);
+		if (line.size() > 0)
 		{
-			trim(line);
-			if (line.size() > 0)
-			{
-				got += line + '\n';
-			}
+			got += line + '\n';
 		}
 	}
+
 	EXPECT_STREQ(expect.c_str(), got.c_str());
 }
 

@@ -8,6 +8,8 @@ namespace opt = boost::program_options;
 
 struct Options
 {
+	Options (void) : desc_("Demo Options") {}
+
 	bool parse(int argc, char** argv)
 	{
 		size_t default_seed = static_cast<size_t>(
@@ -15,13 +17,8 @@ struct Options
 				time_since_epoch().count());
 
 		std::vector<std::string> config_fnames;
-		opt::options_description desc("Demo Options");
-		desc.add_options()
+		desc_.add_options()
 			("help", "Display help message")
-			("load", opt::value<fs::path>(&loadfile_)->default_value("rocnnet/pretrained/gdmodel.pbx"),
-				"filename to load pretrained model")
-			("save", opt::value<fs::path>(&savefile_)->default_value(""),
-				"filename to save model")
 			("n_train", opt::value<size_t>(&n_train_)->default_value(3000),
 				"number of times to train")
 			("n_test", opt::value<size_t>(&n_test_)->default_value(500),
@@ -31,7 +28,7 @@ struct Options
 				"number of times to test");
 
 		opt::options_description all_options;
-		all_options.add(desc);
+		all_options.add(desc_);
 
 		try
 		{
@@ -43,7 +40,7 @@ struct Options
 			if (vars.count("help"))
 			{
 				std::cout << make_usage_string(
-					fs::path(argv[0]).stem().string(), desc, pos) << '\n';
+					fs::path(argv[0]).stem().string(), desc_, pos) << '\n';
 				return false;
 			}
 
@@ -58,9 +55,7 @@ struct Options
 		return true;
 	}
 
-	fs::path savefile_;
-
-	fs::path loadfile_;
+	opt::options_description desc_;
 
 	size_t n_train_;
 

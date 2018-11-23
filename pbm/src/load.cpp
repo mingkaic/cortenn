@@ -30,25 +30,35 @@ static ade::CoordPtrT load_coord (
 		});
 }
 
-LoadVecsT load_graph (const tenncor::Graph& in, iDataLoader& dataloader)
+void load_graph (GraphInfo& out, const tenncor::Graph& in,
+	iDataLoader& dataloader)
 {
 	auto nodes = in.nodes();
 	TensT invec;
-	LoadVecsT outvec;
 	for (const tenncor::Node& node : nodes)
 	{
 		auto pb_labels = node.labels();
 		if (node.has_source())
 		{
-			std::string src_label = *(pb_labels.rbegin());
+			std::string src_label;
+			if (pb_labels.size() > 0)
+			{
+				src_label = *(pb_labels.rbegin());
+			}
 			const tenncor::Source& source = node.source();
-			ade::TensptrT leaf = dataloader.load(source, src_label);
+			std::string sstr = source.shape();
+			ade::Shape shape(std::vector<ade::DimT>(sstr.begin(), sstr.end()));
+			size_t tcode = source.typecode();
+			std::string data = source.data();
+			ade::TensptrT leaf = dataloader.deserialize(data.c_str(),
+				shape, tcode, src_label);
 			invec.push_back(leaf);
 			if (false == pb_labels.empty())
 			{
 				StringsT labels(pb_labels.begin(), pb_labels.end());
-				outvec.push_back({leaf, labels});
+				out.labelled_.push_back({leaf, labels});
 			}
+			out.roots_.emplace(leaf);
 		}
 		else
 		{
@@ -59,6 +69,7 @@ LoadVecsT load_graph (const tenncor::Graph& in, iDataLoader& dataloader)
 			{
 				ade::CoordPtrT coord = load_coord(nodearg.coord());
 				args.push_back({coord, invec[nodearg.idx()]});
+				out.roots_.erase(invec[nodearg.idx()]);
 			}
 			ade::TensptrT f(ade::Functor::get(
 				ade::Opcode{func.opname(), func.opcode()}, args));
@@ -66,11 +77,11 @@ LoadVecsT load_graph (const tenncor::Graph& in, iDataLoader& dataloader)
 			if (false == pb_labels.empty())
 			{
 				StringsT labels(pb_labels.begin(), pb_labels.end());
-				outvec.push_back({f, labels});
+				out.labelled_.push_back({f, labels});
 			}
+			out.roots_.emplace(f);
 		}
 	}
-	return outvec;
 }
 
 }

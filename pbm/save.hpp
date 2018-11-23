@@ -21,8 +21,7 @@ using TensLabelT = std::unordered_map<ade::iTensor*,StringsT>;
 
 struct GraphSaver final : public ade::iTraveler
 {
-	GraphSaver (iDataSaver* saver) :
-		saver_(saver) {}
+	GraphSaver (DataSaverT saver) : saver_(saver) {}
 
     /// Implementation of iTraveler
 	void visit (ade::iLeaf* leaf) override
@@ -74,20 +73,16 @@ private:
     /// Marshal llo::iSource to tenncor::Source
     void save_data (tenncor::Source& out, ade::iLeaf* in)
     {
-		if (nullptr == saver_)
-		{
-			err::fatal("cannot save tensor without datasaver");
-		}
         const ade::Shape& shape = in->shape();
         char* data = (char*) in->data();
         size_t nelems = shape.n_elems();
 		size_t tcode = in->type_code();
         out.set_shape(std::string(shape.begin(), shape.end()));
-		out.set_data(saver_->serialize(data, nelems, tcode));
+		out.set_data(saver_(data, nelems, tcode));
 		out.set_typecode(tcode);
     }
 
-    DataSaverPtrT saver_;
+    DataSaverT saver_;
 };
 
 }

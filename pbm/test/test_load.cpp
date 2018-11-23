@@ -13,18 +13,6 @@
 #include "pbm/test/common.hpp"
 
 
-struct MockLoader : public pbm::iDataLoader
-{
-    virtual ~MockLoader (void) = default;
-
-    virtual ade::TensptrT deserialize (const char* pb,
-        ade::Shape shape, size_t typecode, std::string label)
-	{
-		return ade::TensptrT(new MockTensor(shape));
-	}
-};
-
-
 const std::string testdir = "pbm/data";
 
 
@@ -59,9 +47,13 @@ TEST(LOAD, LoadGraph)
 		ASSERT_TRUE(graph.ParseFromIstream(&inputstr));
 	}
 
-	MockLoader loader;
 	pbm::GraphInfo graphinfo;
-	pbm::load_graph(graphinfo, graph, loader);
+	pbm::load_graph(graphinfo, graph, 
+		[](const char* pb, ade::Shape shape,
+			size_t typecode, std::string label)
+		{
+			return ade::TensptrT(new MockTensor(shape));
+		});
 
 	EXPECT_EQ(2, graphinfo.roots_.size());
 

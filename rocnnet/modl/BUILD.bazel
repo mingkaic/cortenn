@@ -19,5 +19,8 @@ cc_library(
     hdrs = glob(["*.hpp"]),
     srcs = glob(["src/*.cpp"]),
     copts = ["-std=c++14"],
-    deps = ["//rocnnet/eqns:eqns"],
+    deps = [
+        "@com_github_mingkaic_cortenn//pbm:pbm",
+        "//rocnnet/eqns:eqns",
+    ],
 )

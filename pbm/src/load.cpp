@@ -31,7 +31,7 @@ static ade::CoordPtrT load_coord (
 }
 
 void load_graph (GraphInfo& out, const tenncor::Graph& in,
-	iDataLoader& dataloader)
+	DataLoaderT dataloader)
 {
 	auto nodes = in.nodes();
 	TensT invec;
@@ -50,7 +50,7 @@ void load_graph (GraphInfo& out, const tenncor::Graph& in,
 			ade::Shape shape(std::vector<ade::DimT>(sstr.begin(), sstr.end()));
 			size_t tcode = source.typecode();
 			std::string data = source.data();
-			ade::TensptrT leaf = dataloader.deserialize(data.c_str(),
+			ade::TensptrT leaf = dataloader(data.c_str(),
 				shape, tcode, src_label);
 			invec.push_back(leaf);
 			if (false == pb_labels.empty())

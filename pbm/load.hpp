@@ -27,7 +27,7 @@ struct GraphInfo final
 
 /// Return all nodes in graph unmarshalled from protobuf object
 void load_graph (GraphInfo& out, const tenncor::Graph& in,
-    iDataLoader& dataloader);
+    DataLoaderT dataloader);
 
 }
 

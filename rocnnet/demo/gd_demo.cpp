@@ -95,9 +95,8 @@ int main (int argc, char** argv)
 	{
 		tenncor::Graph graph;
 		graph.ParseFromIstream(&loadstr);
-		llo::DataLoader loader;
 		pbm::GraphInfo info;
-		pbm::load_graph(info, graph, loader);
+		pbm::load_graph(info, graph, llo::deserialize);
 		pbm::LabelledsT vars = info.labelled_;
 		pretrained_brain.parse_from(vars);
 		loadstr.close();
@@ -210,7 +209,7 @@ int main (int argc, char** argv)
 		std::ofstream savestr(savepath);
 		if (savestr.is_open())
 		{
-			pbm::GraphSaver saver(new llo::DataSaver());
+			pbm::GraphSaver saver(llo::serialize);
 			trained_out->accept(saver);
 
 			std::vector<LabelVar> vars = brain.get_variables();

@@ -16,16 +16,6 @@
 const std::string testdir = "pbm/data";
 
 
-struct MockSaver : public pbm::iDataSaver
-{
-	std::string serialize (const char* in,
-        size_t nelems, size_t typecode) override
-	{
-		return std::string(nelems, 0);
-	}
-};
-
-
 TEST(SAVE, SaveGraph)
 {
 	std::string expect_pbfile = testdir + "/graph.pb";
@@ -119,7 +109,11 @@ TEST(SAVE, SaveGraph)
 		labels[dest.get()] = {"subtree2", "dest"};
 	}
 
-	pbm::GraphSaver saver(new MockSaver());
+	pbm::GraphSaver saver(
+		[](const char* in, size_t nelems, size_t typecode)
+		{
+			return std::string(nelems, 0);
+		});
 	for (auto& root : roots)
 	{
 		root->accept(saver);

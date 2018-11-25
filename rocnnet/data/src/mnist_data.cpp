@@ -38,8 +38,8 @@ std::vector<T> to_vector (np::ndarray narr, std::vector<size_t>& shape)
 	return result;
 }
 
-// heap allocate xy_data, does not own
-xy_data* get_xy_data(bp::tuple xy_set)
+// heap allocate ImgData, does not own
+ImgData* get_xy_data(bp::tuple xy_set)
 {
 	np::ndarray data_set_x = bp::extract<np::ndarray>(xy_set[0]);
 	np::ndarray data_set_y = bp::extract<np::ndarray>(xy_set[1]);
@@ -53,10 +53,10 @@ xy_data* get_xy_data(bp::tuple xy_set)
 	assert(shape.size() == 1); // y should be a 1d array
 	assert(shape_y == shape[0]);
 
-	return new xy_data{data_x, data_y, std::pair<size_t, size_t>{shape_x, shape_y}};
+	return new ImgData{data_x, data_y, std::pair<size_t, size_t>{shape_x, shape_y}};
 }
 
-std::vector<xy_data*> get_mnist_data (void)
+std::vector<ImgPtrT> get_mnist_data (void)
 {
 	std::string mnist = "mnist.pkl.gz";
 	bp::tuple dataset = pickle(mnist);
@@ -74,9 +74,9 @@ std::vector<xy_data*> get_mnist_data (void)
 	size_t n_dtest = bp::len(test_set);
 	assert(n_dtraining == 2 && n_dvalid == 2 && n_dtest == 2);
 
-	xy_data* training = get_xy_data(training_set);
-	xy_data* valid = get_xy_data(valid_set);
-	xy_data* testing = get_xy_data(test_set);
+	ImgPtrT training(get_xy_data(training_set));
+	ImgPtrT valid(get_xy_data(valid_set));
+	ImgPtrT testing(get_xy_data(test_set));
 
 	return {training, valid, testing};
 }

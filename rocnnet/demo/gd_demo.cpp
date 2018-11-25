@@ -19,15 +19,12 @@
 
 Options options;
 
-// user-side generator
-static std::default_random_engine rnd_device(std::time(NULL));
-
 static std::vector<double> batch_generate (size_t n, size_t batchsize)
 {
 	size_t total = n * batchsize;
 
 	// Specify the engine and distribution.
-	std::mt19937 mersenne_engine(rnd_device());
+	std::mt19937 mersenne_engine(llo::get_engine());
 	std::uniform_real_distribution<double> dist(0, 1);
 
 	auto gen = std::bind(dist, mersenne_engine);
@@ -53,12 +50,18 @@ int main (int argc, char** argv)
 
 	std::string savepath;
 	std::string loadpath;
+	size_t n_train;
+	size_t n_test;
 
 	options.desc_.add_options()
 		("load", opt::value<std::string>(&loadpath)->default_value("rocnnet/pretrained/gdmodel.pbx"),
 			"filename to load pretrained model")
 		("save", opt::value<std::string>(&savepath)->default_value(""),
-			"filename to save model");
+			"filename to save model")
+		("n_train", opt::value<size_t>(&n_train)->default_value(3000),
+			"number of times to train")
+		("n_test", opt::value<size_t>(&n_test)->default_value(500),
+			"number of times to test");
 
 	int exit_status = 0;
 	std::clock_t start;
@@ -68,9 +71,6 @@ int main (int argc, char** argv)
 	{
 		return 1;
 	}
-
-	size_t n_train = options.n_train_;
-	size_t n_test = options.n_test_;
 
 	if (options.seed_)
 	{

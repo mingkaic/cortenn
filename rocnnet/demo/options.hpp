@@ -19,10 +19,6 @@ struct Options
 		std::vector<std::string> config_fnames;
 		desc_.add_options()
 			("help", "Display help message")
-			("n_train", opt::value<size_t>(&n_train_)->default_value(3000),
-				"number of times to train")
-			("n_test", opt::value<size_t>(&n_test_)->default_value(500),
-				"number of times to test")
 			("seed", opt::bool_switch(&seed_)->default_value(true), "whether to seed or not")
 			("seedval", opt::value<size_t>(&seedval_)->default_value(default_seed),
 				"number of times to test");

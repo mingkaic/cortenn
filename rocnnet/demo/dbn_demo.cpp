@@ -4,27 +4,30 @@
 
 #include <random>
 
-#ifdef __GNUC__
-#include <unistd.h>
-#endif
-
 #include "rocnnet/models/db_trainer.hpp"
 #include "rocnnet/data/mnist_data.hpp"
 
-static std::default_random_engine rnd_device(std::time(NULL));
+#include "rocnnet/demo/options.hpp"
 
-struct test_params
+Options options;
+
+struct TestParams
 {
-	size_t pretrain_epochs_ = 100;
-	double pretrain_lr_ = 0.01;
-	size_t training_epochs_ = 1000;
-	double training_lr_ = 0.1;
-	size_t n_cont_div_ = 15;
-	size_t n_batch_ = 20;
-	std::vector<size_t> hiddens_ = { 1000, 1000, 1000 };
-	bool pretrain_ = true;
-	bool train_ = true;
-	std::string outdir_ = ".";
+	double pretrain_lr = 0.01;
+	double training_lr = 0.1;
+	size_t n_batch = 20;
+	std::vector<size_t> hiddens = { 1000, 1000, 1000 };
+
+	size_t n_cont_div;
+	size_t pretrain_epochs;
+	size_t training_epochs;
+
+	bool pretrain;
+	bool train;
+
+	std::string pretrain_path;
+	std::string savepath;
+	std::string loadpath;
 };
 
 static std::vector<double> batch_generate (size_t n, size_t batchsize)
@@ -32,7 +35,7 @@ static std::vector<double> batch_generate (size_t n, size_t batchsize)
 	size_t total = n * batchsize;
 
 	// Specify the engine and distribution.
-	std::mt19937 mersenne_engine(rnd_device());
+	std::mt19937 mersenne_engine(llo::get_engine());
 	std::uniform_real_distribution<double> dist(0, 1);
 
 	auto gen = std::bind(dist, mersenne_engine);
@@ -41,29 +44,29 @@ static std::vector<double> batch_generate (size_t n, size_t batchsize)
 	return vec;
 }
 
-std::string serialname = "dbn_test.pbx";
-
 static void pretrain (DBTrainer& model, size_t n_input,
-	std::vector<double> data, test_params params, std::string test_name)
+	std::vector<double> data, TestParams params, std::string test_name)
 {
-	std::string serialpath = params.outdir_ + "/" + serialname;
+	std::string pretrain_path = params.pretrain_path;
 	size_t n_data = data.size() / n_input;
-	size_t n_train_batches = n_data / params.n_batch_;
-	nnet::placeholder<double> pretrain_in(std::vector<size_t>{n_input, params.n_batch_}, "pretrain_in");
-	double inbatch = params.n_batch_ * n_input;
+	size_t n_train_batches = n_data / params.n_batch;
+	llo::VarptrT pretrain_in = llo::get_variable(
+		std::vector<double>(n_input * params.n_batch),
+		ade::Shape({n_input, params.n_batch}), "pretrain_in");
+	double inbatch = params.n_batch * n_input;
 
 	std::cout << "... getting the pretraining functions" << '\n';
-	rocnnet::pretrain_t pretrainers = model.pretraining_functions(
-		pretrain_in, params.pretrain_lr_ , params.n_cont_div_);
+	PretrainsT pretrainers = model.pretraining_functions(
+		pretrain_in, params.pretrain_lr , params.n_cont_div);
 
 	std::cout << "... pre-training the model" << '\n';
 	auto it = data.begin();
 	for (size_t pidx = 0; pidx < pretrainers.size(); pidx++)
 	{
-		auto ptit = pretrainers[pidx];
-		nnet::variable_updater<double> trainer = ptit.first;
-		nnet::varptr<double> cost = ptit.second;
-		for (size_t e = 0; e < params.pretrain_epochs_; e++)
+		DeltasNCostT& ptit = pretrainers[pidx];
+		DeltasT trainer = ptit.first;
+		ade::TensptrT cost = ptit.second;
+		for (size_t e = 0; e < params.pretrain_epochs; e++)
 		{
 			double mean_cost = 0;
 			for (size_t i = 0; i < n_train_batches; i++)
@@ -73,19 +76,37 @@ static void pretrain (DBTrainer& model, size_t n_input,
 				trainer(true);
 				std::cout << "layer " << pidx << " epoch " << e << " completed batch " << i << '\n';
 
-				mean_cost += nnet::expose<double>(cost)[0] / n_train_batches;
+				llo::GenericData gcost = llo::eval(cost, llo::DOUBLE);
+				mean_cost += *((double*) gcost.data_.get());
 			}
 			std::cout << "pre-trained layer " << pidx << " epoch "
-				<< e << " has mean cost " << mean_cost << '\n';
+				<< e << " has mean cost " << mean_cost / n_train_batches << '\n';
 
-			model.save(serialpath, "dbn_" + test_name + "_pretrain"); // save in case of problems
+			std::ofstream savestr(pretrain_path);
+			if (savestr.is_open())
+			{
+				pbm::GraphSaver saver(llo::serialize);
+
+				std::vector<LabelVar> vars = model.get_variables();
+				pbm::TensLabelT labels;
+				for (LabelVar& var : vars)
+				{
+					labels[var.var_.get()] = var.labels_;
+					var.var_->accept(saver);
+				}
+
+				tenncor::Graph graph;
+				saver.save(graph, labels);
+				graph.SerializeToOstream(&savestr);
+				savestr.close();
+			}
 		}
 	}
 }
 
-static void finetune (DBTrainer& model, xy_data* train,
-	xy_data* valid, xy_data* test, size_t n_input,
-	size_t n_output, test_params params)
+static void finetune (DBTrainer& model, ImgPtrT train,
+	ImgPtrT valid, ImgPtrT test, size_t n_input,
+	size_t n_output, TestParams params)
 {
 	size_t n_train_batches = train->shape_.first;
 
@@ -93,9 +114,9 @@ static void finetune (DBTrainer& model, xy_data* train,
 	std::vector<double> training_data_y(train->data_y_.begin(), train->data_y_.end());
 
 	std::cout << "... getting the finetuning functions" << '\n';
-	nnet::placeholder<double> finetune_in(std::vector<size_t>{n_input, params.n_batch_}, "finetune_in");
-	nnet::placeholder<double> finetune_out(std::vector<size_t>{n_output, params.n_batch_}, "finetune_out");
-	rocnnet::update_cost_t tuner = model.build_finetune_functions(finetune_in, finetune_out, params.training_lr_);
+	nnet::placeholder<double> finetune_in(std::vector<size_t>{n_input, params.n_batch}, "finetune_in");
+	nnet::placeholder<double> finetune_out(std::vector<size_t>{n_output, params.n_batch}, "finetune_out");
+	rocnnet::update_cost_t tuner = model.build_finetune_functions(finetune_in, finetune_out, params.training_lr);
 	nnet::variable_updater<double> train_update = tuner.first;
 	nnet::varptr<double> train_cost = tuner.second;
 	nnet::varptr<double> train_loss = nnet::reduce_mean(train_cost);
@@ -110,8 +131,8 @@ static void finetune (DBTrainer& model, xy_data* train,
 	bool keep_looping = true;
 	size_t best_iter = 0;
 
-	size_t inbatch = params.n_batch_ * n_input;
-	size_t outbatch = params.n_batch_ * n_output;
+	size_t inbatch = params.n_batch * n_input;
+	size_t outbatch = params.n_batch * n_output;
 	auto xit = training_data_x.begin();
 	auto yit = training_data_y.begin();
 
@@ -124,7 +145,7 @@ static void finetune (DBTrainer& model, xy_data* train,
 	auto test_xit = test_data_x.begin();
 	auto test_yit = test_data_y.begin();
 
-	for (size_t epoch = 0; epoch < params.training_epochs_ && keep_looping; epoch++)
+	for (size_t epoch = 0; epoch < params.training_epochs && keep_looping; epoch++)
 	{
 		for (size_t mb_idx = 0; mb_idx < n_train_batches; mb_idx++)
 		{
@@ -185,9 +206,9 @@ static void finetune (DBTrainer& model, xy_data* train,
 		<< test_score * 100.0 << '\n';
 }
 
-static void mnist_test (xy_data* train, xy_data* valid, xy_data* test, test_params params)
+static void mnist_test (ImgPtrT train, ImgPtrT valid, ImgPtrT test, TestParams params)
 {
-	std::string serialpath = params.outdir_ + "/" + serialname;
+	std::string serialpath = params.savepath;
 
 	std::vector<double> training_data_x(train->data_x_.begin(), train->data_x_.end());
 	std::vector<double> training_data_y(train->data_y_.begin(), train->data_y_.end());
@@ -198,11 +219,11 @@ static void mnist_test (xy_data* train, xy_data* valid, xy_data* test, test_para
 
 	size_t n_input = train->shape_.first;
 	size_t n_output = 10;
-	params.hiddens_.push_back(n_output);
+	params.hiddens.push_back(n_output);
 
-	DBTrainer model(n_input, params.hiddens_, "dbn_mnist_learner");
+	DBTrainer model(n_input, params.hiddens, "dbn_mnist_learner");
 
-	if (params.pretrain_)
+	if (params.pretrain)
 	{
 		model.initialize();
 		pretrain(model, n_input, training_data_x, params, "mnist");
@@ -229,12 +250,12 @@ std::vector<double> simple_op (std::vector<double> input)
 	return output;
 }
 
-void simpler_test (size_t n_train_sample, size_t n_test_sample, size_t n_in, test_params params)
+void simpler_test (size_t n_train_sample, size_t n_test_sample, size_t n_in, TestParams params)
 {
-	params.n_batch_ = std::min(params.n_batch_, n_train_sample);
-	std::string serialpath = params.outdir_ + "/" + serialname;
-	params.hiddens_ = { n_in, n_in, n_in / 2 };
-	DBTrainer model(n_in, params.hiddens_, "dbn_simple_learner");
+	params.n_batch = std::min(params.n_batch, n_train_sample);
+	std::string serialpath = params.savepath;
+	params.hiddens = { n_in, n_in, n_in / 2 };
+	DBTrainer model(n_in, params.hiddens, "dbn_simple_learner");
 
 	// generate test sample
 	std::vector<double> train_samples = batch_generate(n_train_sample, n_in);
@@ -242,10 +263,10 @@ void simpler_test (size_t n_train_sample, size_t n_test_sample, size_t n_in, tes
 	std::vector<double> train_out = simple_op(train_samples);
 	std::vector<double> test_out = simple_op(test_samples);
 
-	if (params.train_)
+	if (params.train)
 	{
 		// pretrain
-		if (params.pretrain_)
+		if (params.pretrain)
 		{
 			model.initialize();
 			pretrain(model, n_in, train_samples, params, "demo");
@@ -258,18 +279,18 @@ void simpler_test (size_t n_train_sample, size_t n_test_sample, size_t n_in, tes
 		}
 
 		// finetune
-		double inbatch = params.n_batch_ * n_in;
+		double inbatch = params.n_batch * n_in;
 		double outbatch = inbatch / 2;
-		nnet::placeholder<double> finetune_in(std::vector<size_t>{n_in, params.n_batch_}, "finetune_in");
-		nnet::placeholder<double> finetune_out(std::vector<size_t>{n_in / 2, params.n_batch_}, "finetune_out");
-		rocnnet::update_cost_t tuner = model.build_finetune_functions(finetune_in, finetune_out, params.training_lr_);
+		nnet::placeholder<double> finetune_in(std::vector<size_t>{n_in, params.n_batch}, "finetune_in");
+		nnet::placeholder<double> finetune_out(std::vector<size_t>{n_in / 2, params.n_batch}, "finetune_out");
+		rocnnet::update_cost_t tuner = model.build_finetune_functions(finetune_in, finetune_out, params.training_lr);
 		nnet::variable_updater<double> train_update = tuner.first;
-		size_t n_train_batches = n_train_sample / params.n_batch_;
+		size_t n_train_batches = n_train_sample / params.n_batch;
 
 		auto xit = train_samples.begin();
 		auto yit = train_out.begin();
 
-		for (size_t epoch = 0; epoch < params.training_epochs_; epoch++)
+		for (size_t epoch = 0; epoch < params.training_epochs; epoch++)
 		{
 			for (size_t mb_idx = 0; mb_idx < n_train_batches; mb_idx++)
 			{
@@ -316,60 +337,43 @@ int main (int argc, char** argv)
 {
 	GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-	// todo: replace with boost flags
-	test_params params;
-	std::experimental::optional<size_t> seed;
-#ifdef __GNUC__ // use this gnu parser, since boost is too big for free-tier platforms
-	int c;
-	bool test_mnist = false;
-	size_t n_simple_samples = 300;
-	while ((c = getopt (argc, argv, "s:o:p:E:e:k:t:m:n:")) != -1)
+	TestParams params;
+
+	bool test_mnist;
+	size_t n_simple_samples;
+
+	options.desc_.add_options()
+		("mnist", opt::bool_switch(&test_mnist)->default_value(false),
+			"whether to take mnist data or not")
+		("train", opt::bool_switch(&params.train)->default_value(true),
+			"whether to train or not")
+		("pretrain", opt::bool_switch(&params.pretrain)->default_value(true),
+			"whether to pretrain or not")
+		("pretrain_path", opt::value<std::string>(&params.pretrain_path)->default_value(""),
+			"filename to save pretrained model")
+		("save", opt::value<std::string>(&params.savepath)->default_value(""),
+			"filename to save model")
+		("load", opt::value<std::string>(&params.loadpath)->default_value(
+			"rocnnet/pretrained/dbmodel.pbx"),
+			"filename to load pretrained model")
+		("k", opt::value(&params.n_cont_div)->default_value(15), "k-CD or k-PCD")
+		("train_epoch", opt::value(&params.train_epochs)->default_value(1000),
+			"epoch training iteration")
+		("pretrain_epoch", opt::value(&params.pretrain_epochs)->default_value(1000),
+			"epoch training iteration")
+		("n_samples", opt::value(&n_simple_samples)->default_value(300),
+			"epoch training iteration");
+
+	if (false == options.parse(argc, argv))
 	{
-		switch(c)
-		{
-			case 's':
-				seed = atoi(optarg);
-				break;
-			case 'o': // output directory
-				params.outdir_ = std::string(optarg);
-				break;
-			case 'p':
-				params.pretrain_ = false;
-				break;
-			case 'E': // epoch pretraining iteration
-				params.pretrain_epochs_ = atoi(optarg);
-				break;
-			case 'e': // epoch training iteration
-				params.training_epochs_ = atoi(optarg);
-				break;
-			case 'k': // k-CD or k-PCD
-				params.n_cont_div_ = atoi(optarg);
-				break;
-			case 't':
-				params.train_ = false;
-				break;
-			case 'm':
-				test_mnist = true;
-				break;
-			case 'n':
-				n_simple_samples = std::min(6, atoi(optarg));
-				break;
-		}
+		return 1;
 	}
-#else
-	if (argc > 1)
+
+	if (options.seed_)
 	{
-		params.outdir_ = std::string(argv[1]);
-	}
-	if (argc > 2)
-	{
-		params.training_epochs_ = atoi(argv[2]);
-	}
-#endif
-	if (seed)
-	{
-		rnd_device.seed(*seed);
-		nnutils::seed_generator(*seed);
+		size_t seed = options.seedval_;
+		std::cout << "seeding " << seed << '\n';
+		llo::get_engine().seed(seed);
 	}
 
 	if (test_mnist)
@@ -378,30 +382,25 @@ int main (int argc, char** argv)
 		{
 			Py_Initialize();
 			np::initialize();
-			std::vector<xy_data*> datasets = get_mnist_data();
+			std::vector<ImgPtrT> datasets = get_mnist_data();
 
-			xy_data* training_set = datasets[0];
-			xy_data* valid_set = datasets[1];
-			xy_data* testing_set = datasets[2];
+			ImgPtrT training_set = datasets[0];
+			ImgPtrT valid_set = datasets[1];
+			ImgPtrT testing_set = datasets[2];
 
 			mnist_test(training_set, valid_set, testing_set, params);
-
-			for (xy_data* dataset : datasets)
-			{
-				delete dataset;
-			}
 		}
 		catch(const bp::error_already_set&)
 		{
-			std::cerr << ">>> Error! Uncaught exception:\n";
+			std::cerr << "[ERROR]: Uncaught python exception:\n";
 			PyErr_Print();
 			return 1;
 		}
 	}
 	else
 	{
-		params.pretrain_epochs_ = 1;
-		params.training_epochs_ = 1;
+		params.pretrain_epochs = 1;
+		params.training_epochs = 1;
 		simpler_test(n_simple_samples, n_simple_samples / 6, 10, params);
 	}
 

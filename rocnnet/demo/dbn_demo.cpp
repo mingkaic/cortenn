@@ -4,12 +4,11 @@
 
 #include <random>
 
-#include "rocnnet/models/db_trainer.hpp"
+#include "flag/flag.hpp"
+
 #include "rocnnet/data/mnist_data.hpp"
 
-#include "rocnnet/demo/options.hpp"
-
-Options options;
+#include "rocnnet/modl/db_trainer.hpp"
 
 struct TestParams
 {
@@ -35,7 +34,7 @@ static std::vector<double> batch_generate (size_t n, size_t batchsize)
 	size_t total = n * batchsize;
 
 	// Specify the engine and distribution.
-	std::mt19937 mersenne_engine(llo::get_engine());
+	std::mt19937 mersenne_engine(llo::get_engine()());
 	std::uniform_real_distribution<double> dist(0, 1);
 
 	auto gen = std::bind(dist, mersenne_engine);
@@ -63,9 +62,8 @@ static void pretrain (DBTrainer& model, size_t n_input,
 	auto it = data.begin();
 	for (size_t pidx = 0; pidx < pretrainers.size(); pidx++)
 	{
-		DeltasNCostT& ptit = pretrainers[pidx];
-		DeltasT trainer = ptit.first;
-		ade::TensptrT cost = ptit.second;
+		DeltasT trainer = pretrainers[pidx].first;
+		ade::TensptrT cost = pretrainers[pidx].second;
 		for (size_t e = 0; e < params.pretrain_epochs; e++)
 		{
 			double mean_cost = 0;
@@ -339,10 +337,20 @@ int main (int argc, char** argv)
 
 	TestParams params;
 
+	bool seed;
 	bool test_mnist;
+	size_t seedval;
 	size_t n_simple_samples;
 
-	options.desc_.add_options()
+	size_t default_seed = static_cast<size_t>(
+		std::chrono::high_resolution_clock::now().
+			time_since_epoch().count());
+
+	flag::FlagSet flags("dbn_demo");
+	flags.add_flags()
+		("seed", flag::opt::bool_switch(&seed)->default_value(true), "whether to seed or not")
+		("seedval", flag::opt::value<size_t>(&seedval)->default_value(default_seed),
+			"number of times to test")
 		("mnist", opt::bool_switch(&test_mnist)->default_value(false),
 			"whether to take mnist data or not")
 		("train", opt::bool_switch(&params.train)->default_value(true),
@@ -369,11 +377,10 @@ int main (int argc, char** argv)
 		return 1;
 	}
 
-	if (options.seed_)
+	if (seed)
 	{
-		size_t seed = options.seedval_;
-		std::cout << "seeding " << seed << '\n';
-		llo::get_engine().seed(seed);
+		std::cout << "seeding " << seedval << '\n';
+		llo::get_engine().seed(seedval);
 	}
 
 	if (test_mnist)

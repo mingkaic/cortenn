@@ -29,6 +29,19 @@ cc_binary(
 )
 
 cc_binary(
+    name = "dbn_demo",
+    srcs = ["demo/dbn_demo.cpp"],
+    copts = ["-std=c++14"],
+    deps = [
+        "//rocnnet/modl:modl",
+        "//rocnnet/data:data",
+        "@com_github_mingkaic_cppkg//flag:flag",
+        "@com_github_mingkaic_tenncor//dbg:dbg",
+    ],
+    data = glob(["pretrained/*"]),
+)
+
+cc_binary(
     name = "tcr_sample",
     srcs = ["test/sample.cpp"],
     copts = ["-std=c++14"],

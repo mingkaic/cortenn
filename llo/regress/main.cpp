@@ -7,7 +7,7 @@
 #include "llo/generated/api.hpp"
 #include "llo/data.hpp"
 #include "llo/eval.hpp"
-#include "llo/shear.hpp"
+#include "llo/zprune.hpp"
 
 
 void EXPECT_DATA_EQ (std::string name, std::vector<double> expect, std::vector<double> got)

@@ -6,15 +6,12 @@ P3 - verify rocnnet correctness using automated test
 P3 - implement better fallback strategy when test server is unavailable
 
 structure:
-P2 - generalize prune for any ade extension and move to its own "optimization module"
 P4 - after llo api experimentation, move rocnnet to its own repo
 
 transparency:
 P4 - investigate llo api: experiment with top-level code
 
 performance:
-P4 - implement optimization options to decrease equation graph size
+P2 - implement eigen version of llo
+P3 - implement optimization options to decrease equation graph size in opt
 P4 - implement optimization options to increase data accuracy
-
-features:
-P2 - implement llo-like api with eigen

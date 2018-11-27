@@ -3,9 +3,9 @@
 
 #include "ade/functor.hpp"
 
-#include "llo/shear.hpp"
+#include "llo/zprune.hpp"
 
-#ifdef LLO_SHEAR_HPP
+#ifdef LLO_ZPRUNE_HPP
 
 namespace llo
 {
@@ -99,67 +99,13 @@ static ade::TensptrT prune0 (bool& is_zero, ade::iFunctor* func,
 
 ade::TensptrT zero_prune (ade::TensptrT root)
 {
-	// assert that context will be unaffected by prune,
-	// since source will never be touched
-	LabelFinder finder("0");
-	root->accept(finder);
-	auto& pathmap = finder.parents_;
-	if (pathmap.empty()) // not path to zero or root is not a parent
-	{
-		return root;
-	}
-	ade::GraphStat stat;
-	root->accept(stat);
-	// grab the intersection of stat.funcs_ and pathmap
-	std::list<ade::iFunctor*> parents;
-	std::transform(pathmap.begin(), pathmap.end(), std::back_inserter(parents),
-		[](std::pair<ade::iTensor*,std::unordered_set<size_t>> parent)
+	opt::TargetPruner<std::string> zpruner("0",
+		[](ade::iLeaf* leaf)
 		{
-			return static_cast<ade::iFunctor*>(parent.first);
-		});
-	parents.sort(
-		[&](ade::iTensor* a, ade::iTensor* b)
-		{
-			return stat.graphsize_[a] < stat.graphsize_[b];
-		});
-
-	// each proceeding node in parents list is closer to SYMBOLIC_ZERO
-	// start pruning according to each parent node in order
-	std::unordered_set<ade::iTensor*> zeros = finder.labelled_;
-
-	std::unordered_map<ade::iTensor*,ade::TensptrT> mapping;
-	std::unordered_map<ade::iTensor*,bool> zeromap;
-	for (ade::iFunctor* func : parents)
-	{
-		ade::ArgsT children = func->get_children();
-		std::unordered_set<size_t> indices = pathmap[func]; // indices lead to zero nodes
-		for (auto it = indices.begin(), et = indices.end(); it != et;)
-		{
-			ade::MappedTensor& child = children[*it];
-			ade::iTensor* tens = child.tensor_.get();
-			auto zit = zeros.find(tens);
-			if (zeros.end() == zit) // child is not zero, so erase ot from indices
-			{
-				it = indices.erase(it);
-			}
-			else
-			{
-				++it;
-			}
-		}
-		bool is_zero = false;
-		mapping.emplace(func, prune0(is_zero, func, indices, children));
-		if (is_zero) // func maps to zero, so store in zeros
-		{
-			zeros.emplace(func);
-		}
-	}
-	auto it = mapping.find(root.get());
-	if (mapping.end() == it)
-	{
-		logs::fatal("something went wrong"); // todo: probably add context?
-	}
-	return it->second;
+			auto data = static_cast<Variable*>(leaf);
+			return data->label_;
+		}, prune0);
+	return zpruner.prune(root);
 }
 
 ade::TensptrT derive (ade::TensptrT root, ade::TensptrT target)

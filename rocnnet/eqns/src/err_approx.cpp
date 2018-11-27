@@ -1,5 +1,5 @@
 #include "llo/generated/api.hpp"
-#include "llo/shear.hpp"
+#include "llo/zprune.hpp"
 
 #include "rocnnet/eqns/err_approx.hpp"
 

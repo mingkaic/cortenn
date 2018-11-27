@@ -50,6 +50,7 @@ cc_library(
     srcs = glob(["src/*.cpp"]) + [":generated_llo"],
     copts = ["-std=c++14"],
     deps = [
+        "//opt:opt",
         "@com_github_mingkaic_tenncor//bwd:bwd",
     ],
     visibility = ["//visibility:public"],

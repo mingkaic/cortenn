@@ -3,7 +3,7 @@
 
 #include "dbg/ade.hpp"
 
-#include "llo/shear.hpp"
+#include "llo/zprune.hpp"
 
 #include "pbm/save.hpp"
 

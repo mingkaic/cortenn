@@ -16,9 +16,17 @@ load("@com_github_raggledodo_dora//:dora.bzl", "dependencies")
 
 dependencies()
 
-# pbm dependencies
+# local dependencies
 
 load("//:cortenn.bzl", "dependencies")
+
+dependencies()
+
+load("@com_github_mingkaic_tenncor//:tenncor.bzl", "dependencies")
+
+dependencies()
+
+load("@com_github_mingkaic_cppkg//:cppkg.bzl", "dependencies")
 
 dependencies()
 
@@ -30,7 +38,7 @@ load("@org_pubref_rules_protobuf//python:rules.bzl", "py_proto_repositories")
 
 py_proto_repositories()
 
-# rocnnet dependencies
+## Replace after removing rocnnet
 
 load("//rocnnet:rocnnet.bzl", "dependencies")
 

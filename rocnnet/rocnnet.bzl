@@ -8,9 +8,9 @@ def dependencies():
     #        commit = "09664002ca45f5476b91aa4df86ff349ebed801a",
     #    )
 
-    if "com_github_nelhage_rules_boost" not in native.existing_rules():
-        git_repository(
-            name = "com_github_nelhage_rules_boost",
-            commit = "8a8853fd755496288995a603ce9aa2685709cd39",
-            remote = "https://github.com/nelhage/rules_boost",
-        )
+    if "com_github_mingkaic_cppkg" not in native.existing_rules():
+       git_repository(
+           name = "com_github_mingkaic_cppkg",
+           remote = "https://github.com/mingkaic/cppkg",
+           commit = "fa37730e25bd189056df795d4a374a16e5cc39fe",
+       )

@@ -6,8 +6,6 @@
 /// Define functions for marshal and unmarshal data sources
 ///
 
-#include "ade/ileaf.hpp"
-
 #include "llo/data.hpp"
 
 #ifndef LLO_SOURCE_HPP

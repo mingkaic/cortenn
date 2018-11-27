@@ -24,7 +24,7 @@ struct MLP final
 			size_t n_output = layers[i].n_out_;
 			layers_.push_back(HiddenLayer{
 				FCLayer(std::vector<uint8_t>{n_input}, n_output,
-					err::sprintf("hidden_%d", i)),
+					fmts::sprintf("hidden_%d", i)),
 				layers[i].hidden_
 			});
 			n_input = n_output;

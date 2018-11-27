@@ -7,7 +7,7 @@
 namespace llo
 {
 
-constexpr bool is_big_endian(void)
+bool is_big_endian(void)
 {
     union
     {

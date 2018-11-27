@@ -11,13 +11,13 @@ struct DBTrainer final
 	{
         if (hiddens.empty())
         {
-            err::fatal("cannot db train with no hiddens");
+            logs::fatal("cannot db train with no hiddens");
         }
         for (size_t level = 0, n = hiddens.size(); level < n; ++level)
         {
             uint8_t n_out = hiddens[level];
             layers_.push_back(RBM(n_input, n_out,
-                err::sprintf("rbm_%d", level)));
+                fmts::sprintf("rbm_%d", level)));
             n_input = n_out;
         }
 	}
@@ -48,7 +48,7 @@ struct DBTrainer final
         const ade::Shape& in_shape = input->shape();
         if (in_shape.at(0) != n_input_)
         {
-            err::fatalf("cannot dbn with input shape %s against n_input %d",
+            logs::fatalf("cannot dbn with input shape %s against n_input %d",
                 in_shape.to_string().c_str(), n_input_);
         }
         ade::TensptrT output = input;

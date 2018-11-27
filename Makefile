@@ -69,11 +69,3 @@ gen_test: dora_run
 
 test_regress: gen_test
 	$(TEST) $(C_FLAGS) $(REGRESS_TEST)
-
-# deployment
-
-docs:
-	rm -rf docs
-	doxygen
-	mv doxout/html docs
-	rm -rf doxout

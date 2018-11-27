@@ -11,20 +11,18 @@
 
 #include "llo/source.hpp"
 
+#include "flag/flag.hpp"
+
 #include "rocnnet/eqns/activations.hpp"
 
 #include "rocnnet/modl/gd_trainer.hpp"
-
-#include "rocnnet/demo/options.hpp"
-
-Options options;
 
 static std::vector<double> batch_generate (size_t n, size_t batchsize)
 {
 	size_t total = n * batchsize;
 
 	// Specify the engine and distribution.
-	std::mt19937 mersenne_engine(llo::get_engine());
+	std::mt19937 mersenne_engine(llo::get_engine()());
 	std::uniform_real_distribution<double> dist(0, 1);
 
 	auto gen = std::bind(dist, mersenne_engine);
@@ -48,35 +46,44 @@ int main (int argc, char** argv)
 {
 	GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-	std::string savepath;
-	std::string loadpath;
+	bool seed;
+	size_t seedval;
 	size_t n_train;
 	size_t n_test;
+	std::string savepath;
+	std::string loadpath;
 
-	options.desc_.add_options()
-		("load", opt::value<std::string>(&loadpath)->default_value("rocnnet/pretrained/gdmodel.pbx"),
-			"filename to load pretrained model")
-		("save", opt::value<std::string>(&savepath)->default_value(""),
-			"filename to save model")
-		("n_train", opt::value<size_t>(&n_train)->default_value(3000),
+	size_t default_seed = static_cast<size_t>(
+		std::chrono::high_resolution_clock::now().
+			time_since_epoch().count());
+
+	flag::FlagSet flags("gd_demo");
+	flags.add_flags()
+		("seed", flag::opt::bool_switch(&seed)->default_value(true), "whether to seed or not")
+		("seedval", flag::opt::value<size_t>(&seedval)->default_value(default_seed),
+			"number of times to test")
+		("n_train", flag::opt::value<size_t>(&n_train)->default_value(3000),
 			"number of times to train")
-		("n_test", opt::value<size_t>(&n_test)->default_value(500),
-			"number of times to test");
+		("n_test", flag::opt::value<size_t>(&n_test)->default_value(500),
+			"number of times to test")
+		("save", flag::opt::value<std::string>(&savepath)->default_value(""),
+			"filename to save model")
+		("load", flag::opt::value<std::string>(&loadpath)->default_value("rocnnet/pretrained/gdmodel.pbx"),
+			"filename to load pretrained model");
 
 	int exit_status = 0;
 	std::clock_t start;
 	double duration;
 
-	if (false == options.parse(argc, argv))
+	if (false == flags.parse(argc, argv))
 	{
 		return 1;
 	}
 
-	if (options.seed_)
+	if (seed)
 	{
-		size_t seed = options.seedval_;
-		std::cout << "seeding " << seed << '\n';
-		llo::get_engine().seed(seed);
+		std::cout << "seeding " << seedval << '\n';
+		llo::get_engine().seed(seedval);
 	}
 
 	uint8_t n_in = 10;
@@ -114,7 +121,7 @@ int main (int argc, char** argv)
 	size_t i = 0;
 	for (auto deltas : trainer.updates_)
 	{
-		peq.labels_[deltas.first] = err::sprintf("var%d", i);
+		peq.labels_[deltas.first] = fmts::sprintf("var%d", i);
 		++i;
 	}
 	peq.labels_[trainer.expected_out_.get()] = "expected_out";
@@ -144,7 +151,7 @@ int main (int argc, char** argv)
 			llo::GenericData trained_derr = llo::eval(trainer.error_, age::DOUBLE);
 			double* trained_err_res = (double*) trained_derr.data_.get();
 			std::cout << "training " << i+1 << '\n';
-			std::cout << "trained error: " << err::to_string(trained_err_res, trained_err_res + n_out) << '\n';
+			std::cout << "trained error: " << fmts::to_string(trained_err_res, trained_err_res + n_out) << '\n';
 		}
 		std::vector<double> batch = batch_generate(n_in, n_batch);
 		std::vector<double> batch_out = avgevry2(batch);

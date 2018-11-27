@@ -43,7 +43,7 @@ struct Evaluator final : public ade::iTraveler
 		{
 			if (nargs != 2)
 			{
-				err::fatalf("cannot RAND_BINO without exactly 2 arguments: "
+				logs::fatalf("cannot RAND_BINO without exactly 2 arguments: "
 					"using %d arguments", nargs);
 			}
 			Evaluator left_eval(dtype_);

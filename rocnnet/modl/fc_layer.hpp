@@ -23,7 +23,7 @@ struct FCLayer
 		size_t n = n_inputs.size();
 		if (n == 0)
 		{
-			err::fatal("cannot create FCLayer with no inputs");
+			logs::fatal("cannot create FCLayer with no inputs");
 		}
 		for (size_t i = 0; i < n; ++i)
 		{
@@ -41,9 +41,9 @@ struct FCLayer
 
 			weight_bias_.push_back({
 				llo::VarptrT(llo::get_variable(data, shape,
-					err::sprintf(weight_fmt, i))),
+					fmts::sprintf(weight_fmt, i))),
 				llo::VarptrT(llo::data<double>(0, ade::Shape({n_output}),
-					err::sprintf(bias_fmt, i)))});
+					fmts::sprintf(bias_fmt, i)))});
 		}
 	}
 
@@ -71,7 +71,7 @@ struct FCLayer
 		size_t n = inputs.size();
 		if (n != weight_bias_.size())
 		{
-			err::fatalf("number of inputs must be exactly %d", n);
+			logs::fatalf("number of inputs must be exactly %d", n);
 		}
 		age::TensT args;
 		for (size_t i = 0; i < n; ++i)
@@ -90,8 +90,8 @@ struct FCLayer
 		std::vector<LabelVar> out;
 		for (size_t i = 0, n = weight_bias_.size(); i < n; ++i)
 		{
-			std::string weight_label = err::sprintf(weight_fmt, i);
-			std::string bias_label = err::sprintf(bias_fmt, i);
+			std::string weight_label = fmts::sprintf(weight_fmt, i);
+			std::string bias_label = fmts::sprintf(bias_fmt, i);
 			out.push_back({
 				weight_bias_[i].first,
 				{label_, weight_label}
@@ -126,12 +126,12 @@ struct FCLayer
 		}
 		for (size_t i = 0, n = weight_bias_.size(); i < n; ++i)
 		{
-			std::string weight_label = err::sprintf(weight_fmt, i);
-			std::string bias_label = err::sprintf(bias_fmt, i);
+			std::string weight_label = fmts::sprintf(weight_fmt, i);
+			std::string bias_label = fmts::sprintf(bias_fmt, i);
 			auto wit = relevant.find(weight_label);
 			if (relevant.end() == wit)
 			{
-				err::warn(weight_label + " not found in protobuf");
+				logs::warn(weight_label + " not found in protobuf");
 			}
 			else
 			{
@@ -142,7 +142,7 @@ struct FCLayer
 			auto bit = relevant.find(bias_label);
 			if (relevant.end() == wit)
 			{
-				err::warn(bias_label + " not found in protobuf");
+				logs::warn(bias_label + " not found in protobuf");
 			}
 			else
 			{

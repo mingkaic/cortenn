@@ -1,11 +1,11 @@
-#include "err/log.hpp"
-#include "err/string.hpp"
+#include "logs/logs.hpp"
+#include "fmts/fmts.hpp"
 #include "ade/shape.hpp"
 #include "ade/functor.hpp"
 
 #include "simple/jack.hpp"
 
-struct TestLogger : public err::iLogger
+struct TestLogger : public logs::iLogger
 {
 	static std::string latest_warning_;
 	static std::string latest_error_;
@@ -31,14 +31,14 @@ extern std::shared_ptr<TestLogger> tlogger;
 const size_t nelem_limit = 32456;
 
 #define ASSERT_ARREQ(ARR, ARR2) { std::stringstream arrs, arrs2;\
-	err::to_stream(arrs, ARR.begin(), ARR.end());\
-	err::to_stream(arrs2, ARR2.begin(), ARR2.end());\
+	fmts::to_stream(arrs, ARR.begin(), ARR.end());\
+	fmts::to_stream(arrs2, ARR2.begin(), ARR2.end());\
 	ASSERT_TRUE(std::equal(ARR.begin(), ARR.end(), ARR2.begin())) <<\
 		"expect list " << arrs.str() << ", got " << arrs2.str() << " instead"; }
 
 #define EXPECT_ARREQ(ARR, ARR2) { std::stringstream arrs, arrs2;\
-	err::to_stream(arrs, ARR.begin(), ARR.end());\
-	err::to_stream(arrs2, ARR2.begin(), ARR2.end());\
+	fmts::to_stream(arrs, ARR.begin(), ARR.end());\
+	fmts::to_stream(arrs2, ARR2.begin(), ARR2.end());\
 	EXPECT_TRUE(std::equal(ARR.begin(), ARR.end(), ARR2.begin())) <<\
 		"expect list " << arrs.str() << ", got " << arrs2.str() << " instead"; }
 

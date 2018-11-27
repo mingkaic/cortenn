@@ -48,12 +48,12 @@ int main (int argc, char** argv)
 
 		llo::GenericData gdata = llo::eval(pruned, age::DOUBLE);
 		double* gdptr = (double*) gdata.data_.get();
-		std::cout << err::to_string(gdptr, gdptr + gdata.shape_.n_elems()) << '\n';
+		std::cout << fmts::to_string(gdptr, gdptr + gdata.shape_.n_elems()) << '\n';
 	}
 
 	llo::GenericData data = llo::eval(root, age::DOUBLE);
 	double* dptr = (double*) data.data_.get();
-	std::cout << err::to_string(dptr, dptr + data.shape_.n_elems()) << '\n';
+	std::cout << fmts::to_string(dptr, dptr + data.shape_.n_elems()) << '\n';
 
 	tenncor::Graph graph;
 	std::vector<ade::TensptrT> roots = {trainer.error_};
@@ -61,7 +61,7 @@ int main (int argc, char** argv)
 	std::fstream outstr(serialpath, std::ios::out | std::ios::trunc | std::ios::binary);
 	if (!graph.SerializeToOstream(&outstr))
 	{
-		err::warn("failed to serialize initial trainer");
+		logs::warn("failed to serialize initial trainer");
 	}
 
 	google::protobuf::ShutdownProtobufLibrary();

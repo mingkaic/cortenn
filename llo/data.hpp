@@ -103,13 +103,13 @@ struct Variable final : public ade::iLeaf
 	{
 		if (false == data.shape_.compatible_after(shape(), 0))
 		{
-			err::fatalf("cannot assign data of incompatible shaped %s to "
+			logs::fatalf("cannot assign data of incompatible shaped %s to "
 				"internal data of shape %s", data.shape_.to_string().c_str(),
 				shape().to_string().c_str());
 		}
 		if (data.dtype_ != data_.dtype_)
 		{
-			err::fatalf("cannot assign data of incompatible types %s "
+			logs::fatalf("cannot assign data of incompatible types %s "
 				"(external) and %s (internal)",
 				age::name_type(data.dtype_).c_str(), age::name_type(data_.dtype_).c_str());
 		}
@@ -163,7 +163,7 @@ VarptrT get_variable (std::vector<T> data, ade::Shape shape,
 {
 	if (data.size() != shape.n_elems())
 	{
-		err::fatalf("cannot create variable with data size %d "
+		logs::fatalf("cannot create variable with data size %d "
 			"against shape %s", data.size(), shape.to_string().c_str());
 	}
 	return VarptrT(new Variable((char*) &data[0],

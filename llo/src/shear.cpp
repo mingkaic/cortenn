@@ -34,7 +34,7 @@ static ade::TensptrT prune0 (bool& is_zero, ade::iFunctor* func,
 			case age::EXP:
 				return ade::TensptrT(age::data(1, func->shape()));
 			case age::LOG:
-				err::fatal("cannot LOG by zero");
+				logs::fatal("cannot LOG by zero");
 			case age::POW:
 				if (zeros.end() != zeros.find(0))
 				{
@@ -75,7 +75,7 @@ static ade::TensptrT prune0 (bool& is_zero, ade::iFunctor* func,
 			case age::DIV:
 				if (zeros.end() != zeros.find(1))
 				{
-					err::fatal("cannot DIV by zero");
+					logs::fatal("cannot DIV by zero");
 				}
 				// else if 0 == zeros.front()
 				is_zero = true;
@@ -91,7 +91,7 @@ static ade::TensptrT prune0 (bool& is_zero, ade::iFunctor* func,
 			case age::RAND_NORM:
 				break;
 			default:
-				err::fatal("cannot prune unknown opcode");
+				logs::fatal("cannot prune unknown opcode");
 		}
 	}
 	return ade::TensptrT(ade::Functor::get(ade::Opcode{age::name_op(opcode), opcode}, args));
@@ -157,7 +157,7 @@ ade::TensptrT zero_prune (ade::TensptrT root)
 	auto it = mapping.find(root.get());
 	if (mapping.end() == it)
 	{
-		err::fatal("something went wrong"); // todo: probably add context?
+		logs::fatal("something went wrong"); // todo: probably add context?
 	}
 	return it->second;
 }

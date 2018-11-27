@@ -1,4 +1,4 @@
-#include "err/log.hpp"
+#include "logs/logs.hpp"
 
 #include "ade/traveler.hpp"
 #include "ade/functor.hpp"
@@ -15,7 +15,7 @@ static ade::CoordPtrT load_coord (
 {
 	if (ade::mat_dim * ade::mat_dim != coord.size())
 	{
-		err::fatal("cannot deserialize non-matrix coordinate map");
+		logs::fatal("cannot deserialize non-matrix coordinate map");
 	}
 	return std::make_shared<ade::CoordMap>(
 		[&](ade::MatrixT fwd)

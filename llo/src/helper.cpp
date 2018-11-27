@@ -39,18 +39,18 @@ ade::TensptrT matmul (ade::TensptrT a, ade::TensptrT b)
 	size_t C = ashape.at(0);
 	if (C != bshape.at(1))
 	{
-		err::fatalf("cannot matmul shapes of incompatible common dimension "
+		logs::fatalf("cannot matmul shapes of incompatible common dimension "
 			"%s and %s", ashape.to_string().c_str(),
 			bshape.to_string().c_str());
 	}
 	if (C * N != ashape.n_elems())
 	{
-		err::fatalf("cannot matmul ashape %s of dimension "
+		logs::fatalf("cannot matmul ashape %s of dimension "
 			"higher than 2-D", ashape.to_string().c_str());
 	}
 	if (C * M != bshape.n_elems())
 	{
-		err::fatalf("cannot matmul bshape %s of dimension "
+		logs::fatalf("cannot matmul bshape %s of dimension "
 			"higher than 2-D", bshape.to_string().c_str());
 	}
 
@@ -79,13 +79,13 @@ ade::TensptrT convolve (ade::TensptrT img, ade::TensptrT kernel)
 	uint8_t out_channels = kernelshape.at(3);
 	if (in_channels != kernelshape.at(2))
 	{
-		err::fatalf("cannot convolve with mismatch img %s and kernel %s "
+		logs::fatalf("cannot convolve with mismatch img %s and kernel %s "
 			"in_channel (dim=3 for img, dim=2 for kernel)",
 			imgshape.to_string().c_str(), kernelshape.to_string().c_str());
 	}
 	if (in_width < kernel_width || in_height < kernel_height)
 	{
-		err::fatalf("cannot convolve kernel %s against a smaller image %s",
+		logs::fatalf("cannot convolve kernel %s against a smaller image %s",
 			kernelshape.to_string().c_str(),
 			imgshape.to_string().c_str());
 	}

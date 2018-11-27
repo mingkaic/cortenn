@@ -27,7 +27,7 @@
         "prod": "PROD",
         "data_out": "char*",
         "data_in": "llo::DataArgsT&",
-        "scalarize": "llo::get_variable(std::vector<T>(shape.n_elems(),scalar),shape,err::sprintf(\"%d\",scalar))"
+        "scalarize": "llo::get_variable(std::vector<T>(shape.n_elems(),scalar),shape,fmts::sprintf(\"%d\",scalar))"
     },
     "opcodes": {
         "ABS": {

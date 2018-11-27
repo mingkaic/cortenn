@@ -18,15 +18,11 @@ filegroup(
 
 cc_binary(
     name = "gd_demo",
-    srcs = [
-        "demo/options.hpp",
-        "demo/gd_demo.cpp",
-    ],
+    srcs = ["demo/gd_demo.cpp"],
     copts = ["-std=c++14"],
     deps = [
         "//rocnnet/modl:modl",
-        "@boost//:filesystem",
-        "@boost//:program_options",
+        "@com_github_mingkaic_cppkg//flag:flag",
         "@com_github_mingkaic_tenncor//dbg:dbg",
     ],
     data = glob(["pretrained/*"]),
@@ -38,6 +34,7 @@ cc_binary(
     copts = ["-std=c++14"],
     deps = [
         "//rocnnet/modl:modl",
+        "@com_github_mingkaic_cppkg//flag:flag",
         "@com_github_mingkaic_tenncor//dbg:dbg",
         "@com_github_mingkaic_cortenn//pbm:pbm",
     ],

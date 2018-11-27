@@ -8,8 +8,7 @@
 
 #include <list>
 
-#include "ade/itensor.hpp"
-#include "ade/traveler.hpp"
+#include "ade/ade.hpp"
 
 #include "pbm/graph.pb.h"
 

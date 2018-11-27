@@ -5,7 +5,7 @@ def dependencies():
         git_repository(
             name = "com_github_mingkaic_tenncor",
             remote = "https://github.com/mingkaic/tenncor",
-            commit = "79a717bd03a8b4f51d91b10c52ecb817764e00ee",
+            commit = "43b18d2c26775e6f6a74fa22bca4c4a666a152b2",
         )
 
     if "org_pubref_rules_protobuf" not in native.existing_rules():

@@ -1,0 +1,29 @@
+workspace(name = "com_github_mingkaic_rocnnet")
+
+# local dependencies
+
+load("//:rocnnet.bzl", "dependencies")
+
+dependencies()
+
+# cortenn dependencies
+
+load("@com_github_mingkaic_cortenn//:cortenn.bzl", "dependencies")
+
+dependencies()
+
+load("@com_github_mingkaic_tenncor//:tenncor.bzl", "dependencies")
+
+dependencies()
+
+load("@com_github_mingkaic_cppkg//:cppkg.bzl", "dependencies")
+
+dependencies()
+
+load("@com_github_nelhage_rules_boost//:boost/boost.bzl", "boost_deps")
+
+boost_deps()
+
+load("@org_pubref_rules_protobuf//cpp:rules.bzl", "cpp_proto_repositories")
+
+cpp_proto_repositories()

@@ -1,0 +1,24 @@
+licenses(["notice"])
+
+filegroup(
+    name = "regress_srcs",
+    srcs = glob([
+        "regress/*.hpp",
+        "regress/*.cpp",
+    ]),
+)
+
+######### TEST #########
+
+cc_test(
+    name = "test_regress",
+    size = "medium",
+    srcs = [":regress_srcs"],
+    copts = ["-std=c++14"],
+    deps = [
+        "//llo:llo",
+        "//testutil:testutil",
+        "@com_github_mingkaic_testify//anteroc:anteroc",
+    ],
+    data = ["//:credentials"],
+)

@@ -29,3 +29,8 @@ filegroup(
     name = "scripts",
     srcs = glob(["scripts/*"]),
 )
+
+sh_binary(
+    name = "swig_conv",
+    srcs = ["scripts/swig_conv.sh"],
+)

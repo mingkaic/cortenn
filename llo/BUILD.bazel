@@ -18,11 +18,11 @@ filegroup(
 )
 
 filegroup(
-    name = "regress_srcs",
+    name = "python_ext",
     srcs = glob([
-        "regress/*.hpp",
-        "regress/*.cpp",
-    ]),
+        "python/*.hpp",
+        "python/*.cpp",
+    ])
 )
 
 ######### LIBRARY #########
@@ -33,6 +33,8 @@ genrule(
     outs = [
         "generated/api.hpp",
         "generated/api.cpp",
+        "generated/capi.hpp",
+        "generated/capi.cpp",
         "generated/codes.hpp",
         "generated/codes.cpp",
         "generated/grader.hpp",
@@ -41,7 +43,26 @@ genrule(
         "generated/opmap.cpp",
     ],
     tools = ["@com_github_mingkaic_tenncor//age:agen"],
-    cmd = "$(location @com_github_mingkaic_tenncor//age:agen) --cfg $(location :cfg/llo.json) --out $(@D)/generated --strip_prefix=$$(dirname $(@D))",
+    cmd = "$(location @com_github_mingkaic_tenncor//age:agen) " +
+        "--cfg $(location :cfg/llo.json) --out $(@D)/generated " +
+        "--strip_prefix=$$(dirname $(@D)) --gen_capi",
+)
+
+genrule(
+    name = "generated_ipython",
+    srcs = [":python_ext", ":generated_llo"],
+    outs = ["generated/capi.i"],
+    cmd = "printf '%%module capi\n%%include \"carrays.i\"\n" +
+        "%%array_class(int32_t,int_arr);\n %%array_class(double,dbl_arr);\n'" +
+        " > $@ && grep -h 'extern .*;' $(locations //llo:generated_llo) " +
+        "$(locations //llo:python_ext) >> $@",
+)
+
+genrule(
+    name = "swig_llo",
+    srcs = [":generated_ipython"],
+    outs = ["generated/capi_wrap.c"],
+    cmd = "swig -python $(@D)/capi.i",
 )
 
 cc_library(
@@ -56,6 +77,14 @@ cc_library(
     visibility = ["//visibility:public"],
 )
 
+cc_library(
+    name = "llo_python",
+    hdrs = glob(["python/*.hpp"]),
+    srcs = glob(["python/*.cpp"]) + [":swig_llo"],
+    deps = ["//llo:llo"],
+    visibility = ["//visibility:public"],
+)
+
 ######### TEST #########
 
 cc_test(
@@ -66,19 +95,6 @@ cc_test(
     deps = [
         "//llo:llo",
         "//testutil:testutil",
-    ],
-    data = ["//:credentials"],
-)
-
-cc_test(
-    name = "test_regress",
-    size = "medium",
-    srcs = [":regress_srcs"],
-    copts = ["-std=c++14"],
-    deps = [
-        "//llo:llo",
-        "//testutil:testutil",
-        "@com_github_mingkaic_testify//anteroc:anteroc",
     ],
     data = ["//:credentials"],
 )

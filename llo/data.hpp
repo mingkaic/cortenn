@@ -58,7 +58,14 @@ struct Variable final : public ade::iLeaf
 		ade::Shape shape, std::string label) :
 		label_(label), data_(shape, dtype)
 	{
-		std::memcpy(data_.data_.get(), data, nbytes());
+		if (nullptr != data)
+		{
+			std::memcpy(data_.data_.get(), data, nbytes());
+		}
+		else
+		{
+			std::memset(data_.data_.get(), 0, nbytes());
+		}
 	}
 
 	Variable (const Variable& other) :

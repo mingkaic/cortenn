@@ -6,11 +6,11 @@
 namespace llo
 {
 
-ade::TensptrT grad_prod (size_t gradidx, age::TensT tens);
+ade::TensptrT grad_prod (size_t gradidx, ade::TensT tens);
 
-ade::TensptrT grad_min (size_t gradidx, age::TensT tens);
+ade::TensptrT grad_min (size_t gradidx, ade::TensT tens);
 
-ade::TensptrT grad_max (size_t gradidx, age::TensT tens);
+ade::TensptrT grad_max (size_t gradidx, ade::TensT tens);
 
 ade::CoordPtrT reduce (uint8_t rank, const ade::Shape& shape);
 

@@ -66,14 +66,14 @@ struct FCLayer
 	FCLayer& operator = (FCLayer&& other) = default;
 
 
-	ade::TensptrT operator () (age::TensT inputs)
+	ade::TensptrT operator () (ade::TensT inputs)
 	{
 		size_t n = inputs.size();
 		if (n != weight_bias_.size())
 		{
 			logs::fatalf("number of inputs must be exactly %d", n);
 		}
-		age::TensT args;
+		ade::TensT args;
 		for (size_t i = 0; i < n; ++i)
 		{
 			ade::DimT cdim = inputs[i]->shape().at(1);

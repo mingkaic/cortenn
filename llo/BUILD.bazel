@@ -53,7 +53,8 @@ genrule(
     srcs = [":python_ext", ":generated_llo"],
     outs = ["generated/capi.i"],
     cmd = "printf '%%module capi\n%%include \"carrays.i\"\n" +
-        "%%array_class(int32_t,int_arr);\n %%array_class(double,dbl_arr);\n'" +
+        "%%array_class(int32_t,int_arr);\n%%array_class(double,dbl_arr);\n" +
+        "%%inline %%{\nextern int LLO_INT;\nextern int LLO_FLOAT;\n%%}\n'" +
         " > $@ && grep -h 'extern .*;' $(locations //llo:generated_llo) " +
         "$(locations //llo:python_ext) >> $@",
 )
@@ -81,7 +82,10 @@ cc_library(
     name = "llo_python",
     hdrs = glob(["python/*.hpp"]),
     srcs = glob(["python/*.cpp"]) + [":swig_llo"],
-    deps = ["//llo:llo"],
+    deps = [
+        "//llo:llo",
+        "@python_linux//:python27-lib",
+    ],
     visibility = ["//visibility:public"],
 )
 

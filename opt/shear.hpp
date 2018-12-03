@@ -6,6 +6,8 @@
 /// Define ade graph pruning functions
 ///
 
+#include <list>
+
 #include "ade/ade.hpp"
 
 #ifndef OPT_SHEAR_HPP

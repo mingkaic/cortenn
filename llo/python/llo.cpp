@@ -1,40 +1,45 @@
 #include "llo/data.hpp"
+#include "llo/eval.hpp"
 #include "llo/zprune.hpp"
 
 #include "llo/python/llo.hpp"
 
-int64_t make_var (int shape[8], DTYPE dtype, char* label)
+const int LLO_INT = 0;
+
+const int LLO_FLOAT = 1;
+
+int64_t make_var (int shape[8], int dtype, char* label)
 {
     age::_GENERATED_DTYPE gdtype;
     switch (dtype)
     {
-        case INT:
+        case LLO_INT:
             gdtype = age::INT32;
             break;
-        case FLOAT:
+        case LLO_FLOAT:
             gdtype = age::DOUBLE;
             break;
         default:
             logs::fatal("cannot make variable of unknown type");
     }
 
-    ade::Shape lshape(shape);
+    ade::Shape lshape(std::vector<ade::DimT>(shape, shape + 8));
     llo::Variable* vp = new llo::Variable(nullptr, gdtype,
-        lshape, label)
+        lshape, label);
 
     return register_tens(vp);
 }
 
 void assign_int (int64_t var, int32_t* arr, int n)
 {
-    std::vector<int32_t> data(arr, n);
+    std::vector<int32_t> data(arr, arr + n);
     auto vp = static_cast<llo::Variable*>(get_tens(var).get());
     *vp = data;
 }
 
 void assign_float (int64_t var, double* arr, int n)
 {
-    std::vector<double> data(arr, n);
+    std::vector<double> data(arr, arr + n);
     auto vp = static_cast<llo::Variable*>(get_tens(var).get());
     *vp = data;
 }
@@ -44,8 +49,8 @@ void evaluate_int (int64_t root, int32_t* arr, int limit)
     auto tens = get_tens(root);
     llo::GenericData gdata = llo::eval(tens, age::INT32);
     int32_t* ptr = (int32_t*) gdata.data_.get();
-    std::memcpy(arr, ptr,
-        std::min(gdata.shape_.n_elems(), limit) * sizeof(int32_t));
+    std::memcpy(arr, ptr, sizeof(int32_t) *
+        std::min(gdata.shape_.n_elems(), (ade::NElemT) limit));
 }
 
 void evaluate_float (int64_t root, double* arr, int limit)
@@ -53,8 +58,8 @@ void evaluate_float (int64_t root, double* arr, int limit)
     auto tens = get_tens(root);
     llo::GenericData gdata = llo::eval(tens, age::DOUBLE);
     double* ptr = (double*) gdata.data_.get();
-    std::memcpy(arr, ptr,
-        std::min(gdata.shape_.n_elems(), limit) * sizeof(double));
+    std::memcpy(arr, ptr, sizeof(double) *
+        std::min(gdata.shape_.n_elems(), (ade::NElemT) limit));
 }
 
 int64_t derive (int64_t root, int64_t wrt)

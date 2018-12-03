@@ -7,18 +7,18 @@
 namespace llo
 {
 
-ade::TensptrT grad_prod (size_t gradidx, age::TensT tens)
+ade::TensptrT grad_prod (size_t gradidx, ade::TensT tens)
 {
 	tens.erase(tens.begin() + gradidx);
 	return age::prod(tens);
 }
 
-ade::TensptrT grad_min (size_t gradidx, age::TensT tens)
+ade::TensptrT grad_min (size_t gradidx, ade::TensT tens)
 {
 	return age::eq(age::min(tens), tens[gradidx]);
 }
 
-ade::TensptrT grad_max (size_t gradidx, age::TensT tens)
+ade::TensptrT grad_max (size_t gradidx, ade::TensT tens)
 {
 	return age::eq(age::max(tens), tens[gradidx]);
 }

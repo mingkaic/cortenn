@@ -1,12 +1,10 @@
 #include "llo/generated/capi.hpp"
 
-extern enum DTYPE
-{
-    INT,
-    FLOAT,
-};
+extern const int LLO_INT;
 
-extern int64_t make_var (int shape[8], DTYPE dtype, char* label);
+extern const int LLO_FLOAT;
+
+extern int64_t make_var (int shape[8], int dtype, char* label);
 
 extern void assign_int (int64_t var, int32_t* arr, int n);
 

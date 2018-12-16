@@ -1,71 +1,83 @@
+#include "pybind11/pybind11.h"
+#include "pybind11/numpy.h"
+
 #include "llo/data.hpp"
 #include "llo/eval.hpp"
 #include "llo/zprune.hpp"
 
-#include "llo/python/llo.hpp"
+namespace py = pybind11;
 
-const int LLO_INT = 0;
-
-const int LLO_FLOAT = 1;
-
-int64_t make_var (int shape[8], int dtype, char* label)
+namespace pyllo
 {
-    age::_GENERATED_DTYPE gdtype;
-    switch (dtype)
-    {
-        case LLO_INT:
-            gdtype = age::INT32;
-            break;
-        case LLO_FLOAT:
-            gdtype = age::DOUBLE;
-            break;
-        default:
-            logs::fatal("cannot make variable of unknown type");
-    }
 
-    ade::Shape lshape(std::vector<ade::DimT>(shape, shape + 8));
-    llo::Variable* vp = new llo::Variable(nullptr, gdtype,
-        lshape, label);
-
-    return register_tens(vp);
+llo::VarptrT variable (py::array data, std::string label)
+{
+	py::buffer_info info = data.request();
+	ade::Shape shape(std::vector<ade::DimT>(
+		info.shape.begin(), info.shape.end()));
+	size_t n = shape.n_elems();
+	char kind = data.dtype().kind();
+	switch (kind)
+	{
+		case 'f':
+		{
+			double* dptr = static_cast<double*>(info.ptr);
+			return llo::get_variable(std::vector<double>(dptr, dptr + n),
+				shape, label);
+		}
+			break;
+		case 'i':
+		{
+			int64_t* dptr = static_cast<int64_t*>(info.ptr);
+			return llo::get_variable(std::vector<int64_t>(dptr, dptr + n),
+				shape, label);
+		}
+			break;
+		default:
+			logs::fatalf("unknown dtype %c", kind);
+	}
 }
 
-void assign_int (int64_t var, int32_t* arr, int n)
+py::array evaluate (ade::TensptrT tens,
+	py::dtype dtype = py::dtype::of<double>())
 {
-    std::vector<int32_t> data(arr, arr + n);
-    auto vp = static_cast<llo::Variable*>(get_tens(var).get());
-    *vp = data;
+	age::_GENERATED_DTYPE ctype = age::BAD_TYPE;
+	char kind = dtype.kind();
+	switch (kind)
+	{
+		case 'f':
+			ctype = age::DOUBLE;
+			break;
+		case 'i':
+			ctype = age::INT64;
+			break;
+		default:
+			logs::fatalf("unknown dtype %c", kind);
+	}
+	llo::GenericData gdata = llo::eval(tens, ctype);
+	void* vptr = gdata.data_.get();
+	auto it = gdata.shape_.begin();
+	auto et = gdata.shape_.end();
+	while (it != et && *(et-1) == 1)
+	{
+		--et;
+	}
+	return py::array(dtype, py::array::ShapeContainer(it, et), vptr);
 }
 
-void assign_float (int64_t var, double* arr, int n)
-{
-    std::vector<double> data(arr, arr + n);
-    auto vp = static_cast<llo::Variable*>(get_tens(var).get());
-    *vp = data;
 }
 
-void evaluate_int (int64_t root, int32_t* arr, int limit)
+PYBIND11_MODULE(llo, m)
 {
-    auto tens = get_tens(root);
-    llo::GenericData gdata = llo::eval(tens, age::INT32);
-    int32_t* ptr = (int32_t*) gdata.data_.get();
-    std::memcpy(arr, ptr, sizeof(int32_t) *
-        std::min(gdata.shape_.n_elems(), (ade::NElemT) limit));
-}
+	m.doc() = "llo variables";
 
-void evaluate_float (int64_t root, double* arr, int limit)
-{
-    auto tens = get_tens(root);
-    llo::GenericData gdata = llo::eval(tens, age::DOUBLE);
-    double* ptr = (double*) gdata.data_.get();
-    std::memcpy(arr, ptr, sizeof(double) *
-        std::min(gdata.shape_.n_elems(), (ade::NElemT) limit));
-}
+	py::object tensor = (py::object) py::module::import("llo.age").attr("Tensor");
+	py::class_<llo::Variable,llo::VarptrT> variable(m, "Variable", tensor);
 
-int64_t derive (int64_t root, int64_t wrt)
-{
-    auto rtens = get_tens(root);
-    auto vtens = get_tens(wrt);
-    ade::TensptrT der = llo::derive(rtens, vtens);
-    return register_tens(der);
+	py::implicitly_convertible<ade::iTensor,llo::Variable>(),
+
+	m.def("variable", &pyllo::variable, "create tensor variable");
+	m.def("evaluate", &pyllo::evaluate, "evaluate tensor",
+		py::arg("tens"), py::arg("dtype") = py::dtype::of<double>());
+	m.def("derive", &llo::derive, "derive tensor with respect to some derive");
 }

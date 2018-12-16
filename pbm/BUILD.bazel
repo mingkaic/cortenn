@@ -1,7 +1,7 @@
 licenses(["notice"])
 
-load("@org_pubref_rules_protobuf//cpp:rules.bzl", "cc_proto_library")
-load("@org_pubref_rules_protobuf//python:rules.bzl", "py_proto_library")
+load("@protobuf//cpp:rules.bzl", "cc_proto_library")
+load("@protobuf//python:rules.bzl", "py_proto_library")
 
 filegroup(
     name = "srcs",
@@ -62,7 +62,7 @@ cc_library(
     srcs = glob(["src/*.cpp"]),
     copts = ["-std=c++14"],
     deps = [
-        "@com_github_mingkaic_tenncor//ade:ade",
+        "@tenncor//ade:ade",
         "//pbm:cc_proto",
     ],
     visibility = ["//visibility:public"],
@@ -76,7 +76,7 @@ cc_test(
     srcs = [":test_srcs"],
     deps = [
         "//pbm:pbm",
-        "@com_github_mingkaic_tenncor//dbg:dbg",
+        "@tenncor//dbg:dbg",
         "@com_google_googletest//:gtest",
     ],
     copts = ["-std=c++14"],

@@ -23,14 +23,14 @@ using TensT = std::vector<ade::TensptrT>;
 using DataSaverT = std::function<std::string(const char*,size_t,size_t)>;
 
 using DataLoaderT = std::function<ade::TensptrT(const char*,ade::Shape,\
-    size_t,std::string)>;
+	size_t,std::string)>;
 
 struct iDataLoader
 {
-    virtual ~iDataLoader (void) = default;
+	virtual ~iDataLoader (void) = default;
 
-    virtual ade::TensptrT deserialize (const char* pb,
-        ade::Shape shape, size_t typecode, std::string label) = 0;
+	virtual ade::TensptrT deserialize (const char* pb,
+		ade::Shape shape, size_t typecode, std::string label) = 0;
 };
 
 using StringsT = std::list<std::string>;

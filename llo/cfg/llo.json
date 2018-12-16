@@ -353,7 +353,7 @@
                 "dtype": "ade::TensptrT",
                 "name": "arg"
             }, {
-                "dtype": "uint8_t", 
+                "dtype": "uint8_t",
                 "name": "rank"
             }],
             "out": "llo::data(arg->shape().at(rank), ade::Shape(), \"n_dims\")"

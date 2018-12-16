@@ -20,14 +20,14 @@ using LabelledsT = std::vector<LabelledTensT>;
 
 struct GraphInfo final
 {
-    std::unordered_set<ade::TensptrT> roots_;
+	std::unordered_set<ade::TensptrT> roots_;
 
-    LabelledsT labelled_;
+	LabelledsT labelled_;
 };
 
 /// Return all nodes in graph unmarshalled from protobuf object
 void load_graph (GraphInfo& out, const tenncor::Graph& in,
-    DataLoaderT dataloader);
+	DataLoaderT dataloader);
 
 }
 

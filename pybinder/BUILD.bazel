@@ -1,0 +1,16 @@
+licenses(["notice"])
+
+filegroup(
+    name = "srcs",
+    srcs = glob(["*.py"]) + ["BUILD.bazel"],
+    visibility = ["//visibility:public"],
+)
+
+######### BINARY #########
+
+py_binary(
+    name = "pyagen",
+    srcs = glob(["*.py"]),
+    deps = ["@tenncor//age:age_generator"],
+    visibility = ["//visibility:public"],
+)

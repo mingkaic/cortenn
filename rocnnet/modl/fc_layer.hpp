@@ -137,7 +137,7 @@ struct FCLayer
 			{
 				llo::GenericData wdata = llo::eval(wit->second, age::DOUBLE);
 				double* wptr = (double*) wdata.data_.get();
-	            *(weight_bias_[i].first) = std::vector<double>(wptr, wptr + wdata.shape_.n_elems());
+				*(weight_bias_[i].first) = std::vector<double>(wptr, wptr + wdata.shape_.n_elems());
 			}
 			auto bit = relevant.find(bias_label);
 			if (relevant.end() == wit)
@@ -148,7 +148,7 @@ struct FCLayer
 			{
 				llo::GenericData bdata = llo::eval(bit->second, age::DOUBLE);
 				double* bptr = (double*) bdata.data_.get();
-            	*(weight_bias_[i].second) = std::vector<double>(bptr, bptr + bdata.shape_.n_elems());
+				*(weight_bias_[i].second) = std::vector<double>(bptr, bptr + bdata.shape_.n_elems());
 			}
 		}
 	}

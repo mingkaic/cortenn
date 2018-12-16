@@ -23,12 +23,12 @@ struct GraphSaver final : public ade::iTraveler
 {
 	GraphSaver (DataSaverT saver) : saver_(saver) {}
 
-    /// Implementation of iTraveler
+	/// Implementation of iTraveler
 	void visit (ade::iLeaf* leaf) override
 	{
 		if (visited_.end() == visited_.find(leaf))
 		{
-            leaf->accept(stat);
+			leaf->accept(stat);
 			leaves_.push_back(leaf);
 			visited_.emplace(leaf);
 		}
@@ -39,7 +39,7 @@ struct GraphSaver final : public ade::iTraveler
 	{
 		if (visited_.end() == visited_.find(func))
 		{
-            func->accept(stat);
+			func->accept(stat);
 			funcs_.push_back(func);
 			visited_.emplace(func);
 
@@ -51,8 +51,8 @@ struct GraphSaver final : public ade::iTraveler
 		}
 	}
 
-    /// Marshal all equation graphs in roots vector to protobuf object
-    void save (tenncor::Graph& out, TensLabelT labels = TensLabelT());
+	/// Marshal all equation graphs in roots vector to protobuf object
+	void save (tenncor::Graph& out, TensLabelT labels = TensLabelT());
 
 	// List of leaves visited (left to right)
 	std::list<ade::iLeaf*> leaves_;
@@ -66,23 +66,23 @@ struct GraphSaver final : public ade::iTraveler
 	ade::GraphStat stat;
 
 private:
-    void save_coord (
-        google::protobuf::RepeatedField<double>* coord,
-        const ade::CoordPtrT& mapper);
+	void save_coord (
+		google::protobuf::RepeatedField<double>* coord,
+		const ade::CoordPtrT& mapper);
 
-    /// Marshal llo::iSource to tenncor::Source
-    void save_data (tenncor::Source& out, ade::iLeaf* in)
-    {
-        const ade::Shape& shape = in->shape();
-        char* data = (char*) in->data();
-        size_t nelems = shape.n_elems();
+	/// Marshal llo::iSource to tenncor::Source
+	void save_data (tenncor::Source& out, ade::iLeaf* in)
+	{
+		const ade::Shape& shape = in->shape();
+		char* data = (char*) in->data();
+		size_t nelems = shape.n_elems();
 		size_t tcode = in->type_code();
-        out.set_shape(std::string(shape.begin(), shape.end()));
+		out.set_shape(std::string(shape.begin(), shape.end()));
 		out.set_data(saver_(data, nelems, tcode));
 		out.set_typecode(tcode);
-    }
+	}
 
-    DataSaverT saver_;
+	DataSaverT saver_;
 };
 
 }

@@ -13,8 +13,8 @@ def cortenn_repositories(repository_name, excludes = []):
     if "numpy" not in ignores:
         numpy_repository(name = "numpy")
 
-    if "protobuf" not in ignores:
-        protobuf_rules_repository(name = "protobuf")
+    if "protobuf_rules" not in ignores:
+        protobuf_rules_repository(name = "protobuf_rules")
 
     if "pybind11" not in ignores:
         pybind11_repository(name = "pybind11", repository_name = repository_name)

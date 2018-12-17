@@ -56,7 +56,7 @@ void load_graph (GraphInfo& out, const tenncor::Graph& in,
 			if (false == pb_labels.empty())
 			{
 				StringsT labels(pb_labels.begin(), pb_labels.end());
-				out.labelled_.push_back({leaf, labels});
+				out.tens_.set_labelled(labels.begin(), labels.end(), leaf);
 			}
 			out.roots_.emplace(leaf);
 		}
@@ -77,7 +77,7 @@ void load_graph (GraphInfo& out, const tenncor::Graph& in,
 			if (false == pb_labels.empty())
 			{
 				StringsT labels(pb_labels.begin(), pb_labels.end());
-				out.labelled_.push_back({f, labels});
+				out.tens_.set_labelled(labels.begin(), labels.end(), f);
 			}
 			out.roots_.emplace(f);
 		}

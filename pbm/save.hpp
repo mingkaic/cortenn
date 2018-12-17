@@ -17,7 +17,7 @@
 namespace pbm
 {
 
-using TensLabelT = std::unordered_map<ade::iTensor*,StringsT>;
+using PathedMapT = std::unordered_map<ade::LeafptrT,StringsT>;
 
 struct GraphSaver final : public ade::iTraveler
 {
@@ -52,7 +52,7 @@ struct GraphSaver final : public ade::iTraveler
 	}
 
 	/// Marshal all equation graphs in roots vector to protobuf object
-	void save (tenncor::Graph& out, TensLabelT labels = TensLabelT());
+	void save (tenncor::Graph& out, PathedMapT labels = PathedMapT());
 
 	// List of leaves visited (left to right)
 	std::list<ade::iLeaf*> leaves_;

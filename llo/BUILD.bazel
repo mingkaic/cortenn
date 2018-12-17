@@ -74,10 +74,7 @@ cc_library(
 pybind_library(
     name = "age_py",
     cc_srcs = [":generated/pyapi.cpp"],
-    cc_deps = [
-        ":llo",
-    ],
-    visibility = ["//visibility:public"],
+    cc_deps = [":llo"],
 )
 
 pybind_library(

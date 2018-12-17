@@ -11,7 +11,7 @@ DeltasT sgd (ade::TensptrT& root, VariablesT leaves,
 	DeltasT errs;
 	for (llo::VarptrT& leaf : leaves)
 	{
-		auto gres = llo::derive(root, ade::TensptrT(leaf));
+		auto gres = llo::derive(root, leaf.get());
 		// given root = f, err(x) ~ x - η * df(x), where η is the learning rate
 		ade::Shape gshape = gres->shape();
 		errs.emplace(leaf.get(),
@@ -29,7 +29,7 @@ DeltasT rms_momentum (ade::TensptrT& root, VariablesT leaves,
 	DeltasT errs;
 	for (llo::VarptrT& leaf : leaves)
 	{
-		auto gres = llo::derive(root, ade::TensptrT(leaf));
+		auto gres = llo::derive(root, leaf.get());
 		// given root = f, err(x) ~ x - (η * df(x)) / (sqrt(ε + momentum)),
 		// where η is the learning rate, and ε is epsilon
 

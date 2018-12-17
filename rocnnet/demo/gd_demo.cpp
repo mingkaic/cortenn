@@ -15,7 +15,7 @@
 
 #include "rocnnet/eqns/activations.hpp"
 
-#include "rocnnet/modl/gd_trainer.hpp"
+#include "rocnnet/trainer/gd_trainer.hpp"
 
 static std::vector<double> batch_generate (size_t n, size_t batchsize)
 {
@@ -68,8 +68,8 @@ int main (int argc, char** argv)
 			"number of times to test")
 		("save", flag::opt::value<std::string>(&savepath)->default_value(""),
 			"filename to save model")
-		("load", flag::opt::value<std::string>(&loadpath)->default_value("rocnnet/pretrained/gdmodel.pbx"),
-			"filename to load pretrained model");
+		("load", flag::opt::value<std::string>(&loadpath)->default_value(
+			"rocnnet/pretrained/gdmodel.pbx"), "filename to load pretrained model");
 
 	int exit_status = 0;
 	std::clock_t start;
@@ -104,8 +104,7 @@ int main (int argc, char** argv)
 		graph.ParseFromIstream(&loadstr);
 		pbm::GraphInfo info;
 		pbm::load_graph(info, graph, llo::deserialize);
-		pbm::LabelledsT vars = info.labelled_;
-		pretrained_brain.parse_from(vars);
+		pretrained_brain.set_variables(&info.tens_);
 		loadstr.close();
 	}
 
@@ -219,15 +218,8 @@ int main (int argc, char** argv)
 			pbm::GraphSaver saver(llo::serialize);
 			trained_out->accept(saver);
 
-			std::vector<LabelVar> vars = brain.get_variables();
-			pbm::TensLabelT labels;
-			for (LabelVar& var : vars)
-			{
-				labels[var.var_.get()] = var.labels_;
-			}
-
 			tenncor::Graph graph;
-			saver.save(graph, labels);
+			saver.save(graph, brain.list_bases());
 			graph.SerializeToOstream(&savestr);
 			savestr.close();
 		}

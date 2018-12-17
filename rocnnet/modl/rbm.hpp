@@ -3,6 +3,8 @@
 
 #include "llo/operator.hpp"
 
+#include "rocnnet/modl/marshal.hpp"
+
 using DeltasNCostT = std::pair<DeltasT,ade::TensptrT>;
 
 ade::TensptrT one_binom (ade::TensptrT a)
@@ -16,10 +18,10 @@ ade::TensptrT extended_add (ade::TensptrT bigger, ade::TensptrT smaller)
 	return age::add(bigger, age::extend(ade::TensptrT(smaller), 1, {cdim}));
 }
 
-struct RBM final
+struct RBM final : public iMarshalSet
 {
 	RBM (uint8_t n_input, uint8_t n_hidden, std::string label) :
-		label_(label), n_input_(n_input), n_hidden_(n_hidden)
+		iMarshalSet(label), n_input_(n_input), n_hidden_(n_hidden)
 	{
 		ade::Shape shape({n_hidden, n_input});
 		size_t nw = shape.n_elems();
@@ -33,39 +35,32 @@ struct RBM final
 		std::vector<double> wdata(nw);
 		std::generate(wdata.begin(), wdata.end(), gen);
 
-		weight_ = llo::get_variable(wdata, shape, "weight");
-		hbias_ = llo::data<double>(0, ade::Shape({n_hidden}), "hbias");
-		vbias_ = llo::data<double>(0, ade::Shape({n_input}), "vbias");
+		weight_ = std::shared_ptr<MarshalVar>(
+			llo::get_variable(wdata, shape, "weight"));
+		hbias_ = std::shared_ptr<MarshalVar>(
+			llo::data<double>(0, ade::Shape({n_hidden}), "hbias"));
+		vbias_ = std::shared_ptr<MarshalVar>(
+			llo::data<double>(0, ade::Shape({n_input}), "vbias"));
 	}
 
-	RBM (const RBM& other, std::string label_prefix = "copied_")
+	RBM (const RBM& other) : iMarshalSet(other)
 	{
-		copy_helper(other, label_prefix);
+		copy_helper(other);
 	}
 
 	RBM& operator = (const RBM& other)
 	{
 		if (this != &other)
 		{
-			copy_helper(other, "copied_");
+			iMarshalSet::operator = (other);
+			copy_helper(other);
 		}
 		return *this;
 	}
 
-	RBM (RBM&& other)
-	{
-		move_helper(std::move(other));
-	}
+	RBM (RBM&& other) = default;
 
-	RBM& operator = (RBM&& other)
-	{
-		if (this != &other)
-		{
-			label_ = other.label_;
-			move_helper(std::move(other));
-		}
-		return *this;
-	}
+	RBM& operator = (RBM&& other) = default;
 
 
 	// input of shape <n_input, n_batch>
@@ -75,8 +70,8 @@ struct RBM final
 		// weight is <n_hidden, n_input>
 		// in is <n_input, ?>
 		// out = in @ weight, so out is <n_hidden, ?>
-		ade::TensptrT weighed = age::matmul(input, weight_);
-		ade::TensptrT pre_nl = extended_add(weighted, hbias_);
+		ade::TensptrT weighed = age::matmul(input, weight_->var_);
+		ade::TensptrT pre_nl = extended_add(weighted, hbias_->var_);
 		return sigmoid(pre_nl);
 	}
 
@@ -87,8 +82,9 @@ struct RBM final
 		// in is <n_hidden, ?>
 		// out = in @ weight.T, so out is <n_input, ?>
 		ade::DimT cdim = input->shape().at(1);
-		ade::TensptrT weighed = age::matmul(input, age::transpose(weight_));
-		ade::TensptrT pre_nl = extended_add(weighted, vbias_);
+		ade::TensptrT weighed = age::matmul(input,
+			age::transpose(weight_->var_));
+		ade::TensptrT pre_nl = extended_add(weighted, vbias_->var_);
 		return sigmoid(pre_nl);
 	}
 
@@ -123,7 +119,8 @@ struct RBM final
 			llo::VarptrT hidden_dist = prop_up(input);
 			chain_it = one_binom(hidden_dist);
 		}
-		// otherwise use Persistent CD (initialize from the old state of the chain)
+		// otherwise use Persistent CD
+		// (initialize from the old state of the chain)
 		else
 		{
 			chain_it = persistent;
@@ -136,7 +133,8 @@ struct RBM final
 			ade::TensptrT hidden_dist = reconstruct_hidden(chain);
 
 			// use operational optimization to recover presig and vis nodes
-			ade::TensptrT weighed = age::matmul(chain_it, age::transpose(weight_));
+			ade::TensptrT weighed = age::matmul(chain_it,
+				age::transpose(weight_->var_));
 			ade::TensptrT presig_vis = extended_add(weighted, vbias_);
 			final_visible_dist = age::sigmoid(presig_vis);
 
@@ -148,16 +146,16 @@ struct RBM final
 			age::reduce_mean(free_energy(input)),
 			age::reduce_mean(free_energy(chain_end)));
 
-		ade::TensptrT dW = llo::derive(cost, weight_);
-		ade::TensptrT dhb = llo::derive(cost, hbias_);
-		ade::TensptrT dvb = llo::derive(cost, vbias_);
+		ade::TensptrT dW = llo::derive(cost, weight_->var_);
+		ade::TensptrT dhb = llo::derive(cost, hbias_->var_);
+		ade::TensptrT dvb = llo::derive(cost, vbias_->var_);
 
 		DeltasT errs;
-		errs.emplace(weight_.get(), age::sub(ade::TensptrT(weight_),
+		errs.emplace(weight_->var_.get(), age::sub(ade::TensptrT(weight_->var_),
 			age::mul(llo::data(learning_rate, dW->shape(), "learning_rate"), dW)));
-		errs.emplace(hbias_.get(), age::sub(ade::TensptrT(hbias_),
+		errs.emplace(hbias_->var_.get(), age::sub(ade::TensptrT(hbias_->var_),
 			age::mul(llo::data(learning_rate, dhb->shape(), "learning_rate"), dhb)));
-		errs.emplace(vbias_.get(), age::sub(ade::TensptrT(vbias_),
+		errs.emplace(vbias_->var_.get(), age::sub(ade::TensptrT(vbias_->var_),
 			age::mul(llo::data(learning_rate, dvb->shape(), "learning_rate"), dvb)));
 
 		std::shared_ptr<iTensor> monitoring_cost;
@@ -177,11 +175,6 @@ struct RBM final
 	}
 
 
-	std::vector<llo::VarptrT> get_variables (void) const
-	{
-		return {weight_, hbias_, vbias_};
-	}
-
 	uint8_t get_ninput (void) const
 	{
 		return n_input_;
@@ -192,30 +185,22 @@ struct RBM final
 		return n_hidden_;
 	}
 
-	void parse_from (pbm::LabelledsT labels)
+	MarsarrT get_subs (void) const override
 	{
-		//
+		return {weight_, hbias_, vbias_};
 	}
 
 private:
-	void copy_helper (const RBM& other, std::string prefix)
+	void copy_helper (const RBM& other)
 	{
-		label_ = prefix + other.label_;
 		n_input_ = other.n_input_;
 		n_hidden_ = other.n_hidden_;
-		weight_ = llo::VarptrT(new llo::Variable(*other.weight_));
-		hbias_ = llo::VarptrT(new llo::Variable(*other.hbias_));
-		vbias_ = llo::VarptrT(new llo::Variable(*other.vbias_));
-	}
-
-	void move_helper (RBM&& other)
-	{
-		label_ = std::move(other.label_);
-		n_input_ = std::move(other.n_input_);
-		n_hidden_ = std::move(other.n_hidden_);
-		weight_ = std::move(other.weight_);
-		hbias_ = std::move(other.hbias_);
-		vbias_ = std::move(other.vbias_);
+		weight_ = std::make_shared<MarshalVar>(
+			new llo::Variable(*other.weight_->var_));
+		hbias_ = std::make_shared<MarshalVar>(
+			new llo::Variable(*other.hbias_->var_));
+		vbias_ = std::make_shared<MarshalVar>(
+			new llo::Variable(*other.vbias_->var_));
 	}
 
 	ade::TensptrT free_energy (ade::TensptrT sample)
@@ -260,15 +245,13 @@ private:
 				age::transpose(age::add(p_success, p_not)), 1));
 	}
 
-	std::string label_;
-
 	uint8_t n_input_;
 
 	uint8_t n_hidden_;
 
-	llo::VarptrT weight_;
+	std::shared_ptr<MarshalVar> weight_;
 
-	llo::VarptrT hbias_;
+	std::shared_ptr<MarshalVar> hbias_;
 
-	llo::VarptrT vbias_;
+	std::shared_ptr<MarshalVar> vbias_;
 };

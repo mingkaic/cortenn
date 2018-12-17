@@ -10,8 +10,14 @@
 namespace pbm
 {
 
-void GraphSaver::save (tenncor::Graph& out, TensLabelT labels)
+void GraphSaver::save (tenncor::Graph& out, PathedMapT labels)
 {
+	std::unordered_map<ade::iLeaf*,StringsT> raw_labels;
+	for (auto lpair : labels)
+	{
+		raw_labels[lpair.first.get()] = lpair.second;
+	}
+
 	// sort functions from the root with the smallest subtree to the largest
 	// this ensures every children of a node appears before the parent,
 	// as is the order of node creations
@@ -33,8 +39,8 @@ void GraphSaver::save (tenncor::Graph& out, TensLabelT labels)
 		ordermap[tens] = i;
 
 		tenncor::Node* pb_node = out.add_nodes();
-		auto it = labels.find(tens);
-		if (labels.end() != it)
+		auto it = raw_labels.find(tens);
+		if (raw_labels.end() != it)
 		{
 			google::protobuf::RepeatedPtrField<std::string> vec(
 				it->second.begin(), it->second.end());
@@ -48,13 +54,6 @@ void GraphSaver::save (tenncor::Graph& out, TensLabelT labels)
 		ordermap[f] = nleaves + i;
 
 		tenncor::Node* pb_node = out.add_nodes();
-		auto it = labels.find(f);
-		if (labels.end() != it)
-		{
-			google::protobuf::RepeatedPtrField<std::string> vec(
-				it->second.begin(), it->second.end());
-			pb_node->mutable_labels()->Swap(&vec);
-		}
 		tenncor::Functor* func = pb_node->mutable_functor();
 		ade::Opcode opcode = f->get_opcode();
 		func->set_opname(opcode.name_);

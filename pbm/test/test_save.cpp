@@ -23,7 +23,7 @@ TEST(SAVE, SaveGraph)
 	tenncor::Graph graph;
 	std::vector<ade::TensptrT> roots;
 
-	pbm::TensLabelT labels;
+	pbm::PathedMapT labels;
 	// subtree one
 	ade::Shape shape({3, 7});
 	ade::TensptrT osrc(new MockTensor(shape));

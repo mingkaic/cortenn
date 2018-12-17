@@ -35,7 +35,7 @@ cc_binary(
     srcs = ["demo/gd_demo.cpp"],
     copts = ["-std=c++14"],
     deps = [
-        "//rocnnet/modl:modl",
+        "//rocnnet/trainer:trainer",
         "@cppkg//flag:flag",
         "@tenncor//dbg:dbg",
     ],
@@ -47,31 +47,10 @@ cc_binary(
     srcs = ["demo/dbn_demo.cpp"],
     copts = ["-std=c++14"],
     deps = [
-        "//rocnnet/modl:modl",
+        "//rocnnet/trainer:trainer",
         "//rocnnet/data:data",
         "@cppkg//flag:flag",
         "@tenncor//dbg:dbg",
     ],
     data = glob(["pretrained/*"]),
-)
-
-cc_binary(
-    name = "tcr_sample",
-    srcs = ["test/sample.cpp"],
-    copts = ["-std=c++14"],
-    deps = [
-        "//rocnnet/modl:modl",
-        "@cppkg//flag:flag",
-        "@tenncor//dbg:dbg",
-        "@com_github_mingkaic_cortenn//pbm:pbm",
-    ],
-)
-
-py_binary(
-    name = "tf_sample",
-    main = "test/sample.py",
-    srcs = ["test/sample.py"],
-    deps = [
-        "@com_github_mingkaic_cortenn//pbm:py_proto",
-    ],
 )

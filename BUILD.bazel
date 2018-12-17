@@ -10,6 +10,7 @@ filegroup(
     name = "srcs",
     srcs = [
         "//llo:srcs",
+        "//opt:srcs",
         "//pbm:srcs",
         "//rocnnet:srcs",
         "//graphmgr:srcs",
@@ -28,9 +29,4 @@ filegroup(
 filegroup(
     name = "scripts",
     srcs = glob(["scripts/*"]),
-)
-
-sh_binary(
-    name = "swig_conv",
-    srcs = ["scripts/swig_conv.sh"],
 )

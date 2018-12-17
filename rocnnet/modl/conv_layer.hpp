@@ -1,16 +1,19 @@
+#include "llo/data.hpp"
 #include "llo/operator.hpp"
 #include "llo/generated/api.hpp"
+
+#include "rocnnet/modl/marshal.hpp"
 
 #ifndef MODL_CONV_LAYER_HPP
 #define MODL_CONV_LAYER_HPP
 
-struct ConvLayer final
+struct ConvLayer final : public iMarshalSet
 {
-	ConvLayer (std::pair<uint8_t,uint8_t> filter_hw,
-		uint8_t in_ncol, uint8_t out_ncol, std::string label) :
-		label_("conv_" + label)
+	ConvLayer (std::pair<uint8_t,uint8_t> filter_hw, uint8_t in_ncol,
+		uint8_t out_ncol, std::string label) : iMarshalSet(label)
 	{
-		ade::Shape shape({filter_hw.first, filter_hw.second, in_ncol, out_ncol});
+		ade::Shape shape({filter_hw.first,
+			filter_hw.second, in_ncol, out_ncol});
 		size_t ndata = shape.n_elems();
 
 		size_t input_size = filter_hw.first * filter_hw.second * in_ncol;
@@ -23,56 +26,39 @@ struct ConvLayer final
 		std::vector<double> data(ndata);
 		std::generate(data.begin(), data.end(), gen);
 
-		weight_ = llo::VarptrT(
+		weight_ = std::make_shared<MarshalVar>(
 			llo::get_variable(data, shape, "weight"));
-		bias_ = llo::VarptrT(
+		bias_ = std::make_shared<MarshalVar>(
 			llo::data<double>(0, ade::Shape({out_ncol}), "bias"));
 	}
 
 	ade::TensptrT operator () (ade::TensptrT input)
 	{
-		return age::add(age::convolute(input, ade::TensptrT(weight_)),
-			ade::TensptrT(bias_));
-	}
-
-	std::vector<llo::VarptrT> get_variables (void) const
-	{
-		return {weight_, bias_};
+		return age::add(age::convolute(input,
+			ade::TensptrT(weight_->var_)), ade::TensptrT(bias_->var_));
 	}
 
 	uint8_t get_ninput (void) const
 	{
-		return weight_->shape().at(1);
+		return weight_->var_->shape().at(1);
 	}
 
 	uint8_t get_noutput (void) const
 	{
-		return weight_->shape().at(0);
+		return weight_->var_->shape().at(0);
 	}
 
-	void parse_from (pbm::LabelledsT labels)
+	MarsarrT get_subs (void) const override
 	{
-		pbm::LabelledsT relevant;
-		std::copy_if(labels.begin(), labels.end(), std::back_inserter(relevant),
-			[&](pbm::LabelledTensT& pairs)
-			{
-				return pairs.second.size() > 0 &&
-					this->label_ == pairs.second.front();
-			});
-		for (pbm::LabelledTensT& pairs : relevant)
-		{
-			pairs.second.pop_front();
-		}
-		weight_->parse_from(relevant);
-		bias_->parse_from(relevant);
+		return {weight_, bias_};
 	}
 
 protected:
 	std::string label_;
 
-	llo::VarptrT weight_;
+	std::shared_ptr<MarshalVar> weight_;
 
-	llo::VarptrT bias_;
+	std::shared_ptr<MarshalVar> bias_;
 };
 
 #endif // MODL_CONV_LAYER_HPP

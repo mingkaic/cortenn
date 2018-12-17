@@ -1,4 +1,4 @@
-#include "rocnnet/modl/fc_layer.hpp"
+#include "rocnnet/modl/fc_marshal.hpp"
 #include "rocnnet/modl/rbm.hpp"
 
 using PretrainsT = std::vector<DeltasNCostT>;
@@ -119,22 +119,22 @@ struct DBTrainer final
 		return n_output_;
 	}
 
-	void parse_from (pbm::LabelledsT labels)
+	void set_variables (pbm::PathedArrT labels)
 	{
-		pbm::LabelledsT relevant;
+		pbm::PathedArrT relevant;
 		std::copy_if(labels.begin(), labels.end(), std::back_inserter(relevant),
-			[&](pbm::LabelledTensT& pairs)
+			[&](pbm::PathedTens& pathed)
 			{
-				return pairs.second.size() > 0 &&
-					this->label_ == pairs.second.front();
+				return pathed.path_.size() > 0 &&
+					this->label_ == pathed.path_.front();
 			});
-		for (pbm::LabelledTensT& pairs : relevant)
+		for (pbm::PathedTens& pathed : relevant)
 		{
-			pairs.second.pop_front();
+			pathed.path_.pop_front();
 		}
 		for (RBM& rlayer : layers_)
 		{
-			rlayer.parse_from(relevant);
+			rlayer.set_variables(relevant);
 		}
 	}
 

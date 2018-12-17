@@ -1,24 +1,17 @@
-#include "pbm/load.hpp"
+#include "llo/generated/api.hpp"
 
-#include "llo/operator.hpp"
+#include "rocnnet/modl/marshal.hpp"
 
 #ifndef MODL_FC_LAYER_HPP
 #define MODL_FC_LAYER_HPP
 
-const std::string fc_prefix = "fc_";
 const std::string weight_fmt = "weight_%d";
 const std::string bias_fmt = "bias_%d";
 
-struct LabelVar
+struct FCLayer final : public iMarshalSet
 {
-	llo::VarptrT var_;
-	pbm::StringsT labels_;
-};
-
-struct FCLayer
-{
-	FCLayer (std::vector<uint8_t> n_inputs, uint8_t n_output, std::string label) :
-		label_(fc_prefix + label)
+	FCLayer (std::vector<uint8_t> n_inputs, uint8_t n_output,
+		std::string label) : iMarshalSet(label)
 	{
 		size_t n = n_inputs.size();
 		if (n == 0)
@@ -39,15 +32,18 @@ struct FCLayer
 			std::vector<double> data(ndata);
 			std::generate(data.begin(), data.end(), gen);
 
+			llo::VarptrT weight(llo::get_variable(data, shape,
+				fmts::sprintf(weight_fmt, i)));
+			llo::VarptrT bias(llo::data<double>(0, ade::Shape({n_output}),
+				fmts::sprintf(bias_fmt, i)));
 			weight_bias_.push_back({
-				llo::VarptrT(llo::get_variable(data, shape,
-					fmts::sprintf(weight_fmt, i))),
-				llo::VarptrT(llo::data<double>(0, ade::Shape({n_output}),
-					fmts::sprintf(bias_fmt, i)))});
+				std::make_shared<MarshalVar>(weight),
+				std::make_shared<MarshalVar>(bias),
+			});
 		}
 	}
 
-	FCLayer (const FCLayer& other)
+	FCLayer (const FCLayer& other) : iMarshalSet(other)
 	{
 		copy_helper(other);
 	}
@@ -56,6 +52,7 @@ struct FCLayer
 	{
 		if (this != &other)
 		{
+			iMarshalSet::operator = (other);
 			copy_helper(other);
 		}
 		return *this;
@@ -77,98 +74,55 @@ struct FCLayer
 		for (size_t i = 0; i < n; ++i)
 		{
 			ade::DimT cdim = inputs[i]->shape().at(1);
-			args.push_back(age::matmul(inputs[i],
-				ade::TensptrT(weight_bias_[i].first)));
+			args.push_back(age::matmul(
+				inputs[i], weight_bias_[i].weight_->var_));
 			args.push_back(age::extend(
-				ade::TensptrT(weight_bias_[i].second), 1, {cdim}));
+				weight_bias_[i].bias_->var_, 1, {cdim}));
 		}
 		return age::sum(args);
 	}
 
-	std::vector<LabelVar> get_variables (void) const
-	{
-		std::vector<LabelVar> out;
-		for (size_t i = 0, n = weight_bias_.size(); i < n; ++i)
-		{
-			std::string weight_label = fmts::sprintf(weight_fmt, i);
-			std::string bias_label = fmts::sprintf(bias_fmt, i);
-			out.push_back({
-				weight_bias_[i].first,
-				{label_, weight_label}
-			});
-			out.push_back({
-				weight_bias_[i].second,
-				{label_, bias_label}
-			});
-		}
-		return out;
-	}
-
 	uint8_t get_ninput (void) const
 	{
-		return weight_bias_[0].first->shape().at(1);
+		return weight_bias_[0].weight_->var_->shape().at(1);
 	}
 
 	uint8_t get_noutput (void) const
 	{
-		return weight_bias_[0].first->shape().at(0);
+		return weight_bias_[0].weight_->var_->shape().at(0);
 	}
 
-	void parse_from (pbm::LabelledsT labels)
+	MarsarrT get_subs (void) const override
 	{
-		std::unordered_map<std::string,ade::TensptrT> relevant;
-		for (pbm::LabelledTensT& pairs : labels)
+		MarsarrT out;
+		for (const LoneLayer& wbpair : weight_bias_)
 		{
-			if (label_ == pairs.second.front())
-			{
-				relevant.emplace(pairs.second.back(), pairs.first);
-			}
+			out.push_back(wbpair.weight_);
+			out.push_back(wbpair.bias_);
 		}
-		for (size_t i = 0, n = weight_bias_.size(); i < n; ++i)
-		{
-			std::string weight_label = fmts::sprintf(weight_fmt, i);
-			std::string bias_label = fmts::sprintf(bias_fmt, i);
-			auto wit = relevant.find(weight_label);
-			if (relevant.end() == wit)
-			{
-				logs::warn(weight_label + " not found in protobuf");
-			}
-			else
-			{
-				llo::GenericData wdata = llo::eval(wit->second, age::DOUBLE);
-				double* wptr = (double*) wdata.data_.get();
-				*(weight_bias_[i].first) = std::vector<double>(wptr, wptr + wdata.shape_.n_elems());
-			}
-			auto bit = relevant.find(bias_label);
-			if (relevant.end() == wit)
-			{
-				logs::warn(bias_label + " not found in protobuf");
-			}
-			else
-			{
-				llo::GenericData bdata = llo::eval(bit->second, age::DOUBLE);
-				double* bptr = (double*) bdata.data_.get();
-				*(weight_bias_[i].second) = std::vector<double>(bptr, bptr + bdata.shape_.n_elems());
-			}
-		}
+		return out;
 	}
 
 private:
-	using WbPairT = std::pair<llo::VarptrT,llo::VarptrT>;
+	struct LoneLayer
+	{
+		std::shared_ptr<MarshalVar> weight_;
+		std::shared_ptr<MarshalVar> bias_;
+	};
 
-	std::vector<WbPairT> weight_bias_;
-
-	std::string label_;
+	std::vector<LoneLayer> weight_bias_;
 
 	void copy_helper (const FCLayer& other)
 	{
-		label_ = other.label_;
 		weight_bias_.clear();
-		for (const WbPairT& opair : other.weight_bias_)
+		for (const LoneLayer& opair : other.weight_bias_)
 		{
-			llo::VarptrT ow(new llo::Variable(*opair.first));
-			llo::VarptrT ob(new llo::Variable(*opair.second));
-			weight_bias_.push_back({ow, ob});
+			llo::VarptrT weight(new llo::Variable(*(opair.weight_->var_)));
+			llo::VarptrT bias(new llo::Variable(*(opair.bias_->var_)));
+			weight_bias_.push_back({
+				std::make_shared<MarshalVar>(weight),
+				std::make_shared<MarshalVar>(bias),
+			});
 		}
 	}
 };

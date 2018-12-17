@@ -8,30 +8,32 @@
 
 using HiddenFunc = std::function<ade::TensptrT(ade::TensptrT)>;
 
+const std::string hidden_fmt = "hidden_%d";
+
 struct LayerInfo
 {
 	size_t n_out_;
 	HiddenFunc hidden_;
 };
 
-struct MLP final
+struct MLP final : public iMarshalSet
 {
 	MLP (uint8_t n_input, std::vector<LayerInfo> layers, std::string label) :
-		label_("mlp_" + label)
+		iMarshalSet(label)
 	{
 		for (size_t i = 0, n = layers.size(); i < n; ++i)
 		{
 			size_t n_output = layers[i].n_out_;
 			layers_.push_back(HiddenLayer{
-				FCLayer(std::vector<uint8_t>{n_input}, n_output,
-					fmts::sprintf("hidden_%d", i)),
+				std::make_shared<FCLayer>(std::vector<uint8_t>{n_input},
+					n_output, fmts::sprintf(hidden_fmt, i)),
 				layers[i].hidden_
 			});
 			n_input = n_output;
 		}
 	}
 
-	MLP (const MLP& other)
+	MLP (const MLP& other) : iMarshalSet(other)
 	{
 		copy_helper(other);
 	}
@@ -40,6 +42,7 @@ struct MLP final
 	{
 		if (this != &other)
 		{
+			iMarshalSet::operator = (other);
 			copy_helper(other);
 		}
 		return *this;
@@ -60,59 +63,36 @@ struct MLP final
 		return out;
 	}
 
-	std::vector<LabelVar> get_variables (void) const
-	{
-		std::vector<LabelVar> out;
-		for (const HiddenLayer& layer : layers_)
-		{
-			auto temp = layer.layer_.get_variables();
-			out.insert(out.end(), temp.begin(), temp.end());
-		}
-		for (LabelVar& lv : out)
-		{
-			lv.labels_.push_front(label_);
-		}
-		return out;
-	}
-
 	uint8_t get_ninput (void) const
 	{
-		return layers_.front().layer_.get_ninput();
+		return layers_.front().layer_->get_ninput();
 	}
 
 	uint8_t get_noutput (void) const
 	{
-		return layers_.back().layer_.get_noutput();
+		return layers_.back().layer_->get_noutput();
 	}
 
-	void parse_from (pbm::LabelledsT labels)
+	MarsarrT get_subs (void) const override
 	{
-		pbm::LabelledsT relevant;
-		std::copy_if(labels.begin(), labels.end(), std::back_inserter(relevant),
-			[&](pbm::LabelledTensT& pairs)
+		MarsarrT out(layers_.size());
+		std::transform(layers_.begin(), layers_.end(), out.begin(),
+			[](const HiddenLayer& layer)
 			{
-				return pairs.second.size() > 0 &&
-					this->label_ == pairs.second.front();
+				return layer.layer_;
 			});
-		for (pbm::LabelledTensT& pairs : relevant)
-		{
-			pairs.second.pop_front();
-		}
-		for (HiddenLayer& olayer : layers_)
-		{
-			olayer.layer_.parse_from(relevant);
-		}
+		return out;
 	}
 
 private:
 	void copy_helper (const MLP& other)
 	{
-		label_ = other.label_;
 		layers_.clear();
 		for (const HiddenLayer& olayer : other.layers_)
 		{
 			layers_.push_back(HiddenLayer{
-				FCLayer(olayer.layer_), olayer.hidden_
+				std::make_shared<FCLayer>(*olayer.layer_),
+				olayer.hidden_
 			});
 		}
 	}
@@ -121,15 +101,13 @@ private:
 	{
 		ade::TensptrT operator () (ade::TensptrT& input)
 		{
-			auto hypothesis = layer_({input});
+			auto hypothesis = (*layer_)({input});
 			return hidden_(hypothesis);
 		}
 
-		FCLayer layer_;
+		std::shared_ptr<FCLayer> layer_;
 		HiddenFunc hidden_;
 	};
-
-	std::string label_;
 
 	std::vector<HiddenLayer> layers_;
 };

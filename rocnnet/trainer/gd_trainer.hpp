@@ -22,12 +22,12 @@ struct GDTrainer
 		error_ = age::pow(age::sub(ade::TensptrT(expected_out_), train_out_),
 			ade::TensptrT(age::data(2, expected_out_->shape())));
 
-		std::vector<LabelVar> lvars = brain.get_variables();
-		VariablesT vars(lvars.size());
-		std::transform(lvars.begin(), lvars.end(), vars.begin(),
-			[](LabelVar& lvar)
+		pbm::PathedMapT vmap = brain.list_bases();
+		VariablesT vars(vmap.size());
+		std::transform(vmap.begin(), vmap.end(), vars.begin(),
+			[](std::pair<ade::LeafptrT,pbm::StringsT> vpair) -> llo::VarptrT
 			{
-				return lvar.var_;
+				return std::static_pointer_cast<llo::Variable>(vpair.first);
 			});
 		updates_ = update(error_, vars);
 	}

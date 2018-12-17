@@ -12,10 +12,10 @@ dependencies()
 load("@cppkg//:cppkg.bzl", "dependencies")
 dependencies()
 
-load("@protobuf//cpp:rules.bzl", "cpp_proto_repositories")
+load("@protobuf_rules//cpp:rules.bzl", "cpp_proto_repositories")
 cpp_proto_repositories()
 
-load("@protobuf//python:rules.bzl", "py_proto_repositories")
+load("@protobuf_rules//python:rules.bzl", "py_proto_repositories")
 py_proto_repositories()
 
 load("@com_github_nelhage_rules_boost//:boost/boost.bzl", "boost_deps")

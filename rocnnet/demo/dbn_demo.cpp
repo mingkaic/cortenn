@@ -85,9 +85,9 @@ static void pretrain (DBTrainer& model, size_t n_input,
 			{
 				pbm::GraphSaver saver(llo::serialize);
 
-				std::vector<LabelVar> vars = model.get_variables();
-				pbm::TensLabelT labels;
-				for (LabelVar& var : vars)
+				std::vector<LabelledVarT> vars = model.get_variables();
+				pbm::PathedMapT labels;
+				for (LabelledVarT& var : vars)
 				{
 					labels[var.var_.get()] = var.labels_;
 					var.var_->accept(saver);

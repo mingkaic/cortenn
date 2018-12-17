@@ -108,9 +108,9 @@ ade::TensptrT zero_prune (ade::TensptrT root)
 	return zpruner.prune(root);
 }
 
-ade::TensptrT derive (ade::TensptrT root, ade::TensptrT target)
+ade::TensptrT derive (ade::TensptrT root, ade::iTensor* target)
 {
-	age::Grader grader(target.get(), std::make_shared<age::RuleSet>());
+	age::Grader grader(target, std::make_shared<age::RuleSet>());
 	root->accept(grader);
 	auto it = grader.derivatives_.find(root.get());
 	assert(grader.derivatives_.end() != it);

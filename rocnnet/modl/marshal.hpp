@@ -2,7 +2,9 @@
 
 #include "llo/data.hpp"
 #include "llo/eval.hpp"
+#include "llo/source.hpp"
 
+#include "pbm/save.hpp"
 #include "pbm/load.hpp"
 
 #include "rocnnet/eqns/err_approx.hpp"
@@ -10,9 +12,12 @@
 #ifndef MODL_MARSHAL_HPP
 #define MODL_MARSHAL_HPP
 
+namespace modl
+{
+
 struct iMarshaler
 {
-    virtual ~iMarshaler (void) = default;
+	virtual ~iMarshaler (void) = default;
 
 	virtual std::string get_label (void) const = 0;
 
@@ -148,5 +153,14 @@ struct MarshalVar final : public iMarshaler
 
 	llo::VarptrT var_;
 };
+
+using MarVarsptrT = std::shared_ptr<MarshalVar>;
+
+void save (std::ostream& outs, ade::TensptrT& source,
+	iMarshaler* source_graph);
+
+void load (std::istream& ins, iMarshaler* target);
+
+}
 
 #endif // MODL_MARSHAL_HPP

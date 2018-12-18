@@ -6,6 +6,9 @@
 #ifndef MODL_MLP_HPP
 #define MODL_MLP_HPP
 
+namespace modl
+{
+
 using HiddenFunc = std::function<ade::TensptrT(ade::TensptrT)>;
 
 const std::string hidden_fmt = "hidden_%d";
@@ -105,11 +108,15 @@ private:
 			return hidden_(hypothesis);
 		}
 
-		std::shared_ptr<FCLayer> layer_;
+		FCptrT layer_;
 		HiddenFunc hidden_;
 	};
 
 	std::vector<HiddenLayer> layers_;
 };
+
+using MLptrT = std::shared_ptr<MLP>;
+
+}
 
 #endif // MODL_MLP_HPP

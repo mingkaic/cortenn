@@ -61,7 +61,7 @@ int main (int argc, char** argv)
 	flags.add_flags()
 		("seed", flag::opt::bool_switch(&seed)->default_value(true), "whether to seed or not")
 		("seedval", flag::opt::value<size_t>(&seedval)->default_value(default_seed),
-			"number of times to test")
+			"random seed value")
 		("n_train", flag::opt::value<size_t>(&n_train)->default_value(3000),
 			"number of times to train")
 		("n_test", flag::opt::value<size_t>(&n_test)->default_value(500),
@@ -89,30 +89,26 @@ int main (int argc, char** argv)
 	uint8_t n_in = 10;
 	uint8_t n_out = n_in / 2;
 
-	std::vector<LayerInfo> hiddens = {
+	std::vector<modl::LayerInfo> hiddens = {
 		// use same sigmoid in static memory once models copy is established
-		LayerInfo{9, sigmoid},
-		LayerInfo{n_out, sigmoid}
+		modl::LayerInfo{9, eqns::sigmoid},
+		modl::LayerInfo{n_out, eqns::sigmoid},
 	};
-	MLP brain(n_in, hiddens, "brain");
-	MLP untrained_brain(brain);
-	MLP pretrained_brain(brain);
+	auto brain = std::make_shared<modl::MLP>(n_in, hiddens, "brain");
+	auto untrained_brain = std::make_shared<modl::MLP>(*brain);
+	auto pretrained_brain = std::make_shared<modl::MLP>(*brain);
 	std::ifstream loadstr(loadpath);
 	if (loadstr.is_open())
 	{
-		tenncor::Graph graph;
-		graph.ParseFromIstream(&loadstr);
-		pbm::GraphInfo info;
-		pbm::load_graph(info, graph, llo::deserialize);
-		pretrained_brain.set_variables(&info.tens_);
+		modl::load(loadstr, pretrained_brain.get());
 		loadstr.close();
 	}
 
 	uint8_t n_batch = 3;
 	size_t show_every_n = 500;
-	ApproxFuncT approx = [](ade::TensptrT& root, VariablesT leaves)
+	eqns::ApproxFuncT approx = [](ade::TensptrT& root, eqns::VariablesT leaves)
 	{
-		return sgd(root, leaves, 0.9); // learning rate = 0.9
+		return eqns::sgd(root, leaves, 0.9); // learning rate = 0.9
 	};
 	GDTrainer trainer(brain, approx, n_batch, "gdn");
 
@@ -136,20 +132,15 @@ int main (int argc, char** argv)
 	}
 #endif
 
-	std::vector<double> batch = batch_generate(n_in, n_batch);
-	std::vector<double> batch_out = avgevry2(batch);
-	*trainer.train_in_ = batch;
-	*trainer.expected_out_ = batch_out;
-
 	// train mlp to output input
 	start = std::clock();
 	for (size_t i = 0; i < n_train; i++)
 	{
-		if (i % show_every_n == show_every_n-1)
+		if (i % show_every_n == show_every_n - 1)
 		{
 			llo::GenericData trained_derr = llo::eval(trainer.error_, age::DOUBLE);
 			double* trained_err_res = (double*) trained_derr.data_.get();
-			std::cout << "training " << i+1 << '\n';
+			std::cout << "training " << i + 1 << '\n';
 			std::cout << "trained error: " << fmts::to_string(trained_err_res, trained_err_res + n_out) << '\n';
 		}
 		std::vector<double> batch = batch_generate(n_in, n_batch);
@@ -168,14 +159,14 @@ int main (int argc, char** argv)
 
 	llo::VarptrT testin = llo::get_variable(
 		std::vector<double>(n_in), ade::Shape({n_in}), "testin");
-	auto untrained_out = untrained_brain(testin);
-	auto trained_out = brain(testin);
-	auto pretrained_out = pretrained_brain(testin);
+	auto untrained_out = (*untrained_brain)(testin);
+	auto trained_out = (*brain)(testin);
+	auto pretrained_out = (*pretrained_brain)(testin);
 	for (size_t i = 0; i < n_test; i++)
 	{
-		if (i % show_every_n == show_every_n-1)
+		if (i % show_every_n == show_every_n - 1)
 		{
-			std::cout << "testing " << i+1 << '\n';
+			std::cout << "testing " << i + 1 << '\n';
 		}
 		std::vector<double> batch = batch_generate(n_in, 1);
 		std::vector<double> batch_out = avgevry2(batch);
@@ -215,12 +206,7 @@ int main (int argc, char** argv)
 		std::ofstream savestr(savepath);
 		if (savestr.is_open())
 		{
-			pbm::GraphSaver saver(llo::serialize);
-			trained_out->accept(saver);
-
-			tenncor::Graph graph;
-			saver.save(graph, brain.list_bases());
-			graph.SerializeToOstream(&savestr);
+			modl::save(savestr, trained_out, brain.get());
 			savestr.close();
 		}
 	}

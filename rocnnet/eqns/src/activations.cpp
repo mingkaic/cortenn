@@ -2,6 +2,9 @@
 
 #ifdef EQNS_ACTIVATIONS_HPP
 
+namespace eqns
+{
+
 ade::TensptrT sigmoid (ade::TensptrT x)
 {
 	ade::Shape shape = x->shape();
@@ -24,6 +27,8 @@ ade::TensptrT softmax (ade::TensptrT x)
 	auto num = age::exp(x);
 	auto denom = age::reduce_sum(num);
 	return age::div(num, denom);
+}
+
 }
 
 #endif

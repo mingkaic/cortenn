@@ -5,6 +5,9 @@
 
 #ifdef EQNS_ERR_APPROX_HPP
 
+namespace eqns
+{
+
 DeltasT sgd (ade::TensptrT& root, VariablesT leaves,
 	double learning_rate)
 {
@@ -59,6 +62,8 @@ DeltasT rms_momentum (ade::TensptrT& root, VariablesT leaves,
 			));
 	}
 	return errs;
+}
+
 }
 
 #endif

@@ -13,18 +13,11 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
-cc_library(
-    name = "modl_wrapper",
-    srcs = glob(["python/*.cpp"]),
-    deps = [
-        "//rocnnet/modl:modl",
-        "@pybind11",
-    ],
-)
-
 pybind_library(
-    name = "modl_py",
-    cc_deps = [ ":modl_wrapper" ],
+    name = "rocnnet_py",
+    cc_srcs = glob(["python/*.cpp"]),
+    cc_deps = ["//rocnnet/trainer:trainer"],
+    py_deps = ["//llo:llo_py"],
     visibility = ["//visibility:public"],
 )
 
@@ -52,5 +45,12 @@ cc_binary(
         "@cppkg//flag:flag",
         "@tenncor//dbg:dbg",
     ],
+    data = glob(["pretrained/*"]),
+)
+
+py_binary(
+    name = "pygd_demo",
+    srcs = ["pdemo/pygd_demo.py"],
+    deps = [":rocnnet_py"],
     data = glob(["pretrained/*"]),
 )

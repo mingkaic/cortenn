@@ -56,7 +56,7 @@ struct DBTrainer final
 		{
 			output = h.prop_up(output);
 		}
-		return softmax(log_layer_({ output }));
+		return eqns::softmax(log_layer_({ output }));
 	}
 
 	PretrainsT pretraining_functions (llo::VarptrT input,

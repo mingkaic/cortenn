@@ -5,6 +5,12 @@
 
 #include "rocnnet/modl/marshal.hpp"
 
+#ifndef MODL_RBM_HPP
+#define MODL_RBM_HPP
+
+namespace modl
+{
+
 using DeltasNCostT = std::pair<DeltasT,ade::TensptrT>;
 
 ade::TensptrT one_binom (ade::TensptrT a)
@@ -35,11 +41,11 @@ struct RBM final : public iMarshalSet
 		std::vector<double> wdata(nw);
 		std::generate(wdata.begin(), wdata.end(), gen);
 
-		weight_ = std::shared_ptr<MarshalVar>(
+		weight_ = MarVarsptrT(
 			llo::get_variable(wdata, shape, "weight"));
-		hbias_ = std::shared_ptr<MarshalVar>(
+		hbias_ = MarVarsptrT(
 			llo::data<double>(0, ade::Shape({n_hidden}), "hbias"));
-		vbias_ = std::shared_ptr<MarshalVar>(
+		vbias_ = MarVarsptrT(
 			llo::data<double>(0, ade::Shape({n_input}), "vbias"));
 	}
 
@@ -72,7 +78,7 @@ struct RBM final : public iMarshalSet
 		// out = in @ weight, so out is <n_hidden, ?>
 		ade::TensptrT weighed = age::matmul(input, weight_->var_);
 		ade::TensptrT pre_nl = extended_add(weighted, hbias_->var_);
-		return sigmoid(pre_nl);
+		return eqns::sigmoid(pre_nl);
 	}
 
 	// input of shape <n_hidden, n_batch>
@@ -85,7 +91,7 @@ struct RBM final : public iMarshalSet
 		ade::TensptrT weighed = age::matmul(input,
 			age::transpose(weight_->var_));
 		ade::TensptrT pre_nl = extended_add(weighted, vbias_->var_);
-		return sigmoid(pre_nl);
+		return eqns::sigmoid(pre_nl);
 	}
 
 	// recreate input using hidden distribution
@@ -136,7 +142,7 @@ struct RBM final : public iMarshalSet
 			ade::TensptrT weighed = age::matmul(chain_it,
 				age::transpose(weight_->var_));
 			ade::TensptrT presig_vis = extended_add(weighted, vbias_);
-			final_visible_dist = age::sigmoid(presig_vis);
+			final_visible_dist = eqns::sigmoid(presig_vis);
 
 			chain_it = one_binom(hidden_dist);
 		}
@@ -231,7 +237,7 @@ private:
 
 		return age::reduce_mean(age::mul(
 			llo::data<double>(n_input_, fe_xi->shape(), "n_input"),
-			age::log(sigmoid(age::sub(fe_xi_flip, fe_xi)))));
+			age::log(eqns::sigmoid(age::sub(fe_xi_flip, fe_xi)))));
 	}
 
 	ade::TensptrT get_reconstruction_cost (ade::TensptrT input, ade::TensptrT visible_dist)
@@ -249,9 +255,13 @@ private:
 
 	uint8_t n_hidden_;
 
-	std::shared_ptr<MarshalVar> weight_;
+	MarVarsptrT weight_;
 
-	std::shared_ptr<MarshalVar> hbias_;
+	MarVarsptrT hbias_;
 
-	std::shared_ptr<MarshalVar> vbias_;
+	MarVarsptrT vbias_;
 };
+
+}
+
+#endif // MODL_RBM_HPP

@@ -7,6 +7,9 @@
 #ifndef MODL_CONV_LAYER_HPP
 #define MODL_CONV_LAYER_HPP
 
+namespace modl
+{
+
 struct ConvLayer final : public iMarshalSet
 {
 	ConvLayer (std::pair<uint8_t,uint8_t> filter_hw, uint8_t in_ncol,
@@ -56,9 +59,11 @@ struct ConvLayer final : public iMarshalSet
 protected:
 	std::string label_;
 
-	std::shared_ptr<MarshalVar> weight_;
+	MarVarsptrT weight_;
 
-	std::shared_ptr<MarshalVar> bias_;
+	MarVarsptrT bias_;
 };
+
+}
 
 #endif // MODL_CONV_LAYER_HPP

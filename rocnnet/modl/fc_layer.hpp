@@ -5,6 +5,9 @@
 #ifndef MODL_FC_LAYER_HPP
 #define MODL_FC_LAYER_HPP
 
+namespace modl
+{
+
 const std::string weight_fmt = "weight_%d";
 const std::string bias_fmt = "bias_%d";
 
@@ -106,8 +109,8 @@ struct FCLayer final : public iMarshalSet
 private:
 	struct LoneLayer
 	{
-		std::shared_ptr<MarshalVar> weight_;
-		std::shared_ptr<MarshalVar> bias_;
+		MarVarsptrT weight_;
+		MarVarsptrT bias_;
 	};
 
 	std::vector<LoneLayer> weight_bias_;
@@ -126,5 +129,9 @@ private:
 		}
 	}
 };
+
+using FCptrT = std::shared_ptr<FCLayer>;
+
+}
 
 #endif // MODL_FC_LAYER_HPP

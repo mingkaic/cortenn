@@ -10,20 +10,20 @@
 // GDTrainer does not own anything
 struct GDTrainer
 {
-	GDTrainer (MLP& brain, ApproxFuncT update,
+	GDTrainer (modl::MLptrT brain, eqns::ApproxFuncT update,
 		uint8_t batch_size, std::string label) :
-		label_(label), brain_(&brain), batch_size_(batch_size),
+		label_(label), brain_(brain), batch_size_(batch_size),
 		train_in_(llo::data<double>(0,
-			ade::Shape({brain.get_ninput(), batch_size}), "train_in")),
-		train_out_(brain(ade::TensptrT(train_in_))),
-		expected_out_(llo::data<double>(0,
-			ade::Shape({brain.get_noutput(), batch_size}), "expected_out"))
+			ade::Shape({brain->get_ninput(), batch_size}), "train_in"))
 	{
+		train_out_ = (*brain_)(ade::TensptrT(train_in_));
+		expected_out_ = llo::data<double>(0,
+			ade::Shape({brain_->get_noutput(), batch_size}), "expected_out");
 		error_ = age::pow(age::sub(ade::TensptrT(expected_out_), train_out_),
 			ade::TensptrT(age::data(2, expected_out_->shape())));
 
-		pbm::PathedMapT vmap = brain.list_bases();
-		VariablesT vars(vmap.size());
+		pbm::PathedMapT vmap = brain_->list_bases();
+		eqns::VariablesT vars(vmap.size());
 		std::transform(vmap.begin(), vmap.end(), vars.begin(),
 			[](std::pair<ade::LeafptrT,pbm::StringsT> vpair) -> llo::VarptrT
 			{
@@ -62,14 +62,14 @@ struct GDTrainer
 	}
 
 	std::string label_;
-	MLP* brain_ = nullptr; // do not own this
+	modl::MLptrT brain_;
 	uint8_t batch_size_;
 	llo::VarptrT train_in_;
 	ade::TensptrT train_out_;
 	llo::VarptrT expected_out_;
 	ade::TensptrT error_;
 
-	DeltasT updates_;
+	eqns::DeltasT updates_;
 };
 
 #endif // MODL_GD_TRAINER_HPP

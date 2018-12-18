@@ -18,15 +18,6 @@ def parse(cfg_str):
         raise Exception('cannot parse non-root object {}'.format(cfg_str))
     return args
 
-def str2bool(opt):
-    optstr = opt.lower()
-    if optstr in ('yes', 'true', 't', 'y', '1'):
-        return True
-    elif optstr in ('no', 'false', 'f', 'n', '0'):
-        return False
-    else:
-        raise argparse.ArgumentTypeError('Boolean value expected.')
-
 def main(args):
 
     parser = argparse.ArgumentParser(description=prog_description)

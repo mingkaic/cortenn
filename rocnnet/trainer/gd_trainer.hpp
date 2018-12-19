@@ -23,12 +23,15 @@ struct GDTrainer
 			ade::TensptrT(age::data(2, expected_out_->shape())));
 
 		pbm::PathedMapT vmap = brain_->list_bases();
-		eqns::VariablesT vars(vmap.size());
-		std::transform(vmap.begin(), vmap.end(), vars.begin(),
-			[](std::pair<ade::LeafptrT,pbm::StringsT> vpair) -> llo::VarptrT
+		eqns::VariablesT vars;
+		for (auto vpair : vmap)
+		{
+			if (llo::VarptrT var = std::dynamic_pointer_cast<
+				llo::Variable>(vpair.first))
 			{
-				return std::static_pointer_cast<llo::Variable>(vpair.first);
-			});
+				vars.push_back(var);
+			}
+		}
 		updates_ = update(error_, vars);
 	}
 

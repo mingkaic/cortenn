@@ -124,7 +124,7 @@ struct MarshalVar final : public iMarshaler
 	pbm::PathedMapT list_bases (void) const override
 	{
 		return pbm::PathedMapT{
-			std::pair<llo::VarptrT,pbm::StringsT>{
+			std::pair<ade::TensptrT,pbm::StringsT>{
 				var_, pbm::StringsT{var_->label_}}
 		};
 	}

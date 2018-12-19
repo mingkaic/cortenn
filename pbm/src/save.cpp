@@ -12,7 +12,7 @@ namespace pbm
 
 void GraphSaver::save (tenncor::Graph& out, PathedMapT labels)
 {
-	std::unordered_map<ade::iLeaf*,StringsT> raw_labels;
+	std::unordered_map<ade::iTensptrT*,StringsT> raw_labels;
 	for (auto lpair : labels)
 	{
 		raw_labels[lpair.first.get()] = lpair.second;
@@ -54,6 +54,13 @@ void GraphSaver::save (tenncor::Graph& out, PathedMapT labels)
 		ordermap[f] = nleaves + i;
 
 		tenncor::Node* pb_node = out.add_nodes();
+		auto it = raw_labels.find(f);
+		if (raw_labels.end() != it)
+		{
+			google::protobuf::RepeatedPtrField<std::string> vec(
+				it->second.begin(), it->second.end());
+			pb_node->mutable_labels()->Swap(&vec);
+		}
 		tenncor::Functor* func = pb_node->mutable_functor();
 		ade::Opcode opcode = f->get_opcode();
 		func->set_opname(opcode.name_);

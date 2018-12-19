@@ -17,7 +17,7 @@
 namespace pbm
 {
 
-using PathedMapT = std::unordered_map<ade::LeafptrT,StringsT>;
+using PathedMapT = std::unordered_map<ade::TensptrT,StringsT>;
 
 struct GraphSaver final : public ade::iTraveler
 {

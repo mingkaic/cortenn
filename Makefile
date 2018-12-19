@@ -1,6 +1,8 @@
 COVERAGE_INFO_FILE := coverage.info
 
-LLO_TEST := //llo:test
+LLO_CTEST := //llo:ctest
+
+LLO_PTEST := //llo:ptest
 
 REGRESS_TEST := //llo:test_regress
 
@@ -24,7 +26,7 @@ all: test
 test: test_llo test_pbm
 
 test_llo:
-	$(TEST) $(C_FLAGS) --config grepeat $(LLO_TEST)
+	$(TEST) $(C_FLAGS) --config grepeat $(LLO_CTEST)
 
 test_pbm:
 	$(TEST) $(C_FLAGS) $(PBM_TEST)
@@ -33,7 +35,7 @@ test_pbm:
 coverage: cover_llo cover_pbm
 
 cover_llo:
-	$(COVER) $(C_FLAGS) --config grepeat $(LLO_TEST)
+	$(COVER) $(C_FLAGS) --config grepeat $(LLO_CTEST)
 
 cover_pbm:
 	$(COVER) $(C_FLAGS) $(PBM_TEST)

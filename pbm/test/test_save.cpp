@@ -31,8 +31,8 @@ TEST(SAVE, SaveGraph)
 	ade::Shape shape2({7, 3});
 	ade::TensptrT osrc2(new MockTensor(shape2));
 
-	labels[osrc.get()] = {"global", "osrc"};
-	labels[osrc2.get()] = {"global", "osrc2"};
+	labels[osrc] = {"global", "osrc"};
+	labels[osrc2] = {"global", "osrc2"};
 
 	{
 		ade::TensptrT src(new MockTensor(shape));
@@ -66,9 +66,9 @@ TEST(SAVE, SaveGraph)
 			}));
 		roots.push_back(dest);
 
-		labels[src.get()] = {"subtree", "src"};
-		labels[src2.get()] = {"subtree", "src2"};
-		labels[dest.get()] = {"subtree", "dest"};
+		labels[src] = {"subtree", "src"};
+		labels[src2] = {"subtree", "src2"};
+		labels[dest] = {"subtree", "dest"};
 	}
 
 	// subtree two
@@ -103,10 +103,10 @@ TEST(SAVE, SaveGraph)
 			}));
 		roots.push_back(dest);
 
-		labels[src.get()] = {"subtree2", "src"};
-		labels[src2.get()] = {"subtree2", "src2"};
-		labels[src3.get()] = {"subtree2", "src3"};
-		labels[dest.get()] = {"subtree2", "dest"};
+		labels[src] = {"subtree2", "src"};
+		labels[src2] = {"subtree2", "src2"};
+		labels[src3] = {"subtree2", "src3"};
+		labels[dest] = {"subtree2", "dest"};
 	}
 
 	pbm::GraphSaver saver(

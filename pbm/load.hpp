@@ -57,6 +57,17 @@ struct PathedTens final
 		}
 	}
 
+	ade::TensptrT get_labelled (StringsT path) const
+	{
+		return get_labelled(path.begin(), path.end());
+	}
+	
+	void set_labelled (StringsT path, ade::TensptrT tens)
+	{
+		set_labelled(path.begin(), path.end(), tens);
+	}
+
+	/// Return tensor associated with input path if found otherwise nullptr
 	ade::TensptrT get_labelled (
 		StringsT::iterator path_begin,
 		StringsT::iterator path_end) const
@@ -65,11 +76,27 @@ struct PathedTens final
 		{
 			return nullptr;
 		}
-		auto it = children_.find(*path_begin);
-		assert(nullptr != it->second);
-		return it->second->get_labelled(++path_begin, path_end);
+		auto path_it = path_begin++;
+		if (path_begin == path_end)
+		{
+			auto it = tens_.find(*path_it);
+			if (tens_.end() != it)
+			{
+				return it->second;
+			}
+		}
+		else
+		{
+			auto it = children_.find(*path_it);
+			if (nullptr != it->second)
+			{
+				return it->second->get_labelled(path_begin, path_end);
+			}
+		}
+		return nullptr;
 	}
 
+	/// Set input path to reference tensor
 	void set_labelled (StringsT::iterator path_begin,
 		StringsT::iterator path_end, ade::TensptrT tens)
 	{

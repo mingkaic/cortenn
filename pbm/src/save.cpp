@@ -12,7 +12,7 @@ namespace pbm
 
 void GraphSaver::save (tenncor::Graph& out, PathedMapT labels)
 {
-	std::unordered_map<ade::iTensptrT*,StringsT> raw_labels;
+	std::unordered_map<ade::iTensor*,StringsT> raw_labels;
 	for (auto lpair : labels)
 	{
 		raw_labels[lpair.first.get()] = lpair.second;

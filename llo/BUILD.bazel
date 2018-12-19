@@ -89,7 +89,7 @@ pybind_library(
 
 cc_test(
     name = "ctest",
-    size = "medium",
+    size = "large",
     srcs = [":ctest_srcs"],
     copts = ["-std=c++14"],
     deps = [

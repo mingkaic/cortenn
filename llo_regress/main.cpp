@@ -88,7 +88,7 @@ static void unary_op (antero::Testament* test, std::string tname,
 
 	ade::TensptrT leaf = llo::get_variable<double>(data, shape);
 	ade::TensptrT res = op(leaf);
-	ade::TensptrT gres = llo::derive(res, leaf);
+	ade::TensptrT gres = llo::derive(res, leaf.get());
 
 	llo::GenericData resgd = llo::eval(res, age::DOUBLE);
 	llo::GenericData gresgd = llo::eval(gres, age::DOUBLE);
@@ -118,8 +118,8 @@ static void binary_op (antero::Testament* test, std::string tname,
 	ade::TensptrT leaf = llo::get_variable<double>(data, shape);
 	ade::TensptrT leaf2 = llo::get_variable<double>(data2, shape);
 	ade::TensptrT res = op(leaf, leaf2);
-	ade::TensptrT gres = llo::derive(res, leaf);
-	ade::TensptrT gres2 = llo::derive(res, leaf2);
+	ade::TensptrT gres = llo::derive(res, leaf.get());
+	ade::TensptrT gres2 = llo::derive(res, leaf2.get());
 
 	llo::GenericData resgd = llo::eval(res, age::DOUBLE);
 	llo::GenericData gresgd = llo::eval(gres, age::DOUBLE);
@@ -312,8 +312,8 @@ TEST_F(REGRESS, Matmul)
 	ade::TensptrT leaf = llo::get_variable<double>(data, ashape);
 	ade::TensptrT leaf2 = llo::get_variable<double>(data2, bshape);
 	ade::TensptrT res = age::matmul(leaf, leaf2);
-	ade::TensptrT gres = llo::derive(res, leaf);
-	ade::TensptrT gres2 = llo::derive(res, leaf2);
+	ade::TensptrT gres = llo::derive(res, leaf.get());
+	ade::TensptrT gres2 = llo::derive(res, leaf2.get());
 
 	llo::GenericData resgd = llo::eval(res, age::DOUBLE);
 	llo::GenericData gresgd = llo::eval(gres, age::DOUBLE);

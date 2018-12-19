@@ -150,7 +150,7 @@ static void unary_generic (simple::SessionT& sess,
 	ASSERT_EQ(age::DOUBLE, out.dtype_);
 	verify(out, shape, data);
 
-	ade::TensptrT gsrc = llo::derive(dest, src);
+	ade::TensptrT gsrc = llo::derive(dest, src.get());
 
 	llo::GenericData gout = llo::eval(gsrc, age::DOUBLE);
 	ASSERT_EQ(age::DOUBLE, gout.dtype_);
@@ -189,7 +189,7 @@ static void unary_elementary (simple::SessionT& sess,
 		}
 	});
 
-	ade::TensptrT gsrc = llo::derive(dest, src);
+	ade::TensptrT gsrc = llo::derive(dest, src.get());
 
 	llo::GenericData gout = llo::eval(gsrc, age::DOUBLE);
 	ASSERT_EQ(age::DOUBLE, gout.dtype_);
@@ -247,7 +247,7 @@ static void binary_elementary (simple::SessionT& sess,
 	});
 
 	ade::TensptrT dest2 = op(src, src);
-	ade::TensptrT gsame = llo::derive(dest2, src);
+	ade::TensptrT gsame = llo::derive(dest2, src.get());
 	llo::GenericData gout = llo::eval(gsame, age::DOUBLE);
 	ASSERT_EQ(age::DOUBLE, gout.dtype_);
 	{
@@ -264,7 +264,7 @@ static void binary_elementary (simple::SessionT& sess,
 		}
 	});
 
-	ade::TensptrT gleft = llo::derive(dest, src);
+	ade::TensptrT gleft = llo::derive(dest, src.get());
 	llo::GenericData gout_left = llo::eval(gleft, age::DOUBLE);
 	ASSERT_EQ(age::DOUBLE, gout_left.dtype_);
 	{
@@ -281,7 +281,7 @@ static void binary_elementary (simple::SessionT& sess,
 		}
 	});
 
-	ade::TensptrT gright = llo::derive(dest, src2);
+	ade::TensptrT gright = llo::derive(dest, src2.get());
 	llo::GenericData gout_right = llo::eval(gright, age::DOUBLE);
 	ASSERT_EQ(age::DOUBLE, gout_right.dtype_);
 	{
@@ -331,7 +331,7 @@ static void binary_elementary_int (simple::SessionT& sess,
 	});
 
 	ade::TensptrT dest2 = op(src, src);
-	ade::TensptrT gsame = llo::derive(dest2, src);
+	ade::TensptrT gsame = llo::derive(dest2, src.get());
 	llo::GenericData gout = llo::eval(gsame, age::INT32);
 	ASSERT_EQ(age::INT32, gout.dtype_);
 	{
@@ -348,7 +348,7 @@ static void binary_elementary_int (simple::SessionT& sess,
 		}
 	});
 
-	ade::TensptrT gleft = llo::derive(dest, src);
+	ade::TensptrT gleft = llo::derive(dest, src.get());
 	llo::GenericData gout_left = llo::eval(gleft, age::INT32);
 	ASSERT_EQ(age::INT32, gout_left.dtype_);
 	{
@@ -365,7 +365,7 @@ static void binary_elementary_int (simple::SessionT& sess,
 		}
 	});
 
-	ade::TensptrT gright = llo::derive(dest, src2);
+	ade::TensptrT gright = llo::derive(dest, src2.get());
 	llo::GenericData gout_right = llo::eval(gright, age::INT32);
 	ASSERT_EQ(age::INT32, gout_right.dtype_);
 	{
@@ -522,7 +522,7 @@ TEST_F(API, Flip)
 		}
 	});
 
-	ade::TensptrT gsrc = llo::derive(dest, src);
+	ade::TensptrT gsrc = llo::derive(dest, src.get());
 
 	llo::GenericData gout = llo::eval(gsrc, age::DOUBLE);
 	ASSERT_EQ(age::DOUBLE, gout.dtype_);
@@ -863,7 +863,7 @@ TEST_F(API, Matmul)
 
 	ade::TensptrT c = llo::get_variable<int32_t>(data3, cshape);
 	ade::TensptrT dest2 = age::matmul(c, c);
-	ade::TensptrT gsame = llo::derive(dest2, c);
+	ade::TensptrT gsame = llo::derive(dest2, c.get());
 	llo::GenericData gout = llo::eval(gsame, age::INT32);
 	EXPECT_EQ(age::INT32, gout.dtype_);
 	ade::Shape& gcshape = gout.shape_;
@@ -880,7 +880,7 @@ TEST_F(API, Matmul)
 	// 	// todo: implement
 	// });
 
-	ade::TensptrT gleft = llo::derive(dest, a);
+	ade::TensptrT gleft = llo::derive(dest, a.get());
 	llo::GenericData gout_left = llo::eval(gleft, age::INT32);
 	EXPECT_EQ(age::INT32, gout_left.dtype_);
 	ade::Shape& gashape = gout_left.shape_;
@@ -897,7 +897,7 @@ TEST_F(API, Matmul)
 	// 	// todo: implement
 	// });
 
-	ade::TensptrT gright = llo::derive(dest, b);
+	ade::TensptrT gright = llo::derive(dest, b.get());
 	llo::GenericData gout_right = llo::eval(gright, age::INT32);
 	EXPECT_EQ(age::INT32, gout_right.dtype_);
 	ade::Shape& gbshape = gout_right.shape_;
@@ -952,7 +952,7 @@ TEST_F(API, Permute)
 		}
 	});
 
-	ade::TensptrT gsrc = llo::derive(dest, src);
+	ade::TensptrT gsrc = llo::derive(dest, src.get());
 
 	llo::GenericData gout = llo::eval(gsrc, age::DOUBLE);
 	ASSERT_EQ(age::DOUBLE, gout.dtype_);
@@ -1008,7 +1008,7 @@ TEST_F(API, Extend)
 		}
 	});
 
-	ade::TensptrT gsrc = llo::derive(dest, src);
+	ade::TensptrT gsrc = llo::derive(dest, src.get());
 
 	llo::GenericData gout = llo::eval(gsrc, age::DOUBLE);
 	ASSERT_EQ(age::DOUBLE, gout.dtype_);

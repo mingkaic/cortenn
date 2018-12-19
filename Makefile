@@ -4,7 +4,7 @@ LLO_CTEST := //llo:ctest
 
 LLO_PTEST := //llo:ptest
 
-REGRESS_TEST := //llo:test_regress
+REGRESS_TEST := //llo_regress:test_regress
 
 PBM_TEST := //pbm:test
 
@@ -23,10 +23,13 @@ TMP_LOGFILE := /tmp/cortenn-test.log
 all: test
 
 
-test: test_llo test_pbm
+test: test_cllo test_pyllo test_pbm
 
-test_llo:
+test_cllo:
 	$(TEST) $(C_FLAGS) --config grepeat $(LLO_CTEST)
+
+test_pyllo:
+	$(TEST) $(LLO_PTEST)
 
 test_pbm:
 	$(TEST) $(C_FLAGS) $(PBM_TEST)

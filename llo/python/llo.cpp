@@ -102,7 +102,8 @@ PYBIND11_MODULE(llo, m)
 {
 	m.doc() = "llo variables";
 
-	py::object tensor = (py::object) py::module::import("llo.age").attr("Tensor");
+	py::object tensor = (py::object) 
+		py::module::import("llo.age").attr("Tensor");
 	py::class_<llo::Variable,llo::VarptrT> variable(m, "Variable", tensor);
 
 	py::implicitly_convertible<ade::iTensor,llo::Variable>();
@@ -120,7 +121,7 @@ PYBIND11_MODULE(llo, m)
 	m.def("evaluate", &pyllo::evaluate, "evaluate tensor",
 		py::arg("tens"), py::arg("dtype") = py::dtype::of<double>(),
 		"evaluate data of tens according to dtype");
-	m.def("derive", &llo::derive,
+	m.def("derive", llo::derive,
 		"derive tensor with respect to some derive");
 	m.def("seed", &pyllo::seed_engine, "seed internal rng");
 }

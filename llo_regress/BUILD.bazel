@@ -3,8 +3,8 @@ licenses(["notice"])
 filegroup(
     name = "regress_srcs",
     srcs = glob([
-        "regress/*.hpp",
-        "regress/*.cpp",
+        "*.hpp",
+        "*.cpp",
     ]),
 )
 

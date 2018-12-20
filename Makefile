@@ -20,8 +20,6 @@ COVERAGE_PIPE := ./scripts/merge_cov.sh $(COVERAGE_INFO_FILE)
 
 TMP_LOGFILE := /tmp/cortenn-test.log
 
-all: test
-
 
 test: test_cllo test_pyllo test_pbm
 

@@ -1,17 +1,11 @@
 correctness:
 P2 - test convolution
-P2 - test complicate equations (generate random valid equations)
+P2 - implement better fallback strategy when test server is unavailable
 P3 - test travelling, and pruning algorithms
-P3 - verify rocnnet correctness using automated test
-P3 - implement better fallback strategy when test server is unavailable
-
-structure:
-P4 - after llo api experimentation, move rocnnet to its own repo
-
-transparency:
-P4 - investigate llo api: experiment with top-level code
+P4 - test complicate equations (generate random valid equations)
 
 performance:
-P2 - implement eigen version of llo
-P3 - implement optimization options to decrease equation graph size in opt
+P2 - benchmark llo performance
+P3 - implement eigen version of llo
+P4 - implement optimization options to decrease equation graph size in opt
 P4 - implement optimization options to increase data accuracy

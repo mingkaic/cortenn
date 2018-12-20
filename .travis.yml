@@ -28,5 +28,5 @@ branches:
 branches:
   only:
   - master
-  - experimental
+  - /experimental(-.*)?/
   - stable

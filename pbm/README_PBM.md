@@ -2,11 +2,11 @@
 
 Serialize ADE graphs created by top-level code in protobuf format.
 
-Protobuf is platform independent format for structured data.
+Saving and loading requires data serialization functionals as parameters. This parameterization is to defer data formatting responsibilities to the library implementing ADE.
 
 ## Why Protobuf
 
-Because the library can be used across all the languages I'm familiar with. It's also more transparent and less bug-ridden than most free JSON parsing libraries. Also JSON face potential precision-loss for floating point data
+Because protobuf parsers is consistent across all popular languages.
 
 ## Extension
 

@@ -3,19 +3,21 @@ licenses(["notice"])
 load("@protobuf_rules//cpp:rules.bzl", "cc_proto_library")
 load("@protobuf_rules//python:rules.bzl", "py_proto_library")
 
+package(
+    default_visibility = ["//visibility:public"],
+)
+
 filegroup(
     name = "srcs",
     srcs = glob([
         "*.hpp",
         "src/*.cpp",
     ]) + [":protos", "BUILD.bazel"],
-    visibility = ["//visibility:public"],
 )
 
 filegroup(
     name = "protos",
     srcs = glob(["*.proto"]),
-    visibility = ["//visibility:public"],
 )
 
 filegroup(
@@ -24,6 +26,7 @@ filegroup(
         "test/*.hpp",
         "test/*.cpp",
     ]),
+    visibility = ["//visibility:private"],
 )
 
 ######### LIBRARY #########
@@ -31,21 +34,18 @@ filegroup(
 proto_library(
     name = "proto_lib",
     srcs = ["//pbm:protos"],
-    visibility = ["//visibility:public"],
 )
 
 cc_proto_library(
     name = "cc_proto",
     protos = ["//pbm:protos"],
     with_grpc = False,
-    visibility = ["//visibility:public"],
 )
 
 py_proto_library(
     name = "py_proto",
     protos = ["//pbm:protos"],
     with_grpc = False,
-    visibility = ["//visibility:public"],
 )
 
 cc_library(
@@ -57,7 +57,6 @@ cc_library(
         "@tenncor//ade:ade",
         "//pbm:cc_proto",
     ],
-    visibility = ["//visibility:public"],
 )
 
 ######### TEST #########

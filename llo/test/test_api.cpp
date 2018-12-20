@@ -29,9 +29,9 @@ using BinaryBwdF = std::function<T(T,T,T,T)>;
 
 using MatVecT = std::vector<std::vector<int32_t>>;
 
-static const retro::Range<double> default_range = {-9876, 9876};
+static const retro::Range<double> DEFAULT_RANGE = {-9876, 9876};
 
-const int FREIVALD_N = 10;
+static const int FREIVALD_N = 10;
 
 
 struct API : public simple::TestModel
@@ -141,7 +141,7 @@ static void unary_generic (simple::SessionT& sess,
 	std::vector<ade::DimT> slist = get_shape(sess, "shape");
 	ade::Shape shape(slist);
 	ade::NElemT n = shape.n_elems();
-	std::vector<double> data = sess->get_double("data", n, default_range);
+	std::vector<double> data = sess->get_double("data", n, DEFAULT_RANGE);
 
 	ade::TensptrT src = llo::get_variable<double>(data, shape);
 	ade::TensptrT dest = op(src);
@@ -387,7 +387,7 @@ static void binary_elementary_int (simple::SessionT& sess,
 TEST_F(API, Abs)
 {
 	simple::SessionT sess = get_session("API::Abs");
-	unary_elementary(sess, default_range,
+	unary_elementary(sess, DEFAULT_RANGE,
 		[](ade::TensptrT& a) { return age::abs(a); },
 		[](double d) { return std::abs(d); },
 		[](double d) { return d / std::abs(d); }, false);
@@ -397,7 +397,7 @@ TEST_F(API, Abs)
 TEST_F(API, Neg)
 {
 	simple::SessionT sess = get_session("API::Neg");
-	unary_elementary(sess, default_range,
+	unary_elementary(sess, DEFAULT_RANGE,
 		[](ade::TensptrT& a) { return age::neg(a); },
 		[](double d) { return -d; },
 		[](double d) { return -1.0; }, false);
@@ -407,7 +407,7 @@ TEST_F(API, Neg)
 TEST_F(API, Sin)
 {
 	simple::SessionT sess = get_session("API::Sin");
-	unary_elementary(sess, default_range,
+	unary_elementary(sess, DEFAULT_RANGE,
 		[](ade::TensptrT& a) { return age::sin(a); },
 		[](double d) { return std::sin(d); },
 		[](double d) { return std::cos(d); });
@@ -417,7 +417,7 @@ TEST_F(API, Sin)
 TEST_F(API, Cos)
 {
 	simple::SessionT sess = get_session("API::Cos");
-	unary_elementary(sess, default_range,
+	unary_elementary(sess, DEFAULT_RANGE,
 		[](ade::TensptrT& a) { return age::cos(a); },
 		[](double d) { return std::cos(d); },
 		[](double d) { return -std::sin(d); });
@@ -470,7 +470,7 @@ TEST_F(API, Sqrt)
 TEST_F(API, Round)
 {
 	simple::SessionT sess = get_session("API::Round");
-	unary_elementary(sess, default_range,
+	unary_elementary(sess, DEFAULT_RANGE,
 		[](ade::TensptrT& a) { return age::round(a); },
 		[](double d) { return std::round(d); },
 		[](double d) { return 1.0; }, false);
@@ -491,7 +491,7 @@ TEST_F(API, Flip)
 	}
 	uint8_t baddim = sess->get_scalar("baddim", {nrank, ade::rank_cap});
 	ade::NElemT n = shape.n_elems();
-	std::vector<double> data = sess->get_double("data", n, default_range);
+	std::vector<double> data = sess->get_double("data", n, DEFAULT_RANGE);
 
 	ade::TensptrT src = llo::get_variable<double>(data, shape);
 	ade::TensptrT dest = age::flip(src, dim);
@@ -555,7 +555,7 @@ TEST_F(API, Pow)
 TEST_F(API, Add)
 {
 	simple::SessionT sess = get_session("API::Add");
-	binary_elementary(sess, default_range,
+	binary_elementary(sess, DEFAULT_RANGE,
 		[](ade::TensptrT& a, ade::TensptrT& b) { return age::add(a, b); },
 		[](double a, double b) { return a + b; },
 		[](double a, double b, double leftg, double rightg)
@@ -568,7 +568,7 @@ TEST_F(API, Add)
 TEST_F(API, Sub)
 {
 	simple::SessionT sess = get_session("API::Sub");
-	binary_elementary(sess, default_range,
+	binary_elementary(sess, DEFAULT_RANGE,
 		[](ade::TensptrT& a, ade::TensptrT& b) { return age::sub(a, b); },
 		[](double a, double b) { return a - b; },
 		[](double a, double b, double leftg, double rightg)
@@ -581,7 +581,7 @@ TEST_F(API, Sub)
 TEST_F(API, Mul)
 {
 	simple::SessionT sess = get_session("API::Mul");
-	binary_elementary(sess, default_range,
+	binary_elementary(sess, DEFAULT_RANGE,
 		[](ade::TensptrT& a, ade::TensptrT& b) { return age::mul(a, b); },
 		[](double a, double b) { return a * b; },
 		[](double a, double b, double leftg, double rightg)
@@ -594,7 +594,7 @@ TEST_F(API, Mul)
 TEST_F(API, Div)
 {
 	simple::SessionT sess = get_session("API::Div");
-	binary_elementary(sess, default_range,
+	binary_elementary(sess, DEFAULT_RANGE,
 		[](ade::TensptrT& a, ade::TensptrT& b) { return age::div(a, b); },
 		[](double a, double b) { return a / b; },
 		[](double a, double b, double leftg, double rightg)
@@ -607,7 +607,7 @@ TEST_F(API, Div)
 TEST_F(API, Min)
 {
 	simple::SessionT sess = get_session("API::Min");
-	binary_elementary(sess, default_range,
+	binary_elementary(sess, DEFAULT_RANGE,
 		[](ade::TensptrT& a, ade::TensptrT& b) { return age::min({a, b}); },
 		[](double a, double b) { return std::min(a, b); },
 		[](double a, double b, double leftg, double rightg)
@@ -629,7 +629,7 @@ TEST_F(API, Min)
 TEST_F(API, Max)
 {
 	simple::SessionT sess = get_session("API::Max");
-	binary_elementary(sess, default_range,
+	binary_elementary(sess, DEFAULT_RANGE,
 		[](ade::TensptrT& a, ade::TensptrT& b) { return age::max({a, b}); },
 		[](double a, double b) { return std::max(a, b); },
 		[](double a, double b, double leftg, double rightg)
@@ -703,7 +703,7 @@ TEST_F(API, Gt)
 TEST_F(API, NElems)
 {
 	simple::SessionT sess = get_session("API::NElems");
-	unary_generic(sess, default_range,
+	unary_generic(sess, DEFAULT_RANGE,
 		[](ade::TensptrT& src) { return age::n_elems(src); },
 		[&sess](llo::GenericData& out, ade::Shape& shape, std::vector<double>&)
 		{
@@ -731,7 +731,7 @@ TEST_F(API, NDims)
 	simple::SessionT sess = get_session("API::NDims");
 	uint8_t dim = sess->get_scalar("dim", {0, ade::rank_cap - 1});
 
-	unary_generic(sess, default_range,
+	unary_generic(sess, DEFAULT_RANGE,
 		[dim](ade::TensptrT& src) { return age::n_dims(src, dim); },
 		[dim, &sess](llo::GenericData& out, ade::Shape& shape, std::vector<double>&)
 		{
@@ -758,7 +758,7 @@ TEST_F(API, Rmax)
 {
 	simple::SessionT sess = get_session("API::Rmax");
 
-	unary_generic(sess, default_range,
+	unary_generic(sess, DEFAULT_RANGE,
 		[](ade::TensptrT& src) { return age::reduce_max(src); },
 		[&sess](llo::GenericData& out, ade::Shape& shape, std::vector<double>& data)
 		{
@@ -791,7 +791,7 @@ TEST_F(API, Rsum)
 {
 	simple::SessionT sess = get_session("API::Rsum");
 
-	unary_generic(sess, default_range,
+	unary_generic(sess, DEFAULT_RANGE,
 		[](ade::TensptrT& src) { return age::reduce_sum(src); },
 		[&sess](llo::GenericData& out, ade::Shape& shape, std::vector<double>& data)
 		{
@@ -926,7 +926,7 @@ TEST_F(API, Permute)
 	std::vector<uint8_t> pidx(pidx_temp.begin(), pidx_temp.end());
 	ade::Shape shape(slist);
 	ade::NElemT nelem = shape.n_elems();
-	std::vector<double> data = sess->get_double("data", nelem, default_range);
+	std::vector<double> data = sess->get_double("data", nelem, DEFAULT_RANGE);
 
 	ade::TensptrT src = llo::get_variable<double>(data, shape);
 	ade::TensptrT dest = age::permute(src, pidx);
@@ -985,7 +985,7 @@ TEST_F(API, Extend)
 	std::vector<ade::DimT> ext = get_shape_n(sess, n_ext, "ext");
 	ade::Shape shape(slist);
 	ade::NElemT nelem = shape.n_elems();
-	std::vector<double> data = sess->get_double("data", nelem, default_range);
+	std::vector<double> data = sess->get_double("data", nelem, DEFAULT_RANGE);
 
 	ade::TensptrT src = llo::get_variable<double>(data, shape);
 	ade::TensptrT dest = age::extend(src, nrank, ext);

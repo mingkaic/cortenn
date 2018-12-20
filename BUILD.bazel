@@ -12,7 +12,7 @@ filegroup(
         "//llo:srcs",
         "//opt:srcs",
         "//pbm:srcs",
-        "//rocnnet:srcs",
+        "//pybinder:srcs",
         "//graphmgr:srcs",
         "BUILD.bazel",
     ],

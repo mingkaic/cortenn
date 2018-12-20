@@ -37,7 +37,7 @@ modl::MLptrT mlp_init (uint8_t n_input, std::vector<modl::LayerInfo> layers,
 
 eqns::ApproxFuncT get_sgd (double learning_rate)
 {
-	return [&](ade::TensptrT& root, eqns::VariablesT leaves)
+	return [=](ade::TensptrT& root, eqns::VariablesT leaves)
 	{
 		return eqns::sgd(root, leaves, learning_rate);
 	};
@@ -46,7 +46,7 @@ eqns::ApproxFuncT get_sgd (double learning_rate)
 eqns::ApproxFuncT get_rms_momentum (double learning_rate,
 	double discount_factor, double epsilon)
 {
-	return [&](ade::TensptrT& root, eqns::VariablesT leaves)
+	return [=](ade::TensptrT& root, eqns::VariablesT leaves)
 	{
 		return eqns::rms_momentum(root, leaves, learning_rate,
 			discount_factor, epsilon);
@@ -133,10 +133,18 @@ PYBIND11_MODULE(rocnnet, m)
 		{
 			return self.cast<GDTrainer*>()->expected_out_;
 		}, "get expected_out variable")
+		.def("train_out", [](py::object self)
+		{
+			return self.cast<GDTrainer*>()->train_out_;
+		}, "get training output")
 		.def("error", [](py::object self)
 		{
 			return self.cast<GDTrainer*>()->error_;
-		}, "get error output");
+		}, "get error output")
+		.def("brain", [](py::object self)
+		{
+			return self.cast<GDTrainer*>()->brain_;
+		}, "get mlp");
 
 
 	// inlines
@@ -146,6 +154,4 @@ PYBIND11_MODULE(rocnnet, m)
 
 	m.def("get_sgd", &pyrocnnet::get_sgd);
 	m.def("get_rms_momentum", &pyrocnnet::get_rms_momentum);
-
-	m.def("print_ptr", [](modl::MLptrT ptr){ std::cout << ptr.get() << std::endl; });
 }

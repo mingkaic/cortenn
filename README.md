@@ -21,7 +21,7 @@ This module specifies graph optimization through ADE's visitor pattern.
 
 - [PBM (Protobuf Marshaller)](pbm/README_PBM.md)
 
-This module marshals any ADE graph, but requires data serialization functionals when saving and loading.
+This module marshals any ADE graph, but requires data serialization functors when saving and loading.
 
 - [Pybinder](pybinder/README_PY.md)
 

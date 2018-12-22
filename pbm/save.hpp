@@ -17,8 +17,10 @@
 namespace pbm
 {
 
+/// Map Tensptrs to a string path type
 using PathedMapT = std::unordered_map<ade::TensptrT,StringsT>;
 
+/// Graph serialization traveler
 struct GraphSaver final : public ade::iTraveler
 {
 	GraphSaver (DataSaverT saver) : saver_(saver) {}
@@ -54,15 +56,16 @@ struct GraphSaver final : public ade::iTraveler
 	/// Marshal all equation graphs in roots vector to protobuf object
 	void save (tenncor::Graph& out, PathedMapT labels = PathedMapT());
 
-	// List of leaves visited (left to right)
+	/// List of leaves visited (left to right)
 	std::list<ade::iLeaf*> leaves_;
 
-	// List of functions visited (by depth-first)
+	/// List of functions visited (by depth-first)
 	std::list<ade::iFunctor*> funcs_;
 
-	// Visited nodes
+	/// Visited nodes
 	std::unordered_set<ade::iTensor*> visited_;
 
+	/// Internal traveler
 	ade::GraphStat stat;
 
 private:
@@ -70,7 +73,6 @@ private:
 		google::protobuf::RepeatedField<double>* coord,
 		const ade::CoordPtrT& mapper);
 
-	/// Marshal llo::iSource to tenncor::Source
 	void save_data (tenncor::Source& out, ade::iLeaf* in)
 	{
 		const ade::Shape& shape = in->shape();
@@ -82,6 +84,7 @@ private:
 		out.set_typecode(tcode);
 	}
 
+	/// Data serialization functor
 	DataSaverT saver_;
 };
 

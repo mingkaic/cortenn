@@ -75,6 +75,7 @@ private:
 	age::_GENERATED_DTYPE dtype_;
 };
 
+/// Evaluate generic data of tens converted to specified dtype
 GenericData eval (ade::TensptrT tens, age::_GENERATED_DTYPE dtype);
 
 }

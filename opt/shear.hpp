@@ -21,12 +21,15 @@ template <typename T>
 using GetLeafValT = std::function<T(ade::iLeaf*)>;
 
 /// Type for mapping function nodes in path to boolean vector
-using ParentMapT = std::unordered_map<ade::iTensor*,std::unordered_set<size_t>>;
+using ParentMapT = std::unordered_map<
+	ade::iTensor*,std::unordered_set<size_t>>;
 
+/// Pruning functor type
 using PruneFuncT = std::function<ade::TensptrT(bool&,ade::iFunctor*,\
 	std::unordered_set<size_t>,ade::ArgsT)>;
 
 /// Find leaf nodes by some attribute associated to leaf
+/// This traveler identifies nodes along some path for TargetPruner to work on
 template <typename T>
 struct LeafFinder final : public ade::iTraveler
 {
@@ -90,6 +93,7 @@ struct TargetPruner
 	TargetPruner (T target, GetLeafValT<T> find_target, PruneFuncT pruner) :
 		finder_(target, find_target), pruner_(pruner) {}
 
+	/// Prune graph of root Tensptr
 	ade::TensptrT prune (ade::TensptrT root)
 	{
 		// assert that context will be unaffected by prune,
@@ -104,7 +108,8 @@ struct TargetPruner
 		root->accept(stat);
 		// grab the intersection of stat.funcs_ and pathmap
 		std::list<ade::iFunctor*> parents;
-		std::transform(pathmap.begin(), pathmap.end(), std::back_inserter(parents),
+		std::transform(pathmap.begin(), pathmap.end(),
+			std::back_inserter(parents),
 			[](std::pair<ade::iTensor*,std::unordered_set<size_t>> parent)
 			{
 				return static_cast<ade::iFunctor*>(parent.first);
@@ -124,13 +129,15 @@ struct TargetPruner
 		for (ade::iFunctor* func : parents)
 		{
 			ade::ArgsT children = func->get_children();
-			std::unordered_set<size_t> indices = pathmap[func]; // indices lead to target nodes
+			// indices lead to target nodes
+			std::unordered_set<size_t> indices = pathmap[func];
 			for (auto it = indices.begin(), et = indices.end(); it != et;)
 			{
 				ade::MappedTensor& child = children[*it];
 				ade::iTensor* tens = child.tensor_.get();
+				// child is not target, so erase ot from indices
 				auto zit = targets.find(tens);
-				if (targets.end() == zit) // child is not target, so erase ot from indices
+				if (targets.end() == zit)
 				{
 					it = indices.erase(it);
 				}
@@ -149,14 +156,17 @@ struct TargetPruner
 		auto it = mapping.find(root.get());
 		if (mapping.end() == it)
 		{
-			logs::fatal("something went wrong"); // todo: probably add context?
+			logs::fatal(
+				"GraphStat failed to identify children of root subgraph");
 		}
 		return it->second;
 	}
 
 private:
+	/// Target finding traveler
 	LeafFinder<T> finder_;
 
+	/// Prune functor defining how to prune a given graph
 	PruneFuncT pruner_;
 };
 

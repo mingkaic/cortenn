@@ -2,7 +2,7 @@
 
 Serialize ADE graphs created by top-level code in protobuf format.
 
-Saving and loading requires data serialization functionals as parameters. This parameterization is to defer data formatting responsibilities to the library implementing ADE.
+Saving and loading requires data serialization functors as parameters. This parameterization is to defer data formatting responsibilities to the library implementing ADE.
 
 ## Why Protobuf
 

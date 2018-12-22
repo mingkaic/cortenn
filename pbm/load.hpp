@@ -14,6 +14,7 @@
 namespace pbm
 {
 
+/// Tree node for labeling Tensptrs
 struct PathedTens final
 {
 	~PathedTens (void)
@@ -24,6 +25,8 @@ struct PathedTens final
 		}
 	}
 
+	/// Grab all leaf and branch nodes from subtree root other
+	/// Accounting for duplicate labels but not Tensptrs
 	void join (PathedTens* other)
 	{
 		{
@@ -57,17 +60,20 @@ struct PathedTens final
 		}
 	}
 
+	/// Return tensor associated with input path if found otherwise nullptr
 	ade::TensptrT get_labelled (StringsT path) const
 	{
 		return get_labelled(path.begin(), path.end());
 	}
-	
+
+	/// Set input path to reference tensor
 	void set_labelled (StringsT path, ade::TensptrT tens)
 	{
 		set_labelled(path.begin(), path.end(), tens);
 	}
 
-	/// Return tensor associated with input path if found otherwise nullptr
+	/// Return tensor associated with path between iterators begin and end
+	/// if found otherwise nullptr
 	ade::TensptrT get_labelled (
 		StringsT::iterator path_begin,
 		StringsT::iterator path_end) const
@@ -96,7 +102,7 @@ struct PathedTens final
 		return nullptr;
 	}
 
-	/// Set input path to reference tensor
+	/// Set path between iterators begin and end to reference tensor
 	void set_labelled (StringsT::iterator path_begin,
 		StringsT::iterator path_end, ade::TensptrT tens)
 	{
@@ -125,19 +131,24 @@ struct PathedTens final
 		child->set_labelled(path_begin, path_end, tens);
 	}
 
+	/// Map of labels to branching nodes
 	std::unordered_map<std::string,PathedTens*> children_;
 
+	/// Map of labels to tensor leaves
 	std::unordered_map<std::string,ade::TensptrT> tens_;
 };
 
+/// Contains all information necessary to recreate labelled ADE graph
 struct GraphInfo final
 {
+	/// Set of all roots (Tensptrs without any parent)
 	std::unordered_set<ade::TensptrT> roots_;
 
+	/// Labelled tensors
 	PathedTens tens_;
 };
 
-/// Return all nodes in graph unmarshalled from protobuf object
+/// Return graph info through out available from in graph
 void load_graph (GraphInfo& out, const tenncor::Graph& in,
 	DataLoaderT dataloader);
 

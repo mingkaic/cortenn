@@ -820,7 +820,7 @@ TEST_F(API, Rsum)
 
 TEST_F(API, Matmul)
 {
-	simple::SessionT sess = get_session("API::Matmul2d");
+	simple::SessionT sess = get_session("API::Matmul");
 
 	ade::DimT cdim = sess->get_scalar("cdim", {1, 17});
 	ade::DimT adim = sess->get_scalar("adim", {1, 17});

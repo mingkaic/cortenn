@@ -19,6 +19,8 @@ struct GenericData final
 
 	GenericData (ade::Shape shape, age::_GENERATED_DTYPE dtype);
 
+	/// Copy over data of specified type while retaining shape
+	/// This makes the assumption that the indata fits in shape perfectly
 	void copyover (const char* indata, age::_GENERATED_DTYPE intype);
 
 	/// Smartpointer to a block of untyped data

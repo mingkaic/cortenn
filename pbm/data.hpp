@@ -18,21 +18,17 @@
 namespace pbm
 {
 
+/// Tensptr vector type
 using TensT = std::vector<ade::TensptrT>;
 
+/// Data serialization functor
 using DataSaverT = std::function<std::string(const char*,size_t,size_t)>;
 
+/// Data deserialization functor
 using DataLoaderT = std::function<ade::TensptrT(const char*,ade::Shape,\
 	size_t,std::string)>;
 
-struct iDataLoader
-{
-	virtual ~iDataLoader (void) = default;
-
-	virtual ade::TensptrT deserialize (const char* pb,
-		ade::Shape shape, size_t typecode, std::string label) = 0;
-};
-
+/// String list type used for paths
 using StringsT = std::list<std::string>;
 
 }

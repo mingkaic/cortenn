@@ -4,8 +4,6 @@ LLO_CTEST := //llo:ctest
 
 LLO_PTEST := //llo:ptest
 
-REGRESS_TEST := //llo_regress:test_regress
-
 PBM_TEST := //pbm:test
 
 TEST := bazel test
@@ -61,14 +59,3 @@ lcov_pbm: cover_pbm
 	cat bazel-testlogs/pbm/test/test.log | $(COVERAGE_PIPE)
 	lcov --remove $(COVERAGE_INFO_FILE) $(COVERAGE_IGNORE) 'log/*' 'ade/*' 'age/*' 'llo/*' -o $(COVERAGE_INFO_FILE)
 	lcov --list $(COVERAGE_INFO_FILE)
-
-# test management
-
-dora_run:
-	./scripts/start_dora.sh ./certs
-
-gen_test: dora_run
-	bazel run //test_gen:tfgen
-
-test_regress: gen_test
-	$(TEST) $(C_FLAGS) $(REGRESS_TEST)

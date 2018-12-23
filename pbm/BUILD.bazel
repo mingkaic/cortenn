@@ -1,7 +1,6 @@
 licenses(["notice"])
 
-load("@protobuf_rules//cpp:rules.bzl", "cc_proto_library")
-load("@protobuf_rules//python:rules.bzl", "py_proto_library")
+load("@protobuf_rules//cpp:cpp_proto_library.bzl", "cpp_proto_library")
 
 package(
     default_visibility = ["//visibility:public"],
@@ -32,20 +31,13 @@ filegroup(
 ######### LIBRARY #########
 
 proto_library(
-    name = "proto_lib",
+    name = "pbm_proto",
     srcs = ["//pbm:protos"],
 )
 
-cc_proto_library(
-    name = "cc_proto",
-    protos = ["//pbm:protos"],
-    with_grpc = False,
-)
-
-py_proto_library(
-    name = "py_proto",
-    protos = ["//pbm:protos"],
-    with_grpc = False,
+cpp_proto_library(
+    name = "pbm_cc_proto",
+    deps = ["//pbm:pbm_proto"],
 )
 
 cc_library(
@@ -55,7 +47,7 @@ cc_library(
     copts = ["-std=c++14"],
     deps = [
         "@tenncor//ade:ade",
-        "//pbm:cc_proto",
+        "//pbm:pbm_cc_proto",
     ],
 )
 
@@ -68,7 +60,7 @@ cc_test(
     deps = [
         "//pbm:pbm",
         "@tenncor//dbg:dbg",
-        "@com_google_googletest//:gtest",
+        "@gtest//:gtest",
     ],
     copts = ["-std=c++14"],
     data = glob([

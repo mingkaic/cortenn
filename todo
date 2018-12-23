@@ -1,6 +1,5 @@
 correctness:
 P2 - test convolution
-P2 - implement better fallback strategy when test server is unavailable
 P3 - test travelling, and pruning algorithms
 P4 - test complicate equations (generate random valid equations)
 

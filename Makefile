@@ -12,7 +12,7 @@ COVER := bazel cover
 
 C_FLAGS := --config asan --config gtest
 
-COVERAGE_IGNORE := 'external/*' '**/test/*' 'testutil/*' '**/genfiles/*' 'dbg/*'
+COVERAGE_IGNORE := 'external/*' '**/test/*' '**/genfiles/*' 'dbg/*'
 
 COVERAGE_PIPE := ./scripts/merge_cov.sh $(COVERAGE_INFO_FILE)
 
@@ -22,7 +22,7 @@ TMP_LOGFILE := /tmp/cortenn-test.log
 test: test_cllo test_pyllo test_pbm
 
 test_cllo:
-	$(TEST) $(C_FLAGS) --config grepeat $(LLO_CTEST)
+	$(TEST) $(C_FLAGS) $(LLO_CTEST)
 
 test_pyllo:
 	$(TEST) $(LLO_PTEST)
@@ -34,7 +34,7 @@ test_pbm:
 coverage: cover_llo cover_pbm
 
 cover_llo:
-	$(COVER) $(C_FLAGS) --config grepeat $(LLO_CTEST)
+	$(COVER) $(C_FLAGS) $(LLO_CTEST)
 
 cover_pbm:
 	$(COVER) $(C_FLAGS) $(PBM_TEST)

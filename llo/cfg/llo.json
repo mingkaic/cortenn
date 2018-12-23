@@ -88,11 +88,11 @@
         },
         "MIN": {
             "operation": "llo::min((T*)out,shape,llo::to_refs<T>(in))",
-            "derivative": "llo::grad_min(idx,args)"
+            "derivative": "llo::grad_min(fwd,idx,args)"
         },
         "MAX": {
             "operation": "llo::max((T*)out,shape,llo::to_refs<T>(in))",
-            "derivative": "llo::grad_max(idx,args)"
+            "derivative": "llo::grad_max(fwd,idx,args)"
         },
         "EQ": {
             "operation": "llo::eq((T*)out,shape,llo::to_ref<T>(in[0]),llo::to_ref<T>(in[1]))",

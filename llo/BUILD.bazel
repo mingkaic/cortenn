@@ -23,7 +23,7 @@ filegroup(
     name = "ptest_srcs",
     srcs = glob([
         "test/*.py",
-    ])
+    ]),
 )
 
 ######### LIBRARY #########
@@ -89,14 +89,13 @@ pybind_library(
 
 cc_test(
     name = "ctest",
-    size = "large",
     srcs = [":ctest_srcs"],
     copts = ["-std=c++14"],
     deps = [
-        "//llo:llo",
-        "//testutil:testutil",
+        ":llo",
+        "@gtest//:gtest",
     ],
-    data = ["//:credentials"],
+    linkstatic = True,
 )
 
 py_test(

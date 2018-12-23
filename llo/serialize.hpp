@@ -1,5 +1,5 @@
 ///
-/// source.hpp
+/// serialize.hpp
 /// llo
 ///
 /// Purpose:
@@ -8,13 +8,13 @@
 
 #include "llo/data.hpp"
 
-#ifndef LLO_SOURCE_HPP
-#define LLO_SOURCE_HPP
+#ifndef LLO_SERIALIZE_HPP
+#define LLO_SERIALIZE_HPP
 
 namespace llo
 {
 
-/// Marshal iSource to tenncor::Source
+/// Marshal data to tenncor::Source
 std::string serialize (const char* in, size_t nelems, size_t typecode);
 
 /// Unmarshal tenncor::Source as Variable containing context of source
@@ -23,4 +23,4 @@ ade::TensptrT deserialize (const char* pb, ade::Shape shape,
 
 }
 
-#endif // LLO_SOURCE_HPP
+#endif // LLO_SERIALIZE_HPP

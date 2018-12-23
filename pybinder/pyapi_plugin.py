@@ -62,6 +62,7 @@ def process(directory, relpath, fields):
 
     source.includes = [
         '"pybind11/pybind11.h"',
+        '"pybind11/stl.h"',
         '"llo/generated/api.hpp"',
     ]
 

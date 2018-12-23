@@ -12,11 +12,11 @@ ade::TensptrT grad_prod (size_t gradidx, ade::TensT tens);
 
 /// Return the gradient for min operation assuming the target derived wrt is
 /// index gradidx and arguments are tens
-ade::TensptrT grad_min (size_t gradidx, ade::TensT tens);
+ade::TensptrT grad_min (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens);
 
 /// Return the gradient for max operation assuming the target derived wrt is
 /// index gradidx and arguments are tens
-ade::TensptrT grad_max (size_t gradidx, ade::TensT tens);
+ade::TensptrT grad_max (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens);
 
 /// Return reduce coordinate mapper for shape down to specified rank
 ade::CoordPtrT reduce (uint8_t rank, const ade::Shape& shape);

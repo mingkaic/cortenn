@@ -13,14 +13,24 @@ ade::TensptrT grad_prod (size_t gradidx, ade::TensT tens)
 	return age::prod(tens);
 }
 
-ade::TensptrT grad_min (size_t gradidx, ade::TensT tens)
+ade::TensptrT grad_min (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens)
 {
-	return age::eq(age::min(tens), tens[gradidx]);
+	ade::TensptrT fwd_cpy(ade::Functor::get(
+		fwd->get_opcode(), fwd->get_children()));
+	ade::CoordPtrT mapper(fwd->get_children()[gradidx].mapper_->reverse());
+	ade::TensptrT rev_fwd(ade::Functor::get(ade::Opcode{"SUM",age::SUM},
+		{ade::MappedTensor{mapper, fwd_cpy}}));
+	return age::eq(rev_fwd, tens[gradidx]);
 }
 
-ade::TensptrT grad_max (size_t gradidx, ade::TensT tens)
+ade::TensptrT grad_max (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens)
 {
-	return age::eq(age::max(tens), tens[gradidx]);
+	ade::TensptrT fwd_cpy(ade::Functor::get(
+		fwd->get_opcode(), fwd->get_children()));
+	ade::CoordPtrT mapper(fwd->get_children()[gradidx].mapper_->reverse());
+	ade::TensptrT rev_fwd(ade::Functor::get(ade::Opcode{"SUM",age::SUM},
+		{ade::MappedTensor{mapper, fwd_cpy}}));
+	return age::eq(rev_fwd, tens[gradidx]);
 }
 
 ade::CoordPtrT reduce (uint8_t rank, const ade::Shape& shape)

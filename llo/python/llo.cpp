@@ -10,11 +10,28 @@ namespace py = pybind11;
 namespace pyllo
 {
 
+ade::Shape p2cshape (std::vector<py::ssize_t>& pyshape)
+{
+	return ade::Shape(std::vector<ade::DimT>(
+		pyshape.rbegin(), pyshape.rend()));
+}
+
+py::array::ShapeContainer c2pshape (ade::Shape& cshape)
+{
+	auto it = cshape.begin();
+	auto et = cshape.end();
+	while (it != et && *(et-1) == 1)
+	{
+		--et;
+	}
+	std::vector<ade::DimT> fwd(it, et);
+	return py::array::ShapeContainer(fwd.rbegin(), fwd.rend());
+}
+
 llo::VarptrT variable (py::array data, std::string label)
 {
 	py::buffer_info info = data.request();
-	ade::Shape shape(std::vector<ade::DimT>(
-		info.shape.begin(), info.shape.end()));
+	ade::Shape shape = p2cshape(info.shape);
 	size_t n = shape.n_elems();
 	char kind = data.dtype().kind();
 	switch (kind)
@@ -41,8 +58,7 @@ llo::VarptrT variable (py::array data, std::string label)
 void assign (llo::Variable* target, py::array data)
 {
 	py::buffer_info info = data.request();
-	ade::Shape shape(std::vector<ade::DimT>(
-		info.shape.begin(), info.shape.end()));
+	ade::Shape shape = p2cshape(info.shape);
 	size_t n = shape.n_elems();
 	char kind = data.dtype().kind();
 	switch (kind)
@@ -82,13 +98,7 @@ py::array evaluate (ade::TensptrT tens,
 	}
 	llo::GenericData gdata = llo::eval(tens, ctype);
 	void* vptr = gdata.data_.get();
-	auto it = gdata.shape_.begin();
-	auto et = gdata.shape_.end();
-	while (it != et && *(et-1) == 1)
-	{
-		--et;
-	}
-	return py::array(dtype, py::array::ShapeContainer(it, et), vptr);
+	return py::array(dtype, c2pshape(gdata.shape_), vptr);
 }
 
 void seed_engine (size_t seed)
@@ -102,7 +112,7 @@ PYBIND11_MODULE(llo, m)
 {
 	m.doc() = "llo variables";
 
-	py::object tensor = (py::object) 
+	py::object tensor = (py::object)
 		py::module::import("llo.age").attr("Tensor");
 	py::class_<llo::Variable,llo::VarptrT> variable(m, "Variable", tensor);
 

@@ -9,28 +9,28 @@ cortenn_repositories(_REPO_NAME)
 load("@tenncor//:tenncor.bzl", "dependencies")
 dependencies()
 
-load("@cppkg//:cppkg.bzl", "dependencies")
-dependencies()
-
-load("@protobuf_rules//cpp:rules.bzl", "cpp_proto_repositories")
-cpp_proto_repositories()
-
-load("@protobuf_rules//python:rules.bzl", "py_proto_repositories")
-py_proto_repositories()
-
-load("@com_github_nelhage_rules_boost//:boost/boost.bzl", "boost_deps")
-boost_deps()
+load("@protobuf_rules//cpp:deps.bzl", "cpp_proto_library")
+cpp_proto_library()
 
 # test dependencies
 
+load("@cppkg//:gtest.bzl", "gtest_repository")
+gtest_repository(name = "gtest")
+
+
 git_repository(
-    name = "com_github_mingkaic_testify",
-    remote = "https://github.com/raggledodo/testify",
-    commit = "e96e793b7082c3eb95f6177d5e7b0612ef6cd29c",
+    name = "io_bazel_rules_python",
+    remote = "https://github.com/bazelbuild/rules_python.git",
+    commit = "e6399b601e2f72f74e5aa635993d69166784dde1",
 )
 
-load("@com_github_mingkaic_testify//:testify.bzl", "dependencies")
-dependencies()
+load("@io_bazel_rules_python//python:pip.bzl", "pip_repositories", "pip_import")
+pip_repositories()
 
-load("@com_github_raggledodo_dora//:dora.bzl", "dependencies")
-dependencies()
+pip_import(
+	name = "protobuf_py_deps",
+	requirements = "//llo:test/requirements.txt",
+)
+
+load("@protobuf_py_deps//:requirements.bzl", protobuf_pip_install = "pip_install")
+protobuf_pip_install()

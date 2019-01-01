@@ -48,7 +48,7 @@ TEST(LOAD, LoadGraph)
 	}
 
 	pbm::GraphInfo graphinfo;
-	pbm::load_graph(graphinfo, graph, 
+	pbm::load_graph(graphinfo, graph,
 		[](const char* pb, ade::Shape shape,
 			size_t typecode, std::string label)
 		{

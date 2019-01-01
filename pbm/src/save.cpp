@@ -69,15 +69,20 @@ void GraphSaver::save (tenncor::Graph& out, PathedMapT labels)
 		for (auto& child : children)
 		{
 			tenncor::NodeArg* arg = func->add_args();
-			ade::iTensor* tens = child.tensor_.get();
+			ade::iTensor* tens = child.get_tensor().get();
 			arg->set_idx(ordermap[tens]);
-			save_coord(arg->mutable_coord(), child.mapper_);
+			save_coord(arg->mutable_coord(), child.get_coorder());
+			if (child.get_shaper() != child.get_coorder())
+			{
+				save_coord(arg->mutable_shaper(), child.get_shaper());
+			}
+			arg->set_fwd(child.map_io());
 		}
 	}
 }
 
 void GraphSaver::save_coord (google::protobuf::RepeatedField<double>* coord,
-	const ade::CoordPtrT& mapper)
+	const ade::CoordptrT& mapper)
 {
 	mapper->access([coord](const ade::MatrixT& mat)
 	{

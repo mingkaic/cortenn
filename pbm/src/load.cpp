@@ -10,7 +10,7 @@
 namespace pbm
 {
 
-static ade::CoordPtrT load_coord (
+static ade::CoordptrT load_coord (
 	const google::protobuf::RepeatedField<double>& coord)
 {
 	if (ade::mat_dim * ade::mat_dim != coord.size())
@@ -67,8 +67,20 @@ void load_graph (GraphInfo& out, const tenncor::Graph& in,
 			ade::ArgsT args;
 			for (auto nodearg : nodeargs)
 			{
-				ade::CoordPtrT coord = load_coord(nodearg.coord());
-				args.push_back({coord, invec[nodearg.idx()]});
+				ade::TensptrT arg = invec[nodearg.idx()];
+				ade::CoordptrT coord = load_coord(nodearg.coord());
+				ade::CoordptrT shaper;
+				auto shaper_pb = nodearg.shaper();
+				if (shaper_pb.size() > 0)
+				{
+					shaper = load_coord(shaper_pb);
+				}
+				else
+				{
+					shaper = coord;
+				}
+				args.push_back(
+					ade::MappedTensor(arg, shaper, nodearg.fwd(), coord));
 				out.roots_.erase(invec[nodearg.idx()]);
 			}
 			ade::TensptrT f(ade::Functor::get(

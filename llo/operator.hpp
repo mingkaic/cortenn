@@ -31,21 +31,51 @@ EngineT& get_engine (void);
 template <typename T>
 struct VecRef
 {
+	/// Raw input data
 	const T* data;
 
+	/// Shape info of the raw input
 	ade::Shape shape;
 
-	ade::CoordPtrT mapper;
+	/// Coordinate mapper of input to output
+	ade::CoordptrT mapper;
+
+	/// True if data should be pushed input to output (fwd mapper)
+	/// False if data should be pulled output from input (bwd mapper)
+	bool push;
 };
 
 /// Generic unary operation assuming identity mapping (bijective)
 template <typename T>
-void unary (T* out, VecRef<T> in, std::function<T(const T&)> f)
+void unary (T* out, ade::Shape& outshape,
+	VecRef<T> in, std::function<T(const T&)> f)
 {
-	ade::NElemT n = in.shape.n_elems();
-	for (ade::NElemT i = 0; i < n; ++i)
+	if (in.mapper == ade::identity)
 	{
-		out[i] = f(in.data[i]);
+		for (ade::NElemT i = 0, n = in.shape.n_elems(); i < n; ++i)
+		{
+			out[i] = f(in.data[i]);
+		}
+	}
+	else if (in.push)
+	{
+		ade::CoordT coord;
+		for (ade::NElemT i = 0, n = in.shape.n_elems(); i < n; ++i)
+		{
+			in.mapper->forward(coord.begin(),
+				ade::coordinate(in.shape, i).begin());
+			out[i] = f(in.data[ade::index(outshape, coord)]);
+		}
+	}
+	else
+	{
+		ade::CoordT coord;
+		for (ade::NElemT i = 0, n = outshape.n_elems(); i < n; ++i)
+		{
+			in.mapper->forward(coord.begin(),
+				ade::coordinate(outshape, i).begin());
+			out[i] = f(in.data[ade::index(in.shape, coord)]);
+		}
 	}
 }
 
@@ -54,7 +84,7 @@ void unary (T* out, VecRef<T> in, std::function<T(const T&)> f)
 template <typename T>
 void abs (T* out, VecRef<T> in)
 {
-	unary<T>(out, in, [](const T& src) { return std::abs(src); });
+	unary<T>(out, in.shape, in, [](const T& src) { return std::abs(src); });
 }
 
 template <>
@@ -74,7 +104,7 @@ void abs<uint64_t> (uint64_t* out, VecRef<uint64_t> in);
 template <typename T>
 void neg (T* out, VecRef<T> in)
 {
-	unary<T>(out, in, [](const T& src) { return -src; });
+	unary<T>(out, in.shape, in, [](const T& src) { return -src; });
 }
 
 template <>
@@ -94,7 +124,7 @@ void neg<uint64_t> (uint64_t* out, VecRef<uint64_t> in);
 template <typename T>
 void bit_not (T* out, VecRef<T> in)
 {
-	unary<T>(out, in, [](const T& src) { return !src; });
+	unary<T>(out, in.shape, in, [](const T& src) { return !src; });
 }
 
 /// Given reference to output array, and input vector ref,
@@ -102,7 +132,7 @@ void bit_not (T* out, VecRef<T> in)
 template <typename T>
 void sin (T* out, VecRef<T> in)
 {
-	unary<T>(out, in, [](const T& src) { return std::sin(src); });
+	unary<T>(out, in.shape, in, [](const T& src) { return std::sin(src); });
 }
 
 /// Given reference to output array, and input vector ref,
@@ -110,7 +140,7 @@ void sin (T* out, VecRef<T> in)
 template <typename T>
 void cos (T* out, VecRef<T> in)
 {
-	unary<T>(out, in, [](const T& src) { return std::cos(src); });
+	unary<T>(out, in.shape, in, [](const T& src) { return std::cos(src); });
 }
 
 /// Given reference to output array, and input vector ref,
@@ -118,7 +148,7 @@ void cos (T* out, VecRef<T> in)
 template <typename T>
 void tan (T* out, VecRef<T> in)
 {
-	unary<T>(out, in, [](const T& src) { return std::tan(src); });
+	unary<T>(out, in.shape, in, [](const T& src) { return std::tan(src); });
 }
 
 /// Given reference to output array, and input vector ref,
@@ -126,7 +156,7 @@ void tan (T* out, VecRef<T> in)
 template <typename T>
 void exp (T* out, VecRef<T> in)
 {
-	unary<T>(out, in, [](const T& src) { return std::exp(src); });
+	unary<T>(out, in.shape, in, [](const T& src) { return std::exp(src); });
 }
 
 /// Given reference to output array, and input vector ref,
@@ -134,7 +164,7 @@ void exp (T* out, VecRef<T> in)
 template <typename T>
 void log (T* out, VecRef<T> in)
 {
-	unary<T>(out, in, [](const T& src) { return std::log(src); });
+	unary<T>(out, in.shape, in, [](const T& src) { return std::log(src); });
 }
 
 /// Given reference to output array, and input vector ref,
@@ -142,7 +172,7 @@ void log (T* out, VecRef<T> in)
 template <typename T>
 void sqrt (T* out, VecRef<T> in)
 {
-	unary<T>(out, in, [](const T& src) { return std::sqrt(src); });
+	unary<T>(out, in.shape, in, [](const T& src) { return std::sqrt(src); });
 }
 
 /// Given reference to output array, and input vector ref,
@@ -150,25 +180,70 @@ void sqrt (T* out, VecRef<T> in)
 template <typename T>
 void round (T* out, VecRef<T> in)
 {
-	unary<T>(out, in, [](const T& src) { return std::round(src); });
+	unary<T>(out, in.shape, in, [](const T& src) { return std::round(src); });
 }
 
 /// Generic binary operation assuming identity mapping (bijective)
-template <typename T>
-void binary (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b,
-	std::function<T(const T&,const T&)> f)
+template <typename OUT, typename ATYPE, typename BTYPE>
+void binary (OUT* out, ade::Shape& outshape, VecRef<ATYPE> a, VecRef<BTYPE> b,
+	std::function<OUT(const ATYPE&,const BTYPE&)> f)
 {
-	ade::NElemT n = outshape.n_elems();
-	ade::CoordT acoord;
-	ade::CoordT bcoord;
-	for (ade::NElemT i = 0; i < n; ++i)
+	if (false == a.push && b.push) // avoid tmpdata by checking if it's needed
 	{
-		a.mapper->backward(acoord.begin(),
-			ade::coordinate(outshape, i).begin());
-		b.mapper->backward(bcoord.begin(),
-			ade::coordinate(outshape, i).begin());
-		out[i] = f(a.data[ade::index(a.shape, acoord)],
-			b.data[ade::index(b.shape, bcoord)]);
+		ade::CoordT acoord;
+		ade::CoordT bcoord;
+		for (ade::NElemT i = 0, n = outshape.n_elems(); i < n; ++i)
+		{
+			a.mapper->forward(acoord.begin(),
+				ade::coordinate(outshape, i).begin());
+			b.mapper->forward(bcoord.begin(),
+				ade::coordinate(outshape, i).begin());
+			out[i] = f(
+				a.data[ade::index(a.shape, acoord)],
+				b.data[ade::index(b.shape, bcoord)]);
+		}
+	}
+	else
+	{
+		std::vector<ATYPE> tmpdata(outshape.n_elems());
+		ade::CoordT coord;
+		if (a.push)
+		{
+			for (ade::NElemT i = 0, n = a.shape.n_elems(); i < n; ++i)
+			{
+				a.mapper->forward(coord.begin(),
+					ade::coordinate(a.shape, i).begin());
+				tmpdata[ade::index(outshape, coord)] = a.data[i];
+			}
+		}
+		else
+		{
+			for (ade::NElemT i = 0, n = outshape.n_elems(); i < n; ++i)
+			{
+				a.mapper->forward(coord.begin(),
+					ade::coordinate(outshape, i).begin());
+				tmpdata[i] = a.data[ade::index(a.shape, coord)];
+			}
+		}
+		if (b.push)
+		{
+			for (ade::NElemT i = 0, n = b.shape.n_elems(); i < n; ++i)
+			{
+				b.mapper->forward(coord.begin(),
+					ade::coordinate(b.shape, i).begin());
+				ade::NElemT outidx = ade::index(outshape, coord);
+				out[outidx] = f(tmpdata[outidx], b.data[i]);
+			}
+		}
+		else
+		{
+			for (ade::NElemT i = 0, n = outshape.n_elems(); i < n; ++i)
+			{
+				b.mapper->forward(coord.begin(),
+					ade::coordinate(outshape, i).begin());
+				out[i] = f(tmpdata[i], b.data[ade::index(b.shape, coord)]);
+			}
+		}
 	}
 }
 
@@ -178,8 +253,8 @@ void binary (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b,
 template <typename T>
 void pow (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
 {
-	binary<T>(out, outshape, a, b,
-		[](const T& b, const T& x) { return std::pow(b, x); });
+	binary<T,T,T>(out, outshape, a, b,
+	[](const T& b, const T& x) { return std::pow(b, x); });
 }
 
 /// Given arguments a, and b, for every pair of mapped elements sharing the
@@ -188,8 +263,8 @@ void pow (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
 template <typename T>
 void sub (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
 {
-	binary<T>(out, outshape, a, b,
-		[](const T& a, const T& b) { return a - b; });
+	binary<T,T,T>(out, outshape, a, b,
+	[](const T& a, const T& b) { return a - b; });
 }
 
 /// Given arguments a, and b, for every pair of mapped elements sharing the
@@ -198,8 +273,8 @@ void sub (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
 template <typename T>
 void div (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
 {
-	binary<T>(out, outshape, a, b,
-		[](const T& a, const T& b) { return a / b; });
+	binary<T,T,T>(out, outshape, a, b,
+	[](const T& a, const T& b) { return a / b; });
 }
 
 /// Given arguments a, and b, for every pair of mapped elements sharing the
@@ -208,8 +283,8 @@ void div (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
 template <typename T>
 void eq (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
 {
-	binary<T>(out, outshape, a, b,
-		[](const T& a, const T& b) { return a == b; });
+	binary<T,T,T>(out, outshape, a, b,
+	[](const T& a, const T& b) { return a == b; });
 }
 
 /// Given arguments a, and b, for every pair of mapped elements sharing the
@@ -218,8 +293,8 @@ void eq (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
 template <typename T>
 void neq (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
 {
-	binary<T>(out, outshape, a, b,
-		[](const T& a, const T& b) { return a != b; });
+	binary<T,T,T>(out, outshape, a, b,
+	[](const T& a, const T& b) { return a != b; });
 }
 
 /// Given arguments a, and b, for every pair of mapped elements sharing the
@@ -228,8 +303,8 @@ void neq (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
 template <typename T>
 void lt (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
 {
-	binary<T>(out, outshape, a, b,
-		[](const T& a, const T& b) { return a < b; });
+	binary<T,T,T>(out, outshape, a, b,
+	[](const T& a, const T& b) { return a < b; });
 }
 
 /// Given arguments a, and b, for every pair of mapped elements sharing the
@@ -238,8 +313,8 @@ void lt (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
 template <typename T>
 void gt (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
 {
-	binary<T>(out, outshape, a, b,
-		[](const T& a, const T& b) { return a > b; });
+	binary<T,T,T>(out, outshape, a, b,
+	[](const T& a, const T& b) { return a > b; });
 }
 
 /// Given arguments a, and b, for every pair of mapped elements sharing the
@@ -248,20 +323,12 @@ void gt (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
 template <typename T>
 void rand_binom (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<double> b)
 {
-	ade::NElemT n = outshape.n_elems();
-	ade::CoordT acoord;
-	ade::CoordT bcoord;
-	for (ade::NElemT i = 0; i < n; ++i)
+	binary<T,T,double>(out, outshape, a, b,
+	[](const T& a, const double& b)
 	{
-		a.mapper->backward(acoord.begin(),
-			ade::coordinate(outshape, i).begin());
-		b.mapper->backward(bcoord.begin(),
-			ade::coordinate(outshape, i).begin());
-		std::binomial_distribution<T> dist(
-			a.data[ade::index(a.shape, acoord)],
-			b.data[ade::index(b.shape, bcoord)]);
-		out[i] = dist(get_engine());
-	}
+		std::binomial_distribution<T> dist(a, b);
+		return dist(get_engine());
+	});
 }
 
 template <>
@@ -279,7 +346,7 @@ template <typename T>
 void rand_uniform (T* out,
 	ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
 {
-	binary<T>(out, outshape, a, b,
+	binary<T,T,T>(out, outshape, a, b,
 	[](const T& a, const T& b)
 	{
 		std::uniform_int_distribution<T> dist(a, b);
@@ -305,12 +372,12 @@ void rand_normal (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
 }
 
 template <>
-void rand_normal<float> (float* out,
-	ade::Shape& outshape, VecRef<float> a, VecRef<float> b);
-
-template <>
 void rand_normal<double> (double* out,
 	ade::Shape& outshape, VecRef<double> a, VecRef<double> b);
+
+template <>
+void rand_normal<float> (float* out,
+	ade::Shape& outshape, VecRef<float> a, VecRef<float> b);
 
 /// Generic n-nary operation (potentially surjective)
 template <typename T>
@@ -321,23 +388,10 @@ void nnary (T* out, ade::Shape& outshape, std::vector<VecRef<T>> args,
 	bool visited[nout];
 	std::memset(visited, false, nout);
 	ade::CoordT coord;
-	size_t nargs = args.size();
-	if (nargs == 1 && nout > args[0].shape.n_elems()) // resolve extensions
+	for (VecRef<T>& arg : args)
 	{
-		VecRef<T>& arg = args[0];
-		for (ade::NElemT outidx = 0; outidx < nout; ++outidx)
+		if (arg.push)
 		{
-			arg.mapper->backward(coord.begin(),
-				ade::coordinate(outshape, outidx).begin());
-			ade::NElemT i = ade::index(arg.shape, coord);
-			out[outidx] = arg.data[i];
-		}
-	}
-	else
-	{
-		for (size_t i = 0; i < nargs; ++i)
-		{
-			VecRef<T>& arg = args[i];
 			for (ade::NElemT i = 0, n = arg.shape.n_elems(); i < n; ++i)
 			{
 				arg.mapper->forward(coord.begin(),
@@ -354,8 +408,26 @@ void nnary (T* out, ade::Shape& outshape, std::vector<VecRef<T>> args,
 				}
 			}
 		}
-		// todo: do something/check non-visited elements
+		else
+		{
+			for (ade::NElemT i = 0, n = outshape.n_elems(); i < n; ++i)
+			{
+				arg.mapper->forward(coord.begin(),
+					ade::coordinate(outshape, i).begin());
+				ade::NElemT inidx = ade::index(arg.shape, coord);
+				if (visited[i])
+				{
+					acc(out[i], arg.data[inidx]);
+				}
+				else
+				{
+					out[i] = arg.data[inidx];
+					visited[i] = true;
+				}
+			}
+		}
 	}
+	// todo: do something/check unvisited elements
 }
 
 /// Given arguments, for every mapped index i in range [0:max_nelems],

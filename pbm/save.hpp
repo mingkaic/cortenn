@@ -48,7 +48,7 @@ struct GraphSaver final : public ade::iTraveler
 			ade::ArgsT children = func->get_children();
 			for (auto& child : children)
 			{
-				child.tensor_->accept(*this);
+				child.get_tensor()->accept(*this);
 			}
 		}
 	}
@@ -71,7 +71,7 @@ struct GraphSaver final : public ade::iTraveler
 private:
 	void save_coord (
 		google::protobuf::RepeatedField<double>* coord,
-		const ade::CoordPtrT& mapper);
+		const ade::CoordptrT& mapper);
 
 	void save_data (tenncor::Source& out, ade::iLeaf* in)
 	{

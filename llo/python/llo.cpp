@@ -5,6 +5,8 @@
 #include "llo/eval.hpp"
 #include "llo/zprune.hpp"
 
+#include "dbg/ade.hpp"
+
 namespace py = pybind11;
 
 namespace pyllo
@@ -134,4 +136,11 @@ PYBIND11_MODULE(llo, m)
 	m.def("derive", llo::derive,
 		"derive tensor with respect to some derive");
 	m.def("seed", &pyllo::seed_engine, "seed internal rng");
+	m.def("print_graph", [](ade::TensptrT root, bool showshape)
+		{
+			PrettyEquation peq;
+			peq.showshape_ = showshape;
+			peq.print(std::cout, root);
+		}, "print graph of root tensor",
+		py::arg("root"), py::arg("showshape") = false);
 }

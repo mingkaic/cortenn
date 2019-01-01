@@ -130,7 +130,7 @@
                 "dtype": "ade::TensptrT",
                 "name": "arg1"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"ABS\",ABS},{{ade::identity,arg1}}))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"ABS\",ABS},{ade::identity_map(arg1)}))"
         },
         {
             "name": "neg",
@@ -138,7 +138,7 @@
                 "dtype": "ade::TensptrT",
                 "name": "arg1"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"NEG\",NEG},{{ade::identity,arg1}}))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"NEG\",NEG},{ade::identity_map(arg1)}))"
         },
         {
             "name": "sin",
@@ -146,7 +146,7 @@
                 "dtype": "ade::TensptrT",
                 "name": "arg1"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SIN\",SIN},{{ade::identity,arg1}}))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SIN\",SIN},{ade::identity_map(arg1)}))"
         },
         {
             "name": "cos",
@@ -154,7 +154,7 @@
                 "dtype": "ade::TensptrT",
                 "name": "arg1"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"COS\",COS},{{ade::identity,arg1}}))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"COS\",COS},{ade::identity_map(arg1)}))"
         },
         {
             "name": "tan",
@@ -162,7 +162,7 @@
                 "dtype": "ade::TensptrT",
                 "name": "arg1"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"TAN\",TAN},{{ade::identity,arg1}}))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"TAN\",TAN},{ade::identity_map(arg1)}))"
         },
         {
             "name": "exp",
@@ -170,7 +170,7 @@
                 "dtype": "ade::TensptrT",
                 "name": "arg1"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"EXP\",EXP},{{ade::identity,arg1}}))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"EXP\",EXP},{ade::identity_map(arg1)}))"
         },
         {
             "name": "log",
@@ -178,7 +178,7 @@
                 "dtype": "ade::TensptrT",
                 "name": "arg1"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"LOG\",LOG},{{ade::identity,arg1}}))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"LOG\",LOG},{ade::identity_map(arg1)}))"
         },
         {
             "name": "sqrt",
@@ -186,7 +186,7 @@
                 "dtype": "ade::TensptrT",
                 "name": "arg1"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SQRT\",SQRT},{{ade::identity,arg1}}))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SQRT\",SQRT},{ade::identity_map(arg1)}))"
         },
         {
             "name": "round",
@@ -194,7 +194,7 @@
                 "dtype": "ade::TensptrT",
                 "name": "arg1"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"ROUND\",ROUND},{{ade::identity,arg1}}))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"ROUND\",ROUND},{ade::identity_map(arg1)}))"
         },
         {
             "name": "flip",
@@ -205,7 +205,7 @@
                 "dtype": "uint8_t",
                 "name": "arg2"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SUM\",SUM},{{ade::flip(arg2),arg1}}))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SUM\",SUM},{ade::flip_map(arg1,arg2)}))"
         },
         {
             "name": "pow",
@@ -216,7 +216,7 @@
                 "dtype": "ade::TensptrT",
                 "name": "arg2"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"POW\",POW},{{ade::identity,arg1},{ade::identity,arg2}}))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"POW\",POW},{ade::identity_map(arg1),ade::identity_map(arg2)}))"
         },
         {
             "name": "add",
@@ -227,7 +227,7 @@
                 "dtype": "ade::TensptrT",
                 "name": "arg2"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SUM\",SUM},{{ade::identity,arg1},{ade::identity,arg2}}))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SUM\",SUM},{ade::identity_map(arg1),ade::identity_map(arg2)}))"
         },
         {
             "name": "sub",
@@ -238,7 +238,7 @@
                 "dtype": "ade::TensptrT",
                 "name": "arg2"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SUB\",SUB},{{ade::identity,arg1},{ade::identity,arg2}}))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SUB\",SUB},{ade::identity_map(arg1),ade::identity_map(arg2)}))"
         },
         {
             "name": "mul",
@@ -249,7 +249,7 @@
                 "dtype": "ade::TensptrT",
                 "name": "arg2"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"PROD\",PROD},{{ade::identity,arg1},{ade::identity,arg2}}))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"PROD\",PROD},{ade::identity_map(arg1),ade::identity_map(arg2)}))"
         },
         {
             "name": "div",
@@ -260,7 +260,7 @@
                 "dtype": "ade::TensptrT",
                 "name": "arg2"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"DIV\",DIV},{{ade::identity,arg1},{ade::identity,arg2}}))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"DIV\",DIV},{ade::identity_map(arg1),ade::identity_map(arg2)}))"
         },
         {
             "name": "eq",
@@ -271,7 +271,7 @@
                 "dtype": "ade::TensptrT",
                 "name": "arg2"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"EQ\",EQ},{{ade::identity,arg1},{ade::identity,arg2}}))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"EQ\",EQ},{ade::identity_map(arg1),ade::identity_map(arg2)}))"
         },
         {
             "name": "neq",
@@ -282,7 +282,7 @@
                 "dtype": "ade::TensptrT",
                 "name": "arg2"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"NEQ\",NEQ},{{ade::identity,arg1},{ade::identity,arg2}}))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"NEQ\",NEQ},{ade::identity_map(arg1),ade::identity_map(arg2)}))"
         },
         {
             "name": "lt",
@@ -293,7 +293,7 @@
                 "dtype": "ade::TensptrT",
                 "name": "arg2"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"LT\",LT},{{ade::identity,arg1},{ade::identity,arg2}}))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"LT\",LT},{ade::identity_map(arg1),ade::identity_map(arg2)}))"
         },
         {
             "name": "gt",
@@ -304,7 +304,7 @@
                 "dtype": "ade::TensptrT",
                 "name": "arg2"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"GT\",GT},{{ade::identity,arg1},{ade::identity,arg2}}))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"GT\",GT},{ade::identity_map(arg1),ade::identity_map(arg2)}))"
         },
         {
             "name": "rand_bino",
@@ -315,7 +315,7 @@
                 "dtype": "ade::TensptrT",
                 "name": "arg2"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"RAND_BINO\",RAND_BINO},{{ade::identity,arg1},{ade::identity,arg2}}))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"RAND_BINO\",RAND_BINO},{ade::identity_map(arg1),ade::identity_map(arg2)}))"
         },
         {
             "name": "rand_unif",
@@ -326,7 +326,7 @@
                 "dtype": "ade::TensptrT",
                 "name": "arg2"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"RAND_UNIF\",RAND_UNIF},{{ade::identity,arg1},{ade::identity,arg2}}))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"RAND_UNIF\",RAND_UNIF},{ade::identity_map(arg1),ade::identity_map(arg2)}))"
         },
         {
             "name": "rand_norm",
@@ -337,7 +337,7 @@
                 "dtype": "ade::TensptrT",
                 "name": "arg2"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"RAND_NORM\",RAND_NORM},{{ade::identity,arg1},{ade::identity,arg2}}))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"RAND_NORM\",RAND_NORM},{ade::identity_map(arg1),ade::identity_map(arg2)}))"
         },
         {
             "name": "n_elems",
@@ -399,7 +399,7 @@
                 "dtype": "uint8_t",
                 "name": "arg2"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SUM\",SUM},{{llo::reduce(arg2,arg1->shape()),arg1}}))"
+            "out": "llo::reduce(ade::Opcode{\"SUM\",SUM},arg1,arg2)"
         },
         {
             "name": "reduce_min",
@@ -410,7 +410,7 @@
                 "dtype": "uint8_t",
                 "name": "arg2"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"MIN\",MIN},{{llo::reduce(arg2,arg1->shape()),arg1}}))"
+            "out": "llo::reduce(ade::Opcode{\"MIN\",MIN},arg1,arg2)"
         },
         {
             "name": "reduce_max",
@@ -421,7 +421,7 @@
                 "dtype": "uint8_t",
                 "name": "arg2"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"MAX\",MAX},{{llo::reduce(arg2,arg1->shape()),arg1}}))"
+            "out": "llo::reduce(ade::Opcode{\"MAX\",MAX},arg1,arg2)"
         },
         {
             "name": "permute",
@@ -430,19 +430,9 @@
                 "name": "arg1"
             }, {
                 "dtype": "std::vector<uint8_t>",
-                "name": "arg2",
-                "c": {
-                    "args": [{
-                        "dtype": "uint8_t*",
-                        "name": "arg2"
-                    }, {
-                        "dtype": "uint8_t",
-                        "name": "n_arg2"
-                    }],
-                    "convert": "std::vector<uint8_t>(arg2, arg2 + n_arg2)"
-                }
+                "name": "arg2"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SUM\",SUM},{{ade::permute(arg2),arg1}}))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SUM\",SUM},{ade::permute_map(arg1,arg2)}))"
         },
         {
             "name": "extend",
@@ -454,19 +444,9 @@
                 "name": "arg2"
             }, {
                 "dtype": "std::vector<uint8_t>",
-                "name": "arg3",
-                "c": {
-                    "args": [{
-                        "dtype": "uint8_t*",
-                        "name": "arg3"
-                    }, {
-                        "dtype": "uint8_t",
-                        "name": "n_arg3"
-                    }],
-                    "convert": "std::vector<uint8_t>(arg3, arg3 + n_arg3)"
-                }
+                "name": "arg3"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SUM\",SUM},{{ade::extend(arg2,arg3),arg1}}))"
+            "out": "llo::extend(arg1,arg2,arg3)"
         },
         {
             "name": "reduce_sum",

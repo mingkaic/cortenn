@@ -71,7 +71,7 @@ static ade::TensptrT prune0 (bool& is_zero, ade::iFunctor* func,
 					return ade::TensptrT(ade::Functor::get(ade::Opcode{"NEG", age::NEG}, {args[1]}));
 				}
 				// else if zeros.end() != zeros.find(1)
-				return args[0].tensor_;
+				return args[0].get_tensor();
 			case age::DIV:
 				if (zeros.end() != zeros.find(1))
 				{

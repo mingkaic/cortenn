@@ -15,6 +15,8 @@ message NodeArg
 {
     uint32 idx = 1;
     repeated double coord = 2 [packed = true];
+    repeated double shaper = 3 [packed = true];
+    bool fwd = 4;
 }
 
 message Functor

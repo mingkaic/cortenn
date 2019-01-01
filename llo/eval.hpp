@@ -47,20 +47,35 @@ struct Evaluator final : public ade::iTraveler
 					"using %d arguments", nargs);
 			}
 			Evaluator left_eval(dtype_);
-			children[0].tensor_->accept(left_eval);
-			argdata[0] = {left_eval.out_.data_, left_eval.out_.shape_, children[0].mapper_};
+			children[0].get_tensor()->accept(left_eval);
+			argdata[0] = {
+				left_eval.out_.data_,
+				left_eval.out_.shape_,
+				children[0].get_coorder(),
+				children[0].map_io(),
+			};
 
 			Evaluator right_eval(age::DOUBLE);
-			children[1].tensor_->accept(right_eval);
-			argdata[1] = {right_eval.out_.data_, right_eval.out_.shape_, children[1].mapper_};
+			children[1].get_tensor()->accept(right_eval);
+			argdata[1] = DataArg{
+				right_eval.out_.data_,
+				right_eval.out_.shape_,
+				children[1].get_coorder(),
+				children[1].map_io(),
+			};
 		}
 		else
 		{
 			for (uint8_t i = 0; i < nargs; ++i)
 			{
 				Evaluator evaler(dtype_);
-				children[i].tensor_->accept(evaler);
-				argdata[i] = {evaler.out_.data_, evaler.out_.shape_, children[i].mapper_};
+				children[i].get_tensor()->accept(evaler);
+				argdata[i] = DataArg{
+					evaler.out_.data_,
+					evaler.out_.shape_,
+					children[i].get_coorder(),
+					children[i].map_io(),
+				};
 			}
 		}
 

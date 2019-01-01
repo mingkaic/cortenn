@@ -375,5 +375,50 @@ class LLOTest(unittest.TestCase):
         self._array_close(exdata2, der2)
         self._array_close(exdata3, der3)
 
+    def test_convolute(self):
+        padding = "VALID"
+        batchsize = 2
+        inchannel = 3
+        outchannel = 4
+        shape = [batchsize, 5, 5, inchannel]
+        kernelshape = [3, 3, inchannel, outchannel]
+        data = np.random.rand(*shape)
+        kernel = np.random.rand(*kernelshape)
+        var = llo.variable(data, 'var')
+        vkernel = llo.variable(kernel, 'vkernel')
+        tf_var = tf.Variable(data)
+        tf_kernel = tf.Variable(kernel)
+
+        sess = tf.Session()
+        sess.run(tf_var.initializer)
+        sess.run(tf_kernel.initializer)
+
+        out = age.convolute(var, vkernel)
+        tf_out = tf.nn.convolution(tf_var, tf_kernel, padding)
+
+        fout = llo.evaluate(out, dtype=np.dtype(float))
+        tf_fout = sess.run(tf_out)
+
+        self._array_close(tf_fout, fout)
+
+        var2 = llo.variable(data, 'var2')
+        zero = llo.derive(out, var2)
+        ex = llo.derive(out, var)
+        ex2 = llo.derive(out, vkernel)
+
+        rej = llo.evaluate(zero)
+        der = llo.evaluate(ex)
+        der2 = llo.evaluate(ex2)
+
+        data0 = np.zeros(shape, dtype=float)
+        tf_grad, tf_grad2 = tf.gradients(tf_out, [tf_var, tf_kernel])
+
+        exdata = sess.run(tf_grad)
+        exdata2 = sess.run(tf_grad2)
+
+        self._array_eq(data0, rej)
+        # self._array_close(exdata, der)
+        # self._array_close(exdata2, der2)
+
 if __name__ == "__main__":
     unittest.main()

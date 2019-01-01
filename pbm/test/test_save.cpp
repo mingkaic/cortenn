@@ -40,30 +40,23 @@ TEST(SAVE, SaveGraph)
 		ade::Shape shape3({3, 1, 7});
 		ade::TensptrT src2(new MockTensor(shape3));
 
-		ade::TensptrT dest(ade::Functor::get(
-			ade::Opcode{"-", 0},
-			{
-				{ade::identity, src2},
-				{ade::permute({1, 2, 0}), ade::TensptrT(ade::Functor::get(
-					ade::Opcode{"@", 1},
-					{
-						{ade::permute({1, 0}), ade::TensptrT(ade::Functor::get(
-							ade::Opcode{"/", 2},
-							{
-								{ade::identity, ade::TensptrT(ade::Functor::get(
-									ade::Opcode{"neg", 3}, {{ade::identity, osrc}}))},
-								{ade::identity, ade::TensptrT(ade::Functor::get(
-									ade::Opcode{"+", 4},
-									{
-										{ade::identity, ade::TensptrT(ade::Functor::get(
-											ade::Opcode{"sin", 5}, {{ade::identity, src}}))},
-										{ade::identity, src}
-									}))}
-							}))},
-						{ade::identity, osrc2}
-					}
-				))}
-			}));
+		ade::TensptrT dest(ade::Functor::get(ade::Opcode{"-", 0}, {
+			{src2, ade::identity},
+			{ade::TensptrT(ade::Functor::get(ade::Opcode{"@", 1}, {
+				{ade::TensptrT(ade::Functor::get(ade::Opcode{"/", 2}, {
+					{ade::TensptrT(ade::Functor::get(ade::Opcode{"neg", 3}, {
+						{osrc, ade::identity},
+					})), ade::identity},
+					{ade::TensptrT(ade::Functor::get(ade::Opcode{"+", 4}, {
+						{ade::TensptrT(
+							ade::Functor::get(ade::Opcode{"sin", 5}, {
+							{src, ade::identity}})), ade::identity},
+						{src, ade::identity},
+					})), ade::identity}
+				})), ade::permute({1, 0})},
+				{osrc2, ade::identity}
+			})), ade::permute({1, 2, 0})},
+		}));
 		roots.push_back(dest);
 
 		labels[src] = {"subtree", "src"};
@@ -80,27 +73,20 @@ TEST(SAVE, SaveGraph)
 
 		ade::TensptrT src3(new MockTensor(mshape));
 
-		ade::TensptrT dest(ade::Functor::get(
-			ade::Opcode{"-", 0},
-			{
-				{ade::identity, src},
-				{ade::identity, ade::TensptrT(ade::Functor::get(
-					ade::Opcode{"*", 6},
-					{
-						{ade::identity, ade::TensptrT(ade::Functor::get(
-							ade::Opcode{"abs", 7}, {
-								{ade::identity, src}
-							}))},
-						{ade::identity, ade::TensptrT(ade::Functor::get(
-							ade::Opcode{"exp", 8}, {
-								{ade::identity, src2}
-							}))},
-						{ade::identity, ade::TensptrT(ade::Functor::get(
-							ade::Opcode{"neg", 3}, {
-								{ade::identity, src3}
-							}))}
-					}))}
-			}));
+		ade::TensptrT dest(ade::Functor::get(ade::Opcode{"-", 0}, {
+			{src, ade::identity},
+			{ade::TensptrT(ade::Functor::get(ade::Opcode{"*", 6}, {
+				{ade::TensptrT(ade::Functor::get(ade::Opcode{"abs", 7}, {
+					{src, ade::identity},
+				})), ade::identity},
+				{ade::TensptrT(ade::Functor::get(ade::Opcode{"exp", 8}, {
+					{src2, ade::identity},
+				})), ade::identity},
+				{ade::TensptrT(ade::Functor::get(ade::Opcode{"neg", 3}, {
+					{src3, ade::identity},
+				})), ade::identity},
+			})), ade::identity},
+		}));
 		roots.push_back(dest);
 
 		labels[src] = {"subtree2", "src"};

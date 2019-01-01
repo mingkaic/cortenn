@@ -55,7 +55,7 @@ struct LeafFinder final : public ade::iTraveler
 			std::unordered_set<size_t> path;
 			for (size_t i = 0; i < n; ++i)
 			{
-				ade::TensptrT tens = children[i].tensor_;
+				ade::TensptrT tens = children[i].get_tensor();
 				tens->accept(*this);
 				if (parents_.end() != parents_.find(tens.get()) ||
 					founds_.end() != founds_.find(tens.get()))
@@ -134,7 +134,7 @@ struct TargetPruner
 			for (auto it = indices.begin(), et = indices.end(); it != et;)
 			{
 				ade::MappedTensor& child = children[*it];
-				ade::iTensor* tens = child.tensor_.get();
+				ade::iTensor* tens = child.get_tensor().get();
 				// child is not target, so erase ot from indices
 				auto zit = targets.find(tens);
 				if (targets.end() == zit)

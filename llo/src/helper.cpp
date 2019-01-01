@@ -17,9 +17,10 @@ ade::TensptrT grad_min (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens)
 {
 	ade::TensptrT fwd_cpy(ade::Functor::get(
 		fwd->get_opcode(), fwd->get_children()));
-	ade::CoordPtrT mapper(fwd->get_children()[gradidx].mapper_->reverse());
+	auto fchildren = fwd->get_children();
+	ade::CoordptrT shaper(fchildren[gradidx].get_shaper()->reverse());
 	ade::TensptrT rev_fwd(ade::Functor::get(ade::Opcode{"SUM",age::SUM},
-		{ade::MappedTensor{mapper, fwd_cpy}}));
+		{ade::MappedTensor(fwd_cpy, shaper)}));
 	return age::eq(rev_fwd, tens[gradidx]);
 }
 
@@ -27,16 +28,31 @@ ade::TensptrT grad_max (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens)
 {
 	ade::TensptrT fwd_cpy(ade::Functor::get(
 		fwd->get_opcode(), fwd->get_children()));
-	ade::CoordPtrT mapper(fwd->get_children()[gradidx].mapper_->reverse());
+	auto fchildren = fwd->get_children();
+	ade::CoordptrT shaper(fchildren[gradidx].get_shaper()->reverse());
 	ade::TensptrT rev_fwd(ade::Functor::get(ade::Opcode{"SUM",age::SUM},
-		{ade::MappedTensor{mapper, fwd_cpy}}));
+		{ade::MappedTensor(fwd_cpy, shaper)}));
 	return age::eq(rev_fwd, tens[gradidx]);
 }
 
-ade::CoordPtrT reduce (uint8_t rank, const ade::Shape& shape)
+ade::TensptrT reduce (ade::Opcode opcode, ade::TensptrT tens, uint8_t dim)
 {
-	std::vector<ade::DimT> slist(shape.begin() + rank, shape.end());
-	return ade::reduce(rank, slist);
+	ade::Shape shape = tens->shape();
+	std::vector<ade::DimT> slist(shape.begin() + dim, shape.end());
+	auto out = ade::Functor::get(opcode, {
+		ade::reduce_map(tens, dim, slist),
+	});
+	return ade::TensptrT(out);
+}
+
+ade::TensptrT extend (ade::TensptrT tens,
+	uint8_t dim, std::vector<uint8_t> ext)
+{
+	auto shaper = ade::extend(dim,ext);
+	ade::CoordptrT coord(shaper->reverse());
+	return ade::TensptrT(ade::Functor::get(ade::Opcode{"SUM",age::SUM}, {
+		ade::extend_map(tens, dim, ext),
+	}));
 }
 
 ade::TensptrT matmul (ade::TensptrT a, ade::TensptrT b)
@@ -79,18 +95,18 @@ ade::TensptrT convolve (ade::TensptrT img, ade::TensptrT kernel)
 	const ade::Shape& imgshape = img->shape();
 	const ade::Shape& kernelshape = kernel->shape();
 
-	uint8_t nbatch = imgshape.at(0);
-	uint8_t in_width = imgshape.at(1);
-	uint8_t in_height = imgshape.at(2);
-	uint8_t in_channels = imgshape.at(3);
+	uint8_t nbatch = imgshape.at(3);
+	uint8_t in_width = imgshape.at(2);
+	uint8_t in_height = imgshape.at(1);
+	uint8_t in_channels = imgshape.at(0);
 
-	uint8_t kernel_width = kernelshape.at(0);
-	uint8_t kernel_height = kernelshape.at(1);
-	uint8_t out_channels = kernelshape.at(3);
-	if (in_channels != kernelshape.at(2))
+	uint8_t kernel_width = kernelshape.at(3);
+	uint8_t kernel_height = kernelshape.at(2);
+	uint8_t out_channels = kernelshape.at(0);
+	if (in_channels != kernelshape.at(1))
 	{
 		logs::fatalf("cannot convolve with mismatch img %s and kernel %s "
-			"in_channel (dim=3 for img, dim=2 for kernel)",
+			"in_channel (dim=0 for img, dim=1 for kernel)",
 			imgshape.to_string().c_str(), kernelshape.to_string().c_str());
 	}
 	if (in_width < kernel_width || in_height < kernel_height)
@@ -100,30 +116,68 @@ ade::TensptrT convolve (ade::TensptrT img, ade::TensptrT kernel)
 			imgshape.to_string().c_str());
 	}
 
-	// map img to shape <nbatch, in_width, in_height, ?(out_channels),
-	//		?(kernel_width), ?(kernel_height), in_channels>
-	ade::CoordPtrT img_mapper(new ade::CoordMap(
+	uint8_t invalid_height = 2 * std::floor(kernel_height / 2);
+	uint8_t invalid_width = 2 * std::floor(kernel_width / 2);
+
+	// input: [in_channels, in_height, in_width, nbatch]
+	// output: [out_channels,
+	//			in_height-invalid_height,
+	//			in_width-invalid_height,
+	//			nbatch, in_channels, kernel_height, kernel_width]
+	ade::CoordptrT img_shaper(new ade::CoordMap(
 		[&](ade::MatrixT fwd)
 		{
-			fwd[0][0] = fwd[1][1] = fwd[2][2] = fwd[3][6] = 1;
-			fwd[4][3] = out_channels;
-			fwd[5][4] = kernel_width;
-			fwd[6][5] = kernel_height;
+			fwd[0][4] =
+			fwd[1][1] =
+			fwd[2][2] =
+			fwd[3][3] = 1;
+			fwd[4][0] = out_channels;
+			fwd[5][5] = kernel_height;
+			fwd[6][6] = kernel_width;
+			fwd[ade::mat_dim - 1][1] = -invalid_height;
+			fwd[ade::mat_dim - 1][2] = -invalid_width;
 			for (uint8_t i = 7; i < ade::mat_dim; ++i)
 			{
 				fwd[i][i] = 1;
 			}
 		}));
 
-	// map kernel to shape <?(nbatch), ?(in_width), ?(in_height), out_channels,
-	//		kernel_width, kernel_height, in_channels>
-	ade::CoordPtrT kernel_mapper(new ade::CoordMap(
+	ade::CoordptrT img_mapper(new ade::CoordMap(
 		[&](ade::MatrixT fwd)
 		{
-			fwd[0][3] = fwd[1][4] = fwd[2][5] = fwd[3][6] = 1;
-			fwd[4][0] = nbatch;
-			fwd[5][1] = in_width;
-			fwd[6][2] = in_height;
+			fwd[1][1] =
+			fwd[2][2] =
+			fwd[3][3] =
+			fwd[4][0] =
+			fwd[5][1] =
+			fwd[6][2] = 1;
+			fwd[0][4] = 1.0 / out_channels;
+			fwd[1][5] = 1.0 / (in_height - invalid_height);
+			fwd[2][6] = 1.0 / (in_width - invalid_width);
+			for (uint8_t i = 7; i < ade::mat_dim; ++i)
+			{
+				fwd[i][i] = 1;
+			}
+		}));
+
+	// input: [out_channels, in_channels, kernel_height, kernel_width]
+	// output: [out_channels,
+	//			in_height - invalid_height,
+	//			in_width - invalid_width,
+	//			nbatch, in_channels, kernel_height, kernel_width]
+	ade::CoordptrT kernel_mapper(new ade::CoordMap(
+		[&](ade::MatrixT fwd)
+		{
+			fwd[0][0] =
+			fwd[1][4] =
+			fwd[2][5] =
+			fwd[3][6] =
+			fwd[4][1] =
+			fwd[5][2] =
+			fwd[6][3] = 1;
+			fwd[ade::mat_dim - 1][1] = in_height - invalid_height - 1;
+			fwd[ade::mat_dim - 1][2] = in_width - invalid_width - 1;
+			fwd[ade::mat_dim - 1][3] = nbatch - 1;
 			for (uint8_t i = 7; i < ade::mat_dim; ++i)
 			{
 				fwd[i][i] = 1;
@@ -131,7 +185,9 @@ ade::TensptrT convolve (ade::TensptrT img, ade::TensptrT kernel)
 		}));
 
 	ade::TensptrT prod(ade::Functor::get(ade::Opcode{"PROD", age::PROD}, {
-		{img_mapper, img}, {kernel_mapper, kernel}}));
+		ade::MappedTensor(img, img_shaper, false, img_mapper),
+		ade::MappedTensor(kernel, kernel_mapper),
+	}));
 
 	return age::reduce_sum(prod, 4);
 }

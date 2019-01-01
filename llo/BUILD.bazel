@@ -80,7 +80,10 @@ pybind_library(
 pybind_library(
     name = "llo_py",
     cc_srcs = [":python/llo.cpp"],
-    cc_deps = [":llo"],
+    cc_deps = [
+        ":llo",
+        "@tenncor//dbg:dbg",
+    ],
     py_deps = [":age_py"],
     visibility = ["//visibility:public"],
 )

@@ -198,7 +198,9 @@ struct DataArg
 
 	ade::Shape shape_;
 
-	ade::CoordPtrT mapper_;
+	ade::CoordptrT mapper_;
+
+	bool fwd_;
 };
 
 using DataArgsT = std::vector<DataArg>;
@@ -210,6 +212,7 @@ VecRef<T> to_ref (DataArg& arg)
 		(const T*) arg.data_.get(),
 		arg.shape_,
 		arg.mapper_,
+		arg.fwd_,
 	};
 }
 

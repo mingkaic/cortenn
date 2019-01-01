@@ -17,7 +17,6 @@ cpp_proto_library()
 load("@cppkg//:gtest.bzl", "gtest_repository")
 gtest_repository(name = "gtest")
 
-
 git_repository(
     name = "io_bazel_rules_python",
     remote = "https://github.com/bazelbuild/rules_python.git",

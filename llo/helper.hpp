@@ -18,8 +18,12 @@ ade::TensptrT grad_min (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens);
 /// index gradidx and arguments are tens
 ade::TensptrT grad_max (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens);
 
-/// Return reduce coordinate mapper for shape down to specified rank
-ade::CoordPtrT reduce (uint8_t rank, const ade::Shape& shape);
+/// Return reduction of tens after dimension dim using opcode operation
+ade::TensptrT reduce (ade::Opcode opcode, ade::TensptrT tens, uint8_t dim);
+
+/// Return extension of tens after dimension dim with ext
+ade::TensptrT extend (ade::TensptrT tens,
+	uint8_t dim, std::vector<uint8_t> ext);
 
 /// Return matmul of a and b
 ade::TensptrT matmul (ade::TensptrT a, ade::TensptrT b);

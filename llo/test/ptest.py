@@ -5,15 +5,60 @@ import tensorflow as tf
 import llo.age as age
 import llo.llo as llo
 
+def _normalize_shape(arr1, arr2):
+    if 'shape' in dir(arr1):
+        shape1 = arr1.shape
+        if not isinstance(shape1, tuple):
+            shape1 = []
+    else:
+        shape1 = []
+    if 'shape' in dir(arr2):
+        shape2 = arr2.shape
+        if not isinstance(shape2, tuple):
+            shape2 = []
+    else:
+        shape2 = []
+
+    n1 = len(shape1)
+    n2 = len(shape2)
+    i = 0
+    while i < n1 and shape1[i] == 1:
+        i = i + 1
+    shape1 = shape1[i:]
+    i = 0
+    while i < n2 and shape2[i] == 1:
+        i = i + 1
+    shape2 = shape2[i:]
+
+    n1 = len(shape1)
+    n2 = len(shape2)
+    maxn = max(n1, n2)
+    normalized_s1 = list(shape1) + [1] * (maxn - n1)
+    normalized_s2 = list(shape2) + [1] * (maxn - n2)
+    return normalized_s1, normalized_s2
+
 class LLOTest(unittest.TestCase):
     def _array_eq(self, arr1, arr2):
         msg = 'diff arrays:\n{}\n{}'.format(arr1, arr2)
+        s1, s2 = _normalize_shape(arr1, arr2)
+        if 'shape' in dir(arr1):
+            arr1 = arr1.reshape(s1)
+        else:
+            arr1 = np.array(arr1).reshape(s1)
+        if 'shape' in dir(arr2):
+            arr2 = arr2.reshape(s2)
+        else:
+            arr2 = np.array(arr2).reshape(s2)
         self.assertTrue(np.array_equal(arr1, arr2), msg)
 
     def _array_close(self, arr1, arr2):
+        def prod(arr):
+            return reduce(lambda acc, s: acc * s, arr + [1])
         msg = 'vastly diff arrays:\n{}\n{}'.format(arr1, arr2)
-        self.assertTrue(np.allclose(arr1, arr2) and
-            np.array_equal(arr1.shape, arr2.shape))
+        avoidshape = 1 == prod(list(arr1.shape)) and\
+            1 == prod(list(arr2.shape))
+        s1, s2 = _normalize_shape(arr1, arr2)
+        self.assertTrue(np.allclose(arr1, arr2) and s1 == s2, msg)
 
     def _common_unary(self, shape, api, real, derive):
         data = np.random.rand(*shape) * 234
@@ -380,45 +425,50 @@ class LLOTest(unittest.TestCase):
         batchsize = 2
         inchannel = 3
         outchannel = 4
-        shape = [batchsize, 5, 5, inchannel]
-        kernelshape = [3, 3, inchannel, outchannel]
-        data = np.random.rand(*shape)
-        kernel = np.random.rand(*kernelshape)
-        var = llo.variable(data, 'var')
-        vkernel = llo.variable(kernel, 'vkernel')
-        tf_var = tf.Variable(data)
-        tf_kernel = tf.Variable(kernel)
 
-        sess = tf.Session()
-        sess.run(tf_var.initializer)
-        sess.run(tf_kernel.initializer)
+        shapes = [
+            ([1, 3, 3, 1], [3, 3, 1, 1]),
+            # ([batchsize, 5, 5, inchannel], [3, 3, inchannel, outchannel]),
+        ]
+        for shape, kernelshape in shapes:
+            data = np.random.rand(*shape)
+            kernel = np.random.rand(*kernelshape)
 
-        out = age.convolute(var, vkernel)
-        tf_out = tf.nn.convolution(tf_var, tf_kernel, padding)
+            var = llo.variable(data, 'var')
+            vkernel = llo.variable(kernel, 'vkernel')
+            tf_var = tf.Variable(data)
+            tf_kernel = tf.Variable(kernel)
 
-        fout = llo.evaluate(out, dtype=np.dtype(float))
-        tf_fout = sess.run(tf_out)
+            sess = tf.Session()
+            sess.run(tf_var.initializer)
+            sess.run(tf_kernel.initializer)
 
-        self._array_close(tf_fout, fout)
+            out = age.convolute(var, vkernel)
+            tf_out = tf.nn.convolution(tf_var, tf_kernel, padding)
 
-        var2 = llo.variable(data, 'var2')
-        zero = llo.derive(out, var2)
-        ex = llo.derive(out, var)
-        ex2 = llo.derive(out, vkernel)
+            fout = llo.evaluate(out, dtype=np.dtype(float))
+            tf_fout = sess.run(tf_out)
 
-        rej = llo.evaluate(zero)
-        der = llo.evaluate(ex)
-        der2 = llo.evaluate(ex2)
+            self._array_close(tf_fout, fout)
 
-        data0 = np.zeros(shape, dtype=float)
-        tf_grad, tf_grad2 = tf.gradients(tf_out, [tf_var, tf_kernel])
+            var2 = llo.variable(data, 'var2')
+            zero = llo.derive(out, var2)
+            ex = llo.derive(out, var)
+            ex2 = llo.derive(out, vkernel)
 
-        exdata = sess.run(tf_grad)
-        exdata2 = sess.run(tf_grad2)
+            rej = llo.evaluate(zero)
+            der = llo.evaluate(ex)
+            der2 = llo.evaluate(ex2)
 
-        self._array_eq(data0, rej)
-        # self._array_close(exdata, der)
-        # self._array_close(exdata2, der2)
+            data0 = np.zeros(shape, dtype=float)
+            tf_grad, tf_grad2 = tf.gradients(tf_out, [tf_var, tf_kernel])
+
+            exdata = sess.run(tf_grad)
+            exdata2 = sess.run(tf_grad2)
+
+            self._array_eq(data0, rej)
+            self._array_close(exdata, der)
+            self._array_close(exdata2, der2)
 
 if __name__ == "__main__":
     unittest.main()

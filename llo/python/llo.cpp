@@ -1,5 +1,8 @@
 #include "pybind11/pybind11.h"
 #include "pybind11/numpy.h"
+#include "pybind11/stl.h"
+
+#include "ade/ade.hpp"
 
 #include "llo/data.hpp"
 #include "llo/eval.hpp"
@@ -18,7 +21,7 @@ ade::Shape p2cshape (std::vector<py::ssize_t>& pyshape)
 		pyshape.rbegin(), pyshape.rend()));
 }
 
-py::array::ShapeContainer c2pshape (ade::Shape& cshape)
+std::vector<ade::DimT> c2pshape (ade::Shape& cshape)
 {
 	auto it = cshape.begin();
 	auto et = cshape.end();
@@ -27,7 +30,7 @@ py::array::ShapeContainer c2pshape (ade::Shape& cshape)
 		--et;
 	}
 	std::vector<ade::DimT> fwd(it, et);
-	return py::array::ShapeContainer(fwd.rbegin(), fwd.rend());
+	return std::vector<ade::DimT>(fwd.rbegin(), fwd.rend());
 }
 
 llo::VarptrT variable (py::array data, std::string label)
@@ -100,7 +103,9 @@ py::array evaluate (ade::TensptrT tens,
 	}
 	llo::GenericData gdata = llo::eval(tens, ctype);
 	void* vptr = gdata.data_.get();
-	return py::array(dtype, c2pshape(gdata.shape_), vptr);
+	auto pshape = c2pshape(gdata.shape_);
+	return py::array(dtype,
+		py::array::ShapeContainer(pshape.begin(), pshape.end()), vptr);
 }
 
 void seed_engine (size_t seed)
@@ -117,6 +122,32 @@ PYBIND11_MODULE(llo, m)
 	py::object tensor = (py::object)
 		py::module::import("llo.age").attr("Tensor");
 	py::class_<llo::Variable,llo::VarptrT> variable(m, "Variable", tensor);
+
+	((py::class_<ade::iTensor,ade::TensptrT>) tensor)
+        .def("__str__", &ade::iTensor::to_string)
+        .def("shape", [](py::object self)
+		{
+			ade::Shape shape = self.cast<ade::iTensor*>()->shape();
+            auto pshape = pyllo::c2pshape(shape);
+			std::vector<int> ipshape(pshape.begin(), pshape.end());
+			return py::array(ipshape.size(), &ipshape[0]);
+		})
+		.def("children", [](py::object self)
+		{
+			std::vector<ade::TensptrT> tens;
+			if (auto f = dynamic_cast<ade::iFunctor*>(
+				self.cast<ade::iTensor*>()))
+			{
+				auto args = f->get_children();
+				std::transform(args.begin(), args.end(),
+				std::back_inserter(tens),
+				[](ade::MappedTensor& mten)
+				{
+					return mten.get_tensor();
+				});
+			}
+			return tens;
+		});
 
 	py::implicitly_convertible<ade::iTensor,llo::Variable>();
 

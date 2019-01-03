@@ -9,8 +9,7 @@ set -e
 
 # ===== Run Gtest =====
 echo "===== TESTS =====";
-
-make
+bazel test --config asan --config gtest //...
 
 # ===== Check Docs Directory =====
 echo "===== CHECK DOCUMENT EXISTENCE =====";
@@ -22,7 +21,7 @@ fi
 
 # ===== Coverage Analysis ======
 echo "===== STARTING COVERAGE ANALYSIS =====";
-make lcov_all
+make lcov
 if ! [ -z "$COVERALLS_TOKEN" ];
 then
 	git rev-parse --abbrev-inode* HEAD;
@@ -30,4 +29,4 @@ then
 fi
 
 echo "";
-echo "============ TENNCOR TEST SUCCESSFUL ============";
+echo "============ CORTENN TEST SUCCESSFUL ============";

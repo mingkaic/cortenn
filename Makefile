@@ -8,41 +8,31 @@ PBM_TEST := //pbm:test
 
 TEST := bazel test
 
-COVER := bazel cover
+COVER := bazel cover --config asan --config gtest
 
-C_FLAGS := --config asan --config gtest
-
-COVERAGE_IGNORE := 'external/*' '**/test/*' '**/genfiles/*' 'dbg/*'
+COVERAGE_IGNORE := 'external/*' '**/test/*' '**/genfiles/*'
 
 COVERAGE_PIPE := ./scripts/merge_cov.sh $(COVERAGE_INFO_FILE)
 
 TMP_LOGFILE := /tmp/cortenn-test.log
 
 
-test: test_cllo test_pyllo test_pbm
+coverage: cover_bwd cover_llo cover_pbm
 
-test_cllo:
-	$(TEST) $(C_FLAGS) $(LLO_CTEST)
-
-test_pyllo:
-	$(TEST) $(LLO_PTEST)
-
-test_pbm:
-	$(TEST) $(C_FLAGS) $(PBM_TEST)
-
-
-coverage: cover_llo cover_pbm
+cover_bwd:
+	$(COVER) $(BWD_TEST)
 
 cover_llo:
-	$(COVER) $(C_FLAGS) $(LLO_CTEST)
+	$(COVER) $(LLO_CTEST)
 
 cover_pbm:
-	$(COVER) $(C_FLAGS) $(PBM_TEST)
+	$(COVER) $(PBM_TEST)
 
 # generated coverage files
 
-lcov_all: coverage
+lcov: coverage
 	rm -f $(TMP_LOGFILE)
+	cat bazel-testlogs/bwd/test/test.log >> $(TMP_LOGFILE)
 	cat bazel-testlogs/llo/test/test.log >> $(TMP_LOGFILE)
 	cat bazel-testlogs/pbm/test/test.log >> $(TMP_LOGFILE)
 	cat $(TMP_LOGFILE) | $(COVERAGE_PIPE)
@@ -50,12 +40,19 @@ lcov_all: coverage
 	rm -f $(TMP_LOGFILE)
 	lcov --list $(COVERAGE_INFO_FILE)
 
+lcov_bwd: cover_bwd
+	rm -f $(TMP_LOGFILE)
+	cat bazel-testlogs/bwd/test/test.log | $(COVERAGE_PIPE)
+	lcov --remove $(COVERAGE_INFO_FILE) $(COVERAGE_IGNORE) -o $(COVERAGE_INFO_FILE)
+	rm -f $(TMP_LOGFILE)
+	lcov --list $(COVERAGE_INFO_FILE)
+
 lcov_llo: cover_llo
 	cat bazel-testlogs/llo/test/test.log | $(COVERAGE_PIPE)
-	lcov --remove $(COVERAGE_INFO_FILE) $(COVERAGE_IGNORE) 'log/*' 'ade/*' 'age/*' -o $(COVERAGE_INFO_FILE)
+	lcov --remove $(COVERAGE_INFO_FILE) $(COVERAGE_IGNORE) 'bwd/*' -o $(COVERAGE_INFO_FILE)
 	lcov --list $(COVERAGE_INFO_FILE)
 
 lcov_pbm: cover_pbm
 	cat bazel-testlogs/pbm/test/test.log | $(COVERAGE_PIPE)
-	lcov --remove $(COVERAGE_INFO_FILE) $(COVERAGE_IGNORE) 'log/*' 'ade/*' 'age/*' 'llo/*' -o $(COVERAGE_INFO_FILE)
+	lcov --remove $(COVERAGE_INFO_FILE) $(COVERAGE_IGNORE) -o $(COVERAGE_INFO_FILE)
 	lcov --list $(COVERAGE_INFO_FILE)

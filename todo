@@ -1,5 +1,4 @@
 correctness:
-P1 - (before merge to experimental branch) install tensorflow in test docker image
 P2 - test travelling, and pruning algorithms
 P4 - test complicate equations (generate random valid equations)
 

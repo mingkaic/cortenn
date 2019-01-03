@@ -25,7 +25,7 @@ using ParentMapT = std::unordered_map<
 	ade::iTensor*,std::unordered_set<size_t>>;
 
 /// Pruning functor type
-using PruneFuncT = std::function<ade::TensptrT(bool&,ade::iFunctor*,\
+using PruneFuncT = std::function<ade::TensptrT(ade::iFunctor*,\
 	std::unordered_set<size_t>,ade::ArgsT)>;
 
 /// Find leaf nodes by some attribute associated to leaf
@@ -146,11 +146,15 @@ struct TargetPruner
 					++it;
 				}
 			}
-			bool is_target = false;
-			mapping.emplace(func, pruner_(is_target, func, indices, children));
-			if (is_target) // func maps to target, so store in targets
+			auto fwd = pruner_(func, indices, children);
+			mapping.emplace(func, fwd);
+			// func maps to target, so store in targets
+			if (ade::iLeaf* fwdleaf = dynamic_cast<ade::iLeaf*>(fwd.get()))
 			{
-				targets.emplace(func);
+				if (finder_.get_leaf_(fwdleaf) == finder_.target_)
+				{
+					targets.emplace(func);
+				}
 			}
 		}
 		auto it = mapping.find(root.get());

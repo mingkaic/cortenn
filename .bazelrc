@@ -7,7 +7,7 @@
 test --test_output=all --verbose_failures --cache_test_results=no
 
 # show all coverage outputs
-coverage --test_output=all -verbose_failures
+coverage --test_output=all --verbose_failures
 coverage --instrumentation_filter=
 
 # === MEMORY ANALYSIS ===

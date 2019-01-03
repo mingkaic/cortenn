@@ -11,10 +11,9 @@ namespace llo
 {
 
 // todo: move somewhere else
-static ade::TensptrT prune0 (bool& is_zero, ade::iFunctor* func,
+static ade::TensptrT prune0 (ade::iFunctor* func,
 	std::unordered_set<size_t> zeros, ade::ArgsT args)
 {
-	is_zero = false;
 	age::_GENERATED_OPCODE opcode =
 		(age::_GENERATED_OPCODE) func->get_opcode().code_;
 	if (false == zeros.empty())
@@ -28,7 +27,6 @@ static ade::TensptrT prune0 (bool& is_zero, ade::iFunctor* func,
 			case age::SQRT:
 			case age::ROUND:
 			case age::PROD:
-				is_zero = true;
 				return ade::TensptrT(age::data(0, func->shape()));
 			case age::COS:
 			case age::EXP:
@@ -38,7 +36,6 @@ static ade::TensptrT prune0 (bool& is_zero, ade::iFunctor* func,
 			case age::POW:
 				if (zeros.end() != zeros.find(0))
 				{
-					is_zero = true;
 					return ade::TensptrT(age::data(0, func->shape()));
 				}
 				// else if zeros.end() != zeros.find(1)
@@ -55,7 +52,6 @@ static ade::TensptrT prune0 (bool& is_zero, ade::iFunctor* func,
 				}
 				if (filtered.empty())
 				{
-					is_zero = true;
 					return ade::TensptrT(age::data(0, func->shape()));
 				}
 				return ade::TensptrT(ade::Functor::get(ade::Opcode{"SUM", age::SUM}, filtered));
@@ -63,7 +59,6 @@ static ade::TensptrT prune0 (bool& is_zero, ade::iFunctor* func,
 			case age::SUB:
 				if (2 == zeros.size())
 				{
-					is_zero = true;
 					return ade::TensptrT(age::data(0, func->shape()));
 				}
 				else if (zeros.end() != zeros.find(0))
@@ -78,7 +73,6 @@ static ade::TensptrT prune0 (bool& is_zero, ade::iFunctor* func,
 					logs::fatal("cannot DIV by zero");
 				}
 				// else if 0 == zeros.front()
-				is_zero = true;
 				return ade::TensptrT(age::data(0, func->shape()));
 			case age::MIN:
 			case age::MAX:
@@ -100,9 +94,13 @@ static ade::TensptrT prune0 (bool& is_zero, ade::iFunctor* func,
 ade::TensptrT zero_prune (ade::TensptrT root)
 {
 	opt::TargetPruner<std::string> zpruner("0",
-		[](ade::iLeaf* leaf)
+		[](ade::iLeaf* leaf) -> std::string
 		{
 			auto data = static_cast<Variable*>(leaf);
+			if (nullptr == data)
+			{
+				return "";
+			}
 			return data->label_;
 		}, prune0);
 	return zpruner.prune(root);

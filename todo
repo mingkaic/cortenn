@@ -1,5 +1,4 @@
 correctness:
-P2 - test travelling, and pruning algorithms
 P4 - test complicate equations (generate random valid equations)
 
 structure:

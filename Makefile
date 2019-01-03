@@ -8,7 +8,7 @@ PBM_TEST := //pbm:test
 
 TEST := bazel test
 
-COVER := bazel cover --config asan --config gtest
+COVER := bazel coverage --config asan --config gtest
 
 COVERAGE_IGNORE := 'external/*' '**/test/*' '**/genfiles/*'
 

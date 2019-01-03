@@ -21,15 +21,11 @@ ade::TensptrT grad_max (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens);
 /// Return reduction of tens after dimension dim using opcode operation
 ade::TensptrT reduce (ade::Opcode opcode, ade::TensptrT tens, uint8_t dim);
 
-/// Return extension of tens after dimension dim with ext
-ade::TensptrT extend (ade::TensptrT tens,
-	uint8_t dim, std::vector<uint8_t> ext);
-
 /// Return matmul of a and b
 ade::TensptrT matmul (ade::TensptrT a, ade::TensptrT b);
 
-/// Return img convolved with kernel
-ade::TensptrT convolve (ade::TensptrT img, ade::TensptrT kernel);
+/// Return convolution operation on img with kernel
+ade::TensptrT convolution (ade::TensptrT img, ade::TensptrT kernel);
 
 }
 

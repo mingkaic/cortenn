@@ -1,10 +1,14 @@
 correctness:
-P2 - test convolution
-P3 - test travelling, and pruning algorithms
+P1 - (before merge to experimental branch) install tensorflow in test docker image
+P2 - test travelling, and pruning algorithms
 P4 - test complicate equations (generate random valid equations)
 
+structure:
+P2 - fix bwd sum reduction vs direct mapping problem (bwd/src/grader.cpp line:108)
+P2 - after (bwd fix) sync correct version of local bwd with tenncor's bwd
+
 performance:
-P2 - benchmark llo performance
+P3 - benchmark llo performance
 P3 - implement eigen version of llo
 P4 - implement optimization options to decrease equation graph size in opt
 P4 - implement optimization options to increase data accuracy

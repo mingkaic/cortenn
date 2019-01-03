@@ -19,14 +19,6 @@ filegroup(
 )
 
 filegroup(
-    name = "credentials",
-    srcs = [
-        "certs/server.key",
-        "certs/server.crt",
-    ],
-)
-
-filegroup(
     name = "scripts",
     srcs = glob(["scripts/*"]),
 )

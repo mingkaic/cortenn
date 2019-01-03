@@ -374,6 +374,7 @@ class LLOTest(unittest.TestCase):
         shape = [5, 5]
         data = np.random.rand(*shape)
         data2 = np.random.rand(*shape)
+
         var = llo.variable(data, 'var')
         var2 = llo.variable(data2, 'var2')
         tf_var = tf.Variable(data)
@@ -420,19 +421,20 @@ class LLOTest(unittest.TestCase):
         self._array_close(exdata2, der2)
         self._array_close(exdata3, der3)
 
-    def test_convolute(self):
+    def test_convolution(self):
         padding = "VALID"
         batchsize = 2
         inchannel = 3
         outchannel = 4
+        dims = 5
 
         shapes = [
             ([1, 3, 3, 1], [3, 3, 1, 1]),
-            # ([batchsize, 5, 5, inchannel], [3, 3, inchannel, outchannel]),
+            ([batchsize, dims, dims, inchannel], [3, 3, inchannel, outchannel]),
         ]
         for shape, kernelshape in shapes:
-            data = np.random.rand(*shape)
-            kernel = np.random.rand(*kernelshape)
+            data = np.random.rand(*shape).astype(np.float32)
+            kernel = np.random.rand(*kernelshape).astype(np.float32)
 
             var = llo.variable(data, 'var')
             vkernel = llo.variable(kernel, 'vkernel')
@@ -443,7 +445,7 @@ class LLOTest(unittest.TestCase):
             sess.run(tf_var.initializer)
             sess.run(tf_kernel.initializer)
 
-            out = age.convolute(var, vkernel)
+            out = age.convolution(var, vkernel)
             tf_out = tf.nn.convolution(tf_var, tf_kernel, padding)
 
             fout = llo.evaluate(out, dtype=np.dtype(float))

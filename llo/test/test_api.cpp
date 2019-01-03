@@ -127,7 +127,6 @@ static void unary_generic (UnaryOpF op,
 {
 	std::vector<ade::DimT> slist = {2, 3, 4};
 	ade::Shape shape(slist);
-	ade::NElemT n = shape.n_elems();
 	std::vector<double> data = {
 		22, 15, 74, 38, 61, 95, 62, 81, 99, 76, 7, 22,
 		56, 50, 19, 13, 12, 10, 31, 40, 60, 54, 6, 83
@@ -829,26 +828,35 @@ TEST(API, Extend)
 
 TEST(API, Matmul)
 {
-	std::vector<ade::DimT> alist = {6, 3};
-	std::vector<ade::DimT> blist = {4, 6};
-	std::vector<ade::DimT> sqrlist = {6, 6};
+	std::vector<ade::DimT> alist = {3, 2};
+	std::vector<ade::DimT> blist = {4, 3};
+	std::vector<ade::DimT> sqrlist = {3, 3};
 	ade::Shape ashape(alist);
 	ade::Shape bshape(blist);
 	ade::Shape cshape(sqrlist);
 
-	ade::NElemT na = ashape.n_elems();
-	ade::NElemT nb = bshape.n_elems();
 	std::vector<int32_t> data = {
-		40, 1, 23, 18, 50, 77, 69, 88, 27, 54, 96, 8, 57, 72, 73, 7, 100, 51
+		40, 1, 23,
+		18, 50, 77,
 	};
 	std::vector<int32_t> data2 = {
-		62, 31, 90, 68, 68, 78, 55, 95, 16, 99, 97, 77,
-		40, 55, 56, 19, 88, 88, 14, 52, 95, 79, 51, 3
+		62, 31, 90, 68,
+		68, 78, 55, 95,
+		16, 99, 97, 77,
 	};
 	std::vector<int32_t> data3 = {
-		29, 75, 39, 67, 37, 57, 48, 42, 56, 60, 67, 15,
-		87, 89, 70, 21, 47, 21, 92, 60, 29, 36, 9, 66,
-		63, 99, 62, 99, 87, 4, 59, 37, 13, 75, 87, 70
+		29, 75, 39,
+		67, 37, 57,
+		48, 42, 56,
+	};
+	std::vector<int32_t> expect_ga = {
+		62+31+90+68, 68+78+55+95, 16+99+97+77,
+		62+31+90+68, 68+78+55+95, 16+99+97+77,
+	};
+	std::vector<int32_t> expect_gb = {
+		40+18, 40+18, 40+18, 40+18,
+		50+1, 50+1, 50+1, 50+1,
+		23+77, 23+77, 23+77, 23+77,
 	};
 
 	ade::TensptrT a = llo::get_variable<int32_t>(data, ashape);
@@ -859,7 +867,7 @@ TEST(API, Matmul)
 	EXPECT_EQ(age::INT32, out.dtype_);
 	ade::Shape& gotshape = out.shape_;
 	EXPECT_EQ(4, gotshape.at(0));
-	EXPECT_EQ(3, gotshape.at(1));
+	EXPECT_EQ(2, gotshape.at(1));
 	int32_t* optr = (int32_t*) out.data_.get();
 	ASSERT_NE(nullptr, optr);
 	llo::GenericData ad = llo::eval(a, age::INT32);
@@ -873,7 +881,7 @@ TEST(API, Matmul)
 	ade::TensptrT dest2 = age::matmul(c, c);
 	ade::TensptrT gsame = llo::derive(dest2, c.get());
 	llo::GenericData gout = llo::eval(gsame, age::INT32);
-	EXPECT_EQ(age::INT32, gout.dtype_);
+	ASSERT_EQ(age::INT32, gout.dtype_);
 	ade::Shape& gcshape = gout.shape_;
 	{
 		std::vector<ade::DimT> glist(gcshape.begin(), gcshape.end());
@@ -882,20 +890,125 @@ TEST(API, Matmul)
 
 	ade::TensptrT gleft = llo::derive(dest, a.get());
 	llo::GenericData gout_left = llo::eval(gleft, age::INT32);
-	EXPECT_EQ(age::INT32, gout_left.dtype_);
+	ASSERT_EQ(age::INT32, gout_left.dtype_);
 	ade::Shape& gashape = gout_left.shape_;
 	{
 		std::vector<ade::DimT> glist(gashape.begin(), gashape.end());
 		ASSERT_ARREQ(alist, glist);
+		int32_t* ga = (int32_t*) gout_left.data_.get();
+		ASSERT_NE(nullptr, ga);
+		std::vector<int32_t> ga_data(ga, ga + gashape.n_elems());
+		ASSERT_ARREQ(expect_ga, ga_data);
 	}
 
 	ade::TensptrT gright = llo::derive(dest, b.get());
 	llo::GenericData gout_right = llo::eval(gright, age::INT32);
-	EXPECT_EQ(age::INT32, gout_right.dtype_);
+	ASSERT_EQ(age::INT32, gout_right.dtype_);
 	ade::Shape& gbshape = gout_right.shape_;
 	{
 		std::vector<ade::DimT> glist(gbshape.begin(), gbshape.end());
 		ASSERT_ARREQ(blist, glist);
+		int32_t* gb = (int32_t*) gout_right.data_.get();
+		ASSERT_NE(nullptr, gb);
+		std::vector<int32_t> gb_data(gb, gb + gbshape.n_elems());
+		ASSERT_ARREQ(expect_gb, gb_data);
+	}
+}
+
+
+TEST(API, Convolution)
+{
+	std::vector<ade::DimT> alist = {2, 4, 3, 1};
+	std::vector<ade::DimT> blist = {1, 2, 3, 3};
+	ade::Shape shape(alist);
+	ade::Shape kshape(blist);
+	std::vector<ade::DimT> expectslist = {
+		1, 2, 1, 1, 1, 1, 1, 1,
+	};
+
+	std::vector<double> data = {
+		1,2,3,
+		4,5,6,
+		7,8,9,
+		10,11,12,
+
+		13,14,15,
+		16,17,18,
+		19,20,21,
+		22,23,24,
+	};
+	std::vector<double> data2 = {
+		2,4,3,
+		2,4,3,
+		2,4,3,
+
+		3,3,3,
+		4,4,4,
+		2,2,2,
+	};
+	std::vector<double> expect_out = {
+		615,
+		723,
+	};
+	std::vector<double> expect_ga = {
+		2,4,5,
+		6,7,5,
+		4,3,2,
+		4,5,7,
+
+		6,6,3,
+		3,4,4,
+		8,6,6,
+		4,2,2,
+	};
+	std::vector<double> expect_gb = {
+		4,6,8,
+		10,12,14,
+		20,22,24,
+
+		26,28,30,
+		36,38,40,
+		42,44,46,
+	};
+
+	ade::TensptrT img = llo::get_variable<double>(data, shape);
+	ade::TensptrT kernel = llo::get_variable<double>(data2, kshape);
+	ade::TensptrT dest = age::convolution(img, kernel);
+
+	llo::GenericData out = llo::eval(dest, age::DOUBLE);
+	ASSERT_EQ(age::DOUBLE, out.dtype_);
+	ade::Shape& gotshape = out.shape_;
+	{
+		std::vector<ade::DimT> slist(gotshape.begin(), gotshape.end());
+		EXPECT_ARREQ(expectslist, slist);
+		double* optr = (double*) out.data_.get();
+		ASSERT_NE(nullptr, optr);
+		std::vector<double> outdata(optr, optr + gotshape.n_elems());
+		ASSERT_ARREQ(expect_out, outdata);
+	}
+
+	ade::TensptrT gleft = llo::derive(dest, img.get());
+	llo::GenericData gout_left = llo::eval(gleft, age::DOUBLE);
+	ASSERT_EQ(age::DOUBLE, gout_left.dtype_);
+	ade::Shape& gashape = gout_left.shape_;
+	{
+		std::vector<ade::DimT> glist(gashape.begin(), gashape.end());
+		ASSERT_ARREQ(alist, glist);
+		double* ga = (double*) gout_left.data_.get();
+		std::vector<double> ga_data(ga, ga + gashape.n_elems());
+		ASSERT_ARREQ(expect_ga, ga_data);
+	}
+
+	ade::TensptrT gright = llo::derive(dest, kernel.get());
+	llo::GenericData gout_right = llo::eval(gright, age::DOUBLE);
+	ASSERT_EQ(age::DOUBLE, gout_right.dtype_);
+	ade::Shape& gbshape = gout_right.shape_;
+	{
+		std::vector<ade::DimT> glist(gbshape.begin(), gbshape.end());
+		ASSERT_ARREQ(blist, glist);
+		double* gb = (double*) gout_right.data_.get();
+		std::vector<double> gb_data(gb, gb + gbshape.n_elems());
+		ASSERT_ARREQ(expect_gb, gb_data);
 	}
 }
 

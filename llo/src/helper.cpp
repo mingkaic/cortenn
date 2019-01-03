@@ -45,16 +45,6 @@ ade::TensptrT reduce (ade::Opcode opcode, ade::TensptrT tens, uint8_t dim)
 	return ade::TensptrT(out);
 }
 
-ade::TensptrT extend (ade::TensptrT tens,
-	uint8_t dim, std::vector<uint8_t> ext)
-{
-	auto shaper = ade::extend(dim,ext);
-	ade::CoordptrT coord(shaper->reverse());
-	return ade::TensptrT(ade::Functor::get(ade::Opcode{"SUM",age::SUM}, {
-		ade::extend_map(tens, dim, ext),
-	}));
-}
-
 ade::TensptrT matmul (ade::TensptrT a, ade::TensptrT b)
 {
 	const ade::Shape& ashape = a->shape();
@@ -90,7 +80,7 @@ ade::TensptrT matmul (ade::TensptrT a, ade::TensptrT b)
 // specifications according to https://www.tensorflow.org/api_docs/python/tf/nn/conv2d
 // this is to avoid changing rocnnet too much
 // (todo: consider simplification after experimenting with rocnnet)
-ade::TensptrT convolve (ade::TensptrT img, ade::TensptrT kernel)
+ade::TensptrT convolution (ade::TensptrT img, ade::TensptrT kernel)
 {
 	const ade::Shape& imgshape = img->shape();
 	const ade::Shape& kernelshape = kernel->shape();
@@ -105,13 +95,13 @@ ade::TensptrT convolve (ade::TensptrT img, ade::TensptrT kernel)
 	uint8_t out_channels = kernelshape.at(0);
 	if (in_channels != kernelshape.at(1))
 	{
-		logs::fatalf("cannot convolve with mismatch img %s and kernel %s "
+		logs::fatalf("cannot convolution with mismatch img %s and kernel %s "
 			"in_channel (dim=0 for img, dim=1 for kernel)",
 			imgshape.to_string().c_str(), kernelshape.to_string().c_str());
 	}
 	if (in_width < kernel_width || in_height < kernel_height)
 	{
-		logs::fatalf("cannot convolve kernel %s against a smaller image %s",
+		logs::fatalf("cannot convolution kernel %s against a smaller image %s",
 			kernelshape.to_string().c_str(),
 			imgshape.to_string().c_str());
 	}

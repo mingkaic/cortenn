@@ -38,22 +38,60 @@ llo::VarptrT variable (py::array data, std::string label)
 	py::buffer_info info = data.request();
 	ade::Shape shape = p2cshape(info.shape);
 	size_t n = shape.n_elems();
-	char kind = data.dtype().kind();
+	auto dtype = data.dtype();
+	char kind = dtype.kind();
+	py::ssize_t tbytes = dtype.itemsize();
 	switch (kind)
 	{
 		case 'f':
-		{
-			double* dptr = static_cast<double*>(info.ptr);
-			return llo::get_variable(std::vector<double>(dptr, dptr + n),
-				shape, label);
-		}
+			switch (tbytes)
+			{
+				case 4: // float32
+				{
+					float* dptr = static_cast<float*>(info.ptr);
+					return llo::get_variable(std::vector<float>(dptr, dptr + n),
+						shape, label);
+				}
+				case 8: // float64
+				{
+					double* dptr = static_cast<double*>(info.ptr);
+					return llo::get_variable(std::vector<double>(dptr, dptr + n),
+						shape, label);
+				}
+				default:
+					logs::fatalf("unsupported float type with %d bytes", tbytes);
+			}
 			break;
 		case 'i':
-		{
-			int64_t* dptr = static_cast<int64_t*>(info.ptr);
-			return llo::get_variable(std::vector<int64_t>(dptr, dptr + n),
-				shape, label);
-		}
+			switch (tbytes)
+			{
+				case 1: // int8
+				{
+					int8_t* dptr = static_cast<int8_t*>(info.ptr);
+					return llo::get_variable(std::vector<int8_t>(dptr, dptr + n),
+						shape, label);
+				}
+				case 2: // int16
+				{
+					int16_t* dptr = static_cast<int16_t*>(info.ptr);
+					return llo::get_variable(std::vector<int16_t>(dptr, dptr + n),
+						shape, label);
+				}
+				case 4: // int32
+				{
+					int32_t* dptr = static_cast<int32_t*>(info.ptr);
+					return llo::get_variable(std::vector<int32_t>(dptr, dptr + n),
+						shape, label);
+				}
+				case 8: // int64
+				{
+					int64_t* dptr = static_cast<int64_t*>(info.ptr);
+					return llo::get_variable(std::vector<int64_t>(dptr, dptr + n),
+						shape, label);
+				}
+				default:
+					logs::fatalf("unsupported integer type with %d bytes", tbytes);
+			}
 			break;
 		default:
 			logs::fatalf("unknown dtype %c", kind);

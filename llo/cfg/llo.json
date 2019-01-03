@@ -446,7 +446,7 @@
                 "dtype": "std::vector<uint8_t>",
                 "name": "arg3"
             }],
-            "out": "llo::extend(arg1,arg2,arg3)"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SUM\",SUM},{ade::extend_map(arg1,arg2,arg3)}))"
         },
         {
             "name": "reduce_sum",
@@ -500,7 +500,7 @@
             "out": "llo::matmul(arg1, arg2)"
         },
         {
-            "name": "convolute",
+            "name": "convolution",
             "args": [{
                 "dtype": "ade::TensptrT",
                 "name": "arg1"
@@ -508,7 +508,7 @@
                 "dtype": "ade::TensptrT",
                 "name": "arg2"
             }],
-            "out": "llo::convolve(arg1, arg2)"
+            "out": "llo::convolution(arg1, arg2)"
         }
     ]
 }

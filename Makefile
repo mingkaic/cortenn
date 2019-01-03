@@ -1,5 +1,7 @@
 COVERAGE_INFO_FILE := coverage.info
 
+BWD_TEST := //bwd:test
+
 LLO_CTEST := //llo:ctest
 
 LLO_PTEST := //llo:ptest
@@ -33,7 +35,7 @@ cover_pbm:
 lcov: coverage
 	rm -f $(TMP_LOGFILE)
 	cat bazel-testlogs/bwd/test/test.log >> $(TMP_LOGFILE)
-	cat bazel-testlogs/llo/test/test.log >> $(TMP_LOGFILE)
+	cat bazel-testlogs/llo/ctest/test.log >> $(TMP_LOGFILE)
 	cat bazel-testlogs/pbm/test/test.log >> $(TMP_LOGFILE)
 	cat $(TMP_LOGFILE) | $(COVERAGE_PIPE)
 	lcov --remove $(COVERAGE_INFO_FILE) $(COVERAGE_IGNORE) -o $(COVERAGE_INFO_FILE)
@@ -48,7 +50,7 @@ lcov_bwd: cover_bwd
 	lcov --list $(COVERAGE_INFO_FILE)
 
 lcov_llo: cover_llo
-	cat bazel-testlogs/llo/test/test.log | $(COVERAGE_PIPE)
+	cat bazel-testlogs/llo/ctest/test.log | $(COVERAGE_PIPE)
 	lcov --remove $(COVERAGE_INFO_FILE) $(COVERAGE_IGNORE) 'bwd/*' -o $(COVERAGE_INFO_FILE)
 	lcov --list $(COVERAGE_INFO_FILE)
 

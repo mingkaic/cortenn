@@ -4,8 +4,7 @@ package(
     default_visibility = ["//visibility:public"],
 )
 
-load("@org_pubref_rules_protobuf//cpp:rules.bzl", "cc_proto_library")
-load("@org_pubref_rules_protobuf//python:rules.bzl", "py_proto_library")
+load("@protobuf_rules//cpp:cpp_proto_library.bzl", "cpp_proto_library")
 
 filegroup(
     name = "srcs",
@@ -17,36 +16,16 @@ filegroup(
     srcs = glob(["*.proto"]),
 )
 
+######### LIBRARY #########
+
 proto_library(
-    name = "proto_lib",
+    name = "graphmgr_proto",
     srcs = ["//graphmgr:protos"],
-    deps = [
-        "//pbm:proto_lib",
-        "@com_google_protobuf//:any_proto",
-        "@com_google_protobuf//:empty_proto",
-    ],
+    deps = ["//pbm:pbm_proto"],
 )
 
-cc_proto_library(
-    name = "cc_grpc",
-    protos = ["//pbm:protos"],
-    imports = ["external/com_google_protobuf/src"],
-    proto_deps = ["//pbm:cc_proto"],
-    inputs = [
-        "//pbm:proto_lib",
-        "@com_google_protobuf//:well_known_protos",
-    ],
-    with_grpc = True,
-)
-
-py_proto_library(
-    name = "py_grpc",
-    protos = ["//pbm:protos"],
-    imports = ["external/com_google_protobuf/src"],
-    proto_deps = ["//pbm:py_proto"],
-    inputs = [
-        "//pbm:proto_lib",
-        "@com_google_protobuf//:well_known_protos",
-    ],
-    with_grpc = True,
+cpp_proto_library(
+    name = "graphmgr_cc_proto",
+    deps = ["//graphmgr:graphmgr_proto"],
+    has_services = True,
 )

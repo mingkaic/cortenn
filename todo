@@ -1,16 +1,13 @@
 correctness:
-P2 - test convolution
-P2 - test complicate equations
-P3 - test travelling, and pruning algorithms
-P3 - verify rocnnet correctness using automated test
-P3 - implement better fallback strategy when test server is unavailable
+P2 - test travelling, and pruning algorithms
+P4 - test complicate equations (generate random valid equations)
 
-transparency:
-P4 - investigate llo api: experiment with top-level code
+structure:
+P2 - fix bwd sum reduction vs direct mapping problem (bwd/src/grader.cpp line:108)
+P2 - after (bwd fix) sync correct version of local bwd with tenncor's bwd
 
 performance:
-P4 - implement optimization options to decrease equation graph size
+P3 - benchmark llo performance
+P3 - implement eigen version of llo
+P4 - implement optimization options to decrease equation graph size in opt
 P4 - implement optimization options to increase data accuracy
-
-features:
-P2 - implement api to eigen

@@ -1,6 +1,6 @@
 #include <memory>
 
-#include "ade/tensor.hpp"
+#include "ade/ileaf.hpp"
 
 #include "llo/generated/codes.hpp"
 
@@ -19,6 +19,8 @@ struct GenericData final
 
 	GenericData (ade::Shape shape, age::_GENERATED_DTYPE dtype);
 
+	/// Copy over data of specified type while retaining shape
+	/// This makes the assumption that the indata fits in shape perfectly
 	void copyover (const char* indata, age::_GENERATED_DTYPE intype);
 
 	/// Smartpointer to a block of untyped data
@@ -52,13 +54,20 @@ struct GenericRef
 	age::_GENERATED_DTYPE dtype_;
 };
 
-struct Variable final : public ade::Tensor
+struct Variable final : public ade::iLeaf
 {
 	Variable (const char* data, age::_GENERATED_DTYPE dtype,
 		ade::Shape shape, std::string label) :
 		label_(label), data_(shape, dtype)
 	{
-		std::memcpy(data_.data_.get(), data, nbytes());
+		if (nullptr != data)
+		{
+			std::memcpy(data_.data_.get(), data, nbytes());
+		}
+		else
+		{
+			std::memset(data_.data_.get(), 0, nbytes());
+		}
 	}
 
 	Variable (const Variable& other) :
@@ -103,13 +112,13 @@ struct Variable final : public ade::Tensor
 	{
 		if (false == data.shape_.compatible_after(shape(), 0))
 		{
-			err::fatalf("cannot assign data of incompatible shaped %s to "
+			logs::fatalf("cannot assign data of incompatible shaped %s to "
 				"internal data of shape %s", data.shape_.to_string().c_str(),
 				shape().to_string().c_str());
 		}
 		if (data.dtype_ != data_.dtype_)
 		{
-			err::fatalf("cannot assign data of incompatible types %s "
+			logs::fatalf("cannot assign data of incompatible types %s "
 				"(external) and %s (internal)",
 				age::name_type(data.dtype_).c_str(), age::name_type(data_.dtype_).c_str());
 		}
@@ -158,25 +167,26 @@ private:
 using VarptrT = std::shared_ptr<llo::Variable>;
 
 template <typename T>
-Variable* get_variable (std::vector<T> data, ade::Shape shape,
+VarptrT get_variable (std::vector<T> data, ade::Shape shape,
 	std::string label = "")
 {
 	if (data.size() != shape.n_elems())
 	{
-		err::fatalf("cannot create variable with data size %d "
+		logs::fatalf("cannot create variable with data size %d "
 			"against shape %s", data.size(), shape.to_string().c_str());
 	}
-	return new Variable((char*) &data[0], age::get_type<T>(), shape, label);
+	return VarptrT(new Variable((char*) &data[0],
+		age::get_type<T>(), shape, label));
 }
 
 template <typename T>
-Variable* get_variable (ade::Shape shape, std::string label = "")
+VarptrT get_variable (ade::Shape shape, std::string label = "")
 {
 	return get_variable(std::vector<T>(shape.n_elems(), 0), shape, label);
 }
 
 template <typename T>
-Variable* data (T scalar, ade::Shape shape, std::string label)
+VarptrT data (T scalar, ade::Shape shape, std::string label = "")
 {
 	return llo::get_variable(std::vector<T>(shape.n_elems(),scalar),
 		shape, label);
@@ -188,7 +198,9 @@ struct DataArg
 
 	ade::Shape shape_;
 
-	ade::CoordPtrT mapper_;
+	ade::CoordptrT mapper_;
+
+	bool fwd_;
 };
 
 using DataArgsT = std::vector<DataArg>;
@@ -200,6 +212,7 @@ VecRef<T> to_ref (DataArg& arg)
 		(const T*) arg.data_.get(),
 		arg.shape_,
 		arg.mapper_,
+		arg.fwd_,
 	};
 }
 

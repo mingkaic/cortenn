@@ -1,5 +1,7 @@
 licenses(["notice"])
 
+load("//third_party/drake_rules:pybind.bzl", "pybind_library")
+
 filegroup(
     name = "srcs",
     srcs = glob([
@@ -10,7 +12,7 @@ filegroup(
 )
 
 filegroup(
-    name = "test_srcs",
+    name = "ctest_srcs",
     srcs = glob([
         "test/*.hpp",
         "test/*.cpp",
@@ -18,10 +20,9 @@ filegroup(
 )
 
 filegroup(
-    name = "regress_srcs",
+    name = "ptest_srcs",
     srcs = glob([
-        "regress/*.hpp",
-        "regress/*.cpp",
+        "test/*.py",
     ]),
 )
 
@@ -39,43 +40,70 @@ genrule(
         "generated/grader.cpp",
         "generated/opmap.hpp",
         "generated/opmap.cpp",
+        "generated/pyapi.cpp",
     ],
-    tools = ["@com_github_mingkaic_tenncor//age:agen"],
-    cmd = "$(location @com_github_mingkaic_tenncor//age:agen) --cfg $(location :cfg/llo.json) --out $(@D)/generated --strip_prefix=$$(dirname $(@D))",
+    tools = ["//pybinder:pyagen"],
+    cmd = "$(location //pybinder:pyagen) " +
+        "--cfg $(location :cfg/llo.json) " +
+        "--out $(@D)/generated " +
+        "--strip_prefix=$$(dirname $(@D))",
 )
 
 cc_library(
     name = "llo",
-    hdrs = glob(["*.hpp"]) + [":generated_llo"],
-    srcs = glob(["src/*.cpp"]) + [":generated_llo"],
+    hdrs = glob(["*.hpp"]) + [
+        ":generated/api.hpp",
+        ":generated/codes.hpp",
+        ":generated/grader.hpp",
+        ":generated/opmap.hpp",
+    ],
+    srcs = glob(["src/*.cpp"]) + [
+        ":generated/api.cpp",
+        ":generated/codes.cpp",
+        ":generated/grader.cpp",
+        ":generated/opmap.cpp",
+    ],
     copts = ["-std=c++14"],
-    deps = ["@com_github_mingkaic_tenncor//bwd:bwd"],
+    deps = [
+        "//opt:opt",
+        "//bwd:bwd",
+        # "@tenncor//bwd:bwd",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+pybind_library(
+    name = "age_py",
+    cc_srcs = [":generated/pyapi.cpp"],
+    cc_deps = [":llo"],
+)
+
+pybind_library(
+    name = "llo_py",
+    cc_srcs = [":python/llo.cpp"],
+    cc_deps = [
+        ":llo",
+        "@tenncor//dbg:dbg",
+    ],
+    py_deps = [":age_py"],
     visibility = ["//visibility:public"],
 )
 
 ######### TEST #########
 
 cc_test(
-    name = "test",
-    size = "medium",
-    srcs = [":test_srcs"],
+    name = "ctest",
+    srcs = [":ctest_srcs"],
     copts = ["-std=c++14"],
     deps = [
-        "//llo:llo",
-        "//testutil:testutil",
+        ":llo",
+        "@gtest//:gtest",
     ],
-    data = ["//:credentials"],
+    linkstatic = True,
 )
 
-cc_test(
-    name = "test_regress",
-    size = "medium",
-    srcs = [":regress_srcs"],
-    copts = ["-std=c++14"],
-    deps = [
-        "//llo:llo",
-        "//testutil:testutil",
-        "@com_github_mingkaic_testify//anteroc:anteroc",
-    ],
-    data = ["//:credentials"],
+py_test(
+    name = "ptest",
+    srcs = [":ptest_srcs"],
+    deps = [":llo_py"],
 )

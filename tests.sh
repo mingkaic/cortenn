@@ -9,7 +9,6 @@ set -e
 
 # ===== Run Gtest =====
 echo "===== TESTS =====";
-bazel test --config asan --config gtest //bwd:test
 bazel test --config asan --config gtest //opt:test
 bazel test --config asan --config gtest //llo:ctest
 bazel test --run_under='valgrind --leak-check=full' //llo:ptest

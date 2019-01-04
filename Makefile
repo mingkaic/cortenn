@@ -1,10 +1,10 @@
 COVERAGE_INFO_FILE := coverage.info
 
-BWD_TEST := //bwd:test
-
 LLO_CTEST := //llo:ctest
 
 LLO_PTEST := //llo:ptest
+
+OPT_TEST := //opt:test
 
 PBM_TEST := //pbm:test
 
@@ -19,13 +19,13 @@ COVERAGE_PIPE := ./scripts/merge_cov.sh $(COVERAGE_INFO_FILE)
 TMP_LOGFILE := /tmp/cortenn-test.log
 
 
-coverage: cover_bwd cover_llo cover_pbm
-
-cover_bwd:
-	$(COVER) $(BWD_TEST)
+coverage: cover_opt cover_llo cover_pbm
 
 cover_llo:
 	$(COVER) $(LLO_CTEST)
+
+cover_opt:
+	$(COVER) $(OPT_TEST)
 
 cover_pbm:
 	$(COVER) $(PBM_TEST)
@@ -34,7 +34,7 @@ cover_pbm:
 
 lcov: coverage
 	rm -f $(TMP_LOGFILE)
-	cat bazel-testlogs/bwd/test/test.log >> $(TMP_LOGFILE)
+	cat bazel-testlogs/opt/test/test.log >> $(TMP_LOGFILE)
 	cat bazel-testlogs/llo/ctest/test.log >> $(TMP_LOGFILE)
 	cat bazel-testlogs/pbm/test/test.log >> $(TMP_LOGFILE)
 	cat $(TMP_LOGFILE) | $(COVERAGE_PIPE)
@@ -42,16 +42,16 @@ lcov: coverage
 	rm -f $(TMP_LOGFILE)
 	lcov --list $(COVERAGE_INFO_FILE)
 
-lcov_bwd: cover_bwd
+lcov_opt: cover_opt
 	rm -f $(TMP_LOGFILE)
-	cat bazel-testlogs/bwd/test/test.log | $(COVERAGE_PIPE)
+	cat bazel-testlogs/opt/test/test.log | $(COVERAGE_PIPE)
 	lcov --remove $(COVERAGE_INFO_FILE) $(COVERAGE_IGNORE) -o $(COVERAGE_INFO_FILE)
 	rm -f $(TMP_LOGFILE)
 	lcov --list $(COVERAGE_INFO_FILE)
 
 lcov_llo: cover_llo
 	cat bazel-testlogs/llo/ctest/test.log | $(COVERAGE_PIPE)
-	lcov --remove $(COVERAGE_INFO_FILE) $(COVERAGE_IGNORE) 'bwd/*' -o $(COVERAGE_INFO_FILE)
+	lcov --remove $(COVERAGE_INFO_FILE) $(COVERAGE_IGNORE) 'opt/*' -o $(COVERAGE_INFO_FILE)
 	lcov --list $(COVERAGE_INFO_FILE)
 
 lcov_pbm: cover_pbm

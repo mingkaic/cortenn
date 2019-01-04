@@ -6,8 +6,7 @@ import os.path
 import sys
 
 import age.templates.template as template
-# import age.generator.internal as internal_plugin
-import pybinder.overwrite_internal as internal_plugin
+import age.generator.internal as internal_plugin
 import pybinder.pyapi_plugin as pyapi_plugin
 from age.generator.generate import generate
 

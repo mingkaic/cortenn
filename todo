@@ -1,9 +1,13 @@
 correctness:
+P3 - maximize coverage
 P4 - test complicate equations (generate random valid equations)
 
 structure:
-P2 - fix bwd sum reduction vs direct mapping problem (bwd/src/grader.cpp line:108)
-P2 - after (bwd fix) sync correct version of local bwd with tenncor's bwd
+P2 - fix reduce_prod derivative
+P2 - sync:
+    - correct version of local bwd with tenncor's bwd
+    - pybinder's internal plugin overwrites
+    - merge_cov.sh
 
 performance:
 P3 - benchmark llo performance

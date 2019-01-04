@@ -33,10 +33,10 @@ fi
 OUTPATH="$1";
 
 # extract coverage paths
-PATHS_STR="$(echo $PIPE_IN | sed -rn 's/.*COVERAGE_OUTPUT_FILE=(.*)\/coverage\.dat.*/\1/p')";
+PATHS_STR=$(echo "$PIPE_IN" | sed -rn 's/.*COVERAGE_OUTPUT_FILE=(.*)\/coverage\.dat.*/\1/p');
 
 IFS=$'\n';
-CPATHS=("$PATHS_STR");
+CPATHS=($PATHS_STR);
 
 # make paths absolute
 for ((i=0; i<${#CPATHS[@]}; i++))

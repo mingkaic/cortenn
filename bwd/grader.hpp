@@ -27,12 +27,12 @@ struct iRuleSet
 	/// Return opcode representing nnary sum
 	virtual ade::Opcode sum_opcode (void) = 0;
 
-	/// Return opcode representing binary multiplication
-	virtual ade::Opcode prod_opcode (void) = 0;
-
-	/// Return chain rule of operation with respect to argument at idx
-	/// specified by code given args
-	virtual ade::TensptrT grad_rule (ade::iFunctor* fwd, ade::TensT args, size_t idx) = 0;
+	/// Return d(fwd)/d(x) given:
+	/// bwd = d(args[idx])/d(x)
+	/// Generally,
+	/// d(fwd)/d(x) = rule(fwd,args,idx) * reduction_consolidation(bwd)
+	virtual ade::TensptrT chain_rule (ade::iFunctor* fwd,
+		ade::MappedTensor bwd, ade::TensT args, size_t idx) = 0;
 };
 
 /// Traveler to obtain derivative of accepted node with respect to target

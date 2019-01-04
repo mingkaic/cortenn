@@ -8,7 +8,6 @@ namespace age
 void Grader::visit (ade::iFunctor* func)
 {
 	const ade::Opcode sum = rules_->sum_opcode();
-	const ade::Opcode prod = rules_->prod_opcode();
 	if (func == target_)
 	{
 		derivatives_.emplace(func, rules_->data(1, target_->shape()));
@@ -86,38 +85,10 @@ void Grader::visit (ade::iFunctor* func)
 					})));
 				}
 			}
-			// pass down forward-gradient pair
-			ade::TensptrT grad(rules_->grad_rule(parent, args, i));
 
 			ade::MappedTensor lhs(bwd, revshaper, revmapper, revcoorder);
-			// avoid sum reduction for non-summation forward mapping
-			// this is a hack to distinguish gradient for
-			// generalized non-summation reduction and summation reduction
-			// in the forward graph
-			// e.g.:
-			// PROD[1\2\3\1\1\1\1\1]) // sum every element sharing the same 3rd rank in var1 then multiple with var2
-			// `--(SUM[1\2\3\1\1\1\1\1])
-			// |   `--(var1([1\2\3\4\1\1\1\1]))
-			// `--(var2([1\2\3\1\1\1\1\1]))
-			// should be functionally different from
-			// PROD[1\2\3\1\1\1\1\1]) // multiple the elements of the highest 3rd rank in each respective var
-			// `--(var1([1\2\3\4\1\1\1\1]))
-			// `--(var2([1\2\3\1\1\1\1\1]))
-			// therefore its gradient should be different
-			//
-			// todo: find more a better way
-			if (parent->get_opcode().code_ == sum.code_)
-			{
-				lhs = ade::identity_map(ade::TensptrT(
-					ade::Functor::get(sum, {lhs})
-				));
-			}
 
-			grads[child.get_tensor().get()].push_back(ade::TensptrT(
-				ade::Functor::get(prod, {
-					ade::identity_map(grad),
-					lhs,
-				})));
+			grads[child.get_tensor().get()].push_back(rules_->chain_rule(parent, lhs, args, i));
 		}
 	}
 	auto finalgargs = grads[target_];

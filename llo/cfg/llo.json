@@ -24,7 +24,6 @@
     },
     "data": {
         "sum": "SUM",
-        "prod": "PROD",
         "data_out": "char*",
         "data_in": "llo::DataArgsT&",
         "scalarize": "llo::get_variable(std::vector<T>(shape.n_elems(),scalar),shape,fmts::sprintf(\"%d\",scalar))"
@@ -32,95 +31,95 @@
     "opcodes": {
         "ABS": {
             "operation": "llo::abs((T*)out,llo::to_ref<T>(in[0]))",
-            "derivative": "div(args[0],abs(args[0]))"
+            "derivative": "llo::mtens_mul(div(args[0],abs(args[0])),bwd)"
         },
         "NEG": {
             "operation": "llo::neg((T*)out,llo::to_ref<T>(in[0]))",
-            "derivative": "neg(llo::data(1,args[0]->shape()))"
+            "derivative": "llo::mtens_mul(neg(llo::data(1,args[0]->shape())),bwd)"
         },
         "SIN": {
             "operation": "llo::sin((T*)out,llo::to_ref<T>(in[0]))",
-            "derivative": "cos(args[0])"
+            "derivative": "llo::mtens_mul(cos(args[0]),bwd)"
         },
         "COS": {
             "operation": "llo::cos((T*)out,llo::to_ref<T>(in[0]))",
-            "derivative": "neg(sin(args[0]))"
+            "derivative": "llo::mtens_mul(neg(sin(args[0])),bwd)"
         },
         "TAN": {
             "operation": "llo::tan((T*)out,llo::to_ref<T>(in[0]))",
-            "derivative": "div(llo::data(1,args[0]->shape()),pow(cos(args[0]),llo::data(2,args[0]->shape())))"
+            "derivative": "llo::mtens_mul(div(llo::data(1,args[0]->shape()),pow(cos(args[0]),llo::data(2,args[0]->shape()))),bwd)"
         },
         "EXP": {
             "operation": "llo::exp((T*)out,llo::to_ref<T>(in[0]))",
-            "derivative": "exp(args[0])"
+            "derivative": "llo::mtens_mul(exp(args[0]),bwd)"
         },
         "LOG": {
             "operation": "llo::log((T*)out,llo::to_ref<T>(in[0]))",
-            "derivative": "div(llo::data(1,args[0]->shape()),args[0])"
+            "derivative": "llo::mtens_mul(div(llo::data(1,args[0]->shape()),args[0]),bwd)"
         },
         "SQRT": {
             "operation": "llo::sqrt((T*)out,llo::to_ref<T>(in[0]))",
-            "derivative": "div(llo::data(1,args[0]->shape()),mul(llo::data(2,args[0]->shape()),sqrt(args[0])))"
+            "derivative": "llo::mtens_mul(div(llo::data(1,args[0]->shape()),mul(llo::data(2,args[0]->shape()),sqrt(args[0]))),bwd)"
         },
         "ROUND": {
             "operation": "llo::round((T*)out,llo::to_ref<T>(in[0]))",
-            "derivative": "llo::data(1,args[0]->shape())"
+            "derivative": "llo::mtens_mul(llo::data(1,args[0]->shape()),bwd)"
         },
         "POW": {
             "operation": "llo::pow((T*)out,shape,llo::to_ref<T>(in[0]),llo::to_ref<T>(in[1]))",
-            "derivative": "idx == 0 ? mul(args[1],pow(args[0],sub(args[1],llo::data(1,args[0]->shape())))) : mul(log(args[0]),pow(args[0],args[1]))"
+            "derivative": "llo::mtens_mul(idx == 0?mul(args[1],pow(args[0],sub(args[1],llo::data(1,args[0]->shape())))) : mul(log(args[0]),pow(args[0],args[1])),bwd)"
         },
         "SUM": {
             "operation": "llo::add((T*)out,shape,llo::to_refs<T>(in))",
-            "derivative": "llo::data(1,args[0]->shape())"
+            "derivative": "mul(llo::data(1,args[0]->shape()),ade::TensptrT(ade::Functor::get(ade::Opcode{\"SUM\",SUM},{bwd})))"
         },
         "SUB": {
             "operation": "llo::sub((T*)out,shape,llo::to_ref<T>(in[0]),llo::to_ref<T>(in[1]))",
-            "derivative": "idx == 0 ? llo::data(1,args[0]->shape()) : neg(llo::data(1,args[0]->shape()))"
+            "derivative": "llo::mtens_mul(idx == 0?llo::data(1,args[0]->shape()) : neg(llo::data(1,args[0]->shape())),bwd)"
         },
         "PROD": {
             "operation": "llo::mul((T*)out,shape,llo::to_refs<T>(in))",
-            "derivative": "llo::grad_prod(idx,args)"
+            "derivative": "mul(llo::grad_prod(idx,args),ade::TensptrT(ade::Functor::get(ade::Opcode{\"PROD\",PROD},{bwd})))"
         },
         "DIV": {
             "operation": "llo::div((T*)out,shape,llo::to_ref<T>(in[0]),llo::to_ref<T>(in[1]))",
-            "derivative": "idx == 0 ? div(llo::data(1,args[0]->shape()),args[1]) : div(div(neg(args[0]),args[1]),args[1])"
+            "derivative": "llo::mtens_mul(idx == 0?div(llo::data(1,args[0]->shape()),args[1]) : div(div(neg(args[0]),args[1]),args[1]),bwd)"
         },
         "MIN": {
             "operation": "llo::min((T*)out,shape,llo::to_refs<T>(in))",
-            "derivative": "llo::grad_min(fwd,idx,args)"
+            "derivative": "llo::mtens_mul(llo::grad_min(fwd,idx,args),bwd)"
         },
         "MAX": {
             "operation": "llo::max((T*)out,shape,llo::to_refs<T>(in))",
-            "derivative": "llo::grad_max(fwd,idx,args)"
+            "derivative": "llo::mtens_mul(llo::grad_max(fwd,idx,args),bwd)"
         },
         "EQ": {
             "operation": "llo::eq((T*)out,shape,llo::to_ref<T>(in[0]),llo::to_ref<T>(in[1]))",
-            "derivative": "llo::data(0,args[0]->shape())"
+            "derivative": "llo::mtens_mul(llo::data(0,args[0]->shape()),bwd)"
         },
         "NEQ": {
             "operation": "llo::neq((T*)out,shape,llo::to_ref<T>(in[0]),llo::to_ref<T>(in[1]))",
-            "derivative": "llo::data(0,args[0]->shape())"
+            "derivative": "llo::mtens_mul(llo::data(0,args[0]->shape()),bwd)"
         },
         "LT": {
             "operation": "llo::lt((T*)out,shape,llo::to_ref<T>(in[0]),llo::to_ref<T>(in[1]))",
-            "derivative": "llo::data(0,args[0]->shape())"
+            "derivative": "llo::mtens_mul(llo::data(0,args[0]->shape()),bwd)"
         },
         "GT": {
             "operation": "llo::gt((T*)out,shape,llo::to_ref<T>(in[0]),llo::to_ref<T>(in[1]))",
-            "derivative": "llo::data(0,args[0]->shape())"
+            "derivative": "llo::mtens_mul(llo::data(0,args[0]->shape()),bwd)"
         },
         "RAND_BINO": {
             "operation": "llo::rand_binom((T*)out,shape,llo::to_ref<T>(in[0]),llo::to_ref<double>(in[1]))",
-            "derivative": "llo::data(0,args[0]->shape())"
+            "derivative": "llo::mtens_mul(llo::data(0,args[0]->shape()),bwd)"
         },
         "RAND_UNIF": {
             "operation": "llo::rand_uniform((T*)out,shape,llo::to_ref<T>(in[0]),llo::to_ref<T>(in[1]))",
-            "derivative": "llo::data(0,args[0]->shape())"
+            "derivative": "llo::mtens_mul(llo::data(0,args[0]->shape()),bwd)"
         },
         "RAND_NORM": {
             "operation": "llo::rand_normal((T*)out,shape,llo::to_ref<T>(in[0]),llo::to_ref<T>(in[1]))",
-            "derivative": "llo::data(0,args[0]->shape())"
+            "derivative": "llo::mtens_mul(llo::data(0,args[0]->shape()),bwd)"
         }
     },
     "apis": [
@@ -402,6 +401,17 @@
             "out": "llo::reduce(ade::Opcode{\"SUM\",SUM},arg1,arg2)"
         },
         {
+            "name": "reduce_prod",
+            "args": [{
+                "dtype": "ade::TensptrT",
+                "name": "arg1"
+            }, {
+                "dtype": "uint8_t",
+                "name": "arg2"
+            }],
+            "out": "llo::reduce(ade::Opcode{\"PROD\",PROD},arg1,arg2)"
+        },
+        {
             "name": "reduce_min",
             "args": [{
                 "dtype": "ade::TensptrT",
@@ -449,12 +459,34 @@
             "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SUM\",SUM},{ade::extend_map(arg1,arg2,arg3)}))"
         },
         {
+            "name": "pextend",
+            "args": [{
+                "dtype": "ade::TensptrT",
+                "name": "arg1"
+            }, {
+                "dtype": "uint8_t",
+                "name": "arg2"
+            }, {
+                "dtype": "std::vector<uint8_t>",
+                "name": "arg3"
+            }],
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"PROD\",PROD},{ade::extend_map(arg1,arg2,arg3)}))"
+        },
+        {
             "name": "reduce_sum",
             "args": [{
                 "dtype": "ade::TensptrT",
                 "name": "arg1"
             }],
             "out": "reduce_sum(arg1,0)"
+        },
+        {
+            "name": "reduce_prod",
+            "args": [{
+                "dtype": "ade::TensptrT",
+                "name": "arg1"
+            }],
+            "out": "reduce_prod(arg1,0)"
         },
         {
             "name": "reduce_min",

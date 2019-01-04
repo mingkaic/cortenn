@@ -116,7 +116,7 @@ class LLOTest(unittest.TestCase):
 
     def _common_reduce(self, all_reduce, dim_reduce, tf_reduce):
         shape = [3, 4, 5]
-        data = np.random.rand(*shape) * 234
+        data = np.random.rand(*shape)
         var = llo.variable(data, 'var')
         tf_var = tf.Variable(data)
 
@@ -360,6 +360,30 @@ class LLOTest(unittest.TestCase):
             lambda x: age.n_dims(x, 0),
             lambda data: data.shape[2],
             lambda data: data0)
+
+    def test_extend(self):
+        shape = [2]
+        data = np.random.rand(*shape) * 13
+        expected_out = np.array(list(data) * 3).reshape([3, 2])
+        var = llo.variable(data, 'var')
+
+        # extend's derivative equates to reduce_sum
+        out = age.extend(var, 1, [3])
+        fout = llo.evaluate(out)
+        self._array_eq(expected_out, fout)
+
+        ex = llo.derive(out, var)
+        der = llo.evaluate(ex)
+        self._array_eq(np.array([3, 3]), der)
+
+        # pextend's derivative equates to reduce_prod
+        out2 = age.pextend(var, 1, [3])
+        fout2 = llo.evaluate(out2)
+        self._array_eq(expected_out, fout2)
+
+        ex2 = llo.derive(out2, var)
+        der2 = llo.evaluate(ex2)
+        self._array_eq(np.array([1, 1]), der2)
 
     def test_rsum(self):
         self._common_reduce(age.reduce_sum0, age.reduce_sum, tf.reduce_sum)

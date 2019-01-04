@@ -1,5 +1,6 @@
 #include "llo/generated/api.hpp"
 #include "llo/generated/codes.hpp"
+#include "llo/data.hpp"
 #include "llo/helper.hpp"
 
 #ifdef LLO_HELPER_HPP
@@ -7,10 +8,22 @@
 namespace llo
 {
 
+ade::TensptrT mtens_mul (ade::TensptrT lhs, ade::MappedTensor rhs)
+{
+    return ade::TensptrT(ade::Functor::get(ade::Opcode{"PROD", age::PROD}, {
+        ade::identity_map(lhs), rhs
+    }));
+}
+
 ade::TensptrT grad_prod (size_t gradidx, ade::TensT tens)
 {
+	ade::Shape shape = tens[gradidx]->shape();
 	tens.erase(tens.begin() + gradidx);
-	return age::prod(tens);
+	if (tens.size() > 0)
+	{
+		return age::prod(tens);
+	}
+	return llo::data(1, shape);
 }
 
 ade::TensptrT grad_min (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens)

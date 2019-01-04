@@ -15,15 +15,21 @@ ade::TensptrT mtens_mul (ade::TensptrT lhs, ade::MappedTensor rhs)
     }));
 }
 
-ade::TensptrT grad_prod (size_t gradidx, ade::TensT tens)
+ade::TensptrT grad_prod (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens)
 {
-	ade::Shape shape = tens[gradidx]->shape();
-	tens.erase(tens.begin() + gradidx);
-	if (tens.size() > 0)
-	{
-		return age::prod(tens);
-	}
-	return llo::data(1, shape);
+	auto fwd_children = fwd->get_children();
+	ade::TensptrT fwd_cpy(ade::Functor::get(
+		fwd->get_opcode(), fwd_children));
+
+	auto& fwd_child = fwd_children[gradidx];
+	ade::MappedTensor fwd_mapped(fwd_cpy,
+		ade::CoordptrT(fwd_child.get_shaper()->reverse()),
+		!fwd_child.map_io(), fwd_child.get_coorder());
+
+	ade::TensptrT fwd_extended(
+		ade::Functor::get(ade::Opcode{"SUM", age::SUM}, {fwd_mapped}));
+
+	return age::div(fwd_extended, tens[gradidx]);
 }
 
 ade::TensptrT grad_min (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens)

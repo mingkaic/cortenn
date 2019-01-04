@@ -79,9 +79,7 @@ void Grader::visit (ade::iFunctor* func)
 					args.push_back(ade::TensptrT(ade::Functor::get(sum, {
 						ade::MappedTensor(
 							ade::TensptrT(ade::Functor::get(sum, {kid})),
-							revshaper,
-							revmapper,
-							revcoorder)
+							revshaper, revmapper, revcoorder)
 					})));
 				}
 			}

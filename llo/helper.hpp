@@ -10,7 +10,7 @@ ade::TensptrT mtens_mul (ade::TensptrT lhs, ade::MappedTensor rhs);
 
 /// Return the gradient for prod operation assuming the target derived wrt is
 /// index gradidx and arguments are tens
-ade::TensptrT grad_prod (size_t gradidx, ade::TensT tens);
+ade::TensptrT grad_prod (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens);
 
 /// Return the gradient for min operation assuming the target derived wrt is
 /// index gradidx and arguments are tens

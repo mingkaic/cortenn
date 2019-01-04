@@ -79,7 +79,7 @@
         },
         "PROD": {
             "operation": "llo::mul((T*)out,shape,llo::to_refs<T>(in))",
-            "derivative": "mul(llo::grad_prod(idx,args),ade::TensptrT(ade::Functor::get(ade::Opcode{\"PROD\",PROD},{bwd})))"
+            "derivative": "mul(llo::grad_prod(fwd,idx,args),ade::TensptrT(ade::Functor::get(ade::Opcode{\"PROD\",PROD},{bwd})))"
         },
         "DIV": {
             "operation": "llo::div((T*)out,shape,llo::to_ref<T>(in[0]),llo::to_ref<T>(in[1]))",
@@ -457,20 +457,6 @@
                 "name": "arg3"
             }],
             "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SUM\",SUM},{ade::extend_map(arg1,arg2,arg3)}))"
-        },
-        {
-            "name": "pextend",
-            "args": [{
-                "dtype": "ade::TensptrT",
-                "name": "arg1"
-            }, {
-                "dtype": "uint8_t",
-                "name": "arg2"
-            }, {
-                "dtype": "std::vector<uint8_t>",
-                "name": "arg3"
-            }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"PROD\",PROD},{ade::extend_map(arg1,arg2,arg3)}))"
         },
         {
             "name": "reduce_sum",

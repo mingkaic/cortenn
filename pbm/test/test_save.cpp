@@ -20,7 +20,7 @@ TEST(SAVE, SaveGraph)
 {
 	std::string expect_pbfile = testdir + "/graph.pb";
 	std::string got_pbfile = "got_graph.pb";
-	tenncor::Graph graph;
+	cortenn::Graph graph;
 	std::vector<ade::TensptrT> roots;
 
 	pbm::PathedMapT labels;

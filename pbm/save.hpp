@@ -54,7 +54,7 @@ struct GraphSaver final : public ade::iTraveler
 	}
 
 	/// Marshal all equation graphs in roots vector to protobuf object
-	void save (tenncor::Graph& out, PathedMapT labels = PathedMapT());
+	void save (cortenn::Graph& out, PathedMapT labels = PathedMapT());
 
 	/// List of leaves visited (left to right)
 	std::list<ade::iLeaf*> leaves_;
@@ -73,7 +73,7 @@ private:
 		google::protobuf::RepeatedField<double>* coord,
 		const ade::CoordptrT& mapper);
 
-	void save_data (tenncor::Source& out, ade::iLeaf* in)
+	void save_data (cortenn::Source& out, ade::iLeaf* in)
 	{
 		const ade::Shape& shape = in->shape();
 		char* data = (char*) in->data();

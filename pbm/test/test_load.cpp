@@ -39,7 +39,7 @@ static inline void trim(std::string &s)
 
 TEST(LOAD, LoadGraph)
 {
-	tenncor::Graph graph;
+	cortenn::Graph graph;
 	{
 		std::fstream inputstr(testdir + "/graph.pb",
 			std::ios::in | std::ios::binary);

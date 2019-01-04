@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/mingkaic/tenncor/graphmgr";
+option go_package = "github.com/mingkaic/cortenn/graphmgr";
 
 import "pbm/graph.proto";
 
@@ -13,11 +13,11 @@ message ListRequest {
 }
 
 message ListResponse {
-	repeated tenncor.Graph results = 1;
+	repeated cortenn.Graph results = 1;
 }
 
 message CreateRequest {
-	tenncor.Graph payload = 1;
+	cortenn.Graph payload = 1;
 }
 
 message RemoveRequest {

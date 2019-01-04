@@ -10,7 +10,7 @@
 namespace pbm
 {
 
-void GraphSaver::save (tenncor::Graph& out, PathedMapT labels)
+void GraphSaver::save (cortenn::Graph& out, PathedMapT labels)
 {
 	std::unordered_map<ade::iTensor*,StringsT> raw_labels;
 	for (auto lpair : labels)
@@ -38,7 +38,7 @@ void GraphSaver::save (tenncor::Graph& out, PathedMapT labels)
 		ade::iLeaf* tens = leaves[i];
 		ordermap[tens] = i;
 
-		tenncor::Node* pb_node = out.add_nodes();
+		cortenn::Node* pb_node = out.add_nodes();
 		auto it = raw_labels.find(tens);
 		if (raw_labels.end() != it)
 		{
@@ -53,7 +53,7 @@ void GraphSaver::save (tenncor::Graph& out, PathedMapT labels)
 		ade::iFunctor* f = funcs[i];
 		ordermap[f] = nleaves + i;
 
-		tenncor::Node* pb_node = out.add_nodes();
+		cortenn::Node* pb_node = out.add_nodes();
 		auto it = raw_labels.find(f);
 		if (raw_labels.end() != it)
 		{
@@ -61,14 +61,14 @@ void GraphSaver::save (tenncor::Graph& out, PathedMapT labels)
 				it->second.begin(), it->second.end());
 			pb_node->mutable_labels()->Swap(&vec);
 		}
-		tenncor::Functor* func = pb_node->mutable_functor();
+		cortenn::Functor* func = pb_node->mutable_functor();
 		ade::Opcode opcode = f->get_opcode();
 		func->set_opname(opcode.name_);
 		func->set_opcode(opcode.code_);
 		const ade::ArgsT& children = f->get_children();
 		for (auto& child : children)
 		{
-			tenncor::NodeArg* arg = func->add_args();
+			cortenn::NodeArg* arg = func->add_args();
 			ade::iTensor* tens = child.get_tensor().get();
 			arg->set_idx(ordermap[tens]);
 			save_coord(arg->mutable_coord(), child.get_coorder());

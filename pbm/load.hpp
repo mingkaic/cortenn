@@ -149,7 +149,7 @@ struct GraphInfo final
 };
 
 /// Return graph info through out available from in graph
-void load_graph (GraphInfo& out, const tenncor::Graph& in,
+void load_graph (GraphInfo& out, const cortenn::Graph& in,
 	DataLoaderT dataloader);
 
 }

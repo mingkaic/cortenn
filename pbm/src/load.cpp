@@ -30,12 +30,12 @@ static ade::CoordptrT load_coord (
 		});
 }
 
-void load_graph (GraphInfo& out, const tenncor::Graph& in,
+void load_graph (GraphInfo& out, const cortenn::Graph& in,
 	DataLoaderT dataloader)
 {
 	auto nodes = in.nodes();
 	TensT invec;
-	for (const tenncor::Node& node : nodes)
+	for (const cortenn::Node& node : nodes)
 	{
 		auto pb_labels = node.labels();
 		if (node.has_source())
@@ -45,7 +45,7 @@ void load_graph (GraphInfo& out, const tenncor::Graph& in,
 			{
 				src_label = *(pb_labels.rbegin());
 			}
-			const tenncor::Source& source = node.source();
+			const cortenn::Source& source = node.source();
 			std::string sstr = source.shape();
 			ade::Shape shape(std::vector<ade::DimT>(sstr.begin(), sstr.end()));
 			size_t tcode = source.typecode();
@@ -62,7 +62,7 @@ void load_graph (GraphInfo& out, const tenncor::Graph& in,
 		}
 		else
 		{
-			tenncor::Functor func = node.functor();
+			cortenn::Functor func = node.functor();
 			auto nodeargs = func.args();
 			ade::ArgsT args;
 			for (auto nodearg : nodeargs)

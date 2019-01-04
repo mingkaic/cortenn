@@ -1013,4 +1013,150 @@ TEST(API, Convolution)
 }
 
 
+TEST(API, RandBinomial)
+{
+	std::vector<ade::DimT> slist = {31, 27, 14};
+	double n = 3.2234;
+	double p = 0.2547977589;
+
+	ade::TensptrT src = llo::get_variable<double>({n}, ade::Shape());
+	ade::TensptrT src2 = llo::get_variable<double>({p}, ade::Shape());
+	ade::TensptrT dest(ade::Functor::get(ade::Opcode{"RAND_BINO",age::RAND_BINO}, {
+		ade::extend_map(src, 0, slist),
+		ade::extend_map(src2, 0, slist)
+	}));
+
+	llo::GenericData out = llo::eval(dest, age::DOUBLE);
+	ASSERT_EQ(age::DOUBLE, out.dtype_);
+	{
+		std::vector<ade::DimT> gotshape(out.shape_.begin(), out.shape_.end());
+		ASSERT_ARREQ(slist, gotshape);
+	}
+	double expected_mean = n * p;
+	double expected_variance = expected_mean * (1 - p);
+	double mean = 0;
+	double variance = 0;
+	double* optr = (double*) out.data_.get();
+	size_t nelems = out.shape_.n_elems();
+	for (size_t i = 0; i < nelems; ++i)
+	{
+		mean += optr[i];
+		variance += optr[i] * optr[i];
+	}
+	mean /= nelems;
+	variance = variance / nelems - mean * mean;
+
+	EXPECT_GT(0.1, std::fabs(expected_mean - mean) / mean);
+	EXPECT_GT(0.1, std::fabs(expected_variance - variance) / variance);
+
+	ade::TensptrT gleft = llo::derive(dest, src.get());
+	llo::GenericData gout_left = llo::eval(gleft, age::DOUBLE);
+	ASSERT_EQ(age::DOUBLE, gout_left.dtype_);
+	ASSERT_EQ(1, gout_left.shape_.n_elems());
+	double* goptr2 = (double*) gout_left.data_.get();
+	EXPECT_DOUBLE_EQ(0, goptr2[0]);
+
+	ade::TensptrT gright = llo::derive(dest, src2.get());
+	llo::GenericData gout_right = llo::eval(gright, age::DOUBLE);
+	ASSERT_EQ(age::DOUBLE, gout_right.dtype_);
+	ASSERT_EQ(1, gout_right.shape_.n_elems());
+	double* goptr3 = (double*) gout_right.data_.get();
+	EXPECT_DOUBLE_EQ(0, goptr3[0]);
+}
+
+
+TEST(API, RandUniform)
+{
+	std::vector<ade::DimT> slist = {31, 21, 14};
+	double hi = 3.2234;
+	double lo = 0.2547977589;
+
+	ade::TensptrT src = llo::get_variable<double>({lo}, ade::Shape());
+	ade::TensptrT src2 = llo::get_variable<double>({hi}, ade::Shape());
+	ade::TensptrT dest(ade::Functor::get(ade::Opcode{"RAND_UNIF",age::RAND_UNIF}, {
+		ade::extend_map(src, 0, slist),
+		ade::extend_map(src2, 0, slist)
+	}));
+
+	llo::GenericData out = llo::eval(dest, age::DOUBLE);
+	ASSERT_EQ(age::DOUBLE, out.dtype_);
+	{
+		std::vector<ade::DimT> gotshape(out.shape_.begin(), out.shape_.end());
+		ASSERT_ARREQ(slist, gotshape);
+	}
+	double* optr = (double*) out.data_.get();
+	size_t nelems = out.shape_.n_elems();
+	for (size_t i = 0; i < nelems; ++i)
+	{
+		EXPECT_LT(lo, optr[i]);
+		EXPECT_GT(hi, optr[i]);
+	}
+
+	ade::TensptrT gleft = llo::derive(dest, src.get());
+	llo::GenericData gout_left = llo::eval(gleft, age::DOUBLE);
+	ASSERT_EQ(age::DOUBLE, gout_left.dtype_);
+	ASSERT_EQ(1, gout_left.shape_.n_elems());
+	double* goptr2 = (double*) gout_left.data_.get();
+	EXPECT_DOUBLE_EQ(0, goptr2[0]);
+
+	ade::TensptrT gright = llo::derive(dest, src2.get());
+	llo::GenericData gout_right = llo::eval(gright, age::DOUBLE);
+	ASSERT_EQ(age::DOUBLE, gout_right.dtype_);
+	ASSERT_EQ(1, gout_right.shape_.n_elems());
+	double* goptr3 = (double*) gout_right.data_.get();
+	EXPECT_DOUBLE_EQ(0, goptr3[0]);
+}
+
+
+TEST(API, RandNormal)
+{
+	std::vector<ade::DimT> slist = {31, 27, 14};
+	double expected_mean = 3.2234;
+	double stdev = 1.2547977589;
+
+	ade::TensptrT src = llo::get_variable<double>({expected_mean}, ade::Shape());
+	ade::TensptrT src2 = llo::get_variable<double>({stdev}, ade::Shape());
+	ade::TensptrT dest(ade::Functor::get(ade::Opcode{"RAND_NORM",age::RAND_NORM}, {
+		ade::extend_map(src, 0, slist),
+		ade::extend_map(src2, 0, slist)
+	}));
+
+	llo::GenericData out = llo::eval(dest, age::DOUBLE);
+	ASSERT_EQ(age::DOUBLE, out.dtype_);
+	{
+		std::vector<ade::DimT> gotshape(out.shape_.begin(), out.shape_.end());
+		ASSERT_ARREQ(slist, gotshape);
+	}
+	double expected_variance = stdev * stdev;
+	double mean = 0;
+	double variance = 0;
+	double* optr = (double*) out.data_.get();
+	size_t nelems = out.shape_.n_elems();
+	for (size_t i = 0; i < nelems; ++i)
+	{
+		mean += optr[i];
+		variance += optr[i] * optr[i];
+	}
+	mean /= nelems;
+	variance = variance / nelems - mean * mean;
+
+	EXPECT_GT(0.1, std::fabs(expected_mean - mean) / mean);
+	EXPECT_GT(0.1, std::fabs(expected_variance - variance) / variance);
+
+	ade::TensptrT gleft = llo::derive(dest, src.get());
+	llo::GenericData gout_left = llo::eval(gleft, age::DOUBLE);
+	ASSERT_EQ(age::DOUBLE, gout_left.dtype_);
+	ASSERT_EQ(1, gout_left.shape_.n_elems());
+	double* goptr2 = (double*) gout_left.data_.get();
+	EXPECT_DOUBLE_EQ(0, goptr2[0]);
+
+	ade::TensptrT gright = llo::derive(dest, src2.get());
+	llo::GenericData gout_right = llo::eval(gright, age::DOUBLE);
+	ASSERT_EQ(age::DOUBLE, gout_right.dtype_);
+	ASSERT_EQ(1, gout_right.shape_.n_elems());
+	double* goptr3 = (double*) gout_right.data_.get();
+	EXPECT_DOUBLE_EQ(0, goptr3[0]);
+}
+
+
 #endif // DISABLE_API_TEST

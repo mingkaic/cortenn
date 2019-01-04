@@ -4,5 +4,5 @@ def tenncor_repository(name):
     git_repository(
         name = name,
         remote = "https://github.com/mingkaic/tenncor",
-        commit = "0eb973395f7b13203c4f329a4141c572f2481521",
+        commit = "959d51ed6d3b1257bf1c125751c7f82ecd99af90",
     )

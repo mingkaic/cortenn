@@ -1,11 +1,9 @@
 var searchData=
 [
-  ['nbytes',['nbytes',['../structllo_1_1_variable.html#ae3eb14d0db3deb6845d8566af25365eb',1,'llo::Variable']]],
-  ['neg',['neg',['../namespacello.html#a2523a51704ba46880ed6b0ed38aa0259',1,'llo']]],
-  ['neg_3c_20uint16_5ft_20_3e',['neg&lt; uint16_t &gt;',['../namespacello.html#a26997fff05dbe6209d720e66cb7c2693',1,'llo']]],
-  ['neg_3c_20uint32_5ft_20_3e',['neg&lt; uint32_t &gt;',['../namespacello.html#acc26536b3f54b814ca59d94fa87d2728',1,'llo']]],
-  ['neg_3c_20uint64_5ft_20_3e',['neg&lt; uint64_t &gt;',['../namespacello.html#a9d20723f32966a0b8341676f61f7aa4f',1,'llo']]],
-  ['neg_3c_20uint8_5ft_20_3e',['neg&lt; uint8_t &gt;',['../namespacello.html#a6580f013947aa53d8e53e6fbd2722afa',1,'llo']]],
-  ['neq',['neq',['../namespacello.html#ab6719aec5379449c5df745796e3ce677',1,'llo']]],
-  ['nnary',['nnary',['../namespacello.html#a8c77a8e53c0227e523c81699b9c2aab9',1,'llo']]]
+  ['opt_20_28optimizer_29',['OPT (Optimizer)',['../md_opt__r_e_a_d_m_e__o_p_t.html',1,'']]],
+  ['operator_2ecpp',['operator.cpp',['../operator_8cpp.html',1,'']]],
+  ['operator_2ehpp',['operator.hpp',['../operator_8hpp.html',1,'']]],
+  ['operator_3d',['operator=',['../structllo_1_1_variable.html#ad9b494d214229a166dfe5858ac1315e4',1,'llo::Variable::operator=(const Variable &amp;other)'],['../structllo_1_1_variable.html#a92f4d1aade59f4b48225c85a07af19af',1,'llo::Variable::operator=(Variable &amp;&amp;other)'],['../structllo_1_1_variable.html#aa04ab2870b33eb035e6ad414468b14bc',1,'llo::Variable::operator=(std::vector&lt; T &gt; data)'],['../structllo_1_1_variable.html#afa23c49ccbf3492523cba83238e3c12c',1,'llo::Variable::operator=(GenericRef data)']]],
+  ['opt',['opt',['../namespaceopt.html',1,'']]],
+  ['out_5f',['out_',['../structllo_1_1_evaluator.html#a1f837101f861c151b928f362028ebc65',1,'llo::Evaluator']]]
 ];

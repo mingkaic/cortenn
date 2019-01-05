@@ -1,9 +1,10 @@
 var searchData=
 [
-  ['leaffinder',['LeafFinder',['../structopt_1_1_leaf_finder.html#a99c726fac5ed3911926f617c97cf8294',1,'opt::LeafFinder']]],
-  ['load_5fcoord',['load_coord',['../namespacepbm.html#aeba4471bf47aaee406e158b5c6445271',1,'pbm']]],
-  ['load_5fgraph',['load_graph',['../namespacepbm.html#a0037ee921475730e5547b03f005e3855',1,'pbm']]],
-  ['log',['log',['../namespacello.html#ab1380d9ae294bf7d8e3d6cef4ef40396',1,'llo']]],
-  ['lt',['lt',['../namespacello.html#a37ca02223b4f25f1d4f8c99c74a82619',1,'llo']]],
-  ['ltrim',['ltrim',['../test__shear_8cpp.html#a47084ee818936eef3c48be492c0e860f',1,'ltrim(std::string &amp;s):&#160;test_shear.cpp'],['../test__load_8cpp.html#a47084ee818936eef3c48be492c0e860f',1,'ltrim(std::string &amp;s):&#160;test_load.cpp']]]
+  ['main',['main',['../llo_2test_2main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627',1,'main(int argc, char **argv):&#160;main.cpp'],['../opt_2test_2main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627',1,'main(int argc, char **argv):&#160;main.cpp'],['../pbm_2test_2main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627',1,'main(int argc, char **argv):&#160;main.cpp']]],
+  ['matmul',['matmul',['../namespacello.html#a8dbb6866f0276ec91d368d539aea4730',1,'llo']]],
+  ['max',['max',['../namespacello.html#a0eba005c4545a4522bac459d42c7c140',1,'llo']]],
+  ['min',['min',['../namespacello.html#a46192797ea05f96e5f1fbc728f43b2c4',1,'llo']]],
+  ['mocktensor',['MockTensor',['../struct_mock_tensor.html#ae7cc034794ceebfb11b3076283361157',1,'MockTensor::MockTensor(void)=default'],['../struct_mock_tensor.html#ad82f85c2417441eda10de68536a99cbc',1,'MockTensor::MockTensor(ade::Shape shape)'],['../struct_mock_tensor.html#ae7cc034794ceebfb11b3076283361157',1,'MockTensor::MockTensor(void)=default'],['../struct_mock_tensor.html#ad82f85c2417441eda10de68536a99cbc',1,'MockTensor::MockTensor(ade::Shape shape)']]],
+  ['mtens_5fmul',['mtens_mul',['../namespacello.html#a7398e1235a7ae023f87c6198a75418d0',1,'llo']]],
+  ['mul',['mul',['../namespacello.html#a908f5da99f5702b96e79b3bf63bf1630',1,'llo']]]
 ];

@@ -1,7 +1,7 @@
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "new_git_repository")
 
 _BUILD_CONTENT = """load(
-    "@{workspace}//third_party/drake_rules:install.bzl",
+    "@com_github_mingkaic_cortenn//third_party/drake_rules:install.bzl",
     "install",
 )
 
@@ -38,10 +38,10 @@ install(
 )
 """
 
-def eigen_repository(name, repository_name = "com_github_mingkaic_cortenn"):
+def eigen_repository(name):
     new_git_repository(
         name = name,
         remote = "https://github.com/eigenteam/eigen-git-mirror.git",
         tag = "3.3.5",
-        build_file_content = _BUILD_CONTENT.format(workspace = repository_name),
+        build_file_content = _BUILD_CONTENT,
     )

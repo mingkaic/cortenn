@@ -67,7 +67,7 @@ cc_library(
     deps = [
         "//opt:opt",
         # "//bwd:bwd",
-        "@tenncor//bwd:bwd",
+        "@com_github_mingkaic_tenncor//bwd:bwd",
     ],
     visibility = ["//visibility:public"],
 )
@@ -83,7 +83,7 @@ pybind_library(
     cc_srcs = [":python/llo.cpp"],
     cc_deps = [
         ":llo",
-        "@tenncor//dbg:dbg",
+        "@com_github_mingkaic_tenncor//dbg:dbg",
     ],
     py_deps = [":age_py"],
     visibility = ["//visibility:public"],

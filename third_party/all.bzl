@@ -5,10 +5,10 @@ load("//third_party/repos:pybind11.bzl", "pybind11_repository")
 load("//third_party/repos:python.bzl", "python_repository")
 load("//third_party/repos:tenncor.bzl", "tenncor_repository")
 
-def cortenn_repositories(repository_name, excludes = []):
+def dependencies(excludes = []):
     ignores = native.existing_rules().keys() + excludes
     if "eigen" not in ignores:
-        eigen_repository(name = "eigen", repository_name = repository_name)
+        eigen_repository(name = "eigen")
 
     if "numpy" not in ignores:
         numpy_repository(name = "numpy")
@@ -17,10 +17,10 @@ def cortenn_repositories(repository_name, excludes = []):
         protobuf_rules_repository(name = "protobuf_rules")
 
     if "pybind11" not in ignores:
-        pybind11_repository(name = "pybind11", repository_name = repository_name)
+        pybind11_repository(name = "pybind11")
 
     if "python" not in ignores:
         python_repository(name = "python")
 
-    if "tenncor" not in ignores:
-        tenncor_repository(name = "tenncor")
+    if "com_github_mingkaic_tenncor" not in ignores:
+        tenncor_repository()

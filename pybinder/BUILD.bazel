@@ -11,6 +11,6 @@ filegroup(
 py_binary(
     name = "pyagen",
     srcs = glob(["*.py"]),
-    deps = ["@tenncor//age:age_generator"],
+    deps = ["@com_github_mingkaic_tenncor//age:age_generator"],
     visibility = ["//visibility:public"],
 )

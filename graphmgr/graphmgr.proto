@@ -1,23 +1,23 @@
 syntax = "proto3";
 
-option go_package = "github.com/mingkaic/tenncor/graphmgr";
-
-import "google/protobuf/empty.proto";
+option go_package = "github.com/mingkaic/cortenn/graphmgr";
 
 import "pbm/graph.proto";
 
 package graphmgr;
+
+message Empty {}
 
 message ListRequest {
 	repeated string gids = 1;
 }
 
 message ListResponse {
-	repeated tenncor.Graph results = 1;
+	repeated cortenn.Graph results = 1;
 }
 
 message CreateRequest {
-	tenncor.Graph payload = 1;
+	cortenn.Graph payload = 1;
 }
 
 message RemoveRequest {
@@ -36,9 +36,9 @@ message HealthCheckResponse {
 service Graphmgr {
 	rpc ListGraphs(ListRequest) returns (ListResponse) {}
 
-	rpc CreateGraph(CreateRequest) returns (google.protobuf.Empty) {}
+	rpc CreateGraph(CreateRequest) returns (Empty) {}
 
-	rpc RemoveGraphPb(RemoveRequest) returns (google.protobuf.Empty) {}
+	rpc RemoveGraphPb(RemoveRequest) returns (Empty) {}
 
-	rpc CheckHealth(google.protobuf.Empty) returns (HealthCheckResponse) {}
+	rpc CheckHealth(Empty) returns (HealthCheckResponse) {}
 }

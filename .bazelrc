@@ -7,7 +7,7 @@
 test --test_output=all --verbose_failures --cache_test_results=no
 
 # show all coverage outputs
-coverage --test_output=all -verbose_failures
+coverage --test_output=all --verbose_failures
 coverage --instrumentation_filter=
 
 # === MEMORY ANALYSIS ===
@@ -21,7 +21,3 @@ test:asan --linkopt -fsanitize=address
 test:gtest --action_env="GTEST_SHUFFLE=1" --action_env="GTEST_BREAK_ON_FAILURE=1"
 
 coverage:gtest --action_env="GTEST_SHUFFLE=1" --action_env="GTEST_BREAK_ON_FAILURE=1"
-
-test:grepeat --action_env="GTEST_REPEAT=50"
-
-coverage:grepeat --action_env="GTEST_REPEAT=50"

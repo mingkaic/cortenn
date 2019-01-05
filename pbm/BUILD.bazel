@@ -1,7 +1,10 @@
 licenses(["notice"])
 
-load("@org_pubref_rules_protobuf//cpp:rules.bzl", "cc_proto_library")
-load("@org_pubref_rules_protobuf//python:rules.bzl", "py_proto_library")
+load("@protobuf_rules//cpp:cpp_proto_library.bzl", "cpp_proto_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+)
 
 filegroup(
     name = "srcs",
@@ -9,13 +12,11 @@ filegroup(
         "*.hpp",
         "src/*.cpp",
     ]) + [":protos", "BUILD.bazel"],
-    visibility = ["//visibility:public"],
 )
 
 filegroup(
     name = "protos",
     srcs = glob(["*.proto"]),
-    visibility = ["//visibility:public"],
 )
 
 filegroup(
@@ -24,36 +25,19 @@ filegroup(
         "test/*.hpp",
         "test/*.cpp",
     ]),
-)
-
-filegroup(
-    name = "test_data",
-    srcs = glob([
-        "data/*.pb",
-        "data/*.txt",
-    ]),
+    visibility = ["//visibility:private"],
 )
 
 ######### LIBRARY #########
 
 proto_library(
-    name = "proto_lib",
+    name = "pbm_proto",
     srcs = ["//pbm:protos"],
-    visibility = ["//visibility:public"],
 )
 
-cc_proto_library(
-    name = "cc_proto",
-    protos = ["//pbm:protos"],
-    with_grpc = False,
-    visibility = ["//visibility:public"],
-)
-
-py_proto_library(
-    name = "py_proto",
-    protos = ["//pbm:protos"],
-    with_grpc = False,
-    visibility = ["//visibility:public"],
+cpp_proto_library(
+    name = "pbm_cc_proto",
+    deps = ["//pbm:pbm_proto"],
 )
 
 cc_library(
@@ -62,10 +46,9 @@ cc_library(
     srcs = glob(["src/*.cpp"]),
     copts = ["-std=c++14"],
     deps = [
-        "//llo:llo",
-        "//pbm:cc_proto",
+        "@tenncor//ade:ade",
+        "//pbm:pbm_cc_proto",
     ],
-    visibility = ["//visibility:public"],
 )
 
 ######### TEST #########
@@ -75,10 +58,13 @@ cc_test(
     size = "small",
     srcs = [":test_srcs"],
     deps = [
-        "@com_github_mingkaic_tenncor//dbg:dbg",
         "//pbm:pbm",
-        "@com_google_googletest//:gtest",
+        "@tenncor//dbg:dbg",
+        "@gtest//:gtest",
     ],
     copts = ["-std=c++14"],
-    data = [":test_data"],
+    data = glob([
+        "data/*.pb",
+        "data/*.txt",
+    ]),
 )

@@ -1,6 +1,6 @@
-FROM mkaichen/bazel_cpp:latest
+FROM mkaichen/bazel_cpp_tf:latest
 
-ENV APP_DIR /usr/src/tenncor
+ENV APP_DIR /usr/src/cortenn
 
 RUN mkdir -p $APP_DIR
 WORKDIR $APP_DIR

@@ -1,9 +1,13 @@
 # PBM (Protobuf Marshaller)
 
-Serialize ADE and LLO-extended graphs created by top-level code in protobuf format.
+Serialize ADE graphs created by top-level code in protobuf format.
 
-Protobuf is platform independent format for structured data.
+Saving and loading requires data serialization functors as parameters. This parameterization is to defer data formatting responsibilities to the library implementing ADE.
 
 ## Why Protobuf
 
-Because the library can be used across all the languages I'm familiar with. It's also more transparent and less bug-ridden than most free JSON parsing libraries.
+Because protobuf parsers is consistent across all popular languages.
+
+## Extension
+
+User libraries need to provide an encoding and decoding functions for the library's generic data format when saving and loading

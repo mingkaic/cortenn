@@ -1,3 +1,11 @@
+///
+/// helper.hpp
+/// llo
+///
+/// Purpose:
+/// Helper functions for generated age files
+///
+
 #include "ade/ifunctor.hpp"
 
 #ifndef LLO_HELPER_HPP
@@ -6,17 +14,29 @@
 namespace llo
 {
 
-ade::Tensorptr grad_prod (size_t gradidx, age::TensT tens);
+/// Return product of lhs with mapped rhs
+ade::TensptrT mtens_mul (ade::TensptrT lhs, ade::MappedTensor rhs);
 
-ade::Tensorptr grad_min (size_t gradidx, age::TensT tens);
+/// Return the gradient for prod operation assuming the target derived wrt is
+/// index gradidx and arguments are tens
+ade::TensptrT grad_prod (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens);
 
-ade::Tensorptr grad_max (size_t gradidx, age::TensT tens);
+/// Return the gradient for min operation assuming the target derived wrt is
+/// index gradidx and arguments are tens
+ade::TensptrT grad_min (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens);
 
-ade::CoordPtrT reduce (uint8_t rank, const ade::Shape& shape);
+/// Return the gradient for max operation assuming the target derived wrt is
+/// index gradidx and arguments are tens
+ade::TensptrT grad_max (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens);
 
-ade::Tensorptr matmul (ade::Tensorptr a, ade::Tensorptr b);
+/// Return reduction of tens after dimension dim using opcode operation
+ade::TensptrT reduce (ade::Opcode opcode, ade::TensptrT tens, uint8_t dim);
 
-ade::Tensorptr convolve (ade::Tensorptr img, ade::Tensorptr kernel);
+/// Return matmul of a and b
+ade::TensptrT matmul (ade::TensptrT a, ade::TensptrT b);
+
+/// Return convolution operation on img with kernel
+ade::TensptrT convolution (ade::TensptrT img, ade::TensptrT kernel);
 
 }
 

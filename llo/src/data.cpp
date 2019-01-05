@@ -36,7 +36,7 @@ void convert (char* out, age::_GENERATED_DTYPE outtype, const T* indata, size_t 
 		case age::UINT16: COPYOVER(uint16_t)
 		case age::UINT32: COPYOVER(uint32_t)
 		case age::UINT64: COPYOVER(uint64_t)
-		default: err::fatalf("invalid output type %s",
+		default: logs::fatalf("invalid output type %s",
 			age::name_type(outtype).c_str());
 	}
 }
@@ -65,7 +65,7 @@ void GenericData::copyover (const char* indata, age::_GENERATED_DTYPE intype)
 		case age::UINT16: CONVERT(uint16_t)
 		case age::UINT32: CONVERT(uint32_t)
 		case age::UINT64: CONVERT(uint64_t)
-		default: err::fatalf("invalid input type %s",
+		default: logs::fatalf("invalid input type %s",
 			age::name_type(intype).c_str());
 	}
 }

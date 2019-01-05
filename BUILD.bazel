@@ -10,18 +10,11 @@ filegroup(
     name = "srcs",
     srcs = [
         "//llo:srcs",
+        "//opt:srcs",
         "//pbm:srcs",
-        "//rocnnet:srcs",
+        "//pybinder:srcs",
         "//graphmgr:srcs",
         "BUILD.bazel",
-    ],
-)
-
-filegroup(
-    name = "credentials",
-    srcs = [
-        "certs/server.key",
-        "certs/server.crt",
     ],
 )
 

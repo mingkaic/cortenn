@@ -4,30 +4,20 @@
 
 #include "gtest/gtest.h"
 
-#include "testutil/common.hpp"
+#include "llo/test/common.hpp"
 
 #include "llo/data.hpp"
 #include "llo/eval.hpp"
 
 
-struct DATA : public simple::TestModel
+TEST(DATA, MismatchSize)
 {
-	virtual void TearDown (void)
-	{
-		simple::TestModel::TearDown();
-		TestLogger::latest_warning_ = "";
-		TestLogger::latest_error_ = "";
-	}
-};
-
-
-TEST_F(DATA, MismatchSize)
-{
-	simple::SessionT sess = get_session("DATA::MismatchSize");
-
-	auto slist = get_shape(sess, "slist");
+	std::vector<ade::DimT> slist = {4, 2, 3};
 	ade::Shape shape(slist);
-	std::vector<double> data = sess->get_double("data", shape.n_elems() - 1);
+	std::vector<double> data = {
+		41, 29, 86, 43, 12, 55, 68, 87, 16, 92, 26, 28,
+		13, 1, 62, 9, 27, 10, 23, 70, 80, 67, 96, 22
+	};
 
 	std::stringstream ss;
 	ss << "cannot create variable with data size " << data.size() <<
@@ -36,16 +26,18 @@ TEST_F(DATA, MismatchSize)
 }
 
 
-TEST_F(DATA, SourceRetype)
+TEST(DATA, SourceRetype)
 {
-	simple::SessionT sess = get_session("DATA::SourceRetype");
-
-	auto slist = get_shape(sess, "slist");
+	std::vector<ade::DimT> slist = {3, 3, 3};
 	ade::Shape shape(slist);
 
 	size_t n = shape.n_elems();
-	std::vector<double> data = sess->get_double("data", n);
-	ade::Tensorptr ptr = llo::get_variable<double>(data, shape);
+	std::vector<double> data = {
+		16, 51, 12, 55, 69, 10, 52, 86, 95,
+		6, 78, 18, 100, 11, 52, 66, 55, 30,
+		80, 81, 36, 26, 63, 78, 80, 31, 37
+	};
+	ade::TensptrT ptr = llo::get_variable<double>(data, shape);
 
 	llo::GenericData gd = llo::eval(ptr, age::UINT16);
 	ASSERT_EQ(age::UINT16, gd.dtype_);
@@ -60,16 +52,14 @@ TEST_F(DATA, SourceRetype)
 }
 
 
-TEST_F(DATA, PlaceHolder)
+TEST(DATA, PlaceHolder)
 {
-	simple::SessionT sess = get_session("DATA::Placeholder");
-
-	auto slist = get_shape(sess, "slist");
+	std::vector<ade::DimT> slist = {2, 5, 2};
 	ade::Shape shape(slist);
 	size_t n = shape.n_elems();
 	llo::VarptrT pl(llo::get_variable<double>(shape));
 
-	llo::GenericData uninit_gd = llo::eval(ade::Tensorptr(pl), age::DOUBLE);
+	llo::GenericData uninit_gd = llo::eval(ade::TensptrT(pl), age::DOUBLE);
 	ASSERT_EQ(age::DOUBLE, uninit_gd.dtype_);
 	std::vector<ade::DimT> uninit_slist(uninit_gd.shape_.begin(), uninit_gd.shape_.end());
 	EXPECT_ARREQ(slist, uninit_slist);
@@ -80,9 +70,12 @@ TEST_F(DATA, PlaceHolder)
 		EXPECT_EQ(0, uninit_data[i]);
 	}
 
-	std::vector<double> data = sess->get_double("data", n);
+	std::vector<double> data = {
+		33, 80, 95, 40, 77, 70, 42, 31, 58, 53,
+		48, 77, 58, 64, 83, 64, 6, 24, 16, 9
+	};
 	*pl = data;
-	llo::GenericData gd = llo::eval(ade::Tensorptr(pl), age::DOUBLE);
+	llo::GenericData gd = llo::eval(ade::TensptrT(pl), age::DOUBLE);
 	ASSERT_EQ(age::DOUBLE, gd.dtype_);
 	std::vector<ade::DimT> gotslist(gd.shape_.begin(), gd.shape_.end());
 	EXPECT_ARREQ(slist, gotslist);

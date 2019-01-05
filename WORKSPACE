@@ -2,8 +2,8 @@ workspace(name = "com_github_mingkaic_cortenn")
 
 # local dependencies
 
-load("//:third_party/all.bzl", "cortenn_repositories")
-cortenn_repositories()
+load("//:third_party/all.bzl", "dependencies")
+dependencies()
 
 load("@com_github_mingkaic_tenncor//:tenncor.bzl", "dependencies")
 dependencies()

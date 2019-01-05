@@ -5,7 +5,7 @@ load("//third_party/repos:pybind11.bzl", "pybind11_repository")
 load("//third_party/repos:python.bzl", "python_repository")
 load("//third_party/repos:tenncor.bzl", "tenncor_repository")
 
-def cortenn_repositories(excludes = []):
+def dependencies(excludes = []):
     ignores = native.existing_rules().keys() + excludes
     if "eigen" not in ignores:
         eigen_repository(name = "eigen")

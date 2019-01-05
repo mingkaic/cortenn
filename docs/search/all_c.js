@@ -8,6 +8,7 @@ var searchData=
   ['matvect',['MatVecT',['../test__api_8cpp.html#af816362a86a0829de834ee7c8ddb8a57',1,'test_api.cpp']]],
   ['max',['max',['../namespacello.html#a0eba005c4545a4522bac459d42c7c140',1,'llo']]],
   ['min',['min',['../namespacello.html#a46192797ea05f96e5f1fbc728f43b2c4',1,'llo']]],
-  ['mocktensor',['MockTensor',['../struct_mock_tensor.html',1,'MockTensor'],['../struct_mock_tensor.html#ae7cc034794ceebfb11b3076283361157',1,'MockTensor::MockTensor(void)=default'],['../struct_mock_tensor.html#ad82f85c2417441eda10de68536a99cbc',1,'MockTensor::MockTensor(ade::Shape shape)']]],
+  ['mocktensor',['MockTensor',['../struct_mock_tensor.html',1,'MockTensor'],['../struct_mock_tensor.html#ae7cc034794ceebfb11b3076283361157',1,'MockTensor::MockTensor(void)=default'],['../struct_mock_tensor.html#ad82f85c2417441eda10de68536a99cbc',1,'MockTensor::MockTensor(ade::Shape shape)'],['../struct_mock_tensor.html#ae7cc034794ceebfb11b3076283361157',1,'MockTensor::MockTensor(void)=default'],['../struct_mock_tensor.html#ad82f85c2417441eda10de68536a99cbc',1,'MockTensor::MockTensor(ade::Shape shape)']]],
+  ['mtens_5fmul',['mtens_mul',['../namespacello.html#a7398e1235a7ae023f87c6198a75418d0',1,'llo']]],
   ['mul',['mul',['../namespacello.html#a908f5da99f5702b96e79b3bf63bf1630',1,'llo']]]
 ];

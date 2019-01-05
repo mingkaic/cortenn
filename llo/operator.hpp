@@ -12,7 +12,7 @@
 #include <functional>
 #include <random>
 
-#include "ade/coord.hpp"
+#include "llo/data.hpp"
 
 #ifndef LLO_OPERATOR_HPP
 #define LLO_OPERATOR_HPP
@@ -25,25 +25,6 @@ using EngineT = std::default_random_engine;
 
 /// Return global random generator
 EngineT& get_engine (void);
-
-/// Tensor data wrapper using raw pointer and data size
-/// Avoid using std constainers in case of unintentional deep copies
-template <typename T>
-struct VecRef
-{
-	/// Raw input data
-	const T* data;
-
-	/// Shape info of the raw input
-	ade::Shape shape;
-
-	/// Coordinate mapper of input to output
-	ade::CoordptrT mapper;
-
-	/// True if data should be pushed input to output (fwd mapper)
-	/// False if data should be pulled output from input (bwd mapper)
-	bool push;
-};
 
 /// Generic unary operation assuming identity mapping
 template <typename T>

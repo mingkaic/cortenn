@@ -27,19 +27,19 @@ static ade::TensptrT prune0 (ade::iFunctor* func,
 			case age::SQRT:
 			case age::ROUND:
 			case age::PROD:
-				return ade::TensptrT(age::data(0, func->shape()));
+				return ade::TensptrT(llo::get_scalar(0, func->shape()));
 			case age::COS:
 			case age::EXP:
-				return ade::TensptrT(age::data(1, func->shape()));
+				return ade::TensptrT(llo::get_scalar(1, func->shape()));
 			case age::LOG:
 				logs::fatal("cannot LOG by zero");
 			case age::POW:
 				if (zeros.end() != zeros.find(0))
 				{
-					return ade::TensptrT(age::data(0, func->shape()));
+					return ade::TensptrT(llo::get_scalar(0, func->shape()));
 				}
 				// else if zeros.end() != zeros.find(1)
-				return ade::TensptrT(age::data(1, func->shape()));
+				return ade::TensptrT(llo::get_scalar(1, func->shape()));
 			case age::SUM:
 			{
 				ade::ArgsT filtered;
@@ -52,14 +52,14 @@ static ade::TensptrT prune0 (ade::iFunctor* func,
 				}
 				if (filtered.empty())
 				{
-					return ade::TensptrT(age::data(0, func->shape()));
+					return ade::TensptrT(llo::get_scalar(0, func->shape()));
 				}
 				return ade::TensptrT(ade::Functor::get(ade::Opcode{"SUM", age::SUM}, filtered));
 			}
 			case age::SUB:
 				if (2 == zeros.size())
 				{
-					return ade::TensptrT(age::data(0, func->shape()));
+					return ade::TensptrT(llo::get_scalar(0, func->shape()));
 				}
 				else if (zeros.end() != zeros.find(0))
 				{
@@ -73,7 +73,7 @@ static ade::TensptrT prune0 (ade::iFunctor* func,
 					logs::fatal("cannot DIV by zero");
 				}
 				// else if 0 == zeros.front()
-				return ade::TensptrT(age::data(0, func->shape()));
+				return ade::TensptrT(llo::get_scalar(0, func->shape()));
 			case age::MIN:
 			case age::MAX:
 			case age::EQ:

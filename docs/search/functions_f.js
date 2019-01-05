@@ -11,5 +11,5 @@ var searchData=
   ['rand_5funiform_3c_20float_20_3e',['rand_uniform&lt; float &gt;',['../namespacello.html#a1d9acac2589dd4ed27c9f32d31e81c93',1,'llo']]],
   ['reduce',['reduce',['../namespacello.html#ade366ad6ba9f8fdd883dd5b06ff8dad1',1,'llo']]],
   ['round',['round',['../namespacello.html#af2a4ec16dc83e924a43ac86a3893b411',1,'llo']]],
-  ['rtrim',['rtrim',['../test__load_8cpp.html#af6d6bd5c29782e3b958b5f7c0d1ea9e3',1,'test_load.cpp']]]
+  ['rtrim',['rtrim',['../test__shear_8cpp.html#af6d6bd5c29782e3b958b5f7c0d1ea9e3',1,'rtrim(std::string &amp;s):&#160;test_shear.cpp'],['../test__load_8cpp.html#af6d6bd5c29782e3b958b5f7c0d1ea9e3',1,'rtrim(std::string &amp;s):&#160;test_load.cpp']]]
 ];

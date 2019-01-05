@@ -10,7 +10,7 @@ var searchData=
   ['pbm_5fload_5fhpp',['PBM_LOAD_HPP',['../load_8hpp.html#af09098d601e68ce455d72ed197fb9d1e',1,'load.hpp']]],
   ['pow',['pow',['../namespacello.html#aa56e03e88d5be448c2d06294014a1ff5',1,'llo']]],
   ['prune',['prune',['../structopt_1_1_target_pruner.html#a8f30945021020ffc99b831425dceb950',1,'opt::TargetPruner']]],
-  ['prunefunct',['PruneFuncT',['../namespaceopt.html#a12be6839a1d0e40a702df1c81befd7ef',1,'opt']]],
+  ['prunefunct',['PruneFuncT',['../namespaceopt.html#aee1a6564411fe21aa320fd255abc2e68',1,'opt']]],
   ['pruner_5f',['pruner_',['../structopt_1_1_target_pruner.html#add13fa9a6dd0330bac5ee4ed6554a771',1,'opt::TargetPruner']]],
   ['ptest',['ptest',['../namespaceptest.html',1,'']]],
   ['ptest_2epy',['ptest.py',['../ptest_8py.html',1,'']]],

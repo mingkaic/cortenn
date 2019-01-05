@@ -73,6 +73,7 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_data_arg.html">DataArg</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data to pass around when evaluating.  <a href="structllo_1_1_data_arg.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_evaluator.html">Evaluator</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -82,6 +83,7 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_generic_ref.html">GenericRef</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_variable.html">Variable</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Leaf node containing <a class="el" href="structllo_1_1_generic_data.html" title="GenericData for holding data when passing up the tensor graph. ">GenericData</a>.  <a href="structllo_1_1_variable.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_vec_ref.html">VecRef</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -89,8 +91,10 @@ Classes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:a9812e3273d3774be09da93e11eb01d3e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a9812e3273d3774be09da93e11eb01d3e">VarptrT</a> = std::shared_ptr&lt; <a class="el" href="structllo_1_1_variable.html">llo::Variable</a> &gt;</td></tr>
+<tr class="memdesc:a9812e3273d3774be09da93e11eb01d3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Smart pointer for variable nodes.  <a href="#a9812e3273d3774be09da93e11eb01d3e">More...</a><br /></td></tr>
 <tr class="separator:a9812e3273d3774be09da93e11eb01d3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e3abd419407ceea87846978c6f3d308"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a7e3abd419407ceea87846978c6f3d308">DataArgsT</a> = std::vector&lt; <a class="el" href="structllo_1_1_data_arg.html">DataArg</a> &gt;</td></tr>
+<tr class="memdesc:a7e3abd419407ceea87846978c6f3d308"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector of DataArgs to hold arguments.  <a href="#a7e3abd419407ceea87846978c6f3d308">More...</a><br /></td></tr>
 <tr class="separator:a7e3abd419407ceea87846978c6f3d308"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80fc8a112cc3f147a818d53f6045ac0b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a80fc8a112cc3f147a818d53f6045ac0b">EngineT</a> = std::default_random_engine</td></tr>
 <tr class="memdesc:a80fc8a112cc3f147a818d53f6045ac0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">RNG engine used.  <a href="#a80fc8a112cc3f147a818d53f6045ac0b">More...</a><br /></td></tr>
@@ -99,25 +103,30 @@ Typedefs</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a92ca739c4b1543c5896df36259ea3a23"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a92ca739c4b1543c5896df36259ea3a23"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacello.html#a9812e3273d3774be09da93e11eb01d3e">VarptrT</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a92ca739c4b1543c5896df36259ea3a23">get_variable</a> (std::vector&lt; T &gt; <a class="el" href="namespacello.html#a706a00c5853ee0757e6e22fa108b05e7">data</a>, ade::Shape shape, std::string label=&quot;&quot;)</td></tr>
+<tr class="memitem:a92ca739c4b1543c5896df36259ea3a23"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacello.html#a9812e3273d3774be09da93e11eb01d3e">VarptrT</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a92ca739c4b1543c5896df36259ea3a23">get_variable</a> (std::vector&lt; T &gt; data, ade::Shape shape, std::string label=&quot;&quot;)</td></tr>
 <tr class="separator:a92ca739c4b1543c5896df36259ea3a23"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a888153a5f88705148be5c319c7c8267f"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a888153a5f88705148be5c319c7c8267f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacello.html#a9812e3273d3774be09da93e11eb01d3e">VarptrT</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a888153a5f88705148be5c319c7c8267f">get_variable</a> (ade::Shape shape, std::string label=&quot;&quot;)</td></tr>
 <tr class="separator:a888153a5f88705148be5c319c7c8267f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a706a00c5853ee0757e6e22fa108b05e7"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a706a00c5853ee0757e6e22fa108b05e7"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacello.html#a9812e3273d3774be09da93e11eb01d3e">VarptrT</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a706a00c5853ee0757e6e22fa108b05e7">data</a> (T scalar, ade::Shape shape, std::string label=&quot;&quot;)</td></tr>
-<tr class="separator:a706a00c5853ee0757e6e22fa108b05e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adba72d8fcc9d0f2c823e1083343cc16d"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:adba72d8fcc9d0f2c823e1083343cc16d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacello.html#a9812e3273d3774be09da93e11eb01d3e">VarptrT</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#adba72d8fcc9d0f2c823e1083343cc16d">get_scalar</a> (T scalar, ade::Shape shape, std::string label=&quot;&quot;)</td></tr>
+<tr class="separator:adba72d8fcc9d0f2c823e1083343cc16d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40e4f4a8b2261b298602ba40074fe813"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a40e4f4a8b2261b298602ba40074fe813"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structllo_1_1_vec_ref.html">VecRef</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a40e4f4a8b2261b298602ba40074fe813">to_ref</a> (<a class="el" href="structllo_1_1_data_arg.html">DataArg</a> &amp;arg)</td></tr>
+<tr class="memdesc:a40e4f4a8b2261b298602ba40074fe813"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts DataArgs to <a class="el" href="structllo_1_1_vec_ref.html">VecRef</a> of specific type.  <a href="#a40e4f4a8b2261b298602ba40074fe813">More...</a><br /></td></tr>
 <tr class="separator:a40e4f4a8b2261b298602ba40074fe813"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55d50068a0cc40ed957b650e46ccdf2b"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a55d50068a0cc40ed957b650e46ccdf2b"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structllo_1_1_vec_ref.html">VecRef</a>&lt; T &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a55d50068a0cc40ed957b650e46ccdf2b">to_refs</a> (<a class="el" href="namespacello.html#a7e3abd419407ceea87846978c6f3d308">DataArgsT</a> &amp;args)</td></tr>
+<tr class="memdesc:a55d50068a0cc40ed957b650e46ccdf2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts multiple DataArgs to multiple VecRefs of the same type.  <a href="#a55d50068a0cc40ed957b650e46ccdf2b">More...</a><br /></td></tr>
 <tr class="separator:a55d50068a0cc40ed957b650e46ccdf2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0713341a41c370371e2cdfb9c776d49c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structllo_1_1_generic_data.html">GenericData</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a0713341a41c370371e2cdfb9c776d49c">eval</a> (ade::TensptrT tens, age::_GENERATED_DTYPE dtype)</td></tr>
 <tr class="memdesc:a0713341a41c370371e2cdfb9c776d49c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate generic data of tens converted to specified dtype.  <a href="#a0713341a41c370371e2cdfb9c776d49c">More...</a><br /></td></tr>
 <tr class="separator:a0713341a41c370371e2cdfb9c776d49c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ae6d2f36c5680724297af0ac333fd18"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a5ae6d2f36c5680724297af0ac333fd18">grad_prod</a> (size_t gradidx, ade::TensT tens)</td></tr>
-<tr class="separator:a5ae6d2f36c5680724297af0ac333fd18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7398e1235a7ae023f87c6198a75418d0"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a7398e1235a7ae023f87c6198a75418d0">mtens_mul</a> (ade::TensptrT lhs, ade::MappedTensor rhs)</td></tr>
+<tr class="memdesc:a7398e1235a7ae023f87c6198a75418d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return product of lhs with mapped rhs.  <a href="#a7398e1235a7ae023f87c6198a75418d0">More...</a><br /></td></tr>
+<tr class="separator:a7398e1235a7ae023f87c6198a75418d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6cb4e632643824f43f0afdbd52cb948f"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a6cb4e632643824f43f0afdbd52cb948f">grad_prod</a> (ade::iFunctor *fwd, size_t gradidx, ade::TensT tens)</td></tr>
+<tr class="separator:a6cb4e632643824f43f0afdbd52cb948f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28d51d7aedcf040e9b83a627342ebe33"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a28d51d7aedcf040e9b83a627342ebe33">grad_min</a> (ade::iFunctor *fwd, size_t gradidx, ade::TensT tens)</td></tr>
 <tr class="separator:a28d51d7aedcf040e9b83a627342ebe33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afdf9eee2940ca0aae6ddab4582dd9c00"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#afdf9eee2940ca0aae6ddab4582dd9c00">grad_max</a> (ade::iFunctor *fwd, size_t gradidx, ade::TensT tens)</td></tr>
@@ -136,7 +145,7 @@ Functions</h2></td></tr>
 <tr class="separator:a61884656c3aa93b200183b6047ef40dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc00e45b50d07b6444490730f901947e"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:acc00e45b50d07b6444490730f901947e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#acc00e45b50d07b6444490730f901947e">unary</a> (T *out, ade::Shape &amp;outshape, <a class="el" href="structllo_1_1_vec_ref.html">VecRef</a>&lt; T &gt; in, std::function&lt; T(const T &amp;)&gt; f)</td></tr>
-<tr class="memdesc:acc00e45b50d07b6444490730f901947e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic unary operation assuming identity mapping (bijective)  <a href="#acc00e45b50d07b6444490730f901947e">More...</a><br /></td></tr>
+<tr class="memdesc:acc00e45b50d07b6444490730f901947e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic unary operation assuming identity mapping.  <a href="#acc00e45b50d07b6444490730f901947e">More...</a><br /></td></tr>
 <tr class="separator:acc00e45b50d07b6444490730f901947e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af3ffcdedba093a42da3e937e945aba30"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:af3ffcdedba093a42da3e937e945aba30"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#af3ffcdedba093a42da3e937e945aba30">abs</a> (T *out, <a class="el" href="structllo_1_1_vec_ref.html">VecRef</a>&lt; T &gt; in)</td></tr>
@@ -194,7 +203,7 @@ Functions</h2></td></tr>
 <tr class="separator:af2a4ec16dc83e924a43ac86a3893b411"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e10ea5ec51ef72add0a81f7d749e141"><td class="memTemplParams" colspan="2">template&lt;typename OUT , typename ATYPE , typename BTYPE &gt; </td></tr>
 <tr class="memitem:a8e10ea5ec51ef72add0a81f7d749e141"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a8e10ea5ec51ef72add0a81f7d749e141">binary</a> (OUT *out, ade::Shape &amp;outshape, <a class="el" href="structllo_1_1_vec_ref.html">VecRef</a>&lt; ATYPE &gt; a, <a class="el" href="structllo_1_1_vec_ref.html">VecRef</a>&lt; BTYPE &gt; b, std::function&lt; OUT(const ATYPE &amp;, const BTYPE &amp;)&gt; f)</td></tr>
-<tr class="memdesc:a8e10ea5ec51ef72add0a81f7d749e141"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic binary operation assuming identity mapping (bijective)  <a href="#a8e10ea5ec51ef72add0a81f7d749e141">More...</a><br /></td></tr>
+<tr class="memdesc:a8e10ea5ec51ef72add0a81f7d749e141"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic binary operation assuming identity mapping.  <a href="#a8e10ea5ec51ef72add0a81f7d749e141">More...</a><br /></td></tr>
 <tr class="separator:a8e10ea5ec51ef72add0a81f7d749e141"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa56e03e88d5be448c2d06294014a1ff5"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:aa56e03e88d5be448c2d06294014a1ff5"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#aa56e03e88d5be448c2d06294014a1ff5">pow</a> (T *out, ade::Shape &amp;outshape, <a class="el" href="structllo_1_1_vec_ref.html">VecRef</a>&lt; T &gt; a, <a class="el" href="structllo_1_1_vec_ref.html">VecRef</a>&lt; T &gt; b)</td></tr>
@@ -246,7 +255,7 @@ Functions</h2></td></tr>
 <tr class="separator:a502ebfee3eb91123ca56a38862c62801"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c77a8e53c0227e523c81699b9c2aab9"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a8c77a8e53c0227e523c81699b9c2aab9"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a8c77a8e53c0227e523c81699b9c2aab9">nnary</a> (T *out, ade::Shape &amp;outshape, std::vector&lt; <a class="el" href="structllo_1_1_vec_ref.html">VecRef</a>&lt; T &gt;&gt; args, std::function&lt; void(T &amp;, const T &amp;)&gt; acc)</td></tr>
-<tr class="memdesc:a8c77a8e53c0227e523c81699b9c2aab9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic n-nary operation (potentially surjective)  <a href="#a8c77a8e53c0227e523c81699b9c2aab9">More...</a><br /></td></tr>
+<tr class="memdesc:a8c77a8e53c0227e523c81699b9c2aab9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic n-nary operation.  <a href="#a8c77a8e53c0227e523c81699b9c2aab9">More...</a><br /></td></tr>
 <tr class="separator:a8c77a8e53c0227e523c81699b9c2aab9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a891db6a8dd93b21745773a877d795044"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a891db6a8dd93b21745773a877d795044"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a891db6a8dd93b21745773a877d795044">add</a> (T *out, ade::Shape &amp;outshape, std::vector&lt; <a class="el" href="structllo_1_1_vec_ref.html">VecRef</a>&lt; T &gt;&gt; args)</td></tr>
@@ -261,10 +270,10 @@ Functions</h2></td></tr>
 <tr class="memitem:a0eba005c4545a4522bac459d42c7c140"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a0eba005c4545a4522bac459d42c7c140">max</a> (T *out, ade::Shape &amp;outshape, std::vector&lt; <a class="el" href="structllo_1_1_vec_ref.html">VecRef</a>&lt; T &gt;&gt; args)</td></tr>
 <tr class="separator:a0eba005c4545a4522bac459d42c7c140"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b4d14ea52754c4a4d7107e99e754047"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a5b4d14ea52754c4a4d7107e99e754047">serialize</a> (const char *in, size_t nelems, size_t typecode)</td></tr>
-<tr class="memdesc:a5b4d14ea52754c4a4d7107e99e754047"><td class="mdescLeft">&#160;</td><td class="mdescRight">Marshal data to tenncor::Source.  <a href="#a5b4d14ea52754c4a4d7107e99e754047">More...</a><br /></td></tr>
+<tr class="memdesc:a5b4d14ea52754c4a4d7107e99e754047"><td class="mdescLeft">&#160;</td><td class="mdescRight">Marshal data to cortenn::Source.  <a href="#a5b4d14ea52754c4a4d7107e99e754047">More...</a><br /></td></tr>
 <tr class="separator:a5b4d14ea52754c4a4d7107e99e754047"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad57c9bbe16634aec8fad7bb27abd39b0"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#ad57c9bbe16634aec8fad7bb27abd39b0">deserialize</a> (const char *pb, ade::Shape shape, size_t typecode, std::string label)</td></tr>
-<tr class="memdesc:ad57c9bbe16634aec8fad7bb27abd39b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unmarshal tenncor::Source as <a class="el" href="structllo_1_1_variable.html">Variable</a> containing context of source.  <a href="#ad57c9bbe16634aec8fad7bb27abd39b0">More...</a><br /></td></tr>
+<tr class="memdesc:ad57c9bbe16634aec8fad7bb27abd39b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unmarshal cortenn::Source as <a class="el" href="structllo_1_1_variable.html" title="Leaf node containing GenericData. ">Variable</a> containing context of source.  <a href="#ad57c9bbe16634aec8fad7bb27abd39b0">More...</a><br /></td></tr>
 <tr class="separator:ad57c9bbe16634aec8fad7bb27abd39b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b726ccde4c4cc2e41bba236539cc71a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a0b726ccde4c4cc2e41bba236539cc71a">is_big_endian</a> (void)</td></tr>
 <tr class="separator:a0b726ccde4c4cc2e41bba236539cc71a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -275,7 +284,11 @@ Functions</h2></td></tr>
 <tr class="separator:a085b001fb98e1ae2f31926f84cac56a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p><a class="el" href="operator_8hpp.html">operator.hpp</a> llo</p>
+<div class="textblock"><p>data.hpp llo</p>
+<p>Purpose: Define data structures for owning, and passing generalized and type-specific data</p>
+<p><a class="el" href="helper_8hpp.html">helper.hpp</a> llo</p>
+<p>Purpose: Helper functions for generated age files</p>
+<p><a class="el" href="operator_8hpp.html">operator.hpp</a> llo</p>
 <p>Purpose: Define functions manipulating tensor data values No function in this file makes any attempt to check for nullptrs</p>
 <p><a class="el" href="serialize_8hpp.html">serialize.hpp</a> llo</p>
 <p>Purpose: Define functions for marshal and unmarshal data sources</p>
@@ -293,6 +306,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Vector of DataArgs to hold arguments. </p>
 
 </div>
 </div>
@@ -323,6 +338,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Smart pointer for variable nodes. </p>
 
 </div>
 </div>
@@ -561,7 +578,7 @@ template&lt;typename OUT , typename ATYPE , typename BTYPE &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Generic binary operation assuming identity mapping (bijective) </p>
+<p>Generic binary operation assuming identity mapping. </p>
 
 </div>
 </div>
@@ -657,42 +674,6 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a706a00c5853ee0757e6e22fa108b05e7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a706a00c5853ee0757e6e22fa108b05e7">&#9670;&nbsp;</a></span>data()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacello.html#a9812e3273d3774be09da93e11eb01d3e">VarptrT</a> llo::data </td>
-          <td>(</td>
-          <td class="paramtype">T&#160;</td>
-          <td class="paramname"><em>scalar</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">ade::Shape&#160;</td>
-          <td class="paramname"><em>shape</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>label</em> = <code>&quot;&quot;</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a085b001fb98e1ae2f31926f84cac56a0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a085b001fb98e1ae2f31926f84cac56a0">&#9670;&nbsp;</a></span>derive()</h2>
 
@@ -761,7 +742,7 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Unmarshal tenncor::Source as <a class="el" href="structllo_1_1_variable.html">Variable</a> containing context of source. </p>
+<p>Unmarshal cortenn::Source as <a class="el" href="structllo_1_1_variable.html" title="Leaf node containing GenericData. ">Variable</a> containing context of source. </p>
 
 </div>
 </div>
@@ -932,6 +913,43 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a id="adba72d8fcc9d0f2c823e1083343cc16d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adba72d8fcc9d0f2c823e1083343cc16d">&#9670;&nbsp;</a></span>get_scalar()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacello.html#a9812e3273d3774be09da93e11eb01d3e">VarptrT</a> llo::get_scalar </td>
+          <td>(</td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>scalar</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ade::Shape&#160;</td>
+          <td class="paramname"><em>shape</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>label</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Return new variable containing 0s according to specified shape and labelled according to input label </p>
+
+</div>
+</div>
 <a id="a92ca739c4b1543c5896df36259ea3a23"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a92ca739c4b1543c5896df36259ea3a23">&#9670;&nbsp;</a></span>get_variable() <span class="overload">[1/2]</span></h2>
 
@@ -965,6 +983,7 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Return new variable containing input vector data according to specified shape and labelled according to input label Throw error if the input vector size differs from shape.n_elems() </p>
 
 </div>
 </div>
@@ -995,6 +1014,7 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Return new variable containing 0s according to specified shape and labelled according to input label </p>
 
 </div>
 </div>
@@ -1068,8 +1088,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a5ae6d2f36c5680724297af0ac333fd18"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5ae6d2f36c5680724297af0ac333fd18">&#9670;&nbsp;</a></span>grad_prod()</h2>
+<a id="a6cb4e632643824f43f0afdbd52cb948f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6cb4e632643824f43f0afdbd52cb948f">&#9670;&nbsp;</a></span>grad_prod()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1077,6 +1097,12 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname">ade::TensptrT llo::grad_prod </td>
           <td>(</td>
+          <td class="paramtype">ade::iFunctor *&#160;</td>
+          <td class="paramname"><em>fwd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">size_t&#160;</td>
           <td class="paramname"><em>gradidx</em>, </td>
         </tr>
@@ -1333,6 +1359,36 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 <p>Given arguments, for every mapped index i in range [0:max_nelems], take the minimum all elements for all arguments </p>
+
+</div>
+</div>
+<a id="a7398e1235a7ae023f87c6198a75418d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7398e1235a7ae023f87c6198a75418d0">&#9670;&nbsp;</a></span>mtens_mul()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ade::TensptrT llo::mtens_mul </td>
+          <td>(</td>
+          <td class="paramtype">ade::TensptrT&#160;</td>
+          <td class="paramname"><em>lhs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ade::MappedTensor&#160;</td>
+          <td class="paramname"><em>rhs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return product of lhs with mapped rhs. </p>
 
 </div>
 </div>
@@ -1607,7 +1663,7 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Generic n-nary operation (potentially surjective) </p>
+<p>Generic n-nary operation. </p>
 
 </div>
 </div>
@@ -2134,7 +2190,7 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Marshal data to tenncor::Source. </p>
+<p>Marshal data to cortenn::Source. </p>
 
 </div>
 </div>
@@ -2292,6 +2348,8 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Converts DataArgs to <a class="el" href="structllo_1_1_vec_ref.html">VecRef</a> of specific type. </p>
+
 </div>
 </div>
 <a id="a55d50068a0cc40ed957b650e46ccdf2b"></a>
@@ -2311,6 +2369,8 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Converts multiple DataArgs to multiple VecRefs of the same type. </p>
 
 </div>
 </div>
@@ -2354,7 +2414,7 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Generic unary operation assuming identity mapping (bijective) </p>
+<p>Generic unary operation assuming identity mapping. </p>
 
 </div>
 </div>

@@ -1,3 +1,11 @@
+///
+/// helper.hpp
+/// llo
+///
+/// Purpose:
+/// Helper functions for generated age files
+///
+
 #include "ade/ifunctor.hpp"
 
 #ifndef LLO_HELPER_HPP
@@ -6,6 +14,7 @@
 namespace llo
 {
 
+/// Return product of lhs with mapped rhs
 ade::TensptrT mtens_mul (ade::TensptrT lhs, ade::MappedTensor rhs);
 
 /// Return the gradient for prod operation assuming the target derived wrt is

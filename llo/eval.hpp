@@ -1,8 +1,16 @@
+///
+/// eval.hpp
+/// llo
+///
+/// Purpose:
+/// Define evaluation visitor to evaluate the root of an equation graph
+///
+
 #include "ade/traveler.hpp"
 
 #include "llo/generated/opmap.hpp"
 
-#include "llo/data.hpp"
+#include "llo/operator.hpp"
 
 #ifndef LLO_EVAL_HPP
 #define LLO_EVAL_HPP

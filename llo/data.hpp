@@ -1,10 +1,18 @@
+///
+/// data.hpp
+/// llo
+///
+/// Purpose:
+/// Define data structures for owning, and passing
+///	generalized and type-specific data
+///
+
 #include <memory>
 
+#include "ade/coord.hpp"
 #include "ade/ileaf.hpp"
 
 #include "llo/generated/codes.hpp"
-
-#include "llo/operator.hpp"
 
 #ifndef LLO_DATA_HPP
 #define LLO_DATA_HPP
@@ -54,6 +62,7 @@ struct GenericRef
 	age::_GENERATED_DTYPE dtype_;
 };
 
+/// Leaf node containing GenericData
 struct Variable final : public ade::iLeaf
 {
 	Variable (const char* data, age::_GENERATED_DTYPE dtype,
@@ -100,7 +109,7 @@ struct Variable final : public ade::iLeaf
 		return *this;
 	}
 
-	/// Assign vectorized data to source
+	/// Assign vectorized data to data source
 	template <typename T>
 	Variable& operator = (std::vector<T> data)
 	{
@@ -108,6 +117,7 @@ struct Variable final : public ade::iLeaf
 		return operator = (ref);
 	}
 
+	/// Assign generic reference to data source
 	Variable& operator = (GenericRef data)
 	{
 		if (false == data.shape_.compatible_after(shape(), 0))
@@ -138,34 +148,44 @@ struct Variable final : public ade::iLeaf
 		return label_ + "(" + data_.shape_.to_string() + ")";
 	}
 
+	/// Implementation of iLeaf
 	void* data (void) override
 	{
 		return data_.data_.get();
 	}
 
+	/// Implementation of iLeaf
 	const void* data (void) const override
 	{
 		return data_.data_.get();
 	}
 
+	/// Implementation of iLeaf
 	size_t type_code (void) const override
 	{
 		return data_.dtype_;
 	}
 
+	/// Return number of bytes in data source
 	size_t nbytes (void) const
 	{
 		return type_size(data_.dtype_) * data_.shape_.n_elems();
 	}
 
+	/// Label for distinguishing variable nodes
 	std::string label_;
 
 private:
+	/// Generic data source
 	GenericData data_;
 };
 
+/// Smart pointer for variable nodes
 using VarptrT = std::shared_ptr<llo::Variable>;
 
+/// Return new variable containing input vector data according to
+/// specified shape and labelled according to input label
+/// Throw error if the input vector size differs from shape.n_elems()
 template <typename T>
 VarptrT get_variable (std::vector<T> data, ade::Shape shape,
 	std::string label = "")
@@ -179,32 +199,67 @@ VarptrT get_variable (std::vector<T> data, ade::Shape shape,
 		age::get_type<T>(), shape, label));
 }
 
+/// Return new variable containing 0s according to
+/// specified shape and labelled according to input label
 template <typename T>
 VarptrT get_variable (ade::Shape shape, std::string label = "")
 {
 	return get_variable(std::vector<T>(shape.n_elems(), 0), shape, label);
 }
 
+/// Return new variable containing 0s according to
+/// specified shape and labelled according to input label
 template <typename T>
-VarptrT data (T scalar, ade::Shape shape, std::string label = "")
+VarptrT get_scalar (T scalar, ade::Shape shape, std::string label = "")
 {
+	if (label.empty())
+	{
+		label = fmts::to_string(scalar);
+	}
 	return llo::get_variable(std::vector<T>(shape.n_elems(),scalar),
 		shape, label);
 }
 
+/// Data to pass around when evaluating
 struct DataArg
 {
+	/// Smart pointer to generic data as bytes
 	std::shared_ptr<char> data_;
 
+	/// Shape of the generic data
 	ade::Shape shape_;
 
+	/// Coordinate mapper
 	ade::CoordptrT mapper_;
 
+	/// True if the coordinate mapper accepts input coordinates,
+	/// False if it accepts output coordinates
 	bool fwd_;
 };
 
+/// Vector of DataArgs to hold arguments
 using DataArgsT = std::vector<DataArg>;
 
+/// Type-specific tensor data wrapper using raw pointer and data size
+/// Avoid using std constainers in case of unintentional deep copies
+template <typename T>
+struct VecRef
+{
+	/// Raw input data
+	const T* data;
+
+	/// Shape info of the raw input
+	ade::Shape shape;
+
+	/// Coordinate mapper of input to output
+	ade::CoordptrT mapper;
+
+	/// True if data should be pushed input to output (fwd mapper)
+	/// False if data should be pulled output from input (bwd mapper)
+	bool push;
+};
+
+/// Converts DataArgs to VecRef of specific type
 template <typename T>
 VecRef<T> to_ref (DataArg& arg)
 {
@@ -216,6 +271,7 @@ VecRef<T> to_ref (DataArg& arg)
 	};
 }
 
+/// Converts multiple DataArgs to multiple VecRefs of the same type
 template <typename T>
 std::vector<VecRef<T>> to_refs (DataArgsT& args)
 {

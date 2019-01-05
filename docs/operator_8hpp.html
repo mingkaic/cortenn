@@ -66,7 +66,6 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
@@ -78,12 +77,13 @@ $(function() {
 <code>#include &lt;cmath&gt;</code><br />
 <code>#include &lt;functional&gt;</code><br />
 <code>#include &lt;random&gt;</code><br />
-<code>#include &quot;ade/coord.hpp&quot;</code><br />
+<code>#include &quot;<a class="el" href="llo_2data_8hpp_source.html">llo/data.hpp</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for operator.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="operator_8hpp__incl.png" border="0" usemap="#llo_2operator_8hpp" alt=""/></div>
 <map name="llo_2operator_8hpp" id="llo_2operator_8hpp">
+<area shape="rect" id="node6" href="llo_2data_8hpp.html" title="llo/data.hpp" alt="" coords="364,79,454,104"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -91,28 +91,18 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="operator_8hpp__dep__incl.png" border="0" usemap="#llo_2operator_8hppdep" alt=""/></div>
 <map name="llo_2operator_8hppdep" id="llo_2operator_8hppdep">
-<area shape="rect" id="node2" href="llo_2data_8hpp.html" title="llo/data.hpp" alt="" coords="494,79,584,104"/>
-<area shape="rect" id="node13" href="operator_8cpp.html" title="llo/src/operator.cpp" alt="" coords="608,79,742,104"/>
-<area shape="rect" id="node3" href="eval_8hpp.html" title="llo/eval.hpp" alt="" coords="455,152,543,177"/>
-<area shape="rect" id="node4" href="llo_8cpp.html" title="llo/python/llo.cpp" alt="" coords="315,225,435,251"/>
-<area shape="rect" id="node7" href="test__data_8cpp.html" title="llo/test/test_data.cpp" alt="" coords="592,225,736,251"/>
-<area shape="rect" id="node8" href="zprune_8hpp.html" title="llo/zprune.hpp" alt="" coords="217,152,322,177"/>
-<area shape="rect" id="node10" href="serialize_8hpp.html" title="llo/serialize.hpp" alt="" coords="617,152,730,177"/>
-<area shape="rect" id="node12" href="data_8cpp.html" title="llo/src/data.cpp" alt="" coords="754,152,865,177"/>
-<area shape="rect" id="node5" href="eval_8cpp.html" title="llo/src/eval.cpp" alt="" coords="459,225,568,251"/>
-<area shape="rect" id="node6" href="test__api_8cpp.html" title="llo/test/test_api.cpp" alt="" coords="155,225,291,251"/>
-<area shape="rect" id="node9" href="zprune_8cpp.html" title="llo/src/zprune.cpp" alt="" coords="5,225,131,251"/>
-<area shape="rect" id="node11" href="serialize_8cpp.html" title="llo/src/serialize.cpp" alt="" coords="760,225,894,251"/>
+<area shape="rect" id="node2" href="eval_8hpp.html" title="llo/eval.hpp" alt="" coords="233,79,322,104"/>
+<area shape="rect" id="node7" href="operator_8cpp.html" title="llo/src/operator.cpp" alt="" coords="347,79,481,104"/>
+<area shape="rect" id="node8" href="test__operator_8cpp.html" title="llo/test/test_operator.cpp" alt="" coords="505,79,672,104"/>
+<area shape="rect" id="node3" href="llo_8cpp.html" title="llo/python/llo.cpp" alt="" coords="5,152,126,177"/>
+<area shape="rect" id="node4" href="eval_8cpp.html" title="llo/src/eval.cpp" alt="" coords="150,152,259,177"/>
+<area shape="rect" id="node5" href="test__api_8cpp.html" title="llo/test/test_api.cpp" alt="" coords="283,152,419,177"/>
+<area shape="rect" id="node6" href="test__data_8cpp.html" title="llo/test/test_data.cpp" alt="" coords="443,152,587,177"/>
 </map>
 </div>
 </div>
 <p><a href="operator_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_vec_ref.html">llo::VecRef&lt; T &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespacello"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html">llo</a></td></tr>
@@ -131,7 +121,7 @@ Functions</h2></td></tr>
 <tr class="separator:a61884656c3aa93b200183b6047ef40dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc00e45b50d07b6444490730f901947e"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:acc00e45b50d07b6444490730f901947e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#acc00e45b50d07b6444490730f901947e">llo::unary</a> (T *out, ade::Shape &amp;outshape, VecRef&lt; T &gt; in, std::function&lt; T(const T &amp;)&gt; f)</td></tr>
-<tr class="memdesc:acc00e45b50d07b6444490730f901947e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic unary operation assuming identity mapping (bijective)  <a href="namespacello.html#acc00e45b50d07b6444490730f901947e">More...</a><br /></td></tr>
+<tr class="memdesc:acc00e45b50d07b6444490730f901947e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic unary operation assuming identity mapping.  <a href="namespacello.html#acc00e45b50d07b6444490730f901947e">More...</a><br /></td></tr>
 <tr class="separator:acc00e45b50d07b6444490730f901947e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af3ffcdedba093a42da3e937e945aba30"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:af3ffcdedba093a42da3e937e945aba30"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#af3ffcdedba093a42da3e937e945aba30">llo::abs</a> (T *out, VecRef&lt; T &gt; in)</td></tr>
@@ -189,7 +179,7 @@ Functions</h2></td></tr>
 <tr class="separator:af2a4ec16dc83e924a43ac86a3893b411"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e10ea5ec51ef72add0a81f7d749e141"><td class="memTemplParams" colspan="2">template&lt;typename OUT , typename ATYPE , typename BTYPE &gt; </td></tr>
 <tr class="memitem:a8e10ea5ec51ef72add0a81f7d749e141"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a8e10ea5ec51ef72add0a81f7d749e141">llo::binary</a> (OUT *out, ade::Shape &amp;outshape, VecRef&lt; ATYPE &gt; a, VecRef&lt; BTYPE &gt; b, std::function&lt; OUT(const ATYPE &amp;, const BTYPE &amp;)&gt; f)</td></tr>
-<tr class="memdesc:a8e10ea5ec51ef72add0a81f7d749e141"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic binary operation assuming identity mapping (bijective)  <a href="namespacello.html#a8e10ea5ec51ef72add0a81f7d749e141">More...</a><br /></td></tr>
+<tr class="memdesc:a8e10ea5ec51ef72add0a81f7d749e141"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic binary operation assuming identity mapping.  <a href="namespacello.html#a8e10ea5ec51ef72add0a81f7d749e141">More...</a><br /></td></tr>
 <tr class="separator:a8e10ea5ec51ef72add0a81f7d749e141"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa56e03e88d5be448c2d06294014a1ff5"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:aa56e03e88d5be448c2d06294014a1ff5"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#aa56e03e88d5be448c2d06294014a1ff5">llo::pow</a> (T *out, ade::Shape &amp;outshape, VecRef&lt; T &gt; a, VecRef&lt; T &gt; b)</td></tr>
@@ -241,7 +231,7 @@ Functions</h2></td></tr>
 <tr class="separator:a502ebfee3eb91123ca56a38862c62801"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c77a8e53c0227e523c81699b9c2aab9"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a8c77a8e53c0227e523c81699b9c2aab9"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a8c77a8e53c0227e523c81699b9c2aab9">llo::nnary</a> (T *out, ade::Shape &amp;outshape, std::vector&lt; VecRef&lt; T &gt;&gt; args, std::function&lt; void(T &amp;, const T &amp;)&gt; acc)</td></tr>
-<tr class="memdesc:a8c77a8e53c0227e523c81699b9c2aab9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic n-nary operation (potentially surjective)  <a href="namespacello.html#a8c77a8e53c0227e523c81699b9c2aab9">More...</a><br /></td></tr>
+<tr class="memdesc:a8c77a8e53c0227e523c81699b9c2aab9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic n-nary operation.  <a href="namespacello.html#a8c77a8e53c0227e523c81699b9c2aab9">More...</a><br /></td></tr>
 <tr class="separator:a8c77a8e53c0227e523c81699b9c2aab9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a891db6a8dd93b21745773a877d795044"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a891db6a8dd93b21745773a877d795044"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a891db6a8dd93b21745773a877d795044">llo::add</a> (T *out, ade::Shape &amp;outshape, std::vector&lt; VecRef&lt; T &gt;&gt; args)</td></tr>

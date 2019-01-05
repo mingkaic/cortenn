@@ -1,12 +1,11 @@
-_REPO_NAME = "com_github_mingkaic_cortenn"
-workspace(name = _REPO_NAME)
+workspace(name = "com_github_mingkaic_cortenn")
 
 # local dependencies
 
 load("//:third_party/all.bzl", "cortenn_repositories")
-cortenn_repositories(_REPO_NAME)
+cortenn_repositories()
 
-load("@tenncor//:tenncor.bzl", "dependencies")
+load("@com_github_mingkaic_tenncor//:tenncor.bzl", "dependencies")
 dependencies()
 
 load("@protobuf_rules//cpp:deps.bzl", "cpp_proto_library")

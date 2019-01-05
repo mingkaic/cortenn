@@ -46,7 +46,7 @@ cc_library(
     srcs = glob(["src/*.cpp"]),
     copts = ["-std=c++14"],
     deps = [
-        "@tenncor//ade:ade",
+        "@com_github_mingkaic_tenncor//ade:ade",
         "//pbm:pbm_cc_proto",
     ],
 )
@@ -59,7 +59,7 @@ cc_test(
     srcs = [":test_srcs"],
     deps = [
         "//pbm:pbm",
-        "@tenncor//dbg:dbg",
+        "@com_github_mingkaic_tenncor//dbg:dbg",
         "@gtest//:gtest",
     ],
     copts = ["-std=c++14"],

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.14"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Cortenn: Cortenn</title>
+<title>Cortenn: Pybinder</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -45,7 +45,6 @@ $(function() {
 });
 /* @license-end */</script>
 <div id="main-nav"></div>
-</div><!-- top -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -60,35 +59,13 @@ $(function() {
 </iframe>
 </div>
 
+</div><!-- top -->
 <div class="header">
   <div class="headertitle">
-<div class="title">Cortenn </div>  </div>
+<div class="title">Pybinder </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a href="https://travis-ci.org/mingkaic/cortenn"></a> <a href="https://coveralls.io/github/mingkaic/cortenn?branch=master"></a></p>
-<h2>Synopsis</h2>
-<p>Cortenn implements data formatting and manipulation portions for the <a href="https://github.com/mingkaic/tenncor">Tenncor libraries</a> help developers write math equations for machine learning.</p>
-<p>This project is a multiplex layer for Tenncor and some data-manipulation library. This library exist to avoid changing Tenncor too much.</p>
-<h2>Components</h2>
-<ul>
-<li><a class="el" href="md_llo__r_e_a_d_m_e__l_l_o.html">LLO (Low Level Operators)</a></li>
-</ul>
-<p>This module is implements basic operations for Tenncor's ADE Tensor objects generated through pybinder. Additionally, llo also defines data format and (de)serialization methods required by PBM.</p>
-<ul>
-<li><a class="el" href="md_opt__r_e_a_d_m_e__o_p_t.html">OPT (Optimizer)</a></li>
-</ul>
-<p>This module specifies graph optimization through ADE's visitor pattern.</p>
-<ul>
-<li><a class="el" href="md_pbm__r_e_a_d_m_e__p_b_m.html">PBM (Protobuf Marshaller)</a></li>
-</ul>
-<p>This module marshals any ADE graph, but requires data serialization functors when saving and loading.</p>
-<ul>
-<li><a class="el" href="md_pybinder__r_e_a_d_m_e__p_y.html">Pybinder</a></li>
-</ul>
-<p>This generator extends Tenncor's AGE generator. In this instance, on top of generating the ADE operators specified in LLO, pybinder generates pybind11 binding code.</p>
-<h2>Building</h2>
-<p>Cortenn uses bazel 0.15+.</p>
-<p>Download bazel: <a href="https://docs.bazel.build/versions/master/install.html">https://docs.bazel.build/versions/master/install.html</a> </p>
+<div class="textblock"><p>Extends ADE Generator to also generate pybind11 binding code. </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

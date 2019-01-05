@@ -45,7 +45,7 @@ struct VecRef
 	bool push;
 };
 
-/// Generic unary operation assuming identity mapping (bijective)
+/// Generic unary operation assuming identity mapping
 template <typename T>
 void unary (T* out, ade::Shape& outshape,
 	VecRef<T> in, std::function<T(const T&)> f)
@@ -64,7 +64,7 @@ void unary (T* out, ade::Shape& outshape,
 		{
 			in.mapper->forward(coord.begin(),
 				ade::coordinate(in.shape, i).begin());
-			out[i] = f(in.data[ade::index(outshape, coord)]);
+			out[ade::index(outshape, coord)] = f(in.data[i]);
 		}
 	}
 	else
@@ -183,27 +183,29 @@ void round (T* out, VecRef<T> in)
 	unary<T>(out, in.shape, in, [](const T& src) { return std::round(src); });
 }
 
-/// Generic binary operation assuming identity mapping (bijective)
+/// Generic binary operation assuming identity mapping
 template <typename OUT, typename ATYPE, typename BTYPE>
 void binary (OUT* out, ade::Shape& outshape, VecRef<ATYPE> a, VecRef<BTYPE> b,
 	std::function<OUT(const ATYPE&,const BTYPE&)> f)
 {
-	if (false == a.push && b.push) // avoid tmpdata by checking if it's needed
+	// avoid tmpdata by checking if it's needed
+	// tmpdata not needed if neither a nor b are pushing
+	if (false == (a.push || b.push))
 	{
+		ade::CoordT coord;
 		ade::CoordT acoord;
 		ade::CoordT bcoord;
 		for (ade::NElemT i = 0, n = outshape.n_elems(); i < n; ++i)
 		{
-			a.mapper->forward(acoord.begin(),
-				ade::coordinate(outshape, i).begin());
-			b.mapper->forward(bcoord.begin(),
-				ade::coordinate(outshape, i).begin());
+			coord = ade::coordinate(outshape, i);
+			a.mapper->forward(acoord.begin(), coord.begin());
+			b.mapper->forward(bcoord.begin(), coord.begin());
 			out[i] = f(
 				a.data[ade::index(a.shape, acoord)],
 				b.data[ade::index(b.shape, bcoord)]);
 		}
 	}
-	else
+	else // a.push || b.push
 	{
 		std::vector<ATYPE> tmpdata(outshape.n_elems());
 		ade::CoordT coord;
@@ -379,7 +381,7 @@ template <>
 void rand_normal<float> (float* out,
 	ade::Shape& outshape, VecRef<float> a, VecRef<float> b);
 
-/// Generic n-nary operation (potentially surjective)
+/// Generic n-nary operation
 template <typename T>
 void nnary (T* out, ade::Shape& outshape, std::vector<VecRef<T>> args,
 	std::function<void(T&, const T&)> acc)

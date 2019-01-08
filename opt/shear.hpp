@@ -16,30 +16,22 @@
 namespace opt
 {
 
-/// Functor for getting leaf values
-template <typename T>
-using GetLeafValT = std::function<T(ade::iLeaf*)>;
+/// Functor for finding leaf targets
+using IsLeafTargetT = std::function<bool(ade::iLeaf*)>;
 
 /// Type for mapping function nodes in path to boolean vector
-using ParentMapT = std::unordered_map<
-	ade::iTensor*,std::unordered_set<size_t>>;
-
-/// Pruning functor type
-using PruneFuncT = std::function<ade::TensptrT(ade::iFunctor*,\
-	std::unordered_set<size_t>,ade::ArgsT)>;
+using ParentMapT =
 
 /// Find leaf nodes by some attribute associated to leaf
-/// This traveler identifies nodes along some path for TargetPruner to work on
-template <typename T>
 struct LeafFinder final : public ade::iTraveler
 {
-	LeafFinder (T target, GetLeafValT<T> get_leaf) :
-		target_(target), get_leaf_(get_leaf) {}
+	LeafFinder (IsLeafTargetT check_leaf) :
+		check_leaf_(check_leaf) {}
 
 	/// Implementation of iTraveler
 	void visit (ade::iLeaf* leaf) override
 	{
-		if (target_ == get_leaf_(leaf))
+		if (check_leaf_(leaf))
 		{
 			founds_.emplace(leaf);
 		}
@@ -52,46 +44,43 @@ struct LeafFinder final : public ade::iTraveler
 		{
 			auto& children = func->get_children();
 			size_t n = children.size();
-			std::unordered_set<size_t> path;
+			bool onpath = false;
 			for (size_t i = 0; i < n; ++i)
 			{
 				ade::TensptrT tens = children[i].get_tensor();
 				tens->accept(*this);
-				if (parents_.end() != parents_.find(tens.get()) ||
-					founds_.end() != founds_.find(tens.get()))
-				{
-					path.emplace(i);
-				}
+				onpath = onpath ||
+					(parents_.end() != parents_.find(tens.get()) ||
+					founds_.end() != founds_.find(tens.get()));
 			}
-			if (false == path.empty())
+			if (onpath)
 			{
-				parents_[func] = path;
+				parents_.emplace(func);
 			}
 		}
 	}
 
-	/// Target of label all paths are travelling to
-	T target_;
-
 	/// Leaf value getter
-	GetLeafValT<T> get_leaf_;
+	IsLeafTargetT check_leaf_;
 
 	/// Set of leaf nodes found
 	std::unordered_set<ade::iTensor*> founds_;
 
 	/// Map of parent nodes in path
-	ParentMapT parents_;
+	std::unordered_set<ade::iTensor*> parents_;
 };
+
+/// Edit functor type
+using EditFuncT = std::function<ade::TensptrT(ade::iFunctor*,ade::ArgsT)>;
 
 /// For some target extractable from iLeaf, prune graph such that reduces the
 /// length of branches to target from root
 /// For example, prune zeros branches by reducing f(x) * 0 to 0,
 /// repeat for every instance of multiplication by zero in graph
-template <typename T>
-struct TargetPruner
+struct TargetedEdit
 {
-	TargetPruner (T target, GetLeafValT<T> find_target, PruneFuncT pruner) :
-		finder_(target, find_target), pruner_(pruner) {}
+	TargetedEdit (IsLeafTargetT check_target, EditFuncT edit) :
+		finder_(check_target), edit_(edit) {}
 
 	/// Prune graph of root Tensptr
 	ade::TensptrT prune (ade::TensptrT root)
@@ -99,8 +88,8 @@ struct TargetPruner
 		// assert that context will be unaffected by prune,
 		// since source will never be touched
 		root->accept(finder_);
-		auto& pathmap = finder_.parents_;
-		if (pathmap.empty()) // not path to target or root is not a parent
+		auto& pathset = finder_.parents_;
+		if (pathset.empty()) // not path to target or root is not a parent
 		{
 			return root;
 		}
@@ -108,11 +97,11 @@ struct TargetPruner
 		root->accept(stat);
 		// grab the intersection of stat.funcs_ and pathmap
 		std::list<ade::iFunctor*> parents;
-		std::transform(pathmap.begin(), pathmap.end(),
+		std::transform(pathset.begin(), pathset.end(),
 			std::back_inserter(parents),
-			[](std::pair<ade::iTensor*,std::unordered_set<size_t>> parent)
+			[](ade::iTensor* tens)
 			{
-				return static_cast<ade::iFunctor*>(parent.first);
+				return static_cast<ade::iFunctor*>(tens);
 			});
 		parents.sort(
 			[&](ade::iTensor* a, ade::iTensor* b)
@@ -120,58 +109,54 @@ struct TargetPruner
 				return stat.graphsize_[a] < stat.graphsize_[b];
 			});
 
-		// each proceeding node in parents list is closer to target
-		// start pruning according to each parent node in order
-		std::unordered_set<ade::iTensor*> targets = finder_.founds_;
-
-		std::unordered_map<ade::iTensor*,ade::TensptrT> mapping;
-		std::unordered_map<ade::iTensor*,bool> targetmap;
+		std::unordered_map<ade::iTensor*,ade::TensptrT> edited_mapping;
 		for (ade::iFunctor* func : parents)
 		{
+			bool func_edited = false; // if edited, mark in mapping
 			ade::ArgsT children = func->get_children();
-			// indices lead to target nodes
-			std::unordered_set<size_t> indices = pathmap[func];
-			for (auto it = indices.begin(), et = indices.end(); it != et;)
+			for (size_t i = 0, n = children.size(); i < n; ++i)
 			{
-				ade::MappedTensor& child = children[*it];
+				ade::MappedTensor& child = children[i];
 				ade::iTensor* tens = child.get_tensor().get();
-				// child is not target, so erase ot from indices
-				auto zit = targets.find(tens);
-				if (targets.end() == zit)
+				// update children arguments if tens is arguments
+				auto edited = edited_mapping.find(tens);
+				if (edited_mapping.end() != edited)
 				{
-					it = indices.erase(it);
-				}
-				else
-				{
-					++it;
+					// replace edited child
+					child = ade::MappedTensor(
+						edited->second,
+						child.get_shaper(),
+						child.map_io(),
+						child.get_coorder()
+					);
+					func_edited = true;
 				}
 			}
-			auto fwd = pruner_(func, indices, children);
-			mapping.emplace(func, fwd);
-			// func maps to target, so store in targets
-			if (ade::iLeaf* fwdleaf = dynamic_cast<ade::iLeaf*>(fwd.get()))
+			ade::TensptrT fwd = edit_(func, children);
+			if (nullptr != fwd)
 			{
-				if (finder_.get_leaf_(fwdleaf) == finder_.target_)
-				{
-					targets.emplace(func);
-				}
+				edited_mapping.emplace(func, fwd);
+			}
+			else if (func_edited)
+			{
+				edited_mapping.emplace(func, ade::TensptrT(
+					ade::Functor::get(func->get_opcode(), children)));
 			}
 		}
-		auto it = mapping.find(root.get());
-		if (mapping.end() == it)
+		auto it = edited_mapping.find(root.get());
+		if (edited_mapping.end() == it)
 		{
-			logs::fatal(
-				"GraphStat failed to identify children of root subgraph");
+			return root;
 		}
 		return it->second;
 	}
 
 private:
 	/// Target finding traveler
-	LeafFinder<T> finder_;
+	LeafFinder finder_;
 
-	/// Prune functor defining how to prune a given graph
-	PruneFuncT pruner_;
+	/// Edit functor defining how to edit a function given its new arguments
+	EditFuncT edit_;
 };
 
 }

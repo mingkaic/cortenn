@@ -390,6 +390,50 @@
             "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"MAX\",MAX},age::to_args(arg1)))"
         },
         {
+            "name": "reduce_sum_1d",
+            "args": [{
+                "dtype": "ade::TensptrT",
+                "name": "arg1"
+            }, {
+                "dtype": "uint8_t",
+                "name": "arg2"
+            }],
+            "out": "llo::reduce_1d(ade::Opcode{\"SUM\",SUM},arg1,arg2)"
+        },
+        {
+            "name": "reduce_prod_1d",
+            "args": [{
+                "dtype": "ade::TensptrT",
+                "name": "arg1"
+            }, {
+                "dtype": "uint8_t",
+                "name": "arg2"
+            }],
+            "out": "llo::reduce_1d(ade::Opcode{\"PROD\",PROD},arg1,arg2)"
+        },
+        {
+            "name": "reduce_min_1d",
+            "args": [{
+                "dtype": "ade::TensptrT",
+                "name": "arg1"
+            }, {
+                "dtype": "uint8_t",
+                "name": "arg2"
+            }],
+            "out": "llo::reduce_1d(ade::Opcode{\"MIN\",MIN},arg1,arg2)"
+        },
+        {
+            "name": "reduce_max_1d",
+            "args": [{
+                "dtype": "ade::TensptrT",
+                "name": "arg1"
+            }, {
+                "dtype": "uint8_t",
+                "name": "arg2"
+            }],
+            "out": "llo::reduce_1d(ade::Opcode{\"MAX\",MAX},arg1,arg2)"
+        },
+        {
             "name": "reduce_sum",
             "args": [{
                 "dtype": "ade::TensptrT",

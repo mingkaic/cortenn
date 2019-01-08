@@ -54,6 +54,24 @@ ade::TensptrT grad_max (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens)
 	return age::eq(rev_fwd, tens[gradidx]);
 }
 
+ade::TensptrT reduce_1d (ade::Opcode opcode, ade::TensptrT tens, uint8_t dim)
+{
+	ade::Shape shape = tens->shape();
+	std::vector<ade::DimT> slist = {shape.at(dim)};
+	std::vector<ade::DimT> indices(ade::rank_cap);
+	auto bt = indices.begin();
+	auto it = bt + dim;
+	std::iota(bt, it, 0);
+	std::iota(it, indices.end(), dim + 1);
+	indices[ade::rank_cap - 1] = dim;
+	ade::CoordptrT reduce(
+		ade::reduce(dim, slist)->connect(*ade::permute(indices)));
+	auto out = ade::Functor::get(opcode, {
+		ade::MappedTensor(tens, reduce),
+	});
+	return ade::TensptrT(out);
+}
+
 ade::TensptrT reduce (ade::Opcode opcode, ade::TensptrT tens, uint8_t dim)
 {
 	ade::Shape shape = tens->shape();

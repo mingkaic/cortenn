@@ -128,22 +128,26 @@ TEST(SHEAR, Prune)
             ade::identity_map(binar2),
         }));
 
-    opt::GetLeafValT<bool> leaves12 = [&](ade::iLeaf* l)
+    opt::IsLeafTargetT leaves12 = [&](ade::iLeaf* l)
     {
         return l == leaf.get() || l == leaf2.get();
     };
 
-    opt::PruneFuncT pruner = [=](ade::iFunctor* f,
-        std::unordered_set<size_t> target_indices,
-        ade::ArgsT args)
+    opt::EditFuncT pruner = [&](ade::iFunctor* f, ade::ArgsT args)
     {
         auto opcode = f->get_opcode();
         if (opcode.code_ < 2) // killable
         {
-            for (size_t index : target_indices)
+            ade::ArgsT filtered;
+            for (auto arg : args)
             {
-                args.erase(args.begin() + index);
+                ade::iTensor* tens = arg.get_tensor().get();
+                if (tens != leaf.get() && tens != leaf2.get())
+                {
+                    filtered.push_back(arg);
+                }
             }
+            args = filtered;
         }
         if (args.size() > 0)
         {
@@ -152,7 +156,7 @@ TEST(SHEAR, Prune)
         return leaf;
     };
 
-    opt::TargetPruner<bool> mockpruner(true, leaves12, pruner);
+    opt::TargetedEdit mockpruner(leaves12, pruner);
     auto root = mockpruner.prune(repl_binar);
 
     std::unordered_map<ade::iTensor*,std::string> varlabels = {
@@ -167,11 +171,7 @@ TEST(SHEAR, Prune)
         " |   `--(killable[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
         " |       `--(binary[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
         " |           `--(leaf3=[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
-        " |           `--(killable[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
-        " |               `--(leaf=[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
         " `--(binary[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
-        "    `--(killable[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
-        "    |   `--(leaf2=[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
         "    `--(not_killable[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
         "        `--(leaf=[1\\1\\1\\1\\1\\1\\1\\1])\n";
 	TREE_EQ(str, root, varlabels);

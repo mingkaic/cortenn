@@ -98,6 +98,7 @@ cc_test(
     deps = [
         ":llo",
         "@gtest//:gtest",
+        "@com_github_mingkaic_tenncor//dbg:dbg",
     ],
     linkstatic = True,
 )

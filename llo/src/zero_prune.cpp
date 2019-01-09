@@ -3,9 +3,9 @@
 
 #include "ade/functor.hpp"
 
-#include "llo/zprune.hpp"
+#include "llo/opt/zero_prune.hpp"
 
-#ifdef LLO_ZPRUNE_HPP
+#ifdef LLO_ZERO_PRUNE_HPP
 
 namespace llo
 {
@@ -101,26 +101,8 @@ static ade::TensptrT prune0 (ade::iFunctor* func, ade::ArgsT args)
 
 ade::TensptrT zero_prune (ade::TensptrT root)
 {
-	opt::TargetedEdit zpruner(
-		[](ade::iLeaf* leaf) -> bool
-		{
-			auto data = static_cast<Variable*>(leaf);
-			if (nullptr == data)
-			{
-				return false;
-			}
-			return data->label_ == "0";
-		}, prune0);
-	return zpruner.prune(root);
-}
-
-ade::TensptrT derive (ade::TensptrT root, ade::iTensor* target)
-{
-	age::Grader grader(target, std::make_shared<age::RuleSet>());
-	root->accept(grader);
-	auto it = grader.derivatives_.find(root.get());
-	assert(grader.derivatives_.end() != it);
-	return zero_prune(it->second);
+	opt::GraphEditor zero_pruner(prune0);
+	return zero_pruner.edit(root);
 }
 
 }

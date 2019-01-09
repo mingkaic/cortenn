@@ -1,19 +1,17 @@
 ///
-///	zprune.hpp
+///	zero_prune.hpp
 ///	llo
 ///
 ///	Purpose:
 ///	Define llo zero pruning functions
 ///
 
-#include "opt/shear.hpp"
-
-#include "llo/generated/grader.hpp"
+#include "opt/graph_editor.hpp"
 
 #include "llo/data.hpp"
 
-#ifndef LLO_ZPRUNE_HPP
-#define LLO_ZPRUNE_HPP
+#ifndef LLO_ZERO_PRUNE_HPP
+#define LLO_ZERO_PRUNE_HPP
 
 namespace llo
 {
@@ -22,9 +20,6 @@ namespace llo
 /// For example, add(x, 0) is converted to simply x, while mul(x, 0) is 0
 ade::TensptrT zero_prune (ade::TensptrT root);
 
-/// Derive root with respect to target with zero branches pruned
-ade::TensptrT derive (ade::TensptrT root, ade::iTensor* target);
-
 }
 
-#endif // LLO_ZPRUNE_HPP
+#endif // LLO_ZERO_PRUNE_HPP

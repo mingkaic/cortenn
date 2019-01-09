@@ -11,7 +11,7 @@
 #include "llo/generated/api.hpp"
 
 #include "llo/eval.hpp"
-#include "llo/zprune.hpp"
+#include "llo/opt/derive.hpp"
 
 
 using UnaryDblF = std::function<double(double)>;

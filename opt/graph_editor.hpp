@@ -1,5 +1,5 @@
 ///
-/// shear.hpp
+/// graph_editor.hpp
 /// opt
 ///
 /// Purpose:
@@ -16,60 +16,6 @@
 namespace opt
 {
 
-/// Functor for finding leaf targets
-using IsLeafTargetT = std::function<bool(ade::iLeaf*)>;
-
-/// Type for mapping function nodes in path to boolean vector
-using ParentMapT =
-
-/// Find leaf nodes by some attribute associated to leaf
-struct LeafFinder final : public ade::iTraveler
-{
-	LeafFinder (IsLeafTargetT check_leaf) :
-		check_leaf_(check_leaf) {}
-
-	/// Implementation of iTraveler
-	void visit (ade::iLeaf* leaf) override
-	{
-		if (check_leaf_(leaf))
-		{
-			founds_.emplace(leaf);
-		}
-	}
-
-	/// Implementation of iTraveler
-	void visit (ade::iFunctor* func) override
-	{
-		if (parents_.end() == parents_.find(func))
-		{
-			auto& children = func->get_children();
-			size_t n = children.size();
-			bool onpath = false;
-			for (size_t i = 0; i < n; ++i)
-			{
-				ade::TensptrT tens = children[i].get_tensor();
-				tens->accept(*this);
-				onpath = onpath ||
-					(parents_.end() != parents_.find(tens.get()) ||
-					founds_.end() != founds_.find(tens.get()));
-			}
-			if (onpath)
-			{
-				parents_.emplace(func);
-			}
-		}
-	}
-
-	/// Leaf value getter
-	IsLeafTargetT check_leaf_;
-
-	/// Set of leaf nodes found
-	std::unordered_set<ade::iTensor*> founds_;
-
-	/// Map of parent nodes in path
-	std::unordered_set<ade::iTensor*> parents_;
-};
-
 /// Edit functor type
 using EditFuncT = std::function<ade::TensptrT(ade::iFunctor*,ade::ArgsT)>;
 
@@ -77,31 +23,32 @@ using EditFuncT = std::function<ade::TensptrT(ade::iFunctor*,ade::ArgsT)>;
 /// length of branches to target from root
 /// For example, prune zeros branches by reducing f(x) * 0 to 0,
 /// repeat for every instance of multiplication by zero in graph
-struct TargetedEdit
+struct GraphEditor
 {
-	TargetedEdit (IsLeafTargetT check_target, EditFuncT edit) :
-		finder_(check_target), edit_(edit) {}
+	GraphEditor (EditFuncT edit) : edit_(edit) {}
 
 	/// Prune graph of root Tensptr
-	ade::TensptrT prune (ade::TensptrT root)
+	ade::TensptrT edit (ade::TensptrT root)
 	{
-		// assert that context will be unaffected by prune,
-		// since source will never be touched
-		root->accept(finder_);
-		auto& pathset = finder_.parents_;
-		if (pathset.empty()) // not path to target or root is not a parent
+		ade::GraphStat stat;
+		root->accept(stat);
+		if (stat.graphsize_.size() == 0)
 		{
 			return root;
 		}
-		ade::GraphStat stat;
-		root->accept(stat);
-		// grab the intersection of stat.funcs_ and pathmap
-		std::list<ade::iFunctor*> parents;
-		std::transform(pathset.begin(), pathset.end(),
-			std::back_inserter(parents),
-			[](ade::iTensor* tens)
+		std::unordered_map<ade::iTensor*,size_t> funcsize;
+		std::copy_if(stat.graphsize_.begin(), stat.graphsize_.end(),
+			std::inserter(funcsize, funcsize.end()),
+			[](std::pair<ade::iTensor*,size_t> graphpair)
 			{
-				return static_cast<ade::iFunctor*>(tens);
+				return graphpair.second > 0;
+			});
+		std::list<ade::iFunctor*> parents;
+		std::transform(funcsize.begin(), funcsize.end(),
+			std::back_inserter(parents),
+			[](std::pair<ade::iTensor*,size_t> graphpair)
+			{
+				return static_cast<ade::iFunctor*>(graphpair.first);
 			});
 		parents.sort(
 			[&](ade::iTensor* a, ade::iTensor* b)
@@ -152,9 +99,6 @@ struct TargetedEdit
 	}
 
 private:
-	/// Target finding traveler
-	LeafFinder finder_;
-
 	/// Edit functor defining how to edit a function given its new arguments
 	EditFuncT edit_;
 };

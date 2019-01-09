@@ -6,7 +6,7 @@
 
 #include "dbg/ade.hpp"
 
-#include "opt/shear.hpp"
+#include "opt/graph_editor.hpp"
 
 
 struct MockTensor final : public ade::iLeaf
@@ -97,7 +97,7 @@ static inline void trim(std::string &s)
 }
 
 
-TEST(SHEAR, Prune)
+TEST(EDITOR, Prune)
 {
     ade::TensptrT leaf(new MockTensor(ade::Shape()));
     ade::TensptrT leaf2(new MockTensor(ade::Shape()));
@@ -128,11 +128,6 @@ TEST(SHEAR, Prune)
             ade::identity_map(binar2),
         }));
 
-    opt::IsLeafTargetT leaves12 = [&](ade::iLeaf* l)
-    {
-        return l == leaf.get() || l == leaf2.get();
-    };
-
     opt::EditFuncT pruner = [&](ade::iFunctor* f, ade::ArgsT args)
     {
         auto opcode = f->get_opcode();
@@ -156,8 +151,8 @@ TEST(SHEAR, Prune)
         return leaf;
     };
 
-    opt::TargetedEdit mockpruner(leaves12, pruner);
-    auto root = mockpruner.prune(repl_binar);
+    opt::GraphEditor mockpruner(pruner);
+    auto root = mockpruner.edit(repl_binar);
 
     std::unordered_map<ade::iTensor*,std::string> varlabels = {
         {leaf.get(), "leaf"},

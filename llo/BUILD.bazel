@@ -6,6 +6,7 @@ filegroup(
     name = "srcs",
     srcs = glob([
         "*.hpp",
+        "opt/*.hpp",
         "src/*.cpp",
     ]) + ["BUILD.bazel"],
     visibility = ["//visibility:public"],
@@ -51,7 +52,10 @@ genrule(
 
 cc_library(
     name = "llo",
-    hdrs = glob(["*.hpp"]) + [
+    hdrs = glob([
+        "*.hpp",
+        "opt/*.hpp",
+    ]) + [
         ":generated/api.hpp",
         ":generated/codes.hpp",
         ":generated/grader.hpp",
@@ -66,7 +70,6 @@ cc_library(
     copts = ["-std=c++14"],
     deps = [
         "//opt:opt",
-        # "//bwd:bwd",
         "@com_github_mingkaic_tenncor//bwd:bwd",
     ],
     visibility = ["//visibility:public"],

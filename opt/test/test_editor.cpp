@@ -46,57 +46,6 @@ struct MockTensor final : public ade::iLeaf
 };
 
 
-static inline void ltrim(std::string &s)
-{
-	s.erase(s.begin(), std::find_if(s.begin(), s.end(),
-		std::not1(std::ptr_fun<int,int>(std::isspace))));
-}
-
-
-static inline void rtrim(std::string &s)
-{
-	s.erase(std::find_if(s.rbegin(), s.rend(),
-		std::not1(std::ptr_fun<int,int>(std::isspace))).base(), s.end());
-}
-
-
-static inline void trim(std::string &s)
-{
-	ltrim(s);
-	rtrim(s);
-}
-
-
-#define TREE_EQ(expectstr, root, labels)\
-{\
-	PrettyEquation artist;\
-	artist.showshape_ = true;\
-    artist.labels_ = labels;\
-	std::stringstream gotstr;\
-	artist.print(gotstr, root);\
-	std::string expect;\
-	std::string got;\
-	std::string line;\
-	while (std::getline(expectstr, line))\
-	{\
-		trim(line);\
-		if (line.size() > 0)\
-		{\
-			expect += line + "\n";\
-		}\
-	}\
-	while (std::getline(gotstr, line))\
-	{\
-		trim(line);\
-		if (line.size() > 0)\
-		{\
-			got += line + "\n";\
-		}\
-	}\
-	EXPECT_STREQ(expect.c_str(), got.c_str());\
-}
-
-
 TEST(EDITOR, Prune)
 {
     ade::TensptrT leaf(new MockTensor(ade::Shape()));
@@ -169,7 +118,7 @@ TEST(EDITOR, Prune)
         " `--(binary[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
         "    `--(not_killable[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
         "        `--(leaf=[1\\1\\1\\1\\1\\1\\1\\1])\n";
-	TREE_EQ(str, root, varlabels);
+    EXPECT_STREQ("", compare_graph(str, root, true, varlabels).c_str());
 }
 
 

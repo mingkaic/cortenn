@@ -37,8 +37,7 @@ static bool is_identity (ade::CoordptrT coorder)
 	return eq;
 }
 
-/// Implementation of iTraveler
-static ade::TensptrT nnary_merge (ade::iFunctor* func, ade::ArgsT args)
+static ade::TensptrT ops_merge_edit (ade::iFunctor* func, ade::ArgsT args)
 {
 	ade::Opcode fopcode = func->get_opcode();
 	age::_GENERATED_OPCODE opcode = (age::_GENERATED_OPCODE) fopcode.code_;
@@ -118,7 +117,7 @@ static ade::TensptrT nnary_merge (ade::iFunctor* func, ade::ArgsT args)
 
 ade::TensptrT ops_merge (ade::TensptrT root)
 {
-	opt::GraphEditor opedit(nnary_merge);
+	opt::GraphEditor opedit(ops_merge_edit);
 	return opedit.edit(root);
 }
 

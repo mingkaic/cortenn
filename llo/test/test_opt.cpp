@@ -14,56 +14,6 @@
 #include "llo/opt/ops_merge.hpp"
 
 
-static inline void ltrim(std::string &s)
-{
-	s.erase(s.begin(), std::find_if(s.begin(), s.end(),
-		std::not1(std::ptr_fun<int,int>(std::isspace))));
-}
-
-
-static inline void rtrim(std::string &s)
-{
-	s.erase(std::find_if(s.rbegin(), s.rend(),
-		std::not1(std::ptr_fun<int,int>(std::isspace))).base(), s.end());
-}
-
-
-static inline void trim(std::string &s)
-{
-	ltrim(s);
-	rtrim(s);
-}
-
-
-#define TREE_EQ(expectstr, root)\
-{\
-	PrettyEquation artist;\
-	artist.showshape_ = true;\
-	std::stringstream gotstr;\
-	artist.print(gotstr, root);\
-	std::string expect;\
-	std::string got;\
-	std::string line;\
-	while (std::getline(expectstr, line))\
-	{\
-		trim(line);\
-		if (line.size() > 0)\
-		{\
-			expect += line + "\n";\
-		}\
-	}\
-	while (std::getline(gotstr, line))\
-	{\
-		trim(line);\
-		if (line.size() > 0)\
-		{\
-			got += line + "\n";\
-		}\
-	}\
-	EXPECT_STREQ(expect.c_str(), got.c_str());\
-}
-
-
 TEST(OPTIMIZATION, zero_prune_singles)
 {
     auto zero = llo::get_scalar(0, ade::Shape());
@@ -83,7 +33,7 @@ TEST(OPTIMIZATION, zero_prune_singles)
             "(SUM[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
             " `--(1([1\\1\\1\\1\\1\\1\\1\\1]))\n" <<
             " `--(2([1\\1\\1\\1\\1\\1\\1\\1]))";
-        TREE_EQ(ss, got3);
+        EXPECT_STREQ("", compare_graph(ss, got3).c_str());
     }
 
     auto gotn1 = llo::zero_prune(age::sub(zero, one));
@@ -92,7 +42,7 @@ TEST(OPTIMIZATION, zero_prune_singles)
         ss <<
             "(NEG[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
             " `--(1([1\\1\\1\\1\\1\\1\\1\\1]))";
-        TREE_EQ(ss, gotn1);
+        EXPECT_STREQ("", compare_graph(ss, gotn1).c_str());
     }
 
     auto got2 = llo::zero_prune(age::sub(two, zero));
@@ -113,7 +63,7 @@ TEST(OPTIMIZATION, zero_prune_singles)
             "(MAX[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
             " `--(2([1\\1\\1\\1\\1\\1\\1\\1]))\n" <<
             " `--(0([1\\1\\1\\1\\1\\1\\1\\1]))";
-        TREE_EQ(ss, gotnormal);
+        EXPECT_STREQ("", compare_graph(ss, gotnormal).c_str());
     }
 }
 
@@ -160,7 +110,7 @@ TEST(OPTIMIZATION, zero_prune_graph)
         " |       `--(NEG[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
         " |           `--(1([1\\1\\1\\1\\1\\1\\1\\1]))\n" <<
         " `--(2([1\\1\\1\\1\\1\\1\\1\\1]))";
-    TREE_EQ(ss, opt_nocascades);
+    EXPECT_STREQ("", compare_graph(ss, opt_nocascades).c_str());
 
     auto got0 = age::tan(zero);
     auto opt_cascades = llo::zero_prune(age::pow(nocascades, got0));
@@ -184,7 +134,7 @@ TEST(OPTIMIZATION, ops_merge_singles)
             " `--(1([1\\1\\1\\1\\1\\1\\1\\1]))\n" <<
             " `--(2([1\\1\\1\\1\\1\\1\\1\\1]))\n" <<
             " `--(3([1\\1\\1\\1\\1\\1\\1\\1]))";
-        TREE_EQ(ss, got1123);
+        EXPECT_STREQ("", compare_graph(ss, got1123).c_str());
     }
 
     // don't merge different nnary
@@ -198,7 +148,7 @@ TEST(OPTIMIZATION, ops_merge_singles)
             " |   `--(1([1\\1\\1\\1\\1\\1\\1\\1]))\n" <<
             " |   `--(2([1\\1\\1\\1\\1\\1\\1\\1]))\n" <<
             " `--(3([1\\1\\1\\1\\1\\1\\1\\1]))";
-        TREE_EQ(ss, got1_12_3);
+        EXPECT_STREQ("", compare_graph(ss, got1_12_3).c_str());
     }
 
     // merge single unary argument of nnary
@@ -210,7 +160,7 @@ TEST(OPTIMIZATION, ops_merge_singles)
             " `--(2([1\\1\\1\\1\\1\\1\\1\\1]))\n" <<
             " `--(1([1\\1\\1\\1\\1\\1\\1\\1]))\n" <<
             " `--(3([1\\1\\1\\1\\1\\1\\1\\1]))";
-        TREE_EQ(ss, got213);
+        EXPECT_STREQ("", compare_graph(ss, got213).c_str());
     }
 
     // don't merge single unary argument of non-nnary
@@ -223,7 +173,7 @@ TEST(OPTIMIZATION, ops_merge_singles)
             " `--(TAN[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
             " |   `--(1([1\\1\\1\\1\\1\\1\\1\\1]))\n" <<
             " `--(3([1\\1\\1\\1\\1\\1\\1\\1]))";
-        TREE_EQ(ss, got2_1_3);
+        EXPECT_STREQ("", compare_graph(ss, got2_1_3).c_str());
     }
 
     auto zero = llo::get_variable<double>(ade::Shape({3, 4}), "0");
@@ -237,7 +187,7 @@ TEST(OPTIMIZATION, ops_merge_singles)
             " `--(1([1\\1\\1\\1\\1\\1\\1\\1]))\n" <<
             " `--(0([3\\4\\1\\1\\1\\1\\1\\1]))\n" <<
             " `--(3([1\\1\\1\\1\\1\\1\\1\\1]))";
-        TREE_EQ(ss, got2103);
+        EXPECT_STREQ("", compare_graph(ss, got2103).c_str());
     }
 
     // merge reduced sum
@@ -249,7 +199,7 @@ TEST(OPTIMIZATION, ops_merge_singles)
             "(SUM[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
             " `--(1([3\\4\\1\\1\\1\\1\\1\\1]))\n" <<
             " `--(0([3\\4\\1\\1\\1\\1\\1\\1]))";
-        TREE_EQ(ss, got10);
+        EXPECT_STREQ("", compare_graph(ss, got10).c_str());
     }
 
     // merge redundent double reduced argument
@@ -259,7 +209,7 @@ TEST(OPTIMIZATION, ops_merge_singles)
         ss <<
             "(SUM[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
             " `--(0([3\\4\\1\\1\\1\\1\\1\\1]))\n";
-        TREE_EQ(ss, got0);
+        EXPECT_STREQ("", compare_graph(ss, got0).c_str());
     }
 
     // don't merge non-redundent double reduced argument
@@ -270,7 +220,7 @@ TEST(OPTIMIZATION, ops_merge_singles)
             "(SUM[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
             " `--(SUM[3\\1\\1\\1\\1\\1\\1\\1])\n" <<
             "     `--(0([3\\4\\1\\1\\1\\1\\1\\1]))\n";
-        TREE_EQ(ss, got_0);
+        EXPECT_STREQ("", compare_graph(ss, got_0).c_str());
     }
 
     // don't merge prod-reduced_sum
@@ -282,7 +232,7 @@ TEST(OPTIMIZATION, ops_merge_singles)
             " `--(SUM[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
             " |   `--(0([3\\4\\1\\1\\1\\1\\1\\1]))\n" <<
             " `--(1([1\\1\\1\\1\\1\\1\\1\\1]))\n";
-        TREE_EQ(ss, got_0_1);
+        EXPECT_STREQ("", compare_graph(ss, got_0_1).c_str());
     }
 }
 
@@ -340,7 +290,7 @@ TEST(OPTIMIZATION, ops_merge_graph)
         " `--(SUB[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
         "     `--(2([1\\1\\1\\1\\1\\1\\1\\1]))\n" <<
         "     `--(3([1\\1\\1\\1\\1\\1\\1\\1]))";
-    TREE_EQ(ss, root);
+    EXPECT_STREQ("", compare_graph(ss, root).c_str());
 }
 
 

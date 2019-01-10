@@ -10,8 +10,7 @@
 namespace llo
 {
 
-// todo: move somewhere else
-static ade::TensptrT prune0 (ade::iFunctor* func, ade::ArgsT args)
+static ade::TensptrT zero_prune_edit (ade::iFunctor* func, ade::ArgsT args)
 {
 	age::_GENERATED_OPCODE opcode =
 		(age::_GENERATED_OPCODE) func->get_opcode().code_;
@@ -101,7 +100,7 @@ static ade::TensptrT prune0 (ade::iFunctor* func, ade::ArgsT args)
 
 ade::TensptrT zero_prune (ade::TensptrT root)
 {
-	opt::GraphEditor zero_pruner(prune0);
+	opt::GraphEditor zero_pruner(zero_prune_edit);
 	return zero_pruner.edit(root);
 }
 

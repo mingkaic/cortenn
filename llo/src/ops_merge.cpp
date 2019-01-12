@@ -44,7 +44,7 @@ static bool is_identity (ade::CoordptrT coorder)
 
 static bool is_bijective (ade::CoordptrT coorder)
 {
-	if (auto ecoorder = dynamic_cast<coord::EigenMap*>(coord.get()))
+	if (auto ecoorder = dynamic_cast<coord::EigenMap*>(coorder.get()))
 	{
 		return ecoorder->is_bijective();
 	}

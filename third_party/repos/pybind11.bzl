@@ -14,7 +14,7 @@ cc_library(
     hdrs = glob([ "include/pybind11/**/*.h" ]),
     includes = ["include"],
     deps = [
-        "@eigen",
+        "@com_github_eigenteam_eigen//:eigen",
         "@numpy",
         "@python",
     ],
@@ -30,9 +30,9 @@ install(
 )
 """
 
-def pybind11_repository(name):
+def pybind11_repository():
     new_git_repository(
-        name = name,
+        name = "com_github_pybind_pybind11",
         remote = "https://github.com/pybind/pybind11.git",
         tag = "v2.2.4",
         build_file_content = _BUILD_CONTENT,

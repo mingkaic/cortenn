@@ -10,9 +10,9 @@ namespace llo
 
 ade::TensptrT mtens_mul (ade::TensptrT lhs, ade::MappedTensor rhs)
 {
-    return ade::TensptrT(ade::Functor::get(ade::Opcode{"PROD", age::PROD}, {
-        ade::identity_map(lhs), rhs
-    }));
+	return ade::TensptrT(ade::Functor::get(ade::Opcode{"PROD", age::PROD}, {
+		ade::identity_map(lhs), rhs
+	}));
 }
 
 ade::TensptrT grad_prod (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens)

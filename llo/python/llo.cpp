@@ -162,11 +162,11 @@ PYBIND11_MODULE(llo, m)
 	py::class_<llo::Variable,llo::VarptrT> variable(m, "Variable", tensor);
 
 	((py::class_<ade::iTensor,ade::TensptrT>) tensor)
-        .def("__str__", &ade::iTensor::to_string)
-        .def("shape", [](py::object self)
+		.def("__str__", &ade::iTensor::to_string)
+		.def("shape", [](py::object self)
 		{
 			ade::Shape shape = self.cast<ade::iTensor*>()->shape();
-            auto pshape = pyllo::c2pshape(shape);
+			auto pshape = pyllo::c2pshape(shape);
 			std::vector<int> ipshape(pshape.begin(), pshape.end());
 			return py::array(ipshape.size(), &ipshape[0]);
 		})

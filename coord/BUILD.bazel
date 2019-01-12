@@ -1,0 +1,45 @@
+licenses(["notice"])
+
+filegroup(
+    name = "srcs",
+    srcs = glob([
+        "*.hpp",
+        "src/*.cpp",
+    ]) + ["BUILD.bazel"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "test_srcs",
+    srcs = glob([
+        "test/*.hpp",
+        "test/*.cpp",
+    ]),
+)
+
+######### LIBRARY #########
+
+cc_library(
+    name = "coord",
+    hdrs = glob(["*.hpp"]),
+    srcs = glob(["src/*.cpp"]),
+    copts = ["-std=c++14"],
+    deps = [
+        "@com_github_eigenteam_eigen//:eigen",
+        "@com_github_mingkaic_tenncor//bwd:bwd",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+######### TEST #########
+
+cc_test(
+    name = "test",
+    srcs = [":test_srcs"],
+    copts = ["-std=c++14"],
+    deps = [
+        ":coord",
+        "@gtest//:gtest",
+    ],
+    linkstatic = True,
+)

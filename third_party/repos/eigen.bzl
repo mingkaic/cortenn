@@ -19,6 +19,7 @@ cc_library(
     name = "eigen",
     hdrs = glob(
         include = [
+            "Eigen/*",
             "Eigen/**/*.h",
             "unsupported/Eigen/*",
         ],

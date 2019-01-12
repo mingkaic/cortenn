@@ -1,3 +1,7 @@
+#include <set>
+
+#include "coord/coord.hpp"
+
 #include "llo/opt/ops_merge.hpp"
 
 #ifdef LLO_OPMERGE_HPP
@@ -5,7 +9,8 @@
 namespace llo
 {
 
-static const std::unordered_set<age::_GENERATED_OPCODE> nnary = {
+// todo: make bool array once generator expresses number of OPCODEs
+static const std::set<age::_GENERATED_OPCODE> nnary = {
 	age::SUM,
 	age::PROD,
 	age::MIN,
@@ -35,6 +40,19 @@ static bool is_identity (ade::CoordptrT coorder)
 		}
 	});
 	return eq;
+}
+
+static bool is_bijective (ade::CoordptrT coorder)
+{
+	if (auto ecoorder = dynamic_cast<coord::EigenMap*>(coord.get()))
+	{
+		return ecoorder->is_bijective();
+	}
+	if (is_identity(coorder))
+	{
+		return true;
+	}
+	return false;
 }
 
 static ade::TensptrT ops_merge_edit (ade::iFunctor* func, ade::ArgsT args)

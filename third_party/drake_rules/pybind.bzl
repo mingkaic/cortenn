@@ -54,7 +54,7 @@ def pybind_py_library(
         ],
         # Always link to pybind11.
         deps = [
-            "@pybind11",
+            "@com_github_pybind_pybind11//:pybind11",
         ] + cc_deps,
         testonly = testonly,
         visibility = visibility,

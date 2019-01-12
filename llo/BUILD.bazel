@@ -70,6 +70,7 @@ cc_library(
     copts = ["-std=c++14"],
     deps = [
         "//opt:opt",
+        "//coord:coord",
         "@com_github_mingkaic_tenncor//bwd:bwd",
     ],
     visibility = ["//visibility:public"],

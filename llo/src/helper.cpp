@@ -61,12 +61,18 @@ ade::TensptrT reduce_1d (ade::Opcode opcode, ade::TensptrT tens, uint8_t dim)
 	}));
 }
 
-ade::TensptrT reduce (ade::Opcode opcode, ade::TensptrT tens, uint8_t dim)
+ade::TensptrT reduce (ade::Opcode opcode, ade::TensptrT tens,
+	uint8_t start, uint8_t end)
 {
+	if (end < start)
+	{
+		logs::fatalf("end index %d must be after start %d", end, start);
+	}
 	ade::Shape shape = tens->shape();
-	std::vector<ade::DimT> slist(shape.begin() + dim, shape.end());
+	auto it = shape.begin();
+	std::vector<ade::DimT> slist(it + start, it + end);
 	auto out = ade::Functor::get(opcode, {
-		ade::reduce_map(tens, dim, slist),
+		ade::reduce_map(tens, start, slist),
 	});
 	return ade::TensptrT(out);
 }

@@ -33,7 +33,8 @@ ade::TensptrT grad_max (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens);
 ade::TensptrT reduce_1d (ade::Opcode opcode, ade::TensptrT tens, uint8_t dim);
 
 /// Return reduction of tens after dimension dim using opcode operation
-ade::TensptrT reduce (ade::Opcode opcode, ade::TensptrT tens, uint8_t dim);
+ade::TensptrT reduce (ade::Opcode opcode, ade::TensptrT tens,
+	uint8_t start, uint8_t end);
 
 /// Return matmul of a and b
 ade::TensptrT matmul (ade::TensptrT a, ade::TensptrT b);

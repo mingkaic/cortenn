@@ -420,16 +420,16 @@ class LLOTest(unittest.TestCase):
         self._common_reduce_1d(age.reduce_max_1d, tf.reduce_max)
 
     def test_rsum(self):
-        self._common_reduce(age.reduce_sum0, age.reduce_sum, tf.reduce_sum)
+        self._common_reduce(age.reduce_sum, age.reduce_sum, tf.reduce_sum)
 
     def test_rprod(self):
-        self._common_reduce(age.reduce_prod0, age.reduce_prod, tf.reduce_prod)
+        self._common_reduce(age.reduce_prod, age.reduce_prod, tf.reduce_prod)
 
     def test_rmin(self):
-        self._common_reduce(age.reduce_min0, age.reduce_min, tf.reduce_min)
+        self._common_reduce(age.reduce_min, age.reduce_min, tf.reduce_min)
 
     def test_rmax(self):
-        self._common_reduce(age.reduce_max0, age.reduce_max, tf.reduce_max)
+        self._common_reduce(age.reduce_max, age.reduce_max, tf.reduce_max)
 
     def test_matmul(self):
         shape = [5, 5]

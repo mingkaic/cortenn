@@ -437,45 +437,69 @@
             "name": "reduce_sum",
             "args": [{
                 "dtype": "ade::TensptrT",
-                "name": "arg1"
+                "name": "tens"
             }, {
                 "dtype": "uint8_t",
-                "name": "arg2"
+                "name": "start",
+                "default": "0"
+            }, {
+                "dtype": "uint8_t",
+                "name": "end",
+                "default": "ade::rank_cap"
             }],
-            "out": "llo::reduce(ade::Opcode{\"SUM\",SUM},arg1,arg2)"
+            "out": "llo::reduce(ade::Opcode{\"SUM\",SUM},tens,start,end)",
+            "description": "sum values ignoring coordinate indices between start and end"
         },
         {
             "name": "reduce_prod",
             "args": [{
                 "dtype": "ade::TensptrT",
-                "name": "arg1"
+                "name": "tens"
             }, {
                 "dtype": "uint8_t",
-                "name": "arg2"
+                "name": "start",
+                "default": "0"
+            }, {
+                "dtype": "uint8_t",
+                "name": "end",
+                "default": "ade::rank_cap"
             }],
-            "out": "llo::reduce(ade::Opcode{\"PROD\",PROD},arg1,arg2)"
+            "out": "llo::reduce(ade::Opcode{\"PROD\",PROD},tens,start,end)",
+            "description": "multiply values ignoring coordinate indices between start and end"
         },
         {
             "name": "reduce_min",
             "args": [{
                 "dtype": "ade::TensptrT",
-                "name": "arg1"
+                "name": "tens"
             }, {
                 "dtype": "uint8_t",
-                "name": "arg2"
+                "name": "start",
+                "default": "0"
+            }, {
+                "dtype": "uint8_t",
+                "name": "end",
+                "default": "ade::rank_cap"
             }],
-            "out": "llo::reduce(ade::Opcode{\"MIN\",MIN},arg1,arg2)"
+            "out": "llo::reduce(ade::Opcode{\"MIN\",MIN},tens,start,end)",
+            "description": "min values ignoring coordinate indices between start and end"
         },
         {
             "name": "reduce_max",
             "args": [{
                 "dtype": "ade::TensptrT",
-                "name": "arg1"
+                "name": "tens"
             }, {
                 "dtype": "uint8_t",
-                "name": "arg2"
+                "name": "start",
+                "default": "0"
+            }, {
+                "dtype": "uint8_t",
+                "name": "end",
+                "default": "ade::rank_cap"
             }],
-            "out": "llo::reduce(ade::Opcode{\"MAX\",MAX},arg1,arg2)"
+            "out": "llo::reduce(ade::Opcode{\"MAX\",MAX},tens,start,end)",
+            "description": "max values ignoring coordinate indices between start and end"
         },
         {
             "name": "permute",
@@ -501,38 +525,6 @@
                 "name": "arg3"
             }],
             "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SUM\",SUM},{ade::extend_map(arg1,arg2,arg3)}))"
-        },
-        {
-            "name": "reduce_sum",
-            "args": [{
-                "dtype": "ade::TensptrT",
-                "name": "arg1"
-            }],
-            "out": "reduce_sum(arg1,0)"
-        },
-        {
-            "name": "reduce_prod",
-            "args": [{
-                "dtype": "ade::TensptrT",
-                "name": "arg1"
-            }],
-            "out": "reduce_prod(arg1,0)"
-        },
-        {
-            "name": "reduce_min",
-            "args": [{
-                "dtype": "ade::TensptrT",
-                "name": "arg1"
-            }],
-            "out": "reduce_min(arg1,0)"
-        },
-        {
-            "name": "reduce_max",
-            "args": [{
-                "dtype": "ade::TensptrT",
-                "name": "arg1"
-            }],
-            "out": "reduce_max(arg1,0)"
         },
         {
             "name": "transpose",

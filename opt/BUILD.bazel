@@ -33,7 +33,7 @@ cc_library(
 cc_test(
     name = "test",
     size = "small",
-    srcs = [":test_srcs"],
+    srcs = ["//opt:test_srcs"],
     copts = ["-std=c++14"],
     deps = [
         "//opt:opt",

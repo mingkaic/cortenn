@@ -11,7 +11,7 @@ filegroup(
     srcs = glob([
         "*.hpp",
         "src/*.cpp",
-    ]) + [":protos", "BUILD.bazel"],
+    ]) + ["//pbm:protos", "BUILD.bazel"],
 )
 
 filegroup(
@@ -56,7 +56,7 @@ cc_library(
 cc_test(
     name = "test",
     size = "small",
-    srcs = [":test_srcs"],
+    srcs = ["//pbm:test_srcs"],
     deps = [
         "//pbm:pbm",
         "@com_github_mingkaic_tenncor//dbg:dbg",

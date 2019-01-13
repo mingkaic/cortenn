@@ -8,7 +8,7 @@ load("@protobuf_rules//cpp:cpp_proto_library.bzl", "cpp_proto_library")
 
 filegroup(
     name = "srcs",
-    srcs = [":protos", "BUILD.bazel"],
+    srcs = ["//graphmgr:protos", "BUILD.bazel"],
 )
 
 filegroup(

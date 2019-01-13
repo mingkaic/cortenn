@@ -56,16 +56,16 @@ cc_library(
         "*.hpp",
         "opt/*.hpp",
     ]) + [
-        ":generated/api.hpp",
-        ":generated/codes.hpp",
-        ":generated/grader.hpp",
-        ":generated/opmap.hpp",
+        "//llo:generated/api.hpp",
+        "//llo:generated/codes.hpp",
+        "//llo:generated/grader.hpp",
+        "//llo:generated/opmap.hpp",
     ],
     srcs = glob(["src/*.cpp"]) + [
-        ":generated/api.cpp",
-        ":generated/codes.cpp",
-        ":generated/grader.cpp",
-        ":generated/opmap.cpp",
+        "//llo:generated/api.cpp",
+        "//llo:generated/codes.cpp",
+        "//llo:generated/grader.cpp",
+        "//llo:generated/opmap.cpp",
     ],
     copts = ["-std=c++14"],
     deps = [
@@ -78,18 +78,18 @@ cc_library(
 
 pybind_library(
     name = "age_py",
-    cc_srcs = [":generated/pyapi.cpp"],
-    cc_deps = [":llo"],
+    cc_srcs = ["//llo:generated/pyapi.cpp"],
+    cc_deps = ["//llo:llo"],
 )
 
 pybind_library(
     name = "llo_py",
-    cc_srcs = [":python/llo.cpp"],
+    cc_srcs = ["//llo:python/llo.cpp"],
     cc_deps = [
-        ":llo",
+        "//llo:llo",
         "@com_github_mingkaic_tenncor//dbg:dbg",
     ],
-    py_deps = [":age_py"],
+    py_deps = ["//llo:age_py"],
     visibility = ["//visibility:public"],
 )
 
@@ -97,10 +97,10 @@ pybind_library(
 
 cc_test(
     name = "ctest",
-    srcs = [":ctest_srcs"],
+    srcs = ["//llo:ctest_srcs"],
     copts = ["-std=c++14"],
     deps = [
-        ":llo",
+        "//llo:llo",
         "@gtest//:gtest",
         "@com_github_mingkaic_tenncor//dbg:dbg",
     ],
@@ -109,6 +109,6 @@ cc_test(
 
 py_test(
     name = "ptest",
-    srcs = [":ptest_srcs"],
-    deps = [":llo_py"],
+    srcs = ["//llo:ptest_srcs"],
+    deps = ["//llo:llo_py"],
 )

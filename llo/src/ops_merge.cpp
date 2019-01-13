@@ -17,42 +17,10 @@ static const std::set<age::_GENERATED_OPCODE> nnary = {
 	age::MAX,
 };
 
-static bool is_identity (ade::CoordptrT coorder)
-{
-	if (ade::identity == coorder)
-	{
-		return true;
-	}
-	bool eq = true;
-	coorder->access([&](const ade::MatrixT& m)
-	{
-		for (uint8_t i = 0; eq && i < ade::mat_dim; ++i)
-		{
-			for (uint8_t j = 0; eq && j < i; ++j)
-			{
-				eq = 0 == m[i][j];
-			}
-			eq = 1 == m[i][i];
-			for (uint8_t j = i + 1; eq && j < ade::mat_dim; ++j)
-			{
-				eq = 0 == m[i][j];
-			}
-		}
-	});
-	return eq;
-}
-
 static bool is_bijective (ade::CoordptrT coorder)
 {
-	if (auto ecoorder = dynamic_cast<coord::EigenMap*>(coorder.get()))
-	{
-		return ecoorder->is_bijective();
-	}
-	if (is_identity(coorder))
-	{
-		return true;
-	}
-	return false;
+	return ade::identity == coorder ||
+		coorder->is_bijective();
 }
 
 static ade::TensptrT ops_merge_edit (ade::iFunctor* func, ade::ArgsT args)
@@ -78,46 +46,69 @@ static ade::TensptrT ops_merge_edit (ade::iFunctor* func, ade::ArgsT args)
 				arg_children = f->get_children();
 				arg_op = (age::_GENERATED_OPCODE) f->get_opcode().code_;
 			}
-			bool arg_id = is_identity(arg_coorder);
-			// merge with arg_children if:
-			// - arg or its children use identity coorders
-			// - arg has same opcode as func OR arg is nnary with only a child
-			if ((opcode == arg_op && (arg_id || std::all_of(
+			bool arg_id = is_bijective(arg_coorder);
+			if (opcode == arg_op && (arg_id || std::all_of(
 				arg_children.begin(), arg_children.end(),
 				[](ade::MappedTensor& mten)
 				{
-					return is_identity(mten.get_coorder());
-				}))) ||
-				(arg_children.size() == 1 &&
-				nnary.end() != nnary.find(arg_op) &&
-				is_identity(arg_children[0].get_coorder())))
+					return is_bijective(mten.get_coorder());
+				})))
 			{
-				bool newdirection;
-				ade::CoordptrT newcoorder;
 				// merge child's mapper and shaper to these arguments
 				for (auto child : arg_children)
 				{
+					bool newdirection;
+					auto acoorder = arg_coorder;
+					bool child_io = child.map_io();
+					auto ccoorder = child.get_coorder();
 					// arg is identity, so take children's direction and coorder
 					if (arg_id)
 					{
-						newdirection = child.map_io();
-						newcoorder = child.get_coorder();
+						newdirection = child_io;
+						acoorder = newdirection != arg_io ?
+							ade::CoordptrT(acoorder->reverse()) :
+							acoorder;
 					}
 					// child.get_coorder() is identity,
 					// so take arg's direction and coorder
 					else
 					{
 						newdirection = arg_io;
-						newcoorder = arg_coorder;
+						ccoorder = newdirection != child_io ?
+							ade::CoordptrT(ccoorder->reverse()) :
+							ccoorder;
 					}
 					newchildren.push_back(ade::MappedTensor(
 						child.get_tensor(),
 						ade::CoordptrT(child.get_shaper()->
 							connect(*arg_shaper)),
 						newdirection,
-						newcoorder
+						ade::CoordptrT(newdirection ?
+							ccoorder->connect(*acoorder) : // child -> arg
+							acoorder->connect(*ccoorder)) // arg -> child
 					));
 				}
+				merged = true;
+			}
+			else if (arg_children.size() == 1 &&
+				nnary.end() != nnary.find(arg_op) &&
+				is_bijective(arg_children[0].get_coorder()))
+			{
+				auto child = arg_children[0];
+				bool child_io = child.map_io();
+				auto ccoorder = child.get_coorder();
+				ccoorder = arg_io != child_io ?
+					ade::CoordptrT(ccoorder->reverse()) :
+					ccoorder;
+				newchildren.push_back(ade::MappedTensor(
+					child.get_tensor(),
+					ade::CoordptrT(child.get_shaper()->
+						connect(*arg_shaper)),
+					arg_io,
+					ade::CoordptrT(arg_io ?
+						ccoorder->connect(*arg_coorder) : // child -> arg
+						arg_coorder->connect(*ccoorder)) // arg -> child
+				));
 				merged = true;
 			}
 			else

@@ -87,7 +87,7 @@ struct EigenMap final : public ade::iCoordMap
 		cb(buffer);
 	}
 
-	bool is_bijective (void) const
+	bool is_bijective (void) const override
 	{
 		return (int) matrix_.determinant() != 0;
 	}
@@ -95,6 +95,36 @@ struct EigenMap final : public ade::iCoordMap
 private:
 	Eigen::MatrixXd matrix_;
 };
+
+/// Identity matrix instance
+extern ade::CoordptrT identity;
+
+/// Return coordinate mapper dividing dimensions after rank
+/// by values in red vector
+/// For example, given coordinate [2, 2, 6, 6], rank=2, and red=[3, 3],
+/// mapper forward transforms to coordinate [2, 2, 2, 2]
+ade::CoordptrT reduce (uint8_t rank, std::vector<ade::DimT> red);
+
+/// Return coordinate mapper multiplying dimensions after rank
+/// by values in ext vector
+/// For example, given coordinate [6, 6, 2, 2], rank=2, and ext=[3, 3],
+/// mapper forward transforms to coordinate [6, 6, 6, 6]
+ade::CoordptrT extend (uint8_t rank, std::vector<ade::DimT> ext);
+
+/// Return coordinate mapper permuting coordinate according to input order
+/// Order is a vector of indices of the dimensions to appear in order
+/// Indices not referenced by order but less than rank_cap will be appended
+/// by numerical order
+/// For example, given coordinate [1, 2, 3, 4], order=[1, 3],
+/// mapper forward transforms to coordinate [2, 4, 1, 3]
+/// Returned coordinate mapper will be a CoordMap instance, so inversibility
+/// requires order indices be unique, otherwise throw fatal error
+ade::CoordptrT permute (std::vector<uint8_t> order);
+
+/// Return coordinate mapper flipping coordinate value at specified dimension
+/// Flipped dimension with original value x is represented as -x-1
+/// (see CoordT definition)
+ade::CoordptrT flip (uint8_t dim);
 
 }
 

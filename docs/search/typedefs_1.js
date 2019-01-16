@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['dataargst',['DataArgsT',['../namespacello.html#a7e3abd419407ceea87846978c6f3d308',1,'llo']]],
-  ['dataloadert',['DataLoaderT',['../namespacepbm.html#a06155a5439c0c77b969ed34d5da6cbfd',1,'pbm']]],
-  ['datasavert',['DataSaverT',['../namespacepbm.html#a98a0c941943a8ea186975b9eb102a991',1,'pbm']]]
+  ['editfunct',['EditFuncT',['../namespaceopt.html#a8cbd4508cca3b4920e499d5145001991',1,'opt']]],
+  ['enginet',['EngineT',['../namespacello.html#a80fc8a112cc3f147a818d53f6045ac0b',1,'llo']]]
 ];

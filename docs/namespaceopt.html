@@ -71,75 +71,32 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structopt_1_1_leaf_finder.html">LeafFinder</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structopt_1_1_target_pruner.html">TargetPruner</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structopt_1_1_graph_editor.html">GraphEditor</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:ac3aa46ec315b055c2486aeab0398170d"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ac3aa46ec315b055c2486aeab0398170d"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceopt.html#ac3aa46ec315b055c2486aeab0398170d">GetLeafValT</a> = std::function&lt; T(ade::iLeaf *)&gt;</td></tr>
-<tr class="memdesc:ac3aa46ec315b055c2486aeab0398170d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Functor for getting leaf values.  <a href="#ac3aa46ec315b055c2486aeab0398170d">More...</a><br /></td></tr>
-<tr class="separator:ac3aa46ec315b055c2486aeab0398170d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a482fb643ec354be00a0eb98a19ba39e4"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceopt.html#a482fb643ec354be00a0eb98a19ba39e4">ParentMapT</a> = std::unordered_map&lt; ade::iTensor *, std::unordered_set&lt; size_t &gt; &gt;</td></tr>
-<tr class="memdesc:a482fb643ec354be00a0eb98a19ba39e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type for mapping function nodes in path to boolean vector.  <a href="#a482fb643ec354be00a0eb98a19ba39e4">More...</a><br /></td></tr>
-<tr class="separator:a482fb643ec354be00a0eb98a19ba39e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aee1a6564411fe21aa320fd255abc2e68"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceopt.html#aee1a6564411fe21aa320fd255abc2e68">PruneFuncT</a> = std::function&lt; ade::TensptrT(ade::iFunctor *, std::unordered_set&lt; size_t &gt;, ade::ArgsT)&gt;</td></tr>
-<tr class="memdesc:aee1a6564411fe21aa320fd255abc2e68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pruning functor type.  <a href="#aee1a6564411fe21aa320fd255abc2e68">More...</a><br /></td></tr>
-<tr class="separator:aee1a6564411fe21aa320fd255abc2e68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8cbd4508cca3b4920e499d5145001991"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceopt.html#a8cbd4508cca3b4920e499d5145001991">EditFuncT</a> = std::function&lt; ade::TensptrT(ade::iFunctor *, ade::ArgsT)&gt;</td></tr>
+<tr class="memdesc:a8cbd4508cca3b4920e499d5145001991"><td class="mdescLeft">&#160;</td><td class="mdescRight">Edit functor type.  <a href="#a8cbd4508cca3b4920e499d5145001991">More...</a><br /></td></tr>
+<tr class="separator:a8cbd4508cca3b4920e499d5145001991"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p><a class="el" href="shear_8hpp.html">shear.hpp</a> opt</p>
+<div class="textblock"><p><a class="el" href="graph__editor_8hpp.html">graph_editor.hpp</a> opt</p>
 <p>Purpose: Define ade graph pruning functions </p>
 </div><h2 class="groupheader">Typedef Documentation</h2>
-<a id="ac3aa46ec315b055c2486aeab0398170d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac3aa46ec315b055c2486aeab0398170d">&#9670;&nbsp;</a></span>GetLeafValT</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="namespaceopt.html#ac3aa46ec315b055c2486aeab0398170d">opt::GetLeafValT</a> = typedef std::function&lt;T(ade::iLeaf*)&gt;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Functor for getting leaf values. </p>
-
-</div>
-</div>
-<a id="a482fb643ec354be00a0eb98a19ba39e4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a482fb643ec354be00a0eb98a19ba39e4">&#9670;&nbsp;</a></span>ParentMapT</h2>
+<a id="a8cbd4508cca3b4920e499d5145001991"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8cbd4508cca3b4920e499d5145001991">&#9670;&nbsp;</a></span>EditFuncT</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespaceopt.html#a482fb643ec354be00a0eb98a19ba39e4">opt::ParentMapT</a> = typedef std::unordered_map&lt; ade::iTensor*,std::unordered_set&lt;size_t&gt; &gt;</td>
+          <td class="memname">using <a class="el" href="namespaceopt.html#a8cbd4508cca3b4920e499d5145001991">opt::EditFuncT</a> = typedef std::function&lt;ade::TensptrT(ade::iFunctor*,ade::ArgsT)&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Type for mapping function nodes in path to boolean vector. </p>
-
-</div>
-</div>
-<a id="aee1a6564411fe21aa320fd255abc2e68"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aee1a6564411fe21aa320fd255abc2e68">&#9670;&nbsp;</a></span>PruneFuncT</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="namespaceopt.html#aee1a6564411fe21aa320fd255abc2e68">opt::PruneFuncT</a> = typedef std::function&lt;ade::TensptrT(ade::iFunctor*, std::unordered_set&lt;size_t&gt;,ade::ArgsT)&gt;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Pruning functor type. </p>
+<p>Edit functor type. </p>
 
 </div>
 </div>

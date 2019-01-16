@@ -1,17 +1,16 @@
 <map id="llo/data.hpp" name="llo/data.hpp">
-<area shape="rect" id="node2" href="$operator_8hpp.html" title="llo/operator.hpp" alt="" coords="560,79,673,104"/>
-<area shape="rect" id="node5" href="$llo_8cpp.html" title="llo/python/llo.cpp" alt="" coords="319,225,440,251"/>
-<area shape="rect" id="node8" href="$test__data_8cpp.html" title="llo/test/test_data.cpp" alt="" coords="762,225,906,251"/>
-<area shape="rect" id="node11" href="$serialize_8hpp.html" title="llo/serialize.hpp" alt="" coords="32,79,145,104"/>
-<area shape="rect" id="node13" href="$zprune_8hpp.html" title="llo/zprune.hpp" alt="" coords="180,152,285,177"/>
-<area shape="rect" id="node15" href="$data_8cpp.html" title="llo/src/data.cpp" alt="" coords="872,79,983,104"/>
-<area shape="rect" id="node16" href="$helper_8cpp.html" title="llo/src/helper.cpp" alt="" coords="1007,79,1128,104"/>
-<area shape="rect" id="node3" href="$eval_8hpp.html" title="llo/eval.hpp" alt="" coords="708,152,797,177"/>
-<area shape="rect" id="node9" href="$operator_8cpp.html" title="llo/src/operator.cpp" alt="" coords="550,152,684,177"/>
-<area shape="rect" id="node10" href="$test__operator_8cpp.html" title="llo/test/test_operator.cpp" alt="" coords="359,152,525,177"/>
-<area shape="rect" id="node4" href="$llo_8hpp.html" title="llo/llo.hpp" alt="" coords="68,225,146,251"/>
-<area shape="rect" id="node6" href="$eval_8cpp.html" title="llo/src/eval.cpp" alt="" coords="628,225,738,251"/>
-<area shape="rect" id="node7" href="$test__api_8cpp.html" title="llo/test/test_api.cpp" alt="" coords="466,225,602,251"/>
-<area shape="rect" id="node12" href="$serialize_8cpp.html" title="llo/src/serialize.cpp" alt="" coords="22,152,156,177"/>
-<area shape="rect" id="node14" href="$zprune_8cpp.html" title="llo/src/zprune.cpp" alt="" coords="170,225,295,251"/>
+<area shape="rect" id="node2" href="$operator_8hpp.html" title="llo/operator.hpp" alt="" coords="304,79,417,104"/>
+<area shape="rect" id="node5" href="$llo_8cpp.html" title="llo/python/llo.cpp" alt="" coords="384,225,504,251"/>
+<area shape="rect" id="node8" href="$serialize_8hpp.html" title="llo/serialize.hpp" alt="" coords="32,79,145,104"/>
+<area shape="rect" id="node10" href="$zero__prune_8hpp.html" title="llo/opt/zero_prune.hpp" alt="" coords="502,79,656,104"/>
+<area shape="rect" id="node14" href="$data_8cpp.html" title="llo/src/data.cpp" alt="" coords="679,79,790,104"/>
+<area shape="rect" id="node15" href="$helper_8cpp.html" title="llo/src/helper.cpp" alt="" coords="814,79,936,104"/>
+<area shape="rect" id="node3" href="$eval_8hpp.html" title="llo/eval.hpp" alt="" coords="180,152,269,177"/>
+<area shape="rect" id="node7" href="$operator_8cpp.html" title="llo/src/operator.cpp" alt="" coords="293,152,427,177"/>
+<area shape="rect" id="node4" href="$llo_8hpp.html" title="llo/llo.hpp" alt="" coords="7,225,84,251"/>
+<area shape="rect" id="node6" href="$eval_8cpp.html" title="llo/src/eval.cpp" alt="" coords="169,225,279,251"/>
+<area shape="rect" id="node9" href="$serialize_8cpp.html" title="llo/src/serialize.cpp" alt="" coords="21,152,155,177"/>
+<area shape="rect" id="node11" href="$derive_8hpp.html" title="llo/opt/derive.hpp" alt="" coords="509,152,632,177"/>
+<area shape="rect" id="node13" href="$zero__prune_8cpp.html" title="llo/src/zero_prune.cpp" alt="" coords="656,152,808,177"/>
+<area shape="rect" id="node12" href="$derive_8cpp.html" title="llo/src/derive.cpp" alt="" coords="529,225,650,251"/>
 </map>

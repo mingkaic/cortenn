@@ -1,9 +1,11 @@
 var searchData=
 [
-  ['leaffinder',['LeafFinder',['../structopt_1_1_leaf_finder.html#a99c726fac5ed3911926f617c97cf8294',1,'opt::LeafFinder']]],
-  ['load_5fcoord',['load_coord',['../namespacepbm.html#aeba4471bf47aaee406e158b5c6445271',1,'pbm']]],
-  ['load_5fgraph',['load_graph',['../namespacepbm.html#a0037ee921475730e5547b03f005e3855',1,'pbm']]],
-  ['log',['log',['../namespacello.html#ab1380d9ae294bf7d8e3d6cef4ef40396',1,'llo']]],
-  ['lt',['lt',['../namespacello.html#a37ca02223b4f25f1d4f8c99c74a82619',1,'llo']]],
-  ['ltrim',['ltrim',['../test__shear_8cpp.html#a47084ee818936eef3c48be492c0e860f',1,'ltrim(std::string &amp;s):&#160;test_shear.cpp'],['../test__load_8cpp.html#a47084ee818936eef3c48be492c0e860f',1,'ltrim(std::string &amp;s):&#160;test_load.cpp']]]
+  ['nbytes',['nbytes',['../structllo_1_1_variable.html#ae3eb14d0db3deb6845d8566af25365eb',1,'llo::Variable']]],
+  ['neg',['neg',['../namespacello.html#a2523a51704ba46880ed6b0ed38aa0259',1,'llo']]],
+  ['neg_3c_20uint16_5ft_20_3e',['neg&lt; uint16_t &gt;',['../namespacello.html#a26997fff05dbe6209d720e66cb7c2693',1,'llo']]],
+  ['neg_3c_20uint32_5ft_20_3e',['neg&lt; uint32_t &gt;',['../namespacello.html#acc26536b3f54b814ca59d94fa87d2728',1,'llo']]],
+  ['neg_3c_20uint64_5ft_20_3e',['neg&lt; uint64_t &gt;',['../namespacello.html#a9d20723f32966a0b8341676f61f7aa4f',1,'llo']]],
+  ['neg_3c_20uint8_5ft_20_3e',['neg&lt; uint8_t &gt;',['../namespacello.html#a6580f013947aa53d8e53e6fbd2722afa',1,'llo']]],
+  ['neq',['neq',['../namespacello.html#ab6719aec5379449c5df745796e3ce677',1,'llo']]],
+  ['nnary',['nnary',['../namespacello.html#a8c77a8e53c0227e523c81699b9c2aab9',1,'llo']]]
 ];

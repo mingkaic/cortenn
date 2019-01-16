@@ -1,10 +1,5 @@
 var searchData=
 [
-  ['main',['main',['../llo_2test_2main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627',1,'main(int argc, char **argv):&#160;main.cpp'],['../opt_2test_2main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627',1,'main(int argc, char **argv):&#160;main.cpp'],['../pbm_2test_2main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627',1,'main(int argc, char **argv):&#160;main.cpp']]],
-  ['matmul',['matmul',['../namespacello.html#a8dbb6866f0276ec91d368d539aea4730',1,'llo']]],
-  ['max',['max',['../namespacello.html#a0eba005c4545a4522bac459d42c7c140',1,'llo']]],
-  ['min',['min',['../namespacello.html#a46192797ea05f96e5f1fbc728f43b2c4',1,'llo']]],
-  ['mocktensor',['MockTensor',['../struct_mock_tensor.html#ae7cc034794ceebfb11b3076283361157',1,'MockTensor::MockTensor(void)=default'],['../struct_mock_tensor.html#ad82f85c2417441eda10de68536a99cbc',1,'MockTensor::MockTensor(ade::Shape shape)'],['../struct_mock_tensor.html#ae7cc034794ceebfb11b3076283361157',1,'MockTensor::MockTensor(void)=default'],['../struct_mock_tensor.html#ad82f85c2417441eda10de68536a99cbc',1,'MockTensor::MockTensor(ade::Shape shape)']]],
-  ['mtens_5fmul',['mtens_mul',['../namespacello.html#a7398e1235a7ae023f87c6198a75418d0',1,'llo']]],
-  ['mul',['mul',['../namespacello.html#a908f5da99f5702b96e79b3bf63bf1630',1,'llo']]]
+  ['operator_3d',['operator=',['../structllo_1_1_variable.html#ad9b494d214229a166dfe5858ac1315e4',1,'llo::Variable::operator=(const Variable &amp;other)'],['../structllo_1_1_variable.html#a92f4d1aade59f4b48225c85a07af19af',1,'llo::Variable::operator=(Variable &amp;&amp;other)'],['../structllo_1_1_variable.html#aa04ab2870b33eb035e6ad414468b14bc',1,'llo::Variable::operator=(std::vector&lt; T &gt; data)'],['../structllo_1_1_variable.html#afa23c49ccbf3492523cba83238e3c12c',1,'llo::Variable::operator=(GenericRef data)']]],
+  ['ops_5fmerge',['ops_merge',['../namespacello.html#ae0368b1bc9dbb51eab89472dfdd5bc1f',1,'llo']]]
 ];

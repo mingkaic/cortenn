@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['get_5fleaf_5f',['get_leaf_',['../structopt_1_1_leaf_finder.html#aa748dec514e55e2c48f8973faf15546e',1,'opt::LeafFinder']]]
+  ['funcs_5f',['funcs_',['../structpbm_1_1_graph_saver.html#acd92330cd395c19facfa6dddbb0609eb',1,'pbm::GraphSaver']]],
+  ['fwd_5f',['fwd_',['../structllo_1_1_data_arg.html#a89baed656d3537dec42cd89ebfc12b86',1,'llo::DataArg']]]
 ];

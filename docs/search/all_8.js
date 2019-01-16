@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['helper_2ecpp',['helper.cpp',['../helper_8cpp.html',1,'']]],
-  ['helper_2ehpp',['helper.hpp',['../helper_8hpp.html',1,'']]]
+  ['join',['join',['../structpbm_1_1_pathed_tens.html#a28fb6ead967a36caf8fa3bb6a752ac2f',1,'pbm::PathedTens']]]
 ];

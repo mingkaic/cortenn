@@ -1,8 +1,6 @@
 <map id="llo/llo.hpp" name="llo/llo.hpp">
-<area shape="rect" id="node2" href="$eval_8hpp.html" title="llo/eval.hpp" alt="" coords="261,79,350,104"/>
-<area shape="rect" id="node15" href="$serialize_8hpp.html" title="llo/serialize.hpp" alt="" coords="449,79,562,104"/>
-<area shape="rect" id="node16" href="$zprune_8hpp.html" title="llo/zprune.hpp" alt="" coords="589,79,694,104"/>
+<area shape="rect" id="node2" href="$eval_8hpp.html" title="llo/eval.hpp" alt="" coords="269,79,358,104"/>
+<area shape="rect" id="node15" href="$serialize_8hpp.html" title="llo/serialize.hpp" alt="" coords="433,79,546,104"/>
 <area shape="rect" id="node5" href="$operator_8hpp.html" title="llo/operator.hpp" alt="" coords="339,152,452,177"/>
-<area shape="rect" id="node10" href="$llo_2data_8hpp.html" title="llo/data.hpp" alt="" coords="511,225,601,251"/>
-<area shape="rect" id="node17" href="$shear_8hpp.html" title="opt/shear.hpp" alt="" coords="593,152,695,177"/>
+<area shape="rect" id="node10" href="$llo_2data_8hpp.html" title="llo/data.hpp" alt="" coords="523,225,613,251"/>
 </map>

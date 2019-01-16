@@ -131,9 +131,12 @@ Functions</h2></td></tr>
 <tr class="separator:a28d51d7aedcf040e9b83a627342ebe33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afdf9eee2940ca0aae6ddab4582dd9c00"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#afdf9eee2940ca0aae6ddab4582dd9c00">grad_max</a> (ade::iFunctor *fwd, size_t gradidx, ade::TensT tens)</td></tr>
 <tr class="separator:afdf9eee2940ca0aae6ddab4582dd9c00"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade366ad6ba9f8fdd883dd5b06ff8dad1"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#ade366ad6ba9f8fdd883dd5b06ff8dad1">reduce</a> (ade::Opcode opcode, ade::TensptrT tens, uint8_t dim)</td></tr>
-<tr class="memdesc:ade366ad6ba9f8fdd883dd5b06ff8dad1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return reduction of tens after dimension dim using opcode operation.  <a href="#ade366ad6ba9f8fdd883dd5b06ff8dad1">More...</a><br /></td></tr>
-<tr class="separator:ade366ad6ba9f8fdd883dd5b06ff8dad1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6906ba9944277db0c7a72cd803a7490"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#ae6906ba9944277db0c7a72cd803a7490">reduce_1d</a> (ade::Opcode opcode, ade::TensptrT tens, uint8_t dim)</td></tr>
+<tr class="memdesc:ae6906ba9944277db0c7a72cd803a7490"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return reduction of tens specified dimension dim using opcode operation.  <a href="#ae6906ba9944277db0c7a72cd803a7490">More...</a><br /></td></tr>
+<tr class="separator:ae6906ba9944277db0c7a72cd803a7490"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abdf021d900da5a0822bcfb49315cc1a7"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#abdf021d900da5a0822bcfb49315cc1a7">reduce</a> (ade::Opcode opcode, ade::TensptrT tens, uint8_t start, uint8_t end)</td></tr>
+<tr class="memdesc:abdf021d900da5a0822bcfb49315cc1a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return reduction of tens after dimension dim using opcode operation.  <a href="#abdf021d900da5a0822bcfb49315cc1a7">More...</a><br /></td></tr>
+<tr class="separator:abdf021d900da5a0822bcfb49315cc1a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8dbb6866f0276ec91d368d539aea4730"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a8dbb6866f0276ec91d368d539aea4730">matmul</a> (ade::TensptrT a, ade::TensptrT b)</td></tr>
 <tr class="memdesc:a8dbb6866f0276ec91d368d539aea4730"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return matmul of a and b.  <a href="#a8dbb6866f0276ec91d368d539aea4730">More...</a><br /></td></tr>
 <tr class="separator:a8dbb6866f0276ec91d368d539aea4730"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -269,17 +272,19 @@ Functions</h2></td></tr>
 <tr class="memitem:a0eba005c4545a4522bac459d42c7c140"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a0eba005c4545a4522bac459d42c7c140"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a0eba005c4545a4522bac459d42c7c140">max</a> (T *out, ade::Shape &amp;outshape, std::vector&lt; <a class="el" href="structllo_1_1_vec_ref.html">VecRef</a>&lt; T &gt;&gt; args)</td></tr>
 <tr class="separator:a0eba005c4545a4522bac459d42c7c140"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a085b001fb98e1ae2f31926f84cac56a0"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a085b001fb98e1ae2f31926f84cac56a0">derive</a> (ade::TensptrT root, ade::iTensor *target)</td></tr>
+<tr class="memdesc:a085b001fb98e1ae2f31926f84cac56a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Derive root with respect to target and optimized.  <a href="#a085b001fb98e1ae2f31926f84cac56a0">More...</a><br /></td></tr>
+<tr class="separator:a085b001fb98e1ae2f31926f84cac56a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0368b1bc9dbb51eab89472dfdd5bc1f"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#ae0368b1bc9dbb51eab89472dfdd5bc1f">ops_merge</a> (ade::TensptrT root)</td></tr>
+<tr class="separator:ae0368b1bc9dbb51eab89472dfdd5bc1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43fe9344b10c2e739b832052067a61ef"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a43fe9344b10c2e739b832052067a61ef">zero_prune</a> (ade::TensptrT root)</td></tr>
+<tr class="separator:a43fe9344b10c2e739b832052067a61ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b4d14ea52754c4a4d7107e99e754047"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a5b4d14ea52754c4a4d7107e99e754047">serialize</a> (const char *in, size_t nelems, size_t typecode)</td></tr>
 <tr class="memdesc:a5b4d14ea52754c4a4d7107e99e754047"><td class="mdescLeft">&#160;</td><td class="mdescRight">Marshal data to cortenn::Source.  <a href="#a5b4d14ea52754c4a4d7107e99e754047">More...</a><br /></td></tr>
 <tr class="separator:a5b4d14ea52754c4a4d7107e99e754047"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad57c9bbe16634aec8fad7bb27abd39b0"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#ad57c9bbe16634aec8fad7bb27abd39b0">deserialize</a> (const char *pb, ade::Shape shape, size_t typecode, std::string label)</td></tr>
 <tr class="memdesc:ad57c9bbe16634aec8fad7bb27abd39b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unmarshal cortenn::Source as <a class="el" href="structllo_1_1_variable.html" title="Leaf node containing GenericData. ">Variable</a> containing context of source.  <a href="#ad57c9bbe16634aec8fad7bb27abd39b0">More...</a><br /></td></tr>
 <tr class="separator:ad57c9bbe16634aec8fad7bb27abd39b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a43fe9344b10c2e739b832052067a61ef"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a43fe9344b10c2e739b832052067a61ef">zero_prune</a> (ade::TensptrT root)</td></tr>
-<tr class="separator:a43fe9344b10c2e739b832052067a61ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a085b001fb98e1ae2f31926f84cac56a0"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a085b001fb98e1ae2f31926f84cac56a0">derive</a> (ade::TensptrT root, ade::iTensor *target)</td></tr>
-<tr class="memdesc:a085b001fb98e1ae2f31926f84cac56a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Derive root with respect to target with zero branches pruned.  <a href="#a085b001fb98e1ae2f31926f84cac56a0">More...</a><br /></td></tr>
-<tr class="separator:a085b001fb98e1ae2f31926f84cac56a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>data.hpp llo</p>
@@ -288,10 +293,10 @@ Functions</h2></td></tr>
 <p>Purpose: Helper functions for generated age files</p>
 <p><a class="el" href="operator_8hpp.html">operator.hpp</a> llo</p>
 <p>Purpose: Define functions manipulating tensor data values No function in this file makes any attempt to check for nullptrs</p>
+<p><a class="el" href="zero__prune_8hpp.html">zero_prune.hpp</a> llo</p>
+<p>Purpose: Define llo zero pruning functions</p>
 <p><a class="el" href="serialize_8hpp.html">serialize.hpp</a> llo</p>
-<p>Purpose: Define functions for marshal and unmarshal data sources</p>
-<p><a class="el" href="zprune_8hpp.html">zprune.hpp</a> llo</p>
-<p>Purpose: Define llo zero pruning functions </p>
+<p>Purpose: Define functions for marshal and unmarshal data sources </p>
 </div><h2 class="groupheader">Typedef Documentation</h2>
 <a id="a7e3abd419407ceea87846978c6f3d308"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7e3abd419407ceea87846978c6f3d308">&#9670;&nbsp;</a></span>DataArgsT</h2>
@@ -698,7 +703,7 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Derive root with respect to target with zero branches pruned. </p>
+<p>Derive root with respect to target and optimized. </p>
 
 </div>
 </div>
@@ -1647,6 +1652,24 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a id="ae0368b1bc9dbb51eab89472dfdd5bc1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0368b1bc9dbb51eab89472dfdd5bc1f">&#9670;&nbsp;</a></span>ops_merge()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ade::TensptrT llo::ops_merge </td>
+          <td>(</td>
+          <td class="paramtype">ade::TensptrT&#160;</td>
+          <td class="paramname"><em>root</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aa56e03e88d5be448c2d06294014a1ff5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa56e03e88d5be448c2d06294014a1ff5">&#9670;&nbsp;</a></span>pow()</h2>
 
@@ -2071,14 +2094,56 @@ template&lt;&gt; </div>
 
 </div>
 </div>
-<a id="ade366ad6ba9f8fdd883dd5b06ff8dad1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ade366ad6ba9f8fdd883dd5b06ff8dad1">&#9670;&nbsp;</a></span>reduce()</h2>
+<a id="abdf021d900da5a0822bcfb49315cc1a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abdf021d900da5a0822bcfb49315cc1a7">&#9670;&nbsp;</a></span>reduce()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">ade::TensptrT llo::reduce </td>
+          <td>(</td>
+          <td class="paramtype">ade::Opcode&#160;</td>
+          <td class="paramname"><em>opcode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ade::TensptrT&#160;</td>
+          <td class="paramname"><em>tens</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>start</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>end</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return reduction of tens after dimension dim using opcode operation. </p>
+
+</div>
+</div>
+<a id="ae6906ba9944277db0c7a72cd803a7490"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6906ba9944277db0c7a72cd803a7490">&#9670;&nbsp;</a></span>reduce_1d()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ade::TensptrT llo::reduce_1d </td>
           <td>(</td>
           <td class="paramtype">ade::Opcode&#160;</td>
           <td class="paramname"><em>opcode</em>, </td>
@@ -2103,7 +2168,7 @@ template&lt;&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Return reduction of tens after dimension dim using opcode operation. </p>
+<p>Return reduction of tens specified dimension dim using opcode operation. </p>
 
 </div>
 </div>

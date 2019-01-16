@@ -1,8 +1,6 @@
 <map id="pbm/data.hpp" name="pbm/data.hpp">
-<area shape="rect" id="node2" href="$load_8hpp.html" title="pbm/load.hpp" alt="" coords="178,79,280,104"/>
-<area shape="rect" id="node5" href="$save_8hpp.html" title="pbm/save.hpp" alt="" coords="341,79,446,104"/>
+<area shape="rect" id="node2" href="$load_8hpp.html" title="pbm/load.hpp" alt="" coords="25,79,127,104"/>
+<area shape="rect" id="node4" href="$save_8hpp.html" title="pbm/save.hpp" alt="" coords="157,79,262,104"/>
 <area shape="rect" id="node3" href="$load_8cpp.html" title="pbm/src/load.cpp" alt="" coords="5,152,128,177"/>
-<area shape="rect" id="node4" href="$test__load_8cpp.html" title="pbm/test/test_load.cpp" alt="" coords="152,152,307,177"/>
-<area shape="rect" id="node6" href="$save_8cpp.html" title="pbm/src/save.cpp" alt="" coords="331,152,456,177"/>
-<area shape="rect" id="node7" href="$test__save_8cpp.html" title="pbm/test/test_save.cpp" alt="" coords="481,152,639,177"/>
+<area shape="rect" id="node5" href="$save_8cpp.html" title="pbm/src/save.cpp" alt="" coords="152,152,278,177"/>
 </map>

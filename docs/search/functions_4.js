@@ -1,7 +1,9 @@
 var searchData=
 [
-  ['data',['data',['../structllo_1_1_variable.html#a4a0dabdeaede14be580794b3cfce0b87',1,'llo::Variable::data(void) override'],['../structllo_1_1_variable.html#a382e505eb8da28125ea3a204ab833d3f',1,'llo::Variable::data(void) const override'],['../struct_mock_tensor.html#a2cc4639e0c9cf3671fa0f4cf7d0d2732',1,'MockTensor::data(void) override'],['../struct_mock_tensor.html#aff0b358ef61bdd639327581993bb7f2b',1,'MockTensor::data(void) const override'],['../struct_mock_tensor.html#a2cc4639e0c9cf3671fa0f4cf7d0d2732',1,'MockTensor::data(void) override'],['../struct_mock_tensor.html#aff0b358ef61bdd639327581993bb7f2b',1,'MockTensor::data(void) const override']]],
-  ['derive',['derive',['../namespacello.html#a085b001fb98e1ae2f31926f84cac56a0',1,'llo']]],
-  ['deserialize',['deserialize',['../namespacello.html#ad57c9bbe16634aec8fad7bb27abd39b0',1,'llo']]],
-  ['div',['div',['../namespacello.html#a9b229ad91f79cdc35b02e9a833e6a7ae',1,'llo']]]
+  ['edit',['edit',['../structopt_1_1_graph_editor.html#adcbbb5f2e4760106af3ffd71e8e841b2',1,'opt::GraphEditor']]],
+  ['eq',['eq',['../namespacello.html#aca5851f201d459bb8cc17c0487697560',1,'llo']]],
+  ['eval',['eval',['../namespacello.html#a0713341a41c370371e2cdfb9c776d49c',1,'llo']]],
+  ['evaluate',['evaluate',['../namespacepyllo.html#a61ae11b34a65155750dac55aa26b0ba1',1,'pyllo']]],
+  ['evaluator',['Evaluator',['../structllo_1_1_evaluator.html#ad3948c9ba18cc3d1920d3b2a5c2cd156',1,'llo::Evaluator']]],
+  ['exp',['exp',['../namespacello.html#aea287e4a457edc851dec192ec953d223',1,'llo']]]
 ];

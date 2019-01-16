@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['c2pshape',['c2pshape',['../namespacepyllo.html#a10a156a80338e76d8a2df94269709d4c',1,'pyllo']]],
-  ['convolution',['convolution',['../namespacello.html#a652364aa1f9f70a86b2fb805f055c7cc',1,'llo']]],
-  ['copyover',['copyover',['../structllo_1_1_generic_data.html#af5b8158d0e8640931a3756de14e1cb43',1,'llo::GenericData']]],
-  ['cos',['cos',['../namespacello.html#a999fe26a576045e8a45b416b7708c51a',1,'llo']]],
-  ['create_5f2d',['create_2d',['../test__api_8cpp.html#a3e00b669d9f91f8b968d524d8edfff73',1,'test_api.cpp']]]
+  ['data',['data',['../structllo_1_1_variable.html#a4a0dabdeaede14be580794b3cfce0b87',1,'llo::Variable::data(void) override'],['../structllo_1_1_variable.html#a382e505eb8da28125ea3a204ab833d3f',1,'llo::Variable::data(void) const override']]],
+  ['derive',['derive',['../namespacello.html#a085b001fb98e1ae2f31926f84cac56a0',1,'llo']]],
+  ['deserialize',['deserialize',['../namespacello.html#ad57c9bbe16634aec8fad7bb27abd39b0',1,'llo']]],
+  ['div',['div',['../namespacello.html#a9b229ad91f79cdc35b02e9a833e6a7ae',1,'llo']]]
 ];

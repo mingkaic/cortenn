@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['unary',['unary',['../namespacello.html#acc00e45b50d07b6444490730f901947e',1,'llo']]],
-  ['unary_5felementary',['unary_elementary',['../test__api_8cpp.html#ae540186cf6d7331978fe6860c58d6d9c',1,'test_api.cpp']]],
-  ['unary_5fgeneric',['unary_generic',['../test__api_8cpp.html#a010260ac24f8f4624fed5a71ab51f890',1,'test_api.cpp']]],
-  ['unarydblf',['UnaryDblF',['../test__api_8cpp.html#af863536444756eb5bb525470a3d368c6',1,'test_api.cpp']]],
-  ['unaryopf',['UnaryOpF',['../test__api_8cpp.html#a9a3566591c4ffb7bbfd667db5fa7af02',1,'test_api.cpp']]]
+  ['variable',['Variable',['../structllo_1_1_variable.html',1,'llo::Variable'],['../structllo_1_1_variable.html#a2c66cf3758e54f9bc26d4a507b9645ef',1,'llo::Variable::Variable(const char *data, age::_GENERATED_DTYPE dtype, ade::Shape shape, std::string label)'],['../structllo_1_1_variable.html#a1bd0c60269777379afebfa4d8019f702',1,'llo::Variable::Variable(const Variable &amp;other)'],['../structllo_1_1_variable.html#a956412849d53f4db4c320a701e7143aa',1,'llo::Variable::Variable(Variable &amp;&amp;other)'],['../namespacepyllo.html#a32b79843ab066231684d4fee64b3bf64',1,'pyllo::variable()']]],
+  ['varptrt',['VarptrT',['../namespacello.html#a9812e3273d3774be09da93e11eb01d3e',1,'llo']]],
+  ['vecref',['VecRef',['../structllo_1_1_vec_ref.html',1,'llo']]],
+  ['visit',['visit',['../structllo_1_1_evaluator.html#ab108f600f3858b32d62ee7b7c9d56ba9',1,'llo::Evaluator::visit(ade::iLeaf *leaf) override'],['../structllo_1_1_evaluator.html#a4c26da320010feab705f66f6f760a414',1,'llo::Evaluator::visit(ade::iFunctor *func) override'],['../structpbm_1_1_graph_saver.html#aab1884ec27152b65d0b497afbe56c7ba',1,'pbm::GraphSaver::visit(ade::iLeaf *leaf) override'],['../structpbm_1_1_graph_saver.html#a1c9450f2f0f4a9a9534902ead4c43289',1,'pbm::GraphSaver::visit(ade::iFunctor *func) override']]],
+  ['visited_5f',['visited_',['../structpbm_1_1_graph_saver.html#a393d21bfeb1c5b37057517b3439587fc',1,'pbm::GraphSaver']]]
 ];

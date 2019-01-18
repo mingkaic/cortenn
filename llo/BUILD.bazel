@@ -27,6 +27,14 @@ filegroup(
     ]),
 )
 
+filegroup(
+    name = "benchmark_srcs",
+    srcs = glob([
+        "bm/*.hpp",
+        "bm/*.cpp",
+    ]),
+)
+
 ######### LIBRARY #########
 
 genrule(
@@ -111,4 +119,16 @@ py_test(
     name = "ptest",
     srcs = ["//llo:ptest_srcs"],
     deps = ["//llo:llo_py"],
+)
+
+######### BENCHMARK #########
+
+cc_binary(
+    name = "benchmark",
+    srcs = ["//llo:benchmark_srcs"],
+    deps = [
+        "//llo:llo",
+        "@com_github_google_benchmark//:benchmark",
+    ],
+    copts = ["-std=c++14"],
 )

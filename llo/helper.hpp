@@ -42,6 +42,8 @@ ade::TensptrT matmul (ade::TensptrT a, ade::TensptrT b);
 /// Return convolution operation on img with kernel
 ade::TensptrT convolution (ade::TensptrT img, ade::TensptrT kernel);
 
+ade::TensptrT get_fast_matmul (ade::TensptrT a, ade::TensptrT b);
+
 }
 
 #endif // LLO_HELPER_HPP

@@ -113,7 +113,7 @@ struct Variable final : public ade::iLeaf
 	template <typename T>
 	Variable& operator = (std::vector<T> data)
 	{
-		GenericRef ref((char*) &data[0], shape(), age::get_type<T>());
+		GenericRef ref((char*) data.data(), shape(), age::get_type<T>());
 		return operator = (ref);
 	}
 
@@ -181,7 +181,7 @@ private:
 };
 
 /// Smart pointer for variable nodes
-using VarptrT = std::shared_ptr<llo::Variable>;
+using VarptrT = std::shared_ptr<Variable>;
 
 /// Return new variable containing input vector data according to
 /// specified shape and labelled according to input label
@@ -195,7 +195,7 @@ VarptrT get_variable (std::vector<T> data, ade::Shape shape,
 		logs::fatalf("cannot create variable with data size %d "
 			"against shape %s", data.size(), shape.to_string().c_str());
 	}
-	return VarptrT(new Variable((char*) &data[0],
+	return VarptrT(new Variable((char*) data.data(),
 		age::get_type<T>(), shape, label));
 }
 

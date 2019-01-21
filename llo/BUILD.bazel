@@ -80,6 +80,7 @@ cc_library(
         "//opt:opt",
         "//coord:coord",
         "@com_github_mingkaic_tenncor//bwd:bwd",
+        "@com_github_eigenteam_eigen//:eigen",
     ],
     visibility = ["//visibility:public"],
 )

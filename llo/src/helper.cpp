@@ -1,5 +1,6 @@
 #include "llo/generated/api.hpp"
 #include "llo/generated/codes.hpp"
+
 #include "llo/data.hpp"
 #include "llo/helper.hpp"
 
@@ -212,6 +213,41 @@ ade::TensptrT convolution (ade::TensptrT img, ade::TensptrT kernel)
 	}));
 
 	return age::reduce_sum(prod, 4);
+}
+
+ade::TensptrT get_fast_matmul (ade::TensptrT a, ade::TensptrT b)
+{
+	ade::DimT ncommon = a->shape().at(0);
+	ade::DimT nrow = a->shape().at(1);
+	ade::DimT ncol = b->shape().at(0);
+
+	ade::CoordptrT left_shaper(new ade::CoordMap(
+		[&](ade::MatrixT fwd)
+		{
+			for (uint8_t i = 0; i < ade::mat_dim; ++i)
+			{
+				fwd[i][i] = 1;
+			}
+			fwd[0][0] = 1.0 / ncol;
+			fwd[ade::mat_dim - 1][0] = ncol - 1;
+		}));
+
+	ade::CoordptrT right_shaper(new ade::CoordMap(
+		[&](ade::MatrixT fwd)
+		{
+			for (uint8_t i = 0; i < ade::mat_dim; ++i)
+			{
+				fwd[i][i] = 1;
+			}
+			fwd[1][1] = 1.0 / nrow;
+			fwd[ade::mat_dim - 1][1] = nrow - 1;
+		}));
+
+	return ade::TensptrT(ade::Functor::get(ade::Opcode{"MATMUL", age::MATMUL},
+		{
+			ade::MappedTensor(a, left_shaper, false, ade::identity),
+			ade::MappedTensor(b, right_shaper, false, ade::identity),
+		}));
 }
 
 }

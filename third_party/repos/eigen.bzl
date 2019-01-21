@@ -22,6 +22,7 @@ cc_library(
             "Eigen/*",
             "Eigen/**/*.h",
             "unsupported/Eigen/*",
+            "unsupported/Eigen/**/*",
         ],
         exclude = ["**/CMakeLists.txt"],
     ),

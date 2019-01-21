@@ -458,11 +458,25 @@ class LLOTest(unittest.TestCase):
         self._array_close(tf_fout, fout)
         self._array_close(tf_fboth, fboth)
 
+        out2 = age.fast_matmul(var, var2)
+        both2 = age.fast_matmul(var, var)
+
+        fout2 = llo.evaluate(out2, dtype=np.dtype(float))
+        fboth2 = llo.evaluate(both2, dtype=np.dtype(float))
+
+        self._array_close(tf_fout, fout2)
+        self._array_close(tf_fboth, fboth2)
+
         var3 = llo.variable(data, 'var3')
         zero = llo.derive(out, var3)
         ex = llo.derive(out, var)
         ex2 = llo.derive(out, var2)
         ex3 = llo.derive(both, var)
+
+        zero2 = llo.derive(out2, var3)
+        dex = llo.derive(out2, var)
+        dex2 = llo.derive(out2, var2)
+        dex3 = llo.derive(both2, var)
 
         rej = llo.evaluate(zero)
         der = llo.evaluate(ex)
@@ -481,6 +495,16 @@ class LLOTest(unittest.TestCase):
         self._array_close(exdata, der)
         self._array_close(exdata2, der2)
         self._array_close(exdata3, der3)
+
+        rej2 = llo.evaluate(zero2)
+        dder = llo.evaluate(dex)
+        dder2 = llo.evaluate(dex2)
+        dder3 = llo.evaluate(dex3)
+
+        self._array_eq(data0, rej2)
+        self._array_close(exdata, dder)
+        self._array_close(exdata2, dder2)
+        self._array_close(exdata3, dder3)
 
     def test_convolution(self):
         padding = "VALID"

@@ -10,6 +10,7 @@
 namespace llo
 {
 
+// todo: change this to target fixed value instead of looking at label
 static ade::TensptrT zero_prune_edit (ade::iFunctor* func, ade::ArgsT args)
 {
 	age::_GENERATED_OPCODE opcode =
@@ -90,9 +91,11 @@ static ade::TensptrT zero_prune_edit (ade::iFunctor* func, ade::ArgsT args)
 			case age::RAND_BINO:
 			case age::RAND_UNIF:
 			case age::RAND_NORM:
+			case age::MATMUL:
 				break;
 			default:
-				logs::fatal("cannot zero prune unknown opcode");
+				logs::fatalf("cannot zero prune unknown opcode \"%s\"",
+					func->get_opcode().name_.c_str());
 		}
 	}
 	return nullptr;

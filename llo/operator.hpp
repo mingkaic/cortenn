@@ -12,6 +12,8 @@
 #include <functional>
 #include <random>
 
+#include "Eigen/Core"
+
 #include "llo/data.hpp"
 
 #ifndef LLO_OPERATOR_HPP
@@ -447,6 +449,18 @@ void max (T* out, ade::Shape& outshape, std::vector<VecRef<T>> args)
 {
 	nnary<T>(out, outshape, args,
 		[](T& out, const T& val) { out = std::max(out, val); });
+}
+
+template <typename T>
+using  MatrixT = Eigen::Matrix<T,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>;
+
+#define TO_MAT(ARG)Eigen::Map<const MatrixT<T>>(ARG.data,ARG.shape.at(1),ARG.shape.at(0))
+
+template <typename T>
+void fast_matmul (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
+{
+	MatrixT<T> mout = TO_MAT(a) * TO_MAT(b);
+	std::memcpy(out, mout.data(), sizeof(T) * outshape.n_elems());
 }
 
 }

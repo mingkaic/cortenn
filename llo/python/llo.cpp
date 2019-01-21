@@ -168,7 +168,7 @@ PYBIND11_MODULE(llo, m)
 			ade::Shape shape = self.cast<ade::iTensor*>()->shape();
 			auto pshape = pyllo::c2pshape(shape);
 			std::vector<int> ipshape(pshape.begin(), pshape.end());
-			return py::array(ipshape.size(), &ipshape[0]);
+			return py::array(ipshape.size(), ipshape.data());
 		})
 		.def("children", [](py::object self)
 		{

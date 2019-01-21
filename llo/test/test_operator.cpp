@@ -22,8 +22,8 @@ TEST(OPERATOR, Unary)
 		91,91,7,6,
 		86,86,85,83,
 	};
-	llo::VecRef<double> inref_id{&data[0], shape, ade::identity, true};
-	llo::unary<double>(&out[0], shape, inref_id, func);
+	llo::VecRef<double> inref_id{data.data(), shape, ade::identity, true};
+	llo::unary<double>(out.data(), shape, inref_id, func);
 	EXPECT_ARREQ(data, out);
 
 	ade::CoordptrT overwrite_mapper(
@@ -38,13 +38,13 @@ TEST(OPERATOR, Unary)
 		}));
 
 	ade::Shape shape2({4, 2});
-	llo::VecRef<double> inref_fwd{&data[0], shape, overwrite_mapper, true};
+	llo::VecRef<double> inref_fwd{data.data(), shape, overwrite_mapper, true};
 	std::vector<double> expect_out = {
 		34,73,1,67,
 		86,86,85,83,
 	};
 	std::vector<double> out2(8);
-	llo::unary<double>(&out2[0], shape2, inref_fwd, func);
+	llo::unary<double>(out2.data(), shape2, inref_fwd, func);
 	EXPECT_ARREQ(expect_out, out2);
 
 	std::vector<double> data2 = {
@@ -56,9 +56,9 @@ TEST(OPERATOR, Unary)
 		86,86,85,83,
 		86,86,85,83,
 	};
-	llo::VecRef<double> inref_bwd{&data2[0], shape2, overwrite_mapper, false};
+	llo::VecRef<double> inref_bwd{data2.data(), shape2, overwrite_mapper, false};
 	std::vector<double> out3(12);
-	llo::unary<double>(&out3[0], shape, inref_bwd, func);
+	llo::unary<double>(out3.data(), shape, inref_bwd, func);
 	EXPECT_ARREQ(expect_out2, out3);
 }
 
@@ -100,10 +100,10 @@ TEST(OPERATOR, Binary)
 			34-75,73-22,1-33,67-86,
 			86-86,86-80,85-47,83-73,
 		};
-		llo::VecRef<double> inref_fwd{&data[0], shape, overwrite_mapper, true};
-		llo::VecRef<double> inref_fwd2{&data2[0], shape, overwrite_mapper, true};
+		llo::VecRef<double> inref_fwd{data.data(), shape, overwrite_mapper, true};
+		llo::VecRef<double> inref_fwd2{data2.data(), shape, overwrite_mapper, true};
 		std::vector<double> out(8);
-		llo::binary<double,double,double>(&out[0], reduced_shape,
+		llo::binary<double,double,double>(out.data(), reduced_shape,
 			inref_fwd, inref_fwd2, func);
 		EXPECT_ARREQ(expect_out, out);
 	}
@@ -116,10 +116,10 @@ TEST(OPERATOR, Binary)
 			91-18,91-99,7-68,6-37,
 			86-86,86-80,85-47,83-73,
 		};
-		llo::VecRef<double> inref_bwd{&data[0], shape, overwrite_mapper, false};
-		llo::VecRef<double> inref_bwd2{&data2[0], shape, overwrite_mapper, false};
+		llo::VecRef<double> inref_bwd{data.data(), shape, overwrite_mapper, false};
+		llo::VecRef<double> inref_bwd2{data2.data(), shape, overwrite_mapper, false};
 		std::vector<double> out(16);
-		llo::binary<double,double,double>(&out[0], extended_shape,
+		llo::binary<double,double,double>(out.data(), extended_shape,
 			inref_bwd, inref_bwd2, func);
 		EXPECT_ARREQ(expect_out, out);
 	}
@@ -141,10 +141,10 @@ TEST(OPERATOR, Binary)
 			29-2,16-65,92-29,3-89,
 			44-2,99-65,71-29,67-89,
 		};
-		llo::VecRef<double> inref_bwd{&data3[0], extended_shape, overwrite_mapper, true};
-		llo::VecRef<double> inref_bwd2{&data4[0], reduced_shape, overwrite_mapper, false};
+		llo::VecRef<double> inref_bwd{data3.data(), extended_shape, overwrite_mapper, true};
+		llo::VecRef<double> inref_bwd2{data4.data(), reduced_shape, overwrite_mapper, false};
 		std::vector<double> out(12);
-		llo::binary<double,double,double>(&out[0], shape,
+		llo::binary<double,double,double>(out.data(), shape,
 			inref_bwd, inref_bwd2, func);
 		EXPECT_ARREQ(expect_out, out);
 	}
@@ -155,10 +155,10 @@ TEST(OPERATOR, Binary)
 			2-29,65-16,29-92,89-3,
 			2-44,65-99,29-71,89-67,
 		};
-		llo::VecRef<double> inref_bwd{&data4[0], reduced_shape, overwrite_mapper, false};
-		llo::VecRef<double> inref_bwd2{&data3[0], extended_shape, overwrite_mapper, true};
+		llo::VecRef<double> inref_bwd{data4.data(), reduced_shape, overwrite_mapper, false};
+		llo::VecRef<double> inref_bwd2{data3.data(), extended_shape, overwrite_mapper, true};
 		std::vector<double> out(12);
-		llo::binary<double,double,double>(&out[0], shape,
+		llo::binary<double,double,double>(out.data(), shape,
 			inref_bwd, inref_bwd2, func);
 		EXPECT_ARREQ(expect_out, out);
 	}
@@ -202,10 +202,10 @@ TEST(OPERATOR, Nnary)
 			34+75,73+22,1+33,67+86,
 			91+18+86+86,91+99+86+80,7+68+85+47,6+37+83+73,
 		};
-		llo::VecRef<double> inref_fwd{&data[0], shape, overwrite_mapper, true};
-		llo::VecRef<double> inref_fwd2{&data2[0], shape, overwrite_mapper, true};
+		llo::VecRef<double> inref_fwd{data.data(), shape, overwrite_mapper, true};
+		llo::VecRef<double> inref_fwd2{data2.data(), shape, overwrite_mapper, true};
 		std::vector<double> out(8);
-		llo::nnary<double>(&out[0], reduced_shape,
+		llo::nnary<double>(out.data(), reduced_shape,
 			{inref_fwd, inref_fwd2}, func);
 		EXPECT_ARREQ(expect_out, out);
 	}
@@ -218,10 +218,10 @@ TEST(OPERATOR, Nnary)
 			91+18,91+99,7+68,6+37,
 			86+86,86+80,85+47,83+73,
 		};
-		llo::VecRef<double> inref_bwd{&data[0], shape, overwrite_mapper, false};
-		llo::VecRef<double> inref_bwd2{&data2[0], shape, overwrite_mapper, false};
+		llo::VecRef<double> inref_bwd{data.data(), shape, overwrite_mapper, false};
+		llo::VecRef<double> inref_bwd2{data2.data(), shape, overwrite_mapper, false};
 		std::vector<double> out(16);
-		llo::nnary<double>(&out[0], extended_shape,
+		llo::nnary<double>(out.data(), extended_shape,
 			{inref_bwd, inref_bwd2}, func);
 		EXPECT_ARREQ(expect_out, out);
 	}
@@ -243,19 +243,19 @@ TEST(OPERATOR, Nnary)
 	};
 	// fwd, then bwd
 	{
-		llo::VecRef<double> inref_bwd{&data3[0], extended_shape, overwrite_mapper, true};
-		llo::VecRef<double> inref_bwd2{&data4[0], reduced_shape, overwrite_mapper, false};
+		llo::VecRef<double> inref_bwd{data3.data(), extended_shape, overwrite_mapper, true};
+		llo::VecRef<double> inref_bwd2{data4.data(), reduced_shape, overwrite_mapper, false};
 		std::vector<double> out(12);
-		llo::nnary<double>(&out[0], shape,
+		llo::nnary<double>(out.data(), shape,
 			{inref_bwd, inref_bwd2}, func);
 		EXPECT_ARREQ(expect_out, out);
 	}
 	// bwd, then fwd
 	{
-		llo::VecRef<double> inref_bwd{&data4[0], reduced_shape, overwrite_mapper, false};
-		llo::VecRef<double> inref_bwd2{&data3[0], extended_shape, overwrite_mapper, true};
+		llo::VecRef<double> inref_bwd{data4.data(), reduced_shape, overwrite_mapper, false};
+		llo::VecRef<double> inref_bwd2{data3.data(), extended_shape, overwrite_mapper, true};
 		std::vector<double> out(12);
-		llo::nnary<double>(&out[0], shape,
+		llo::nnary<double>(out.data(), shape,
 			{inref_bwd, inref_bwd2}, func);
 		EXPECT_ARREQ(expect_out, out);
 	}

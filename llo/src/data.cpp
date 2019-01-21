@@ -18,7 +18,7 @@ GenericData::GenericData (ade::Shape shape, age::_GENERATED_DTYPE dtype) :
 		CDeleter()), shape_(shape), dtype_(dtype) {}
 
 #define COPYOVER(TYPE) { std::vector<TYPE> temp(indata, indata + n);\
-	std::memcpy(out, &temp[0], nbytes); } break;
+	std::memcpy(out, temp.data(), nbytes); } break;
 
 template <typename T>
 void convert (char* out, age::_GENERATED_DTYPE outtype, const T* indata, size_t n)

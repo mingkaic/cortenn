@@ -2,7 +2,8 @@
     "includes": {
         "grader.hpp": [
             "\"llo/data.hpp\"",
-            "\"llo/helper.hpp\""
+            "\"llo/helper.hpp\"",
+            "\"llo/gradhelper.hpp\""
         ],
         "api.cpp": [
             "\"llo/data.hpp\"",
@@ -120,6 +121,10 @@
         "RAND_NORM": {
             "operation": "llo::rand_normal((T*)out,shape,llo::to_ref<T>(in[0]),llo::to_ref<T>(in[1]))",
             "derivative": "llo::mtens_mul(llo::get_scalar(0,args[0]->shape()),bwd)"
+        },
+        "MATMUL": {
+            "operation": "llo::fast_matmul((T*)out,shape,llo::to_ref<T>(in[0]),llo::to_ref<T>(in[1]))",
+            "derivative": "llo::grad_fast_matmul(bwd,args,idx)"
         }
     },
     "apis": [
@@ -563,6 +568,17 @@
                 "name": "arg2"
             }],
             "out": "llo::convolution(arg1, arg2)"
+        },
+        {
+            "name": "fast_matmul",
+            "args": [{
+                "dtype": "ade::TensptrT",
+                "name": "arg1"
+            }, {
+                "dtype": "ade::TensptrT",
+                "name": "arg2"
+            }],
+            "out": "llo::get_fast_matmul(arg1, arg2)"
         }
     ]
 }

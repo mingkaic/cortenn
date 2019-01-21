@@ -183,7 +183,7 @@ static void BM_Matmul(benchmark::State& state)
 		std::vector<double> data2 = random_data(rightshape.n_elems(), -35, 35);
 		llo::VarptrT var = llo::get_variable(data, leftshape, "var");
 		llo::VarptrT var2 = llo::get_variable(data2, rightshape, "var2");
-		ade::TensptrT out = age::matmul(var, var2);
+		ade::TensptrT out = age::fast_matmul(var, var2);
 		state.ResumeTiming();
 		llo::eval(out, outtype);
 	}

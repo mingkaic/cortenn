@@ -1,3 +1,5 @@
+#include <fstream>
+
 #include "pybind11/pybind11.h"
 #include "pybind11/numpy.h"
 #include "pybind11/stl.h"
@@ -9,6 +11,7 @@
 #include "llo/opt/derive.hpp"
 
 #include "dbg/ade.hpp"
+#include "dbg/ade_csv.hpp"
 
 namespace py = pybind11;
 
@@ -212,4 +215,12 @@ PYBIND11_MODULE(llo, m)
 			peq.print(std::cout, root);
 		}, "print graph of root tensor",
 		py::arg("root"), py::arg("showshape") = false);
+	m.def("print_graph_csv", [](ade::TensptrT root, bool showshape, std::string filename)
+		{
+			CSVEquation ceq;
+			ceq.showshape_ = showshape;
+			root->accept(ceq);
+			std::ofstream outstr(filename);
+			ceq.to_stream(outstr);
+		});
 }

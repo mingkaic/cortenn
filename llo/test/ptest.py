@@ -445,44 +445,63 @@ class LLOTest(unittest.TestCase):
         sess.run(tf_var.initializer)
         sess.run(tf_var2.initializer)
 
+        # regular matmul
         out = age.matmul(var, var2)
         both = age.matmul(var, var)
+
+        # fast matmul
+        out_fast = age.fast_matmul(var, var2)
+        both_fast = age.fast_matmul(var, var)
+
+        # tensorflow matmul
         tf_out = tf.matmul(tf_var, tf_var2)
         tf_both = tf.matmul(tf_var, tf_var)
 
+        # evaluate regular matmul
         fout = llo.evaluate(out, dtype=np.dtype(float))
         fboth = llo.evaluate(both, dtype=np.dtype(float))
+
+        # evaluate fast matmul
+        fout_fast = llo.evaluate(out_fast, dtype=np.dtype(float))
+        fboth_fast = llo.evaluate(both_fast, dtype=np.dtype(float))
+
+        # evaluate tensorflow matmul
         tf_fout = sess.run(tf_out)
         tf_fboth = sess.run(tf_both)
 
+        # check regular matmul
         self._array_close(tf_fout, fout)
         self._array_close(tf_fboth, fboth)
 
-        out2 = age.fast_matmul(var, var2)
-        both2 = age.fast_matmul(var, var)
-
-        fout2 = llo.evaluate(out2, dtype=np.dtype(float))
-        fboth2 = llo.evaluate(both2, dtype=np.dtype(float))
-
-        self._array_close(tf_fout, fout2)
-        self._array_close(tf_fboth, fboth2)
+        # check fast matmul
+        self._array_close(tf_fout, fout_fast)
+        self._array_close(tf_fboth, fboth_fast)
 
         var3 = llo.variable(data, 'var3')
+
         zero = llo.derive(out, var3)
         ex = llo.derive(out, var)
         ex2 = llo.derive(out, var2)
         ex3 = llo.derive(both, var)
 
-        zero2 = llo.derive(out2, var3)
-        dex = llo.derive(out2, var)
-        dex2 = llo.derive(out2, var2)
-        dex3 = llo.derive(both2, var)
+        zero_fast = llo.derive(out_fast, var3)
+        dex = llo.derive(out_fast, var)
+        dex2 = llo.derive(out_fast, var2)
+        dex3 = llo.derive(both_fast, var)
 
+        # eval derivative of regular matmul
         rej = llo.evaluate(zero)
         der = llo.evaluate(ex)
         der2 = llo.evaluate(ex2)
         der3 = llo.evaluate(ex3)
 
+        # eval derivative of fast matmul
+        rej_fast = llo.evaluate(zero_fast)
+        fast_der = llo.evaluate(dex)
+        fast_der2 = llo.evaluate(dex2)
+        fast_der3 = llo.evaluate(dex3)
+
+        # eval derivative of tensorflow matmul
         data0 = np.zeros(shape, dtype=float)
         tf_grad, tf_grad2 = tf.gradients(tf_out, [tf_var, tf_var2])
         tf_grad3 = tf.gradients(tf_both, [tf_var])[0]
@@ -491,20 +510,17 @@ class LLOTest(unittest.TestCase):
         exdata2 = sess.run(tf_grad2)
         exdata3 = sess.run(tf_grad3)
 
+        # check regular matmul
         self._array_eq(data0, rej)
         self._array_close(exdata, der)
         self._array_close(exdata2, der2)
         self._array_close(exdata3, der3)
 
-        rej2 = llo.evaluate(zero2)
-        dder = llo.evaluate(dex)
-        dder2 = llo.evaluate(dex2)
-        dder3 = llo.evaluate(dex3)
-
-        self._array_eq(data0, rej2)
-        self._array_close(exdata, dder)
-        self._array_close(exdata2, dder2)
-        self._array_close(exdata3, dder3)
+        # check fast matmul
+        self._array_eq(data0, rej_fast)
+        self._array_close(exdata, fast_der)
+        self._array_close(exdata2, fast_der2)
+        self._array_close(exdata3, fast_der3)
 
     def test_convolution(self):
         padding = "VALID"

@@ -16,14 +16,6 @@ ade::TensptrT grad_fast_matmul (ade::MappedTensor bwd, ade::TensT args, size_t i
 	auto ext_a = age::permute(age::extend(a, 2, {b->shape().at(0)}), {2,1,0});
 	auto ext_b = age::permute(age::extend(b, 2, {a->shape().at(1)}), {0,2,1});
 
-	auto ext_fwd = age::mul(
-		ext_a,
-		ext_b
-	);
-
-	auto ext_bwd = age::extend(ade::TensptrT(ade::Functor::get(
-		ade::Opcode{"SUM", age::SUM}, {bwd})), 2, {a->shape().at(0)});
-
 	ade::TensptrT ext;
 	std::vector<uint8_t> perm;
 	if (0 == idx)
@@ -37,10 +29,13 @@ ade::TensptrT grad_fast_matmul (ade::MappedTensor bwd, ade::TensT args, size_t i
 		perm = {0, 2, 1};
 	}
 
+	auto ext_bwd = age::extend(ade::TensptrT(ade::Functor::get(
+		ade::Opcode{"SUM", age::SUM}, {bwd})), 2, {a->shape().at(0)});
+
 	return age::reduce_sum(
 		age::permute(
 			age::mul(
-				age::div(ext_fwd, ext),
+				age::div(age::mul(ext_a, ext_b), ext),
 				ext_bwd
 			), perm), 2);
 }

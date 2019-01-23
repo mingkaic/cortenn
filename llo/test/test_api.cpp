@@ -861,7 +861,7 @@ TEST(API, Matmul)
 
 	ade::TensptrT a = llo::get_variable<int32_t>(data, ashape);
 	ade::TensptrT b = llo::get_variable<int32_t>(data2, bshape);
-	ade::TensptrT dest = age::matmul(a, b);
+	ade::TensptrT dest = age::fast_matmul(a, b);
 
 	llo::GenericData out = llo::eval(dest, age::INT32);
 	EXPECT_EQ(age::INT32, out.dtype_);
@@ -878,7 +878,7 @@ TEST(API, Matmul)
 	EXPECT_TRUE(freivald(dda, ddb, ddc));
 
 	ade::TensptrT c = llo::get_variable<int32_t>(data3, cshape);
-	ade::TensptrT dest2 = age::matmul(c, c);
+	ade::TensptrT dest2 = age::fast_matmul(c, c);
 	ade::TensptrT gsame = llo::derive(dest2, c.get());
 	llo::GenericData gout = llo::eval(gsame, age::INT32);
 	ASSERT_EQ(age::INT32, gout.dtype_);

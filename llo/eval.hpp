@@ -99,6 +99,9 @@ private:
 };
 
 /// Evaluate generic data of tens converted to specified dtype
+GenericData eval (ade::iTensor* tens, age::_GENERATED_DTYPE dtype);
+
+/// Evaluate generic data of tens pointer converted to specified dtype
 GenericData eval (ade::TensptrT tens, age::_GENERATED_DTYPE dtype);
 
 }

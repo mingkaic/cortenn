@@ -65,7 +65,7 @@ class LLOTest(unittest.TestCase):
         var = llo.variable(data, 'var')
         out = api(var)
 
-        fout = llo.evaluate(out, dtype=np.dtype(float))
+        fout = out.evaluate(dtype=np.dtype(float))
         self._array_eq(real(data), fout)
 
         var2 = llo.variable(data, 'var2')
@@ -73,8 +73,8 @@ class LLOTest(unittest.TestCase):
         zero = llo.derive(out, var2)
 
         data0 = np.zeros(shape, dtype=float)
-        der = llo.evaluate(ex)
-        rej = llo.evaluate(zero)
+        der = ex.evaluate()
+        rej = zero.evaluate()
         exdata = derive(data)
         self._array_close(exdata, der)
         self._array_eq(data0, rej)
@@ -87,8 +87,8 @@ class LLOTest(unittest.TestCase):
         out = api(var, var2)
         both = api(var, var)
 
-        fout = llo.evaluate(out, dtype=np.dtype(float))
-        fboth = llo.evaluate(both, dtype=np.dtype(float))
+        fout = out.evaluate(dtype=np.dtype(float))
+        fboth = both.evaluate(dtype=np.dtype(float))
         self._array_eq(real(data, data2), fout)
         self._array_eq(real(data, data), fboth)
 
@@ -99,10 +99,10 @@ class LLOTest(unittest.TestCase):
         ex2 = llo.derive(out, var2)
         ex3 = llo.derive(both, var)
 
-        rej = llo.evaluate(zero)
-        der = llo.evaluate(ex)
-        der2 = llo.evaluate(ex2)
-        der3 = llo.evaluate(ex3)
+        rej = zero.evaluate()
+        der = ex.evaluate()
+        der2 = ex2.evaluate()
+        der3 = ex3.evaluate()
 
         data0 = np.zeros(shape, dtype=float)
         exdata = derive(0, (data, data2))
@@ -126,7 +126,7 @@ class LLOTest(unittest.TestCase):
         out = dim_reduce(var, 1)
         tf_out = tf_reduce(tf_var, [1])
 
-        fout = llo.evaluate(out, dtype=np.dtype(float))
+        fout = out.evaluate(dtype=np.dtype(float))
         tf_fout = sess.run(tf_out)
 
         self._array_close(tf_fout, fout)
@@ -138,8 +138,8 @@ class LLOTest(unittest.TestCase):
         tf_grad = tf.gradients(tf_out, [tf_var])[0]
 
         data0 = np.zeros(shape, dtype=float)
-        der = llo.evaluate(ex)
-        rej = llo.evaluate(zero)
+        der = ex.evaluate()
+        rej = zero.evaluate()
 
         exdata = sess.run(tf_grad)
 
@@ -160,8 +160,8 @@ class LLOTest(unittest.TestCase):
         tf_out = tf_reduce(tf_var)
         tf_out2 = tf_reduce(tf_var, [0, 1])
 
-        fout = llo.evaluate(out, dtype=np.dtype(float))
-        fout2 = llo.evaluate(out2, dtype=np.dtype(float))
+        fout = out.evaluate(dtype=np.dtype(float))
+        fout2 = out2.evaluate(dtype=np.dtype(float))
         tf_fout = np.array(sess.run(tf_out))
         tf_fout2 = sess.run(tf_out2)
 
@@ -177,9 +177,9 @@ class LLOTest(unittest.TestCase):
         tf_grad2 = tf.gradients(tf_out2, [tf_var])[0]
 
         data0 = np.zeros(shape, dtype=float)
-        der = llo.evaluate(ex)
-        der2 = llo.evaluate(ex2)
-        rej = llo.evaluate(zero)
+        der = ex.evaluate()
+        der2 = ex2.evaluate()
+        rej = zero.evaluate()
 
         exdata = sess.run(tf_grad)
         exdata2 = sess.run(tf_grad2)
@@ -194,8 +194,8 @@ class LLOTest(unittest.TestCase):
         data0 = np.zeros(shape, dtype=float)
         data = np.random.rand(3, 4, 5) * 234
         var = llo.variable(data, 'var')
-        fout = llo.evaluate(var, dtype=np.dtype(float))
-        iout = llo.evaluate(var, dtype=np.dtype(int))
+        fout = var.evaluate(dtype=np.dtype(float))
+        iout = var.evaluate(dtype=np.dtype(int))
 
         self.assertEqual(tuple(shape), fout.shape)
         self.assertEqual(tuple(shape), iout.shape)
@@ -206,8 +206,8 @@ class LLOTest(unittest.TestCase):
         one = llo.derive(var, var)
         zero = llo.derive(var, var2)
 
-        out1 = llo.evaluate(one)
-        out0 = llo.evaluate(zero)
+        out1 = one.evaluate()
+        out0 = zero.evaluate()
         self.assertEqual(tuple(shape), out1.shape)
         self.assertEqual(tuple(shape), out0.shape)
         self._array_eq(data1, out1)
@@ -267,7 +267,7 @@ class LLOTest(unittest.TestCase):
         out = age.flip(var, 1)
         tf_out = tf.reverse(tf_var, [1])
 
-        fout = llo.evaluate(out, dtype=np.dtype(float))
+        fout = out.evaluate(dtype=np.dtype(float))
         tf_fout = sess.run(tf_out)
 
         self._array_close(tf_fout, fout)
@@ -276,8 +276,8 @@ class LLOTest(unittest.TestCase):
         zero = llo.derive(out, var2)
         ex = llo.derive(out, var)
 
-        rej = llo.evaluate(zero)
-        der = llo.evaluate(ex)
+        rej = zero.evaluate()
+        der = ex.evaluate()
 
         tf_grad = tf.gradients(tf_fout, [tf_var])[0]
         self.assertEqual(None, tf_grad)
@@ -400,11 +400,11 @@ class LLOTest(unittest.TestCase):
         var = llo.variable(data, 'var')
 
         out = age.extend(var, 1, [3])
-        fout = llo.evaluate(out)
+        fout = out.evaluate()
         self._array_eq(expected_out, fout)
 
         ex = llo.derive(out, var)
-        der = llo.evaluate(ex)
+        der = ex.evaluate()
         self._array_eq(np.array([3, 3]), der)
 
     def test_rsum_1d(self):
@@ -458,12 +458,12 @@ class LLOTest(unittest.TestCase):
         tf_both = tf.matmul(tf_var, tf_var)
 
         # evaluate regular matmul
-        fout = llo.evaluate(out, dtype=np.dtype(float))
-        fboth = llo.evaluate(both, dtype=np.dtype(float))
+        fout = out.evaluate(dtype=np.dtype(float))
+        fboth = both.evaluate(dtype=np.dtype(float))
 
         # evaluate fast matmul
-        fout_fast = llo.evaluate(out_fast, dtype=np.dtype(float))
-        fboth_fast = llo.evaluate(both_fast, dtype=np.dtype(float))
+        fout_fast = out_fast.evaluate(dtype=np.dtype(float))
+        fboth_fast = both_fast.evaluate(dtype=np.dtype(float))
 
         # evaluate tensorflow matmul
         tf_fout = sess.run(tf_out)
@@ -485,21 +485,21 @@ class LLOTest(unittest.TestCase):
         ex3 = llo.derive(both, var)
 
         zero_fast = llo.derive(out_fast, var3)
-        dex = llo.derive(out_fast, var)
-        dex2 = llo.derive(out_fast, var2)
-        dex3 = llo.derive(both_fast, var)
+        ex_fast = llo.derive(out_fast, var)
+        ex_fast2 = llo.derive(out_fast, var2)
+        ex_fast3 = llo.derive(both_fast, var)
 
         # eval derivative of regular matmul
-        rej = llo.evaluate(zero)
-        der = llo.evaluate(ex)
-        der2 = llo.evaluate(ex2)
-        der3 = llo.evaluate(ex3)
+        rej = zero.evaluate()
+        der = ex.evaluate()
+        der2 = ex2.evaluate()
+        der3 = ex3.evaluate()
 
         # eval derivative of fast matmul
-        rej_fast = llo.evaluate(zero_fast)
-        fast_der = llo.evaluate(dex)
-        fast_der2 = llo.evaluate(dex2)
-        fast_der3 = llo.evaluate(dex3)
+        rej_fast = zero_fast.evaluate()
+        fast_der = ex_fast.evaluate()
+        fast_der2 = ex_fast2.evaluate()
+        fast_der3 = ex_fast3.evaluate()
 
         # eval derivative of tensorflow matmul
         data0 = np.zeros(shape, dtype=float)
@@ -549,7 +549,7 @@ class LLOTest(unittest.TestCase):
             out = age.convolution(var, vkernel)
             tf_out = tf.nn.convolution(tf_var, tf_kernel, padding)
 
-            fout = llo.evaluate(out, dtype=np.dtype(float))
+            fout = out.evaluate(dtype=np.dtype(float))
             tf_fout = sess.run(tf_out)
 
             self._array_close(tf_fout, fout)
@@ -559,9 +559,9 @@ class LLOTest(unittest.TestCase):
             ex = llo.derive(out, var)
             ex2 = llo.derive(out, vkernel)
 
-            rej = llo.evaluate(zero)
-            der = llo.evaluate(ex)
-            der2 = llo.evaluate(ex2)
+            rej = zero.evaluate()
+            der = ex.evaluate()
+            der2 = ex2.evaluate()
 
             data0 = np.zeros(shape, dtype=float)
             tf_grad, tf_grad2 = tf.gradients(tf_out, [tf_var, tf_kernel])

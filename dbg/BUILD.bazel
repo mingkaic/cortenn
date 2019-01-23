@@ -1,0 +1,34 @@
+licenses(["notice"])
+
+load("//third_party/drake_rules:pybind.bzl", "pybind_library")
+
+filegroup(
+    name = "srcs",
+    srcs = glob([
+        "*.hpp",
+        "src/*.cpp",
+    ]) + ["BUILD.bazel"],
+)
+
+######### LIBRARY #########
+
+cc_library(
+    name = "dbg",
+    hdrs = glob(["*.hpp"]),
+    srcs = glob(["src/*.cpp"]),
+    copts = ["-std=c++14"],
+    deps = [
+        "@com_github_mingkaic_tenncor//ade:ade",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+pybind_library(
+    name = "dbg_py",
+    cc_srcs = ["//dbg:python/dbg.cpp"],
+    cc_deps = [
+        "//dbg:dbg",
+        "@com_github_mingkaic_tenncor//dbg:dbg",
+    ],
+    visibility = ["//visibility:public"],
+)

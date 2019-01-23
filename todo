@@ -7,12 +7,11 @@ P4 - clarify helper functions
 P4 - formalize codestyle
 
 performance:
+P3 - implemented fixed leaf nodes and add corresponding optimizations
 P3 - improve optimization options to decrease equation graph size in opt
-P3 - benchmark llo performance
-P3 - implement eigen version of llo
-P4 - implemented fixed leaf nodes and add corresponding optimizations
 P4 - investigate jump sites (
     a fixed forward operation between nodes where no dynamic data is introduced)
 P4 - investigate ade graph node reuse mechanism
 P4 - investigate data caching options when evaluating ade graphs
 P4 - implement optimization options to increase data accuracy
+P4 - implement convolution using Eigen

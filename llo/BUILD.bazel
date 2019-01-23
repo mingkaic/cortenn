@@ -94,10 +94,7 @@ pybind_library(
 pybind_library(
     name = "llo_py",
     cc_srcs = ["//llo:python/llo.cpp"],
-    cc_deps = [
-        "//llo:llo",
-        "@com_github_mingkaic_tenncor//dbg:dbg",
-    ],
+    cc_deps = ["//llo:llo"],
     py_deps = ["//llo:age_py"],
     visibility = ["//visibility:public"],
 )

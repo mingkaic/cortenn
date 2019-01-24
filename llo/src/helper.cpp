@@ -2,6 +2,7 @@
 #include "llo/generated/codes.hpp"
 
 #include "llo/data.hpp"
+#include "llo/eval.hpp"
 #include "llo/helper.hpp"
 
 #ifdef LLO_HELPER_HPP
@@ -110,6 +111,16 @@ ade::TensptrT matmul (ade::TensptrT a, ade::TensptrT b)
 		), 2);
 }
 
+ade::TensptrT get_fast_matmul (ade::TensptrT a, ade::TensptrT b)
+{
+	auto out = matmul(a, b);
+	return ade::TensptrT(ShortcutFunctor::get(age::MATMUL,
+		std::static_pointer_cast<ade::iFunctor>(out), {
+			ade::identity_map(a),
+			ade::identity_map(b),
+		}));
+}
+
 // specifications according to https://www.tensorflow.org/api_docs/python/tf/nn/conv2d
 // this is to avoid changing rocnnet too much
 // (todo: consider simplification after experimenting with rocnnet)
@@ -213,19 +224,6 @@ ade::TensptrT convolution (ade::TensptrT img, ade::TensptrT kernel)
 	}));
 
 	return age::reduce_sum(prod, 4);
-}
-
-ade::TensptrT get_fast_matmul (ade::TensptrT a, ade::TensptrT b)
-{
-	ade::DimT nrow = a->shape().at(1);
-	ade::DimT ncol = b->shape().at(0);
-
-	return ade::TensptrT(ade::Functor::get(ade::Opcode{"MATMUL", age::MATMUL},
-		ade::Shape({ncol, nrow}),
-		{
-			ade::identity_map(a),
-			ade::identity_map(b),
-		}));
 }
 
 }

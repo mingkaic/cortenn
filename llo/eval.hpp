@@ -7,6 +7,7 @@
 ///
 
 #include "ade/traveler.hpp"
+#include "ade/ifunctor.hpp"
 
 #include "llo/generated/opmap.hpp"
 
@@ -17,6 +18,66 @@
 
 namespace llo
 {
+
+using FuncptrT = std::shared_ptr<ade::iFunctor>;
+
+struct ShortcutFunctor final : public ade::iFunctor
+{
+	static ShortcutFunctor* get (age::_GENERATED_OPCODE opcode,
+		FuncptrT proxy_root, ade::ArgsT entries)
+	{
+		ade::GraphStat stat;
+		proxy_root->accept(stat);
+		for (auto& entry : entries)
+		{
+			auto tens = entry.get_tensor().get();
+			if (stat.graphsize_.end() == stat.graphsize_.find(tens))
+			{
+				logs::fatalf("expected %s entry to be descendant of %s",
+					proxy_root->to_string().c_str(),
+					tens->to_string().c_str());
+			}
+		}
+		return new ShortcutFunctor(opcode, proxy_root, entries);
+	}
+
+	/// Implementation of iTensor
+	const ade::Shape& shape (void) const override
+	{
+		return proxy_root_->shape();
+	}
+
+	/// Implementation of iTensor
+	std::string to_string (void) const override
+	{
+		return proxy_root_->to_string();
+	}
+
+	/// Implementation of iFunctor
+	ade::Opcode get_opcode (void) const override
+	{
+		return proxy_root_->get_opcode();
+	}
+
+	/// Implementation of iFunctor
+	const ade::ArgsT& get_children (void) const override
+	{
+		return proxy_root_->get_children();
+	}
+
+	GenericData evaluate (age::_GENERATED_DTYPE dtype);
+
+private:
+	ShortcutFunctor (age::_GENERATED_OPCODE opcode,
+		FuncptrT proxy_root, ade::ArgsT& entries) :
+		opcode_(opcode), proxy_root_(proxy_root), entries_(entries) {}
+
+	age::_GENERATED_OPCODE opcode_;
+
+	FuncptrT proxy_root_;
+
+	ade::ArgsT entries_;
+};
 
 /// Visitor implementation to evaluate ade nodes according to ctx and dtype
 /// Given a global context containing ade-llo association maps, get data from
@@ -40,6 +101,12 @@ struct Evaluator final : public ade::iTraveler
 	/// Implementation of iTraveler
 	void visit (ade::iFunctor* func) override
 	{
+		if (auto shortcut = dynamic_cast<ShortcutFunctor*>(func))
+		{
+			out_ = shortcut->evaluate(dtype_);
+			return;
+		}
+
 		age::_GENERATED_OPCODE opcode = (age::_GENERATED_OPCODE)
 			func->get_opcode().code_;
 		out_ = GenericData(func->shape(), dtype_);

@@ -88,7 +88,6 @@ static ade::TensptrT zero_prune_edit (ade::iFunctor* func, ade::ArgsT args)
 			case age::NEQ:
 			case age::LT:
 			case age::GT:
-			case age::RAND_BINO:
 			case age::RAND_UNIF:
 			case age::RAND_NORM:
 			case age::MATMUL:

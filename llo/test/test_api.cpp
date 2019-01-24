@@ -31,7 +31,7 @@ using MatVecT = std::vector<std::vector<int32_t>>;
 static const int FREIVALD_N = 10;
 
 
-MatVecT create_2d (llo::GenericData& data)
+MatVecT create_2d (llo::TypedData<int32_t>& data)
 {
 	int32_t* ptr = (int32_t*) data.data_.get();
 	std::vector<ade::DimT> dims(data.shape_.begin(), data.shape_.end());
@@ -122,7 +122,7 @@ bool freivald (MatVecT a, MatVecT b, MatVecT c)
 
 
 static void unary_generic (UnaryOpF op,
-	std::function<void(llo::GenericData&,ade::Shape&,std::vector<double>&)> verify,
+	std::function<void(llo::TypedData<double>&,ade::Shape&,std::vector<double>&)> verify,
 	std::function<void(double*,std::vector<double>&)> bwverify)
 {
 	std::vector<ade::DimT> slist = {2, 3, 4};
@@ -135,14 +135,12 @@ static void unary_generic (UnaryOpF op,
 	ade::TensptrT src = llo::get_variable<double>(data, shape);
 	ade::TensptrT dest = op(src);
 
-	llo::GenericData out = llo::eval(dest, age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, out.dtype_);
+	llo::TypedData<double> out = llo::eval<double>(dest);
 	verify(out, shape, data);
 
 	ade::TensptrT gsrc = llo::derive(dest, src.get());
 
-	llo::GenericData gout = llo::eval(gsrc, age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, gout.dtype_);
+	llo::TypedData<double> gout = llo::eval<double>(gsrc);
 	std::vector<ade::DimT> gotshape(gout.shape_.begin(), gout.shape_.end());
 	ASSERT_ARREQ(slist, gotshape);
 	double* goptr = (double*) gout.data_.get();
@@ -164,8 +162,7 @@ static void unary_elementary (UnaryOpF op,
 	ade::TensptrT src = llo::get_variable<double>(data, shape);
 	ade::TensptrT dest = op(src);
 
-	llo::GenericData out = llo::eval(dest, age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, out.dtype_);
+	llo::TypedData<double> out = llo::eval<double>(dest);
 	{
 		std::vector<ade::DimT> gotshape(out.shape_.begin(), out.shape_.end());
 		ASSERT_ARREQ(slist, gotshape);
@@ -178,8 +175,7 @@ static void unary_elementary (UnaryOpF op,
 
 	ade::TensptrT gsrc = llo::derive(dest, src.get());
 
-	llo::GenericData gout = llo::eval(gsrc, age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, gout.dtype_);
+	llo::TypedData<double> gout = llo::eval<double>(gsrc);
 	{
 		std::vector<ade::DimT> gotshape(gout.shape_.begin(), gout.shape_.end());
 		ASSERT_ARREQ(slist, gotshape);
@@ -215,8 +211,7 @@ static void binary_elementary (BinaryOpF op,
 	ade::TensptrT src2 = llo::get_variable<double>(data2, shape);
 	ade::TensptrT dest = op(src, src2);
 
-	llo::GenericData out = llo::eval(dest, age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, out.dtype_);
+	llo::TypedData<double> out = llo::eval<double>(dest);
 	{
 		std::vector<ade::DimT> gotshape(out.shape_.begin(), out.shape_.end());
 		ASSERT_ARREQ(slist, gotshape);
@@ -229,8 +224,7 @@ static void binary_elementary (BinaryOpF op,
 
 	ade::TensptrT dest2 = op(src, src);
 	ade::TensptrT gsame = llo::derive(dest2, src.get());
-	llo::GenericData gout = llo::eval(gsame, age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, gout.dtype_);
+	llo::TypedData<double> gout = llo::eval<double>(gsame);
 	{
 		std::vector<ade::DimT> gotshape(gout.shape_.begin(), gout.shape_.end());
 		ASSERT_ARREQ(slist, gotshape);
@@ -242,8 +236,7 @@ static void binary_elementary (BinaryOpF op,
 	}
 
 	ade::TensptrT gleft = llo::derive(dest, src.get());
-	llo::GenericData gout_left = llo::eval(gleft, age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, gout_left.dtype_);
+	llo::TypedData<double> gout_left = llo::eval<double>(gleft);
 	{
 		std::vector<ade::DimT> gotshape(gout_left.shape_.begin(), gout_left.shape_.end());
 		ASSERT_ARREQ(slist, gotshape);
@@ -255,8 +248,7 @@ static void binary_elementary (BinaryOpF op,
 	}
 
 	ade::TensptrT gright = llo::derive(dest, src2.get());
-	llo::GenericData gout_right = llo::eval(gright, age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, gout_right.dtype_);
+	llo::TypedData<double> gout_right = llo::eval<double>(gright);
 	{
 		std::vector<ade::DimT> gotshape(gout_right.shape_.begin(), gout_right.shape_.end());
 		ASSERT_ARREQ(slist, gotshape);
@@ -288,8 +280,7 @@ static void binary_elementary_int (BinaryOpF op,
 	ade::TensptrT src2 = llo::get_variable<int32_t>(data2, shape);
 	ade::TensptrT dest = op(src, src2);
 
-	llo::GenericData out = llo::eval(dest, age::INT32);
-	ASSERT_EQ(age::INT32, out.dtype_);
+	llo::TypedData<int32_t> out = llo::eval<int32_t>(dest);
 	{
 		std::vector<ade::DimT> gotshape(out.shape_.begin(), out.shape_.end());
 		ASSERT_ARREQ(slist, gotshape);
@@ -302,8 +293,7 @@ static void binary_elementary_int (BinaryOpF op,
 
 	ade::TensptrT dest2 = op(src, src);
 	ade::TensptrT gsame = llo::derive(dest2, src.get());
-	llo::GenericData gout = llo::eval(gsame, age::INT32);
-	ASSERT_EQ(age::INT32, gout.dtype_);
+	llo::TypedData<int32_t> gout = llo::eval<int32_t>(gsame);
 	{
 		std::vector<ade::DimT> gotshape(gout.shape_.begin(), gout.shape_.end());
 		ASSERT_ARREQ(slist, gotshape);
@@ -315,8 +305,7 @@ static void binary_elementary_int (BinaryOpF op,
 	}
 
 	ade::TensptrT gleft = llo::derive(dest, src.get());
-	llo::GenericData gout_left = llo::eval(gleft, age::INT32);
-	ASSERT_EQ(age::INT32, gout_left.dtype_);
+	llo::TypedData<int32_t> gout_left = llo::eval<int32_t>(gleft);
 	{
 		std::vector<ade::DimT> gotshape(gout_left.shape_.begin(), gout_left.shape_.end());
 		ASSERT_ARREQ(slist, gotshape);
@@ -328,8 +317,7 @@ static void binary_elementary_int (BinaryOpF op,
 	}
 
 	ade::TensptrT gright = llo::derive(dest, src2.get());
-	llo::GenericData gout_right = llo::eval(gright, age::INT32);
-	ASSERT_EQ(age::INT32, gout_right.dtype_);
+	llo::TypedData<int32_t> gout_right = llo::eval<int32_t>(gright);
 	{
 		std::vector<ade::DimT> gotshape(gout_right.shape_.begin(), gout_right.shape_.end());
 		ASSERT_ARREQ(slist, gotshape);
@@ -437,10 +425,9 @@ TEST(API, Flip)
 	std::stringstream ss;
 	ss << "attempting to flip dimension " <<
 		(int) baddim << " beyond shape rank " << nrank;
-	EXPECT_FATAL(llo::eval(bad, age::DOUBLE), ss.str().c_str())
+	EXPECT_FATAL(llo::eval<double>(bad), ss.str().c_str())
 
-	llo::GenericData out = llo::eval(dest, age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, out.dtype_);
+	llo::TypedData<double> out = llo::eval<double>(dest);
 	std::vector<ade::DimT> gotshape(out.shape_.begin(), out.shape_.end());
 	ASSERT_ARREQ(slist, gotshape);
 	double* optr = (double*) out.data_.get();
@@ -457,8 +444,7 @@ TEST(API, Flip)
 
 	ade::TensptrT gsrc = llo::derive(dest, src.get());
 
-	llo::GenericData gout = llo::eval(gsrc, age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, gout.dtype_);
+	llo::TypedData<double> gout = llo::eval<double>(gsrc);
 	{
 		std::vector<ade::DimT> gotshape(gout.shape_.begin(), gout.shape_.end());
 		ASSERT_ARREQ(slist, gotshape);
@@ -614,7 +600,7 @@ TEST(API, Gt)
 TEST(API, NElems)
 {
 	unary_generic([](ade::TensptrT& src) { return age::n_elems(src); },
-		[](llo::GenericData& out, ade::Shape& shape, std::vector<double>&)
+		[](llo::TypedData<double>& out, ade::Shape& shape, std::vector<double>&)
 		{
 			ASSERT_EQ(1, out.shape_.n_elems());
 			double got = *((double*) out.data_.get());
@@ -635,7 +621,7 @@ TEST(API, NDims)
 {
 	uint8_t dim = 2;
 	unary_generic([dim](ade::TensptrT& src) { return age::n_dims(src, dim); },
-		[dim](llo::GenericData& out, ade::Shape& shape, std::vector<double>&)
+		[dim](llo::TypedData<double>& out, ade::Shape& shape, std::vector<double>&)
 		{
 			ASSERT_EQ(1, out.shape_.n_elems());
 			double got = *((double*) out.data_.get());
@@ -655,7 +641,7 @@ TEST(API, NDims)
 TEST(API, Rsum)
 {
 	unary_generic([](ade::TensptrT& src) { return age::reduce_sum(src); },
-		[](llo::GenericData& out, ade::Shape& shape, std::vector<double>& data)
+		[](llo::TypedData<double>& out, ade::Shape& shape, std::vector<double>& data)
 		{
 			size_t n = out.shape_.n_elems();
 			{
@@ -679,7 +665,7 @@ TEST(API, Rsum)
 TEST(API, Rmin)
 {
 	unary_generic([](ade::TensptrT& src) { return age::reduce_min(src); },
-		[](llo::GenericData& out, ade::Shape& shape, std::vector<double>& data)
+		[](llo::TypedData<double>& out, ade::Shape& shape, std::vector<double>& data)
 		{
 			size_t n = out.shape_.n_elems();
 			ASSERT_EQ(1, n);
@@ -709,7 +695,7 @@ TEST(API, Rmin)
 TEST(API, Rmax)
 {
 	unary_generic([](ade::TensptrT& src) { return age::reduce_max(src); },
-		[](llo::GenericData& out, ade::Shape& shape, std::vector<double>& data)
+		[](llo::TypedData<double>& out, ade::Shape& shape, std::vector<double>& data)
 		{
 			size_t n = out.shape_.n_elems();
 			ASSERT_EQ(1, n);
@@ -750,8 +736,7 @@ TEST(API, Permute)
 	ade::TensptrT src = llo::get_variable<double>(data, shape);
 	ade::TensptrT dest = age::permute(src, pidx);
 
-	llo::GenericData out = llo::eval(dest, age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, out.dtype_);
+	llo::TypedData<double> out = llo::eval<double>(dest);
 	size_t n = out.shape_.n_elems();
 	ASSERT_EQ(nelem, n);
 	double* got = (double*) out.data_.get();
@@ -769,8 +754,7 @@ TEST(API, Permute)
 
 	ade::TensptrT gsrc = llo::derive(dest, src.get());
 
-	llo::GenericData gout = llo::eval(gsrc, age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, gout.dtype_);
+	llo::TypedData<double> gout = llo::eval<double>(gsrc);
 	{
 		std::vector<ade::DimT> gotshape(gout.shape_.begin(), gout.shape_.end());
 		ASSERT_ARREQ(slist, gotshape);
@@ -796,8 +780,7 @@ TEST(API, Extend)
 	ade::TensptrT src = llo::get_variable<double>(data, shape);
 	ade::TensptrT dest = age::extend(src, slist.size(), ext);
 
-	llo::GenericData out = llo::eval(dest, age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, out.dtype_);
+	llo::TypedData<double> out = llo::eval<double>(dest);
 	size_t ext_nelem = ade::Shape(ext).n_elems();
 	size_t n = out.shape_.n_elems();
 	ASSERT_EQ(nelem * ext_nelem, n);
@@ -812,8 +795,7 @@ TEST(API, Extend)
 
 	ade::TensptrT gsrc = llo::derive(dest, src.get());
 
-	llo::GenericData gout = llo::eval(gsrc, age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, gout.dtype_);
+	llo::TypedData<double> gout = llo::eval<double>(gsrc);
 	{
 		std::vector<ade::DimT> gotshape(gout.shape_.begin(), gout.shape_.end());
 		ASSERT_ARREQ(slist, gotshape);
@@ -863,15 +845,14 @@ TEST(API, Matmul)
 	ade::TensptrT b = llo::get_variable<int32_t>(data2, bshape);
 	ade::TensptrT dest = age::fast_matmul(a, b);
 
-	llo::GenericData out = llo::eval(dest, age::INT32);
-	EXPECT_EQ(age::INT32, out.dtype_);
+	llo::TypedData<int32_t> out = llo::eval<int32_t>(dest);
 	ade::Shape& gotshape = out.shape_;
 	EXPECT_EQ(4, gotshape.at(0));
 	EXPECT_EQ(2, gotshape.at(1));
 	int32_t* optr = (int32_t*) out.data_.get();
 	ASSERT_NE(nullptr, optr);
-	llo::GenericData ad = llo::eval(a, age::INT32);
-	llo::GenericData bd = llo::eval(b, age::INT32);
+	llo::TypedData<int32_t> ad = llo::eval<int32_t>(a);
+	llo::TypedData<int32_t> bd = llo::eval<int32_t>(b);
 	MatVecT dda = create_2d(ad);
 	MatVecT ddb = create_2d(bd);
 	MatVecT ddc = create_2d(out);
@@ -880,8 +861,7 @@ TEST(API, Matmul)
 	ade::TensptrT c = llo::get_variable<int32_t>(data3, cshape);
 	ade::TensptrT dest2 = age::fast_matmul(c, c);
 	ade::TensptrT gsame = llo::derive(dest2, c.get());
-	llo::GenericData gout = llo::eval(gsame, age::INT32);
-	ASSERT_EQ(age::INT32, gout.dtype_);
+	llo::TypedData<int32_t> gout = llo::eval<int32_t>(gsame);
 	ade::Shape& gcshape = gout.shape_;
 	{
 		std::vector<ade::DimT> glist(gcshape.begin(), gcshape.end());
@@ -889,8 +869,7 @@ TEST(API, Matmul)
 	}
 
 	ade::TensptrT gleft = llo::derive(dest, a.get());
-	llo::GenericData gout_left = llo::eval(gleft, age::INT32);
-	ASSERT_EQ(age::INT32, gout_left.dtype_);
+	llo::TypedData<int32_t> gout_left = llo::eval<int32_t>(gleft);
 	ade::Shape& gashape = gout_left.shape_;
 	{
 		std::vector<ade::DimT> glist(gashape.begin(), gashape.end());
@@ -902,8 +881,7 @@ TEST(API, Matmul)
 	}
 
 	ade::TensptrT gright = llo::derive(dest, b.get());
-	llo::GenericData gout_right = llo::eval(gright, age::INT32);
-	ASSERT_EQ(age::INT32, gout_right.dtype_);
+	llo::TypedData<int32_t> gout_right = llo::eval<int32_t>(gright);
 	ade::Shape& gbshape = gout_right.shape_;
 	{
 		std::vector<ade::DimT> glist(gbshape.begin(), gbshape.end());
@@ -975,9 +953,8 @@ TEST(API, Convolution)
 	ade::TensptrT kernel = llo::get_variable<double>(data2, kshape);
 	ade::TensptrT dest = age::convolution(img, kernel);
 
-	llo::GenericData out = llo::eval(dest, age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, out.dtype_);
-	ade::Shape& gotshape = out.shape_;
+	llo::TypedData<double> out = llo::eval<double>(dest);
+		ade::Shape& gotshape = out.shape_;
 	{
 		std::vector<ade::DimT> slist(gotshape.begin(), gotshape.end());
 		EXPECT_ARREQ(expectslist, slist);
@@ -988,9 +965,8 @@ TEST(API, Convolution)
 	}
 
 	ade::TensptrT gleft = llo::derive(dest, img.get());
-	llo::GenericData gout_left = llo::eval(gleft, age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, gout_left.dtype_);
-	ade::Shape& gashape = gout_left.shape_;
+	llo::TypedData<double> gout_left = llo::eval<double>(gleft);
+		ade::Shape& gashape = gout_left.shape_;
 	{
 		std::vector<ade::DimT> glist(gashape.begin(), gashape.end());
 		ASSERT_ARREQ(alist, glist);
@@ -1000,9 +976,8 @@ TEST(API, Convolution)
 	}
 
 	ade::TensptrT gright = llo::derive(dest, kernel.get());
-	llo::GenericData gout_right = llo::eval(gright, age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, gout_right.dtype_);
-	ade::Shape& gbshape = gout_right.shape_;
+	llo::TypedData<double> gout_right = llo::eval<double>(gright);
+		ade::Shape& gbshape = gout_right.shape_;
 	{
 		std::vector<ade::DimT> glist(gbshape.begin(), gbshape.end());
 		ASSERT_ARREQ(blist, glist);
@@ -1010,58 +985,6 @@ TEST(API, Convolution)
 		std::vector<double> gb_data(gb, gb + gbshape.n_elems());
 		ASSERT_ARREQ(expect_gb, gb_data);
 	}
-}
-
-
-TEST(API, RandBinomial)
-{
-	std::vector<ade::DimT> slist = {31, 27, 14};
-	double n = 3.2234;
-	double p = 0.2547977589;
-
-	ade::TensptrT src = llo::get_variable<double>({n}, ade::Shape());
-	ade::TensptrT src2 = llo::get_variable<double>({p}, ade::Shape());
-	ade::TensptrT dest(ade::Functor::get(ade::Opcode{"RAND_BINO",age::RAND_BINO}, {
-		ade::extend_map(src, 0, slist),
-		ade::extend_map(src2, 0, slist)
-	}));
-
-	llo::GenericData out = llo::eval(dest, age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, out.dtype_);
-	{
-		std::vector<ade::DimT> gotshape(out.shape_.begin(), out.shape_.end());
-		ASSERT_ARREQ(slist, gotshape);
-	}
-	double expected_mean = n * p;
-	double expected_variance = expected_mean * (1 - p);
-	double mean = 0;
-	double variance = 0;
-	double* optr = (double*) out.data_.get();
-	size_t nelems = out.shape_.n_elems();
-	for (size_t i = 0; i < nelems; ++i)
-	{
-		mean += optr[i];
-		variance += optr[i] * optr[i];
-	}
-	mean /= nelems;
-	variance = variance / nelems - mean * mean;
-
-	EXPECT_GT(0.1, std::fabs(expected_mean - mean) / mean);
-	EXPECT_GT(0.1, std::fabs(expected_variance - variance) / variance);
-
-	ade::TensptrT gleft = llo::derive(dest, src.get());
-	llo::GenericData gout_left = llo::eval(gleft, age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, gout_left.dtype_);
-	ASSERT_EQ(1, gout_left.shape_.n_elems());
-	double* goptr2 = (double*) gout_left.data_.get();
-	EXPECT_DOUBLE_EQ(0, goptr2[0]);
-
-	ade::TensptrT gright = llo::derive(dest, src2.get());
-	llo::GenericData gout_right = llo::eval(gright, age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, gout_right.dtype_);
-	ASSERT_EQ(1, gout_right.shape_.n_elems());
-	double* goptr3 = (double*) gout_right.data_.get();
-	EXPECT_DOUBLE_EQ(0, goptr3[0]);
 }
 
 
@@ -1078,9 +1001,8 @@ TEST(API, RandUniform)
 		ade::extend_map(src2, 0, slist)
 	}));
 
-	llo::GenericData out = llo::eval(dest, age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, out.dtype_);
-	{
+	llo::TypedData<double> out = llo::eval<double>(dest);
+		{
 		std::vector<ade::DimT> gotshape(out.shape_.begin(), out.shape_.end());
 		ASSERT_ARREQ(slist, gotshape);
 	}
@@ -1093,16 +1015,14 @@ TEST(API, RandUniform)
 	}
 
 	ade::TensptrT gleft = llo::derive(dest, src.get());
-	llo::GenericData gout_left = llo::eval(gleft, age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, gout_left.dtype_);
-	ASSERT_EQ(1, gout_left.shape_.n_elems());
+	llo::TypedData<double> gout_left = llo::eval<double>(gleft);
+		ASSERT_EQ(1, gout_left.shape_.n_elems());
 	double* goptr2 = (double*) gout_left.data_.get();
 	EXPECT_DOUBLE_EQ(0, goptr2[0]);
 
 	ade::TensptrT gright = llo::derive(dest, src2.get());
-	llo::GenericData gout_right = llo::eval(gright, age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, gout_right.dtype_);
-	ASSERT_EQ(1, gout_right.shape_.n_elems());
+	llo::TypedData<double> gout_right = llo::eval<double>(gright);
+		ASSERT_EQ(1, gout_right.shape_.n_elems());
 	double* goptr3 = (double*) gout_right.data_.get();
 	EXPECT_DOUBLE_EQ(0, goptr3[0]);
 }
@@ -1121,9 +1041,8 @@ TEST(API, RandNormal)
 		ade::extend_map(src2, 0, slist)
 	}));
 
-	llo::GenericData out = llo::eval(dest, age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, out.dtype_);
-	{
+	llo::TypedData<double> out = llo::eval<double>(dest);
+		{
 		std::vector<ade::DimT> gotshape(out.shape_.begin(), out.shape_.end());
 		ASSERT_ARREQ(slist, gotshape);
 	}
@@ -1144,16 +1063,14 @@ TEST(API, RandNormal)
 	EXPECT_GT(0.1, std::fabs(expected_variance - variance) / variance);
 
 	ade::TensptrT gleft = llo::derive(dest, src.get());
-	llo::GenericData gout_left = llo::eval(gleft, age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, gout_left.dtype_);
-	ASSERT_EQ(1, gout_left.shape_.n_elems());
+	llo::TypedData<double> gout_left = llo::eval<double>(gleft);
+		ASSERT_EQ(1, gout_left.shape_.n_elems());
 	double* goptr2 = (double*) gout_left.data_.get();
 	EXPECT_DOUBLE_EQ(0, goptr2[0]);
 
 	ade::TensptrT gright = llo::derive(dest, src2.get());
-	llo::GenericData gout_right = llo::eval(gright, age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, gout_right.dtype_);
-	ASSERT_EQ(1, gout_right.shape_.n_elems());
+	llo::TypedData<double> gout_right = llo::eval<double>(gright);
+		ASSERT_EQ(1, gout_right.shape_.n_elems());
 	double* goptr3 = (double*) gout_right.data_.get();
 	EXPECT_DOUBLE_EQ(0, goptr3[0]);
 }

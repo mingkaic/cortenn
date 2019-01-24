@@ -19,6 +19,9 @@ COVERAGE_PIPE := ./scripts/merge_cov.sh $(COVERAGE_INFO_FILE)
 TMP_LOGFILE := /tmp/cortenn-test.log
 
 
+benchmark:
+	bazel run //llo:benchmark
+
 coverage: cover_opt cover_llo cover_pbm
 
 cover_llo:

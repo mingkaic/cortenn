@@ -75,28 +75,6 @@ static ade::TensptrT one_prune_edit (ade::iFunctor* func, ade::ArgsT args)
 				}
 				// else if is_one[0]
 				break;
-			case age::RAND_BINO:
-			{
-				if (is_one[1])
-				{
-					if (ade::identity == args[0].get_coorder())
-					{
-						return args[0].get_tensor();
-					}
-					return ade::TensptrT(ade::Functor::get(
-						ade::Opcode{"SUM", age::SUM}, {args[0]}));
-				}
-				// else if is_one[0]
-				ade::TensptrT trial(ade::Functor::get(
-					ade::Opcode{"RAND_UNIF", age::RAND_UNIF}, {
-						ade::identity_map(
-							llo::get_scalar<double>(0.0, args[0].shape())),
-						args[1]
-					}));
-				return ade::TensptrT(ade::Functor::get(ade::Opcode{"LT", age::LT}, {
-					ade::identity_map(trial), args[1]
-				}));
-			}
 			case age::NEG:
 			case age::SIN:
 			case age::COS:

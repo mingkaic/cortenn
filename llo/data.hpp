@@ -20,16 +20,90 @@
 namespace llo
 {
 
+struct CDeleter final
+{
+	void operator () (void* p)
+	{
+		free(p);
+	}
+};
+
+#define CONVERT(INTYPE)\
+{\
+	const INTYPE* ptr = (const INTYPE*) indata;\
+	std::vector<T> temp(ptr, ptr + n);\
+	std::memcpy(data_.get(), temp.data(), nbytes);\
+} break;
+
+template <typename T>
+struct TypedData final
+{
+	TypedData (void) = default;
+
+	TypedData (ade::Shape shape):
+		data_((T*) malloc(shape.n_elems() * sizeof(T)),
+			CDeleter()), shape_(shape) {}
+
+	/// Copy over data of specified type while retaining shape
+	/// This makes the assumption that the indata fits in shape perfectly
+	void copyover (const char* indata, age::_GENERATED_DTYPE intype)
+	{
+		size_t n = shape_.n_elems();
+		size_t nbytes = sizeof(T) * n;
+		switch (intype)
+		{
+			case age::DOUBLE: CONVERT(double)
+			case age::FLOAT: CONVERT(float)
+			case age::INT8: CONVERT(int8_t)
+			case age::INT16: CONVERT(int16_t)
+			case age::INT32: CONVERT(int32_t)
+			case age::INT64: CONVERT(int64_t)
+			case age::UINT8: CONVERT(uint8_t)
+			case age::UINT16: CONVERT(uint16_t)
+			case age::UINT32: CONVERT(uint32_t)
+			case age::UINT64: CONVERT(uint64_t)
+			default: logs::fatalf("invalid input type %s",
+				age::name_type(intype).c_str());
+		}
+	}
+
+	/// Smartpointer to a block of typed data
+	std::shared_ptr<T> data_;
+
+	/// Shape of data_
+	ade::Shape shape_;
+};
+
+/// Data to pass around when evaluating
+template <typename T>
+struct DataArg
+{
+	/// Smart pointer to generic data as bytes
+	std::shared_ptr<T> data_;
+
+	/// Shape of the generic data
+	ade::Shape shape_;
+
+	/// Coordinate mapper
+	ade::CoordptrT mapper_;
+
+	/// True if the coordinate mapper accepts input coordinates,
+	/// False if it accepts output coordinates
+	bool push_;
+};
+
+/// Vector of DataArgs to hold arguments
+template <typename T>
+using DataArgsT = std::vector<DataArg<T>>;
+
 /// GenericData for holding data when passing up the tensor graph
 struct GenericData final
 {
 	GenericData (void) = default;
 
-	GenericData (ade::Shape shape, age::_GENERATED_DTYPE dtype);
-
-	/// Copy over data of specified type while retaining shape
-	/// This makes the assumption that the indata fits in shape perfectly
-	void copyover (const char* indata, age::_GENERATED_DTYPE intype);
+	GenericData (ade::Shape shape, age::_GENERATED_DTYPE dtype) :
+		data_((char*) malloc(shape.n_elems() * type_size(dtype)),
+			CDeleter()), shape_(shape), dtype_(dtype) {}
 
 	/// Smartpointer to a block of untyped data
 	std::shared_ptr<char> data_;
@@ -218,70 +292,6 @@ VarptrT get_scalar (T scalar, ade::Shape shape, std::string label = "")
 	}
 	return llo::get_variable(std::vector<T>(shape.n_elems(),scalar),
 		shape, label);
-}
-
-/// Data to pass around when evaluating
-struct DataArg
-{
-	/// Smart pointer to generic data as bytes
-	std::shared_ptr<char> data_;
-
-	/// Shape of the generic data
-	ade::Shape shape_;
-
-	/// Coordinate mapper
-	ade::CoordptrT mapper_;
-
-	/// True if the coordinate mapper accepts input coordinates,
-	/// False if it accepts output coordinates
-	bool fwd_;
-};
-
-/// Vector of DataArgs to hold arguments
-using DataArgsT = std::vector<DataArg>;
-
-/// Type-specific tensor data wrapper using raw pointer and data size
-/// Avoid using std constainers in case of unintentional deep copies
-template <typename T>
-struct VecRef
-{
-	/// Raw input data
-	const T* data;
-
-	/// Shape info of the raw input
-	ade::Shape shape;
-
-	/// Coordinate mapper of input to output
-	ade::CoordptrT mapper;
-
-	/// True if data should be pushed input to output (fwd mapper)
-	/// False if data should be pulled output from input (bwd mapper)
-	bool push;
-};
-
-/// Converts DataArgs to VecRef of specific type
-template <typename T>
-VecRef<T> to_ref (DataArg& arg)
-{
-	return VecRef<T>{
-		(const T*) arg.data_.get(),
-		arg.shape_,
-		arg.mapper_,
-		arg.fwd_,
-	};
-}
-
-/// Converts multiple DataArgs to multiple VecRefs of the same type
-template <typename T>
-std::vector<VecRef<T>> to_refs (DataArgsT& args)
-{
-	std::vector<VecRef<T>> out;
-	std::transform(args.begin(), args.end(), std::back_inserter(out),
-		[](DataArg& arg)
-		{
-			return to_ref<T>(arg);
-		});
-	return out;
 }
 
 }

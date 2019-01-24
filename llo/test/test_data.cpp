@@ -39,8 +39,7 @@ TEST(DATA, SourceRetype)
 	};
 	ade::TensptrT ptr = llo::get_variable<double>(data, shape);
 
-	llo::GenericData gd = llo::eval(ptr, age::UINT16);
-	ASSERT_EQ(age::UINT16, gd.dtype_);
+	llo::TypedData<uint16_t> gd = llo::eval<uint16_t>(ptr);
 	std::vector<ade::DimT> gotslist(gd.shape_.begin(), gd.shape_.end());
 	EXPECT_ARREQ(slist, gotslist);
 
@@ -59,8 +58,7 @@ TEST(DATA, PlaceHolder)
 	size_t n = shape.n_elems();
 	llo::VarptrT pl(llo::get_variable<double>(shape));
 
-	llo::GenericData uninit_gd = llo::eval(ade::TensptrT(pl), age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, uninit_gd.dtype_);
+	llo::TypedData<double> uninit_gd = llo::eval<double>(ade::TensptrT(pl));
 	std::vector<ade::DimT> uninit_slist(uninit_gd.shape_.begin(), uninit_gd.shape_.end());
 	EXPECT_ARREQ(slist, uninit_slist);
 
@@ -75,8 +73,7 @@ TEST(DATA, PlaceHolder)
 		48, 77, 58, 64, 83, 64, 6, 24, 16, 9
 	};
 	*pl = data;
-	llo::GenericData gd = llo::eval(ade::TensptrT(pl), age::DOUBLE);
-	ASSERT_EQ(age::DOUBLE, gd.dtype_);
+	llo::TypedData<double> gd = llo::eval<double>(ade::TensptrT(pl));
 	std::vector<ade::DimT> gotslist(gd.shape_.begin(), gd.shape_.end());
 	EXPECT_ARREQ(slist, gotslist);
 

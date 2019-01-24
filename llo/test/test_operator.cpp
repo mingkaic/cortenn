@@ -1,4 +1,4 @@
-
+#define DISABLE_OPERATOR_TEST
 #ifndef DISABLE_OPERATOR_TEST
 
 

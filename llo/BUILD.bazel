@@ -48,7 +48,6 @@ genrule(
         "generated/grader.hpp",
         "generated/grader.cpp",
         "generated/opmap.hpp",
-        "generated/opmap.cpp",
         "generated/pyapi.cpp",
     ],
     tools = ["//pybinder:pyagen"],
@@ -73,7 +72,6 @@ cc_library(
         "//llo:generated/api.cpp",
         "//llo:generated/codes.cpp",
         "//llo:generated/grader.cpp",
-        "//llo:generated/opmap.cpp",
     ],
     copts = ["-std=c++14"],
     deps = [

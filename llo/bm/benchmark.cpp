@@ -52,7 +52,6 @@ template <typename T>\
 static void NAME(benchmark::State& state)\
 {\
 	size_t n = state.range(0);\
-	age::_GENERATED_DTYPE outtype = age::get_type<T>();\
 	for (auto _ : state)\
 	{\
 		state.PauseTiming();\
@@ -61,7 +60,7 @@ static void NAME(benchmark::State& state)\
 		llo::VarptrT var = llo::get_variable(data, shape, "var");\
 		ade::TensptrT out = FUNC(var);\
 		state.ResumeTiming();\
-		llo::eval(out, outtype);\
+		llo::eval<T>(out);\
 	}\
 	state.SetComplexityN(state.range(0));\
 }
@@ -72,7 +71,6 @@ template <typename T>\
 static void NAME(benchmark::State& state)\
 {\
 	size_t n = state.range(0);\
-	age::_GENERATED_DTYPE outtype = age::get_type<T>();\
 	for (auto _ : state)\
 	{\
 		state.PauseTiming();\
@@ -81,7 +79,7 @@ static void NAME(benchmark::State& state)\
 		llo::VarptrT var = llo::get_variable(data, shape, "var");\
 		ade::TensptrT out = FUNC(var);\
 		state.ResumeTiming();\
-		llo::eval(out, outtype);\
+		llo::eval<T>(out);\
 	}\
 	state.SetComplexityN(state.range(0));\
 }
@@ -119,7 +117,6 @@ template <typename T>\
 static void NAME(benchmark::State& state)\
 {\
 	size_t n = state.range(0);\
-	age::_GENERATED_DTYPE outtype = age::get_type<T>();\
 	for (auto _ : state)\
 	{\
 		state.PauseTiming();\
@@ -130,7 +127,7 @@ static void NAME(benchmark::State& state)\
 		llo::VarptrT var2 = llo::get_variable(data2, shape, "var2");\
 		ade::TensptrT out = FUNC(var, var2);\
 		state.ResumeTiming();\
-		llo::eval(out, outtype);\
+		llo::eval<T>(out);\
 	}\
 	state.SetComplexityN(state.range(0));\
 }
@@ -167,7 +164,6 @@ template <typename T>
 static void BM_Matmul(benchmark::State& state)
 {
 	size_t n = state.range(0);
-	age::_GENERATED_DTYPE outtype = age::get_type<T>();
 	for (auto _ : state)
 	{
 		state.PauseTiming();
@@ -185,7 +181,7 @@ static void BM_Matmul(benchmark::State& state)
 		llo::VarptrT var2 = llo::get_variable(data2, rightshape, "var2");
 		ade::TensptrT out = age::fast_matmul(var, var2);
 		state.ResumeTiming();
-		llo::eval(out, outtype);
+		llo::eval<T>(out);
 	}
 	state.SetComplexityN(state.range(0));
 }

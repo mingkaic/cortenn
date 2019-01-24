@@ -33,6 +33,15 @@ std::vector<ade::DimT> c2pshape (ade::Shape& cshape)
 	return std::vector<ade::DimT>(fwd.rbegin(), fwd.rend());
 }
 
+template <typename T>
+py::array typedata_to_array (llo::TypedData<T>& tdata, py::dtype dtype)
+{
+	auto pshape = pyllo::c2pshape(tdata.shape_);
+	return py::array(dtype,
+		py::array::ShapeContainer(pshape.begin(), pshape.end()),
+		tdata.data_.get());
+}
+
 }
 
 PYBIND11_MODULE(llo, m)
@@ -77,25 +86,22 @@ PYBIND11_MODULE(llo, m)
 		.def("evaluate",
 		[](py::object self, py::dtype dtype)
 		{
-			age::_GENERATED_DTYPE ctype = age::BAD_TYPE;
 			char kind = dtype.kind();
 			switch (kind)
 			{
 				case 'f':
-					ctype = age::DOUBLE;
-					break;
+				{
+					auto gdata = llo::eval<double>(self.cast<ade::iTensor*>());
+					return pyllo::typedata_to_array(gdata, dtype);
+				}
 				case 'i':
-					ctype = age::INT64;
-					break;
+				{
+					auto gdata = llo::eval<int64_t>(self.cast<ade::iTensor*>());
+					return pyllo::typedata_to_array(gdata, dtype);
+				}
 				default:
 					logs::fatalf("unknown dtype %c", kind);
 			}
-			llo::GenericData gdata = llo::eval(
-				self.cast<ade::iTensor*>(), ctype);
-			void* vptr = gdata.data_.get();
-			auto pshape = pyllo::c2pshape(gdata.shape_);
-			return py::array(dtype,
-				py::array::ShapeContainer(pshape.begin(), pshape.end()), vptr);
 		},
 		"Return calculated data",
 		py::arg("dtype") = py::dtype::of<double>());

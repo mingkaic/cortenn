@@ -31,23 +31,24 @@ EngineT& get_engine (void);
 /// Generic unary operation assuming identity mapping
 template <typename T>
 void unary (T* out, ade::Shape& outshape,
-	VecRef<T> in, std::function<T(const T&)> f)
+	DataArg<T> in, std::function<T(const T&)> f)
 {
-	if (in.mapper == ade::identity)
+	T* inptr = in.data_.get();
+	if (in.mapper_ == ade::identity)
 	{
-		for (ade::NElemT i = 0, n = in.shape.n_elems(); i < n; ++i)
+		for (ade::NElemT i = 0, n = in.shape_.n_elems(); i < n; ++i)
 		{
-			out[i] = f(in.data[i]);
+			out[i] = f(inptr[i]);
 		}
 	}
-	else if (in.push)
+	else if (in.push_)
 	{
 		ade::CoordT coord;
-		for (ade::NElemT i = 0, n = in.shape.n_elems(); i < n; ++i)
+		for (ade::NElemT i = 0, n = in.shape_.n_elems(); i < n; ++i)
 		{
-			in.mapper->forward(coord.begin(),
-				ade::coordinate(in.shape, i).begin());
-			out[ade::index(outshape, coord)] = f(in.data[i]);
+			in.mapper_->forward(coord.begin(),
+				ade::coordinate(in.shape_, i).begin());
+			out[ade::index(outshape, coord)] = f(inptr[i]);
 		}
 	}
 	else
@@ -55,9 +56,9 @@ void unary (T* out, ade::Shape& outshape,
 		ade::CoordT coord;
 		for (ade::NElemT i = 0, n = outshape.n_elems(); i < n; ++i)
 		{
-			in.mapper->forward(coord.begin(),
+			in.mapper_->forward(coord.begin(),
 				ade::coordinate(outshape, i).begin());
-			out[i] = f(in.data[ade::index(in.shape, coord)]);
+			out[i] = f(inptr[ade::index(in.shape_, coord)]);
 		}
 	}
 }
@@ -65,115 +66,117 @@ void unary (T* out, ade::Shape& outshape,
 /// Given reference to output array, and input vector ref,
 /// make output elements take absolute value of inputs
 template <typename T>
-void abs (T* out, VecRef<T> in)
+void abs (T* out, DataArg<T> in)
 {
-	unary<T>(out, in.shape, in, [](const T& src) { return std::abs(src); });
+	unary<T>(out, in.shape_, in, [](const T& src) { return std::abs(src); });
 }
 
 template <>
-void abs<uint8_t> (uint8_t* out, VecRef<uint8_t> in);
+void abs<uint8_t> (uint8_t* out, DataArg<uint8_t> in);
 
 template <>
-void abs<uint16_t> (uint16_t* out, VecRef<uint16_t> in);
+void abs<uint16_t> (uint16_t* out, DataArg<uint16_t> in);
 
 template <>
-void abs<uint32_t> (uint32_t* out, VecRef<uint32_t> in);
+void abs<uint32_t> (uint32_t* out, DataArg<uint32_t> in);
 
 template <>
-void abs<uint64_t> (uint64_t* out, VecRef<uint64_t> in);
+void abs<uint64_t> (uint64_t* out, DataArg<uint64_t> in);
 
 /// Given reference to output array, and input vector ref,
 /// make output elements take negatives of inputs
 template <typename T>
-void neg (T* out, VecRef<T> in)
+void neg (T* out, DataArg<T> in)
 {
-	unary<T>(out, in.shape, in, [](const T& src) { return -src; });
+	unary<T>(out, in.shape_, in, [](const T& src) { return -src; });
 }
 
 template <>
-void neg<uint8_t> (uint8_t* out, VecRef<uint8_t> in);
+void neg<uint8_t> (uint8_t* out, DataArg<uint8_t> in);
 
 template <>
-void neg<uint16_t> (uint16_t* out, VecRef<uint16_t> in);
+void neg<uint16_t> (uint16_t* out, DataArg<uint16_t> in);
 
 template <>
-void neg<uint32_t> (uint32_t* out, VecRef<uint32_t> in);
+void neg<uint32_t> (uint32_t* out, DataArg<uint32_t> in);
 
 template <>
-void neg<uint64_t> (uint64_t* out, VecRef<uint64_t> in);
+void neg<uint64_t> (uint64_t* out, DataArg<uint64_t> in);
 
 /// Given reference to output array, and input vector ref,
 /// make output elements take bitwise nots of inputs
 template <typename T>
-void bit_not (T* out, VecRef<T> in)
+void bit_not (T* out, DataArg<T> in)
 {
-	unary<T>(out, in.shape, in, [](const T& src) { return !src; });
+	unary<T>(out, in.shape_, in, [](const T& src) { return !src; });
 }
 
 /// Given reference to output array, and input vector ref,
 /// make output elements take sine of inputs
 template <typename T>
-void sin (T* out, VecRef<T> in)
+void sin (T* out, DataArg<T> in)
 {
-	unary<T>(out, in.shape, in, [](const T& src) { return std::sin(src); });
+	unary<T>(out, in.shape_, in, [](const T& src) { return std::sin(src); });
 }
 
 /// Given reference to output array, and input vector ref,
 /// make output elements take cosine of inputs
 template <typename T>
-void cos (T* out, VecRef<T> in)
+void cos (T* out, DataArg<T> in)
 {
-	unary<T>(out, in.shape, in, [](const T& src) { return std::cos(src); });
+	unary<T>(out, in.shape_, in, [](const T& src) { return std::cos(src); });
 }
 
 /// Given reference to output array, and input vector ref,
 /// make output elements take tangent of inputs
 template <typename T>
-void tan (T* out, VecRef<T> in)
+void tan (T* out, DataArg<T> in)
 {
-	unary<T>(out, in.shape, in, [](const T& src) { return std::tan(src); });
+	unary<T>(out, in.shape_, in, [](const T& src) { return std::tan(src); });
 }
 
 /// Given reference to output array, and input vector ref,
 /// make output elements take exponent of inputs
 template <typename T>
-void exp (T* out, VecRef<T> in)
+void exp (T* out, DataArg<T> in)
 {
-	unary<T>(out, in.shape, in, [](const T& src) { return std::exp(src); });
+	unary<T>(out, in.shape_, in, [](const T& src) { return std::exp(src); });
 }
 
 /// Given reference to output array, and input vector ref,
 /// make output elements take natural log of inputs
 template <typename T>
-void log (T* out, VecRef<T> in)
+void log (T* out, DataArg<T> in)
 {
-	unary<T>(out, in.shape, in, [](const T& src) { return std::log(src); });
+	unary<T>(out, in.shape_, in, [](const T& src) { return std::log(src); });
 }
 
 /// Given reference to output array, and input vector ref,
 /// make output elements take square root of inputs
 template <typename T>
-void sqrt (T* out, VecRef<T> in)
+void sqrt (T* out, DataArg<T> in)
 {
-	unary<T>(out, in.shape, in, [](const T& src) { return std::sqrt(src); });
+	unary<T>(out, in.shape_, in, [](const T& src) { return std::sqrt(src); });
 }
 
 /// Given reference to output array, and input vector ref,
 /// make output elements take rounded values of inputs
 template <typename T>
-void round (T* out, VecRef<T> in)
+void round (T* out, DataArg<T> in)
 {
-	unary<T>(out, in.shape, in, [](const T& src) { return std::round(src); });
+	unary<T>(out, in.shape_, in, [](const T& src) { return std::round(src); });
 }
 
 /// Generic binary operation assuming identity mapping
-template <typename OUT, typename ATYPE, typename BTYPE>
-void binary (OUT* out, ade::Shape& outshape, VecRef<ATYPE> a, VecRef<BTYPE> b,
-	std::function<OUT(const ATYPE&,const BTYPE&)> f)
+template <typename T>
+void binary (T* out, ade::Shape& outshape, DataArg<T> a, DataArg<T> b,
+	std::function<T(const T&,const T&)> f)
 {
+	T* aptr = a.data_.get();
+	T* bptr = b.data_.get();
 	// avoid tmpdata by checking if it's needed
 	// tmpdata not needed if neither a nor b are pushing
-	if (false == (a.push || b.push))
+	if (false == (a.push_ || b.push_))
 	{
 		ade::CoordT coord;
 		ade::CoordT acoord;
@@ -181,52 +184,52 @@ void binary (OUT* out, ade::Shape& outshape, VecRef<ATYPE> a, VecRef<BTYPE> b,
 		for (ade::NElemT i = 0, n = outshape.n_elems(); i < n; ++i)
 		{
 			coord = ade::coordinate(outshape, i);
-			a.mapper->forward(acoord.begin(), coord.begin());
-			b.mapper->forward(bcoord.begin(), coord.begin());
+			a.mapper_->forward(acoord.begin(), coord.begin());
+			b.mapper_->forward(bcoord.begin(), coord.begin());
 			out[i] = f(
-				a.data[ade::index(a.shape, acoord)],
-				b.data[ade::index(b.shape, bcoord)]);
+				aptr[ade::index(a.shape_, acoord)],
+				bptr[ade::index(b.shape_, bcoord)]);
 		}
 	}
-	else // a.push || b.push
+	else // a.push_ || b.push_
 	{
-		std::vector<ATYPE> tmpdata(outshape.n_elems());
+		std::vector<T> tmpdata(outshape.n_elems());
 		ade::CoordT coord;
-		if (a.push)
+		if (a.push_)
 		{
-			for (ade::NElemT i = 0, n = a.shape.n_elems(); i < n; ++i)
+			for (ade::NElemT i = 0, n = a.shape_.n_elems(); i < n; ++i)
 			{
-				a.mapper->forward(coord.begin(),
-					ade::coordinate(a.shape, i).begin());
-				tmpdata[ade::index(outshape, coord)] = a.data[i];
+				a.mapper_->forward(coord.begin(),
+					ade::coordinate(a.shape_, i).begin());
+				tmpdata[ade::index(outshape, coord)] = aptr[i];
 			}
 		}
 		else
 		{
 			for (ade::NElemT i = 0, n = outshape.n_elems(); i < n; ++i)
 			{
-				a.mapper->forward(coord.begin(),
+				a.mapper_->forward(coord.begin(),
 					ade::coordinate(outshape, i).begin());
-				tmpdata[i] = a.data[ade::index(a.shape, coord)];
+				tmpdata[i] = aptr[ade::index(a.shape_, coord)];
 			}
 		}
-		if (b.push)
+		if (b.push_)
 		{
-			for (ade::NElemT i = 0, n = b.shape.n_elems(); i < n; ++i)
+			for (ade::NElemT i = 0, n = b.shape_.n_elems(); i < n; ++i)
 			{
-				b.mapper->forward(coord.begin(),
-					ade::coordinate(b.shape, i).begin());
+				b.mapper_->forward(coord.begin(),
+					ade::coordinate(b.shape_, i).begin());
 				ade::NElemT outidx = ade::index(outshape, coord);
-				out[outidx] = f(tmpdata[outidx], b.data[i]);
+				out[outidx] = f(tmpdata[outidx], bptr[i]);
 			}
 		}
 		else
 		{
 			for (ade::NElemT i = 0, n = outshape.n_elems(); i < n; ++i)
 			{
-				b.mapper->forward(coord.begin(),
+				b.mapper_->forward(coord.begin(),
 					ade::coordinate(outshape, i).begin());
-				out[i] = f(tmpdata[i], b.data[ade::index(b.shape, coord)]);
+				out[i] = f(tmpdata[i], bptr[ade::index(b.shape_, coord)]);
 			}
 		}
 	}
@@ -236,9 +239,9 @@ void binary (OUT* out, ade::Shape& outshape, VecRef<ATYPE> a, VecRef<BTYPE> b,
 /// same index apply std::pow operator
 /// Only accept 2 arguments
 template <typename T>
-void pow (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
+void pow (T* out, ade::Shape& outshape, DataArg<T> a, DataArg<T> b)
 {
-	binary<T,T,T>(out, outshape, a, b,
+	binary<T>(out, outshape, a, b,
 	[](const T& b, const T& x) { return std::pow(b, x); });
 }
 
@@ -246,9 +249,9 @@ void pow (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
 /// same index subtract
 /// Only accept 2 arguments
 template <typename T>
-void sub (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
+void sub (T* out, ade::Shape& outshape, DataArg<T> a, DataArg<T> b)
 {
-	binary<T,T,T>(out, outshape, a, b,
+	binary<T>(out, outshape, a, b,
 	[](const T& a, const T& b) { return a - b; });
 }
 
@@ -256,9 +259,9 @@ void sub (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
 /// same index divide
 /// Only accept 2 arguments
 template <typename T>
-void div (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
+void div (T* out, ade::Shape& outshape, DataArg<T> a, DataArg<T> b)
 {
-	binary<T,T,T>(out, outshape, a, b,
+	binary<T>(out, outshape, a, b,
 	[](const T& a, const T& b) { return a / b; });
 }
 
@@ -266,9 +269,9 @@ void div (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
 /// same index apply == operator
 /// Only accept 2 arguments
 template <typename T>
-void eq (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
+void eq (T* out, ade::Shape& outshape, DataArg<T> a, DataArg<T> b)
 {
-	binary<T,T,T>(out, outshape, a, b,
+	binary<T>(out, outshape, a, b,
 	[](const T& a, const T& b) { return a == b; });
 }
 
@@ -276,9 +279,9 @@ void eq (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
 /// same index apply != operator
 /// Only accept 2 arguments
 template <typename T>
-void neq (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
+void neq (T* out, ade::Shape& outshape, DataArg<T> a, DataArg<T> b)
 {
-	binary<T,T,T>(out, outshape, a, b,
+	binary<T>(out, outshape, a, b,
 	[](const T& a, const T& b) { return a != b; });
 }
 
@@ -286,9 +289,9 @@ void neq (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
 /// same index apply < operator
 /// Only accept 2 arguments
 template <typename T>
-void lt (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
+void lt (T* out, ade::Shape& outshape, DataArg<T> a, DataArg<T> b)
 {
-	binary<T,T,T>(out, outshape, a, b,
+	binary<T>(out, outshape, a, b,
 	[](const T& a, const T& b) { return a < b; });
 }
 
@@ -296,42 +299,20 @@ void lt (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
 /// same index apply > operator
 /// Only accept 2 arguments
 template <typename T>
-void gt (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
+void gt (T* out, ade::Shape& outshape, DataArg<T> a, DataArg<T> b)
 {
-	binary<T,T,T>(out, outshape, a, b,
+	binary<T>(out, outshape, a, b,
 	[](const T& a, const T& b) { return a > b; });
 }
-
-/// Given arguments a, and b, for every pair of mapped elements sharing the
-/// same index apply std::binomial_distribution function
-/// Only accept 2 arguments
-template <typename T>
-void rand_binom (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<double> b)
-{
-	binary<T,T,double>(out, outshape, a, b,
-	[](const T& a, const double& b)
-	{
-		std::binomial_distribution<T> dist(a, b);
-		return dist(get_engine());
-	});
-}
-
-template <>
-void rand_binom<double> (double* out,
-	ade::Shape& outshape, VecRef<double> a, VecRef<double> b);
-
-template <>
-void rand_binom<float> (float* out,
-	ade::Shape& outshape, VecRef<float> a, VecRef<double> b);
 
 /// Given arguments a, and b, for every pair of mapped elements sharing the
 /// same index apply std::uniform_distributon function
 /// Only accept 2 arguments
 template <typename T>
 void rand_uniform (T* out,
-	ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
+	ade::Shape& outshape, DataArg<T> a, DataArg<T> b)
 {
-	binary<T,T,T>(out, outshape, a, b,
+	binary<T>(out, outshape, a, b,
 	[](const T& a, const T& b)
 	{
 		std::uniform_int_distribution<T> dist(a, b);
@@ -341,54 +322,55 @@ void rand_uniform (T* out,
 
 template <>
 void rand_uniform<double> (double* out,
-	ade::Shape& outshape, VecRef<double> a, VecRef<double> b);
+	ade::Shape& outshape, DataArg<double> a, DataArg<double> b);
 
 template <>
 void rand_uniform<float> (float* out,
-	ade::Shape& outshape, VecRef<float> a, VecRef<float> b);
+	ade::Shape& outshape, DataArg<float> a, DataArg<float> b);
 
 /// Given arguments a, and b, for every pair of mapped elements sharing the
 /// same index apply std::normal_distribution function
 /// Only accept 2 arguments
 template <typename T>
-void rand_normal (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
+void rand_normal (T* out, ade::Shape& outshape, DataArg<T> a, DataArg<T> b)
 {
 	throw std::bad_function_call();
 }
 
 template <>
 void rand_normal<double> (double* out,
-	ade::Shape& outshape, VecRef<double> a, VecRef<double> b);
+	ade::Shape& outshape, DataArg<double> a, DataArg<double> b);
 
 template <>
 void rand_normal<float> (float* out,
-	ade::Shape& outshape, VecRef<float> a, VecRef<float> b);
+	ade::Shape& outshape, DataArg<float> a, DataArg<float> b);
 
 /// Generic n-nary operation
 template <typename T>
-void nnary (T* out, ade::Shape& outshape, std::vector<VecRef<T>> args,
+void nnary (T* out, ade::Shape& outshape, DataArgsT<T> args,
 	std::function<void(T&, const T&)> acc)
 {
 	ade::NElemT nout = outshape.n_elems();
 	bool visited[nout];
 	std::memset(visited, false, nout);
 	ade::CoordT coord;
-	for (VecRef<T>& arg : args)
+	for (DataArg<T>& arg : args)
 	{
-		if (arg.push)
+		T* argptr = arg.data_.get();
+		if (arg.push_)
 		{
-			for (ade::NElemT i = 0, n = arg.shape.n_elems(); i < n; ++i)
+			for (ade::NElemT i = 0, n = arg.shape_.n_elems(); i < n; ++i)
 			{
-				arg.mapper->forward(coord.begin(),
-					ade::coordinate(arg.shape, i).begin());
+				arg.mapper_->forward(coord.begin(),
+					ade::coordinate(arg.shape_, i).begin());
 				ade::NElemT outidx = ade::index(outshape, coord);
 				if (visited[outidx])
 				{
-					acc(out[outidx], arg.data[i]);
+					acc(out[outidx], argptr[i]);
 				}
 				else
 				{
-					out[outidx] = arg.data[i];
+					out[outidx] = argptr[i];
 					visited[outidx] = true;
 				}
 			}
@@ -397,16 +379,16 @@ void nnary (T* out, ade::Shape& outshape, std::vector<VecRef<T>> args,
 		{
 			for (ade::NElemT i = 0, n = outshape.n_elems(); i < n; ++i)
 			{
-				arg.mapper->forward(coord.begin(),
+				arg.mapper_->forward(coord.begin(),
 					ade::coordinate(outshape, i).begin());
-				ade::NElemT inidx = ade::index(arg.shape, coord);
+				ade::NElemT inidx = ade::index(arg.shape_, coord);
 				if (visited[i])
 				{
-					acc(out[i], arg.data[inidx]);
+					acc(out[i], argptr[inidx]);
 				}
 				else
 				{
-					out[i] = arg.data[inidx];
+					out[i] = argptr[inidx];
 					visited[i] = true;
 				}
 			}
@@ -418,7 +400,7 @@ void nnary (T* out, ade::Shape& outshape, std::vector<VecRef<T>> args,
 /// Given arguments, for every mapped index i in range [0:max_nelems],
 /// sum all elements for all arguments
 template <typename T>
-void add (T* out, ade::Shape& outshape, std::vector<VecRef<T>> args)
+void add (T* out, ade::Shape& outshape, DataArgsT<T> args)
 {
 	nnary<T>(out, outshape, args,
 		[](T& out, const T& val) { out += val; });
@@ -427,7 +409,7 @@ void add (T* out, ade::Shape& outshape, std::vector<VecRef<T>> args)
 /// Given arguments, for every mapped index i in range [0:max_nelems],
 /// multiply all elements for all arguments
 template <typename T>
-void mul (T* out, ade::Shape& outshape, std::vector<VecRef<T>> args)
+void mul (T* out, ade::Shape& outshape, DataArgsT<T> args)
 {
 	nnary<T>(out, outshape, args,
 		[](T& out, const T& val) { out *= val; });
@@ -436,7 +418,7 @@ void mul (T* out, ade::Shape& outshape, std::vector<VecRef<T>> args)
 /// Given arguments, for every mapped index i in range [0:max_nelems],
 /// take the minimum all elements for all arguments
 template <typename T>
-void min (T* out, ade::Shape& outshape, std::vector<VecRef<T>> args)
+void min (T* out, ade::Shape& outshape, DataArgsT<T> args)
 {
 	nnary<T>(out, outshape, args,
 		[](T& out, const T& val) { out = std::min(out, val); });
@@ -445,7 +427,7 @@ void min (T* out, ade::Shape& outshape, std::vector<VecRef<T>> args)
 /// Given arguments, for every mapped index i in range [0:max_nelems],
 /// take the maximum all elements for all arguments
 template <typename T>
-void max (T* out, ade::Shape& outshape, std::vector<VecRef<T>> args)
+void max (T* out, ade::Shape& outshape, DataArgsT<T> args)
 {
 	nnary<T>(out, outshape, args,
 		[](T& out, const T& val) { out = std::max(out, val); });
@@ -454,10 +436,11 @@ void max (T* out, ade::Shape& outshape, std::vector<VecRef<T>> args)
 template <typename T>
 using  MatrixT = Eigen::Matrix<T,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>;
 
-#define TO_MAT(ARG)Eigen::Map<const MatrixT<T>>(ARG.data,ARG.shape.at(1),ARG.shape.at(0))
+#define TO_MAT(ARG)\
+Eigen::Map<const MatrixT<T>>(ARG.data_.get(),ARG.shape_.at(1),ARG.shape_.at(0))
 
 template <typename T>
-void fast_matmul (T* out, ade::Shape& outshape, VecRef<T> a, VecRef<T> b)
+void fast_matmul (T* out, ade::Shape& outshape, DataArg<T> a, DataArg<T> b)
 {
 	MatrixT<T> mout = TO_MAT(a) * TO_MAT(b);
 	std::memcpy(out, mout.data(), sizeof(T) * outshape.n_elems());

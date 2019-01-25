@@ -120,12 +120,12 @@ PYBIND11_MODULE(llo, m)
 		py::arg("dtype") = py::dtype::of<double>());
 
 	// ==== variable ====
-	py::class_<llo::Variable,llo::VarptrT> variable(m, "Variable", tensor);
+	py::class_<llo::iVariable,llo::iVarptrT> variable(m, "Variable", tensor);
 
-	py::implicitly_convertible<ade::iTensor,llo::Variable>();
+	py::implicitly_convertible<ade::iTensor,llo::iVariable>();
 
 	m.def("variable",
-	[](py::array data, std::string label) -> llo::VarptrT
+	[](py::array data, std::string label) -> llo::iVarptrT
 	{
 		py::buffer_info info = data.request();
 		ade::Shape shape = pyllo::p2cshape(info.shape);
@@ -195,28 +195,51 @@ PYBIND11_MODULE(llo, m)
 		.def("assign",
 		[](py::object self, py::array data)
 		{
-			llo::Variable* target = self.cast<llo::Variable*>();
+			llo::iVariable* target = self.cast<llo::iVariable*>();
 			py::buffer_info info = data.request();
 			ade::Shape shape = pyllo::p2cshape(info.shape);
-			size_t n = shape.n_elems();
-			char kind = data.dtype().kind();
+			auto dtype = data.dtype();
+			char kind = dtype.kind();
+			age::_GENERATED_DTYPE age_dtype;
+			py::ssize_t tbytes = dtype.itemsize();
 			switch (kind)
 			{
 				case 'f':
-				{
-					double* dptr = static_cast<double*>(info.ptr);
-					*target = std::vector<double>(dptr, dptr + n);
-				}
+					switch (tbytes)
+					{
+						case 4: // float32
+							age_dtype = age::FLOAT;
+							break;
+						case 8: // float64
+							age_dtype = age::DOUBLE;
+							break;
+						default:
+							logs::fatalf("unsupported float type with %d bytes", tbytes);
+					}
 					break;
 				case 'i':
-				{
-					int64_t* dptr = static_cast<int64_t*>(info.ptr);
-					*target = std::vector<int64_t>(dptr, dptr + n);
-				}
+					switch (tbytes)
+					{
+						case 1: // int8
+							age_dtype = age::INT8;
+							break;
+						case 2: // int16
+							age_dtype = age::INT16;
+							break;
+						case 4: // int32
+							age_dtype = age::INT32;
+							break;
+						case 8: // int64
+							age_dtype = age::INT64;
+							break;
+						default:
+							logs::fatalf("unsupported integer type with %d bytes", tbytes);
+					}
 					break;
 				default:
 					logs::fatalf("unknown dtype %c", kind);
 			}
+			target->assign(info.ptr, age_dtype, shape);
 		},
 		"Assign numpy data array to variable");
 

@@ -56,7 +56,7 @@ TEST(DATA, PlaceHolder)
 	std::vector<ade::DimT> slist = {2, 5, 2};
 	ade::Shape shape(slist);
 	size_t n = shape.n_elems();
-	llo::VarptrT pl(llo::get_variable<double>(shape));
+	llo::VarptrT<double> pl(llo::get_variable<double>(shape));
 
 	llo::TensptrT<double> uninit_gd = llo::eval<double>(ade::TensptrT(pl));
 	auto uninit_slist = uninit_gd->dimensions();

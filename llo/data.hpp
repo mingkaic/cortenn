@@ -78,205 +78,171 @@ struct DataArg
 	bool push_;
 };
 
-/// Vector of DataArgs to hold arguments
 template <typename T>
 using DataArgsT = std::vector<DataArg<T>>;
 
-struct CDeleter final
+struct iVariable : public ade::iLeaf
 {
-	void operator () (void* p)
+	virtual ~iVariable (void) = default;
+
+	virtual void assign (void* input,
+		age::_GENERATED_DTYPE dtype, ade::Shape shape) = 0;
+
+	virtual std::string get_label (void) const = 0;
+
+	/// Implementation of iTensor
+	std::string to_string (void) const override
 	{
-		free(p);
+		return this->get_label() + "(" + this->shape().to_string() + ")";
 	}
 };
 
-/// GenericData for holding data when passing up the tensor graph
-struct GenericData final
+#define TEMPCONVERT(TYPE)std::vector<T>((TYPE*) input, (TYPE*) input + n)
+
+template <typename T>
+TensptrT<T> raw_to_matrix (void* input,
+	age::_GENERATED_DTYPE intype, const ade::Shape& shape)
 {
-	GenericData (void) = default;
+	size_t n = shape.n_elems();
+	std::vector<T> data;
+	switch (intype)
+	{
+		case age::DOUBLE:
+			data = TEMPCONVERT(double);
+			break;
+		case age::FLOAT:
+			data = TEMPCONVERT(float);
+			break;
+		case age::INT8:
+			data = TEMPCONVERT(int8_t);
+			break;
+		case age::INT16:
+			data = TEMPCONVERT(int16_t);
+			break;
+		case age::INT32:
+			data = TEMPCONVERT(int32_t);
+			break;
+		case age::INT64:
+			data = TEMPCONVERT(int64_t);
+			break;
+		case age::UINT8:
+			data = TEMPCONVERT(uint8_t);
+			break;
+		case age::UINT16:
+			data = TEMPCONVERT(uint16_t);
+			break;
+		case age::UINT32:
+			data = TEMPCONVERT(uint32_t);
+			break;
+		case age::UINT64:
+			data = TEMPCONVERT(uint64_t);
+			break;
+		default:
+			logs::fatalf("invalid input type %s",
+				age::name_type(intype).c_str());
+	}
+	return get_tensorptr(data.data(), shape);
+}
 
-	GenericData (ade::Shape shape, age::_GENERATED_DTYPE dtype) :
-		data_((char*) malloc(shape.n_elems() * type_size(dtype)),
-			CDeleter()), shape_(shape), dtype_(dtype) {}
+using iVarptrT = std::shared_ptr<iVariable>;
 
-	/// Smartpointer to a block of untyped data
-	std::shared_ptr<char> data_;
-
-	/// Shape of data_
-	ade::Shape shape_;
-
-	/// Type encoding of data_
-	age::_GENERATED_DTYPE dtype_;
-};
-
-/// GenericRef for holding data
-/// Ref uses raw pointer instead of shared, so it's memory unsafe
-struct GenericRef
+/// Leaf node containing data
+template <typename T>
+struct Variable final : public iVariable
 {
-	GenericRef (char* data, ade::Shape shape, age::_GENERATED_DTYPE dtype) :
-		data_(data), shape_(shape), dtype_(dtype) {}
+	Variable (T* data, ade::Shape shape, std::string label) :
+		label_(label), data_(get_tensor(data, shape)), shape_(shape) {}
 
-	GenericRef (GenericData& generic) :
-		data_(generic.data_.get()),
-		shape_(generic.shape_), dtype_(generic.dtype_) {}
+	Variable (const Variable<T>& other) = default;
 
-	/// Raw pointer to a block of untyped data
-	char* data_;
+	Variable (Variable<T>&& other) = default;
 
-	/// Shape of data_
-	ade::Shape shape_;
+	Variable<T>& operator = (const Variable<T>& other) = default;
 
-	/// Data type of data_
-	age::_GENERATED_DTYPE dtype_;
-};
-
-/// Leaf node containing GenericData
-struct Variable final : public ade::iLeaf
-{
-	Variable (const char* data, age::_GENERATED_DTYPE dtype,
-		ade::Shape shape, std::string label) :
-		label_(label), data_(shape, dtype)
-	{
-		if (nullptr != data)
-		{
-			std::memcpy(data_.data_.get(), data, nbytes());
-		}
-		else
-		{
-			std::memset(data_.data_.get(), 0, nbytes());
-		}
-	}
-
-	Variable (const Variable& other) :
-		label_(other.label_), data_(other.shape(), (age::_GENERATED_DTYPE) other.type_code())
-	{
-		std::memcpy((char*) data_.data_.get(), (const char*) other.data(), nbytes());
-	}
-
-	Variable (Variable&& other) :
-		label_(std::move(other.label_)), data_(std::move(other.data_)) {}
-
-	Variable& operator = (const Variable& other)
-	{
-		if (this != &other)
-		{
-			label_ = other.label_;
-			data_ = GenericData(other.shape(), (age::_GENERATED_DTYPE) other.type_code());
-			std::memcpy((char*) data_.data_.get(), (const char*) other.data(), nbytes());
-		}
-		return *this;
-	}
-
-	Variable& operator = (Variable&& other)
-	{
-		if (this != &other)
-		{
-			label_ = std::move(other.label_);
-			data_ = std::move(other.data_);
-		}
-		return *this;
-	}
+	Variable<T>& operator = (Variable<T>&& other) = default;
 
 	/// Assign vectorized data to data source
-	template <typename T>
-	Variable& operator = (std::vector<T> data)
+	Variable<T>& operator = (std::vector<T> input)
 	{
-		GenericRef ref((char*) data.data(), shape(), age::get_type<T>());
-		return operator = (ref);
-	}
-
-	template <typename T>
-	Variable& operator = (TensptrT<T> data)
-	{
-		auto inshape = llo::get_shape(*data);
-		if (false == inshape.compatible_after(shape(), 0))
+		size_t ninput = input.size();
+		if (shape_.n_elems() != ninput)
 		{
-			logs::fatalf("cannot assign data of incompatible shaped %s to "
-				"internal data of shape %s", inshape.to_string().c_str(),
+			logs::fatalf("cannot assign vector of %d elements to "
+				"internal data of shape %s", ninput,
 				shape().to_string().c_str());
 		}
-		auto dtype = age::get_type<T>();
-		if (dtype != data_.dtype_)
-		{
-			logs::fatalf("cannot assign data of incompatible types %s "
-				"(external) and %s (internal)",
-				age::name_type(dtype).c_str(), age::name_type(data_.dtype_).c_str());
-		}
-		std::memcpy(data_.data_.get(), data->data(), nbytes());
+		std::memcpy(data_.data(), input.data(), ninput * sizeof(T));
 		return *this;
 	}
 
-	/// Assign generic reference to data source
-	Variable& operator = (GenericRef data)
+	Variable<T>& operator = (const TensorT<T>& input)
 	{
-		if (false == data.shape_.compatible_after(shape(), 0))
-		{
-			logs::fatalf("cannot assign data of incompatible shaped %s to "
-				"internal data of shape %s", data.shape_.to_string().c_str(),
-				shape().to_string().c_str());
-		}
-		if (data.dtype_ != data_.dtype_)
-		{
-			logs::fatalf("cannot assign data of incompatible types %s "
-				"(external) and %s (internal)",
-				age::name_type(data.dtype_).c_str(), age::name_type(data_.dtype_).c_str());
-		}
-		std::memcpy(data_.data_.get(), data.data_, nbytes());
+		data_ = input;
 		return *this;
 	}
 
 	/// Implementation of iTensor
 	const ade::Shape& shape (void) const override
 	{
-		return data_.shape_;
-	}
-
-	/// Implementation of iTensor
-	std::string to_string (void) const override
-	{
-		return label_ + "(" + data_.shape_.to_string() + ")";
+		return shape_;
 	}
 
 	/// Implementation of iLeaf
 	void* data (void) override
 	{
-		return data_.data_.get();
+		return data_.data();
 	}
 
 	/// Implementation of iLeaf
 	const void* data (void) const override
 	{
-		return data_.data_.get();
+		return data_.data();
 	}
 
 	/// Implementation of iLeaf
 	size_t type_code (void) const override
 	{
-		return data_.dtype_;
+		return age::get_type<T>();
+	}
+
+	/// Implementation of iVariable
+	void assign (void* input,
+		age::_GENERATED_DTYPE dtype, ade::Shape shape) override
+	{
+		auto temp = raw_to_matrix<T>(input, dtype, shape);
+		data_ = *temp;
+	}
+
+	/// Implementation of iVariable
+	std::string get_label (void) const override
+	{
+		return label_;
 	}
 
 	/// Return number of bytes in data source
 	size_t nbytes (void) const
 	{
-		return type_size(data_.dtype_) * data_.shape_.n_elems();
+		return sizeof(T) * shape_.n_elems();
 	}
 
+private:
 	/// Label for distinguishing variable nodes
 	std::string label_;
 
-private:
-	/// Generic data source
-	GenericData data_;
+	TensorT<T> data_;
+
+	ade::Shape shape_;
 };
 
 /// Smart pointer for variable nodes
-using VarptrT = std::shared_ptr<Variable>;
+template <typename T>
+using VarptrT = std::shared_ptr<Variable<T>>;
 
 /// Return new variable containing input vector data according to
 /// specified shape and labelled according to input label
 /// Throw error if the input vector size differs from shape.n_elems()
 template <typename T>
-VarptrT get_variable (std::vector<T> data, ade::Shape shape,
+VarptrT<T> get_variable (std::vector<T> data, ade::Shape shape,
 	std::string label = "")
 {
 	if (data.size() != shape.n_elems())
@@ -284,14 +250,13 @@ VarptrT get_variable (std::vector<T> data, ade::Shape shape,
 		logs::fatalf("cannot create variable with data size %d "
 			"against shape %s", data.size(), shape.to_string().c_str());
 	}
-	return VarptrT(new Variable((char*) data.data(),
-		age::get_type<T>(), shape, label));
+	return std::make_shared<Variable<T>>(data.data(), shape, label);
 }
 
 /// Return new variable containing 0s according to
 /// specified shape and labelled according to input label
 template <typename T>
-VarptrT get_variable (ade::Shape shape, std::string label = "")
+VarptrT<T> get_variable (ade::Shape shape, std::string label = "")
 {
 	return get_variable(std::vector<T>(shape.n_elems(), 0), shape, label);
 }
@@ -299,7 +264,7 @@ VarptrT get_variable (ade::Shape shape, std::string label = "")
 /// Return new variable containing 0s according to
 /// specified shape and labelled according to input label
 template <typename T>
-VarptrT get_scalar (T scalar, ade::Shape shape, std::string label = "")
+VarptrT<T> get_scalar (T scalar, ade::Shape shape, std::string label = "")
 {
 	if (label.empty())
 	{

@@ -20,8 +20,8 @@ static ade::TensptrT one_prune_edit (ade::iFunctor* func, ade::ArgsT args)
 	std::vector<bool> is_one(n, false);
 	for (size_t i = 0; i < n; ++i)
 	{
-		auto var = dynamic_cast<llo::Variable*>(args[i].get_tensor().get());
-		is_one[i] = nullptr != var && "1" == var->label_;
+		auto var = dynamic_cast<llo::iVariable*>(args[i].get_tensor().get());
+		is_one[i] = nullptr != var && "1" == var->get_label();
 		has_one = has_one || is_one[i];
 	}
 	if (has_one)

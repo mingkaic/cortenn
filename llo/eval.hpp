@@ -80,8 +80,6 @@ private:
 	ade::ArgsT entries_;
 };
 
-#define TEMPCONVERT(TYPE)std::vector<T>((TYPE*) ptr, (TYPE*) ptr + n)
-
 /// Visitor implementation to evaluate ade nodes according to ctx and dtype
 /// Given a global context containing ade-llo association maps, get data from
 /// llo::Sources when possible, otherwise treat native ade::iTensors as zeroes
@@ -93,48 +91,11 @@ struct Evaluator final : public ade::iTraveler
 	/// Implementation of iTraveler
 	void visit (ade::iLeaf* leaf) override
 	{
-		const ade::Shape& shape = leaf->shape();
 		void* ptr = leaf->data();
 		age::_GENERATED_DTYPE intype =
 			(age::_GENERATED_DTYPE) leaf->type_code();
-		size_t n = shape.n_elems();
-		std::vector<T> data;
-		switch (intype)
-		{
-			case age::DOUBLE:
-				data = TEMPCONVERT(double);
-				break;
-			case age::FLOAT:
-				data = TEMPCONVERT(float);
-				break;
-			case age::INT8:
-				data = TEMPCONVERT(int8_t);
-				break;
-			case age::INT16:
-				data = TEMPCONVERT(int16_t);
-				break;
-			case age::INT32:
-				data = TEMPCONVERT(int32_t);
-				break;
-			case age::INT64:
-				data = TEMPCONVERT(int64_t);
-				break;
-			case age::UINT8:
-				data = TEMPCONVERT(uint8_t);
-				break;
-			case age::UINT16:
-				data = TEMPCONVERT(uint16_t);
-				break;
-			case age::UINT32:
-				data = TEMPCONVERT(uint32_t);
-				break;
-			case age::UINT64:
-				data = TEMPCONVERT(uint64_t);
-				break;
-			default: logs::fatalf("invalid input type %s",
-				age::name_type(intype).c_str());
-		}
-		out_ = get_tensorptr(data.data(), shape);
+		const ade::Shape& shape = leaf->shape();
+		out_ = raw_to_matrix<T>(ptr, intype, shape);
 	}
 
 	/// Implementation of iTraveler

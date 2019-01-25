@@ -20,8 +20,8 @@ static ade::TensptrT zero_prune_edit (ade::iFunctor* func, ade::ArgsT args)
 	std::vector<bool> is_zero(n, false);
 	for (size_t i = 0; i < n; ++i)
 	{
-		auto var = dynamic_cast<llo::Variable*>(args[i].get_tensor().get());
-		is_zero[i] = nullptr != var && "0" == var->label_;
+		auto var = dynamic_cast<llo::iVariable*>(args[i].get_tensor().get());
+		is_zero[i] = nullptr != var && "0" == var->get_label();
 		has_zero = has_zero || is_zero[i];
 	}
 	if (has_zero)

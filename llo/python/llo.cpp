@@ -21,7 +21,7 @@ ade::Shape p2cshape (std::vector<py::ssize_t>& pyshape)
 		pyshape.rbegin(), pyshape.rend()));
 }
 
-std::vector<ade::DimT> c2pshape (ade::Shape& cshape)
+std::vector<ade::DimT> c2pshape (Eigen::Dimensions& cshape)
 {
 	auto it = cshape.begin();
 	auto et = cshape.end();
@@ -34,12 +34,12 @@ std::vector<ade::DimT> c2pshape (ade::Shape& cshape)
 }
 
 template <typename T>
-py::array typedata_to_array (llo::TypedData<T>& tdata, py::dtype dtype)
+py::array typedata_to_array (llo::TensorT<T>& tdata, py::dtype dtype)
 {
-	auto pshape = pyllo::c2pshape(tdata.shape_);
+	auto pshape = pyllo::c2pshape(tdata.dimensions());
 	return py::array(dtype,
 		py::array::ShapeContainer(pshape.begin(), pshape.end()),
-		tdata.data_.get());
+		tdata.data());
 }
 
 }

@@ -103,9 +103,6 @@ TEST(LOAD, LoadGraph)
 	artist.print(gotstr, tree1);
 	artist.print(gotstr, tree2);
 
-#if 0
-	std::cout << gotstr.str() << '\n';
-#endif
 	while (std::getline(gotstr, line))
 	{
 		trim(line);

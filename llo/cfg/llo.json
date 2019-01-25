@@ -24,7 +24,7 @@
     },
     "data": {
         "sum": "SUM",
-        "data_out": "T*",
+        "data_out": "llo::TensorT<T>&",
         "data_in": "llo::DataArgsT<T>&",
         "scalarize": "llo::get_scalar(scalar,shape)"
     },
@@ -66,59 +66,59 @@
             "derivative": "llo::mtens_mul(llo::get_scalar(1,args[0]->shape()),bwd)"
         },
         "POW": {
-            "operation": "llo::pow(out,shape,in[0],in[1])",
+            "operation": "llo::pow(out,in[0],in[1])",
             "derivative": "llo::mtens_mul(idx == 0?mul(args[1],pow(args[0],sub(args[1],llo::get_scalar(1,args[0]->shape())))) : mul(log(args[0]),pow(args[0],args[1])),bwd)"
         },
         "SUM": {
-            "operation": "llo::add(out,shape,in)",
+            "operation": "llo::add(out,in)",
             "derivative": "mul(llo::get_scalar(1,args[0]->shape()),ade::TensptrT(ade::Functor::get(ade::Opcode{\"SUM\",SUM},{bwd})))"
         },
         "SUB": {
-            "operation": "llo::sub(out,shape,in[0],in[1])",
+            "operation": "llo::sub(out,in[0],in[1])",
             "derivative": "llo::mtens_mul(idx == 0?llo::get_scalar(1,args[0]->shape()) : neg(llo::get_scalar(1,args[0]->shape())),bwd)"
         },
         "PROD": {
-            "operation": "llo::mul(out,shape,in)",
+            "operation": "llo::mul(out,in)",
             "derivative": "mul(llo::grad_prod(fwd,idx,args),ade::TensptrT(ade::Functor::get(ade::Opcode{\"PROD\",PROD},{bwd})))"
         },
         "DIV": {
-            "operation": "llo::div(out,shape,in[0],in[1])",
+            "operation": "llo::div(out,in[0],in[1])",
             "derivative": "llo::mtens_mul(idx == 0?div(llo::get_scalar(1,args[0]->shape()),args[1]) : div(div(neg(args[0]),args[1]),args[1]),bwd)"
         },
         "MIN": {
-            "operation": "llo::min(out,shape,in)",
+            "operation": "llo::min(out,in)",
             "derivative": "llo::mtens_mul(llo::grad_min(fwd,idx,args),bwd)"
         },
         "MAX": {
-            "operation": "llo::max(out,shape,in)",
+            "operation": "llo::max(out,in)",
             "derivative": "llo::mtens_mul(llo::grad_max(fwd,idx,args),bwd)"
         },
         "EQ": {
-            "operation": "llo::eq(out,shape,in[0],in[1])",
+            "operation": "llo::eq(out,in[0],in[1])",
             "derivative": "llo::mtens_mul(llo::get_scalar(0,args[0]->shape()),bwd)"
         },
         "NEQ": {
-            "operation": "llo::neq(out,shape,in[0],in[1])",
+            "operation": "llo::neq(out,in[0],in[1])",
             "derivative": "llo::mtens_mul(llo::get_scalar(0,args[0]->shape()),bwd)"
         },
         "LT": {
-            "operation": "llo::lt(out,shape,in[0],in[1])",
+            "operation": "llo::lt(out,in[0],in[1])",
             "derivative": "llo::mtens_mul(llo::get_scalar(0,args[0]->shape()),bwd)"
         },
         "GT": {
-            "operation": "llo::gt(out,shape,in[0],in[1])",
+            "operation": "llo::gt(out,in[0],in[1])",
             "derivative": "llo::mtens_mul(llo::get_scalar(0,args[0]->shape()),bwd)"
         },
         "RAND_UNIF": {
-            "operation": "llo::rand_uniform(out,shape,in[0],in[1])",
+            "operation": "llo::rand_uniform(out,in[0],in[1])",
             "derivative": "llo::mtens_mul(llo::get_scalar(0,args[0]->shape()),bwd)"
         },
         "RAND_NORM": {
-            "operation": "llo::rand_normal(out,shape,in[0],in[1])",
+            "operation": "llo::rand_normal(out,in[0],in[1])",
             "derivative": "llo::mtens_mul(llo::get_scalar(0,args[0]->shape()),bwd)"
         },
         "MATMUL": {
-            "operation": "llo::fast_matmul(out,shape,in[0],in[1])",
+            "operation": "llo::fast_matmul(out,in[0],in[1])",
             "derivative": "ade::TensptrT()"
         }
     },

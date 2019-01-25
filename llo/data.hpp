@@ -9,6 +9,8 @@
 
 #include <memory>
 
+#include "unsupported/Eigen/CXX11/Tensor"
+
 #include "ade/coord.hpp"
 #include "ade/ileaf.hpp"
 
@@ -20,69 +22,35 @@
 namespace llo
 {
 
-struct CDeleter final
-{
-	void operator () (void* p)
-	{
-		free(p);
-	}
-};
-
-#define CONVERT(INTYPE)\
-{\
-	const INTYPE* ptr = (const INTYPE*) indata;\
-	std::vector<T> temp(ptr, ptr + n);\
-	std::memcpy(data_.get(), temp.data(), nbytes);\
-} break;
+template <typename T>
+using TensorT = Eigen::Tensor<T,ade::rank_cap,Eigen::RowMajor>;
 
 template <typename T>
-struct TypedData final
+TensorT<T> get_tensor (T* data, const ade::Shape& shape)
 {
-	TypedData (void) = default;
-
-	TypedData (ade::Shape shape):
-		data_((T*) malloc(shape.n_elems() * sizeof(T)),
-			CDeleter()), shape_(shape) {}
-
-	/// Copy over data of specified type while retaining shape
-	/// This makes the assumption that the indata fits in shape perfectly
-	void copyover (const char* indata, age::_GENERATED_DTYPE intype)
+	std::array<Eigen::Index,ade::rank_cap> slist;
+	std::copy(shape.begin(), shape.end(), slist.begin());
+	if (nullptr != data)
 	{
-		size_t n = shape_.n_elems();
-		size_t nbytes = sizeof(T) * n;
-		switch (intype)
-		{
-			case age::DOUBLE: CONVERT(double)
-			case age::FLOAT: CONVERT(float)
-			case age::INT8: CONVERT(int8_t)
-			case age::INT16: CONVERT(int16_t)
-			case age::INT32: CONVERT(int32_t)
-			case age::INT64: CONVERT(int64_t)
-			case age::UINT8: CONVERT(uint8_t)
-			case age::UINT16: CONVERT(uint16_t)
-			case age::UINT32: CONVERT(uint32_t)
-			case age::UINT64: CONVERT(uint64_t)
-			default: logs::fatalf("invalid input type %s",
-				age::name_type(intype).c_str());
-		}
+		return Eigen::TensorMap<TensorT<T>>(data, slist);
 	}
+	TensorT<T> out(slist);
+	out.setZero();
+	return out;
+}
 
-	/// Smartpointer to a block of typed data
-	std::shared_ptr<T> data_;
-
-	/// Shape of data_
-	ade::Shape shape_;
-};
+template <typename T>
+ade::Shape get_shape (const TensorT<T>& tens)
+{
+	auto slist = tens.dimensions();
+	return ade::Shape(std::vector<ade::DimT>(slist.begin(), slist.end()));
+}
 
 /// Data to pass around when evaluating
 template <typename T>
 struct DataArg
 {
-	/// Smart pointer to generic data as bytes
-	std::shared_ptr<T> data_;
-
-	/// Shape of the generic data
-	ade::Shape shape_;
+	TensorT<T> data_;
 
 	/// Coordinate mapper
 	ade::CoordptrT mapper_;
@@ -95,6 +63,14 @@ struct DataArg
 /// Vector of DataArgs to hold arguments
 template <typename T>
 using DataArgsT = std::vector<DataArg<T>>;
+
+struct CDeleter final
+{
+	void operator () (void* p)
+	{
+		free(p);
+	}
+};
 
 /// GenericData for holding data when passing up the tensor graph
 struct GenericData final

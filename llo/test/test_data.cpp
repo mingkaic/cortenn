@@ -39,11 +39,11 @@ TEST(DATA, SourceRetype)
 	};
 	ade::TensptrT ptr = llo::get_variable<double>(data, shape);
 
-	llo::TypedData<uint16_t> gd = llo::eval<uint16_t>(ptr);
-	std::vector<ade::DimT> gotslist(gd.shape_.begin(), gd.shape_.end());
+	llo::TensorT<uint16_t> gd = llo::eval<uint16_t>(ptr);
+	auto gotslist = gd.dimensions();
 	EXPECT_ARREQ(slist, gotslist);
 
-	uint16_t* gotdata = (uint16_t*) gd.data_.get();
+	uint16_t* gotdata = (uint16_t*) gd.data();
 	for (size_t i = 0; i < n; ++i)
 	{
 		EXPECT_EQ((uint16_t) data[i], gotdata[i]);
@@ -58,11 +58,11 @@ TEST(DATA, PlaceHolder)
 	size_t n = shape.n_elems();
 	llo::VarptrT pl(llo::get_variable<double>(shape));
 
-	llo::TypedData<double> uninit_gd = llo::eval<double>(ade::TensptrT(pl));
-	std::vector<ade::DimT> uninit_slist(uninit_gd.shape_.begin(), uninit_gd.shape_.end());
+	llo::TensorT<double> uninit_gd = llo::eval<double>(ade::TensptrT(pl));
+	auto uninit_slist = uninit_gd.dimensions();
 	EXPECT_ARREQ(slist, uninit_slist);
 
-	double* uninit_data = (double*) uninit_gd.data_.get();
+	double* uninit_data = (double*) uninit_gd.data();
 	for (size_t i = 0; i < n; ++i)
 	{
 		EXPECT_EQ(0, uninit_data[i]);
@@ -73,11 +73,11 @@ TEST(DATA, PlaceHolder)
 		48, 77, 58, 64, 83, 64, 6, 24, 16, 9
 	};
 	*pl = data;
-	llo::TypedData<double> gd = llo::eval<double>(ade::TensptrT(pl));
-	std::vector<ade::DimT> gotslist(gd.shape_.begin(), gd.shape_.end());
+	llo::TensorT<double> gd = llo::eval<double>(ade::TensptrT(pl));
+	auto gotslist = gd.dimensions();
 	EXPECT_ARREQ(slist, gotslist);
 
-	double* gotdata = (double*) gd.data_.get();
+	double* gotdata = (double*) gd.data();
 	for (size_t i = 0; i < n; ++i)
 	{
 		EXPECT_EQ(data[i], gotdata[i]);

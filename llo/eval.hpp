@@ -66,7 +66,7 @@ struct ShortcutFunctor final : public ade::iFunctor
 	}
 
 	template <typename T>
-	TypedData<T> evaluate (void);
+	TensorT<T> evaluate (void);
 
 private:
 	ShortcutFunctor (age::_GENERATED_OPCODE opcode,
@@ -80,6 +80,8 @@ private:
 	ade::ArgsT entries_;
 };
 
+#define TEMPCONVERT(TYPE)std::vector<T>((TYPE*) ptr, (TYPE*) ptr + n)
+
 /// Visitor implementation to evaluate ade nodes according to ctx and dtype
 /// Given a global context containing ade-llo association maps, get data from
 /// llo::Sources when possible, otherwise treat native ade::iTensors as zeroes
@@ -92,9 +94,47 @@ struct Evaluator final : public ade::iTraveler
 	void visit (ade::iLeaf* leaf) override
 	{
 		const ade::Shape& shape = leaf->shape();
-		out_ = TypedData<T>(shape);
-		out_.copyover((const char*) leaf->data(),
-			(age::_GENERATED_DTYPE) leaf->type_code());
+		void* ptr = leaf->data();
+		age::_GENERATED_DTYPE intype =
+			(age::_GENERATED_DTYPE) leaf->type_code();
+		size_t n = shape.n_elems();
+		std::vector<T> data;
+		switch (intype)
+		{
+			case age::DOUBLE:
+				data = TEMPCONVERT(double);
+				break;
+			case age::FLOAT:
+				data = TEMPCONVERT(float);
+				break;
+			case age::INT8:
+				data = TEMPCONVERT(int8_t);
+				break;
+			case age::INT16:
+				data = TEMPCONVERT(int16_t);
+				break;
+			case age::INT32:
+				data = TEMPCONVERT(int32_t);
+				break;
+			case age::INT64:
+				data = TEMPCONVERT(int64_t);
+				break;
+			case age::UINT8:
+				data = TEMPCONVERT(uint8_t);
+				break;
+			case age::UINT16:
+				data = TEMPCONVERT(uint16_t);
+				break;
+			case age::UINT32:
+				data = TEMPCONVERT(uint32_t);
+				break;
+			case age::UINT64:
+				data = TEMPCONVERT(uint64_t);
+				break;
+			default: logs::fatalf("invalid input type %s",
+				age::name_type(intype).c_str());
+		}
+		out_ = get_tensor(data.data(), shape);
 	}
 
 	/// Implementation of iTraveler
@@ -108,8 +148,8 @@ struct Evaluator final : public ade::iTraveler
 
 		age::_GENERATED_OPCODE opcode = (age::_GENERATED_OPCODE)
 			func->get_opcode().code_;
-		out_ = TypedData<T>(func->shape());
 
+		const ade::Shape& outshape = func->shape();
 		ade::ArgsT children = func->get_children();
 		uint8_t nargs = children.size();
 		DataArgsT<T> argdata(nargs);
@@ -118,22 +158,22 @@ struct Evaluator final : public ade::iTraveler
 			Evaluator<T> evaler;
 			children[i].get_tensor()->accept(evaler);
 			argdata[i] = DataArg<T>{
-				evaler.out_.data_,
-				evaler.out_.shape_,
+				evaler.out_,
 				children[i].get_coorder(),
 				children[i].map_io(),
 			};
 		}
 
-		age::typed_exec<T>(opcode, out_.data_.get(), out_.shape_, argdata);
+		out_ = get_tensor<T>(nullptr, outshape);
+		age::typed_exec<T>(opcode, out_, argdata);
 	}
 
 	/// Output data evaluated upon visiting node
-	TypedData<T> out_;
+	TensorT<T> out_;
 };
 
 template <typename T>
-TypedData<T> ShortcutFunctor::evaluate (void)
+TensorT<T> ShortcutFunctor::evaluate (void)
 {
 	size_t nargs = entries_.size();
 	DataArgsT<T> argdata(nargs);
@@ -142,21 +182,21 @@ TypedData<T> ShortcutFunctor::evaluate (void)
 		Evaluator<T> evaler;
 		entries_[i].get_tensor()->accept(evaler);
 		argdata[i] = DataArg<T>{
-			evaler.out_.data_,
-			evaler.out_.shape_,
+			evaler.out_,
 			entries_[i].get_coorder(),
 			entries_[i].map_io(),
 		};
 	}
 
-	TypedData<T> out(proxy_root_->shape());
-	age::typed_exec<T>(opcode_, out.data_.get(), out.shape_, argdata);
+	const ade::Shape& outshape = proxy_root_->shape();
+	TensorT<T> out = get_tensor<T>(nullptr, outshape);
+	age::typed_exec<T>(opcode_, out, argdata);
 	return out;
 }
 
 /// Evaluate generic data of tens converted to specified type
 template <typename T>
-TypedData<T> eval (ade::iTensor* tens)
+TensorT<T> eval (ade::iTensor* tens)
 {
 	Evaluator<T> eval;
 	tens->accept(eval);
@@ -165,7 +205,7 @@ TypedData<T> eval (ade::iTensor* tens)
 
 /// Evaluate generic data of tens pointer converted to specified type
 template <typename T>
-TypedData<T> eval (ade::TensptrT tens)
+TensorT<T> eval (ade::TensptrT tens)
 {
 	Evaluator<T> eval;
 	tens->accept(eval);

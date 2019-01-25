@@ -19,7 +19,7 @@ namespace age
 
 template <typename T>
 void typed_exec (_GENERATED_OPCODE opcode,
-    {data_out} out, ade::Shape shape, {data_in} in)
+    {data_out} out, {data_in} in)
 {{
     switch (opcode)
     {{

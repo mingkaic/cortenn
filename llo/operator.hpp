@@ -28,210 +28,291 @@ using EngineT = std::default_random_engine;
 /// Return global random generator
 EngineT& get_engine (void);
 
+bool is_identity (ade::CoordptrT& coorder);
+
 /// Generic unary operation assuming identity mapping
 template <typename T>
-void unary (T* out, ade::Shape& outshape,
-	DataArg<T> in, std::function<T(const T&)> f)
+inline void unary (TensorT<T>& out, DataArg<T> in,
+	std::function<void(TensorT<T>&,const TensorT<T>&)> f)
 {
-	T* inptr = in.data_.get();
-	if (in.mapper_ == ade::identity)
+	if (is_identity(in.mapper_))
 	{
-		for (ade::NElemT i = 0, n = in.shape_.n_elems(); i < n; ++i)
-		{
-			out[i] = f(inptr[i]);
-		}
-	}
-	else if (in.push_)
-	{
-		ade::CoordT coord;
-		for (ade::NElemT i = 0, n = in.shape_.n_elems(); i < n; ++i)
-		{
-			in.mapper_->forward(coord.begin(),
-				ade::coordinate(in.shape_, i).begin());
-			out[ade::index(outshape, coord)] = f(inptr[i]);
-		}
+		f(out, in.data_);
 	}
 	else
 	{
-		ade::CoordT coord;
-		for (ade::NElemT i = 0, n = outshape.n_elems(); i < n; ++i)
+		ade::Shape outshape = get_shape(out);
+		// else map coordinates then apply f
+		TensorT<T> temp = get_tensor<T>(nullptr, outshape);
+		ade::Shape inshape = get_shape(in.data_);
+
+		T* tempptr = temp.data();
+		const T* inptr = in.data_.data();
+		if (in.push_)
 		{
-			in.mapper_->forward(coord.begin(),
-				ade::coordinate(outshape, i).begin());
-			out[i] = f(inptr[ade::index(in.shape_, coord)]);
+			ade::CoordT coord;
+			for (ade::NElemT i = 0, n = inshape.n_elems(); i < n; ++i)
+			{
+				in.mapper_->forward(coord.begin(),
+					ade::coordinate(inshape, i).begin());
+				tempptr[ade::index(outshape, coord)] = inptr[i];
+			}
 		}
+		else
+		{
+			ade::CoordT coord;
+			for (ade::NElemT i = 0, n = outshape.n_elems(); i < n; ++i)
+			{
+				in.mapper_->forward(coord.begin(),
+					ade::coordinate(outshape, i).begin());
+				tempptr[i] = inptr[ade::index(inshape, coord)];
+			}
+		}
+		f(out, temp);
 	}
 }
 
 /// Given reference to output array, and input vector ref,
 /// make output elements take absolute value of inputs
 template <typename T>
-void abs (T* out, DataArg<T> in)
+void abs (TensorT<T>& out, DataArg<T> in)
 {
-	unary<T>(out, in.shape_, in, [](const T& src) { return std::abs(src); });
+	unary<T>(out, in,
+		[](TensorT<T>& out, const TensorT<T>& src)
+		{ out = src.abs(); });
 }
 
 template <>
-void abs<uint8_t> (uint8_t* out, DataArg<uint8_t> in);
+void abs<uint8_t> (TensorT<uint8_t>& out, DataArg<uint8_t> in);
 
 template <>
-void abs<uint16_t> (uint16_t* out, DataArg<uint16_t> in);
+void abs<uint16_t> (TensorT<uint16_t>& out, DataArg<uint16_t> in);
 
 template <>
-void abs<uint32_t> (uint32_t* out, DataArg<uint32_t> in);
+void abs<uint32_t> (TensorT<uint32_t>& out, DataArg<uint32_t> in);
 
 template <>
-void abs<uint64_t> (uint64_t* out, DataArg<uint64_t> in);
+void abs<uint64_t> (TensorT<uint64_t>& out, DataArg<uint64_t> in);
 
 /// Given reference to output array, and input vector ref,
 /// make output elements take negatives of inputs
 template <typename T>
-void neg (T* out, DataArg<T> in)
+void neg (TensorT<T>& out, DataArg<T> in)
 {
-	unary<T>(out, in.shape_, in, [](const T& src) { return -src; });
+	unary<T>(out, in,
+		[](TensorT<T>& out, const TensorT<T>& src)
+		{ out = -src; });
 }
 
 template <>
-void neg<uint8_t> (uint8_t* out, DataArg<uint8_t> in);
+void neg<uint8_t> (TensorT<uint8_t>& out, DataArg<uint8_t> in);
 
 template <>
-void neg<uint16_t> (uint16_t* out, DataArg<uint16_t> in);
+void neg<uint16_t> (TensorT<uint16_t>& out, DataArg<uint16_t> in);
 
 template <>
-void neg<uint32_t> (uint32_t* out, DataArg<uint32_t> in);
+void neg<uint32_t> (TensorT<uint32_t>& out, DataArg<uint32_t> in);
 
 template <>
-void neg<uint64_t> (uint64_t* out, DataArg<uint64_t> in);
+void neg<uint64_t> (TensorT<uint64_t>& out, DataArg<uint64_t> in);
 
 /// Given reference to output array, and input vector ref,
 /// make output elements take bitwise nots of inputs
 template <typename T>
-void bit_not (T* out, DataArg<T> in)
+void bit_not (TensorT<T>& out, DataArg<T> in)
 {
-	unary<T>(out, in.shape_, in, [](const T& src) { return !src; });
+	unary<T>(out, in,
+		[](TensorT<T>& out, const TensorT<T>& src)
+		{
+			T* outptr = out.data();
+			const T* inptr = src.data();
+			size_t n = get_shape(out).n_elems();
+			for (size_t i = 0; i < n; ++i)
+			{
+				outptr[i] = !inptr[i];
+			}
+		});
 }
 
 /// Given reference to output array, and input vector ref,
 /// make output elements take sine of inputs
 template <typename T>
-void sin (T* out, DataArg<T> in)
+void sin (TensorT<T>& out, DataArg<T> in)
 {
-	unary<T>(out, in.shape_, in, [](const T& src) { return std::sin(src); });
+	unary<T>(out, in,
+		[](TensorT<T>& out, const TensorT<T>& src)
+		{
+			T* outptr = out.data();
+			const T* inptr = src.data();
+			size_t n = get_shape(out).n_elems();
+			for (size_t i = 0; i < n; ++i)
+			{
+				outptr[i] = std::sin(inptr[i]);
+			}
+		});
 }
 
 /// Given reference to output array, and input vector ref,
 /// make output elements take cosine of inputs
 template <typename T>
-void cos (T* out, DataArg<T> in)
+void cos (TensorT<T>& out, DataArg<T> in)
 {
-	unary<T>(out, in.shape_, in, [](const T& src) { return std::cos(src); });
+	unary<T>(out, in,
+		[](TensorT<T>& out, const TensorT<T>& src)
+		{
+			T* outptr = out.data();
+			const T* inptr = src.data();
+			size_t n = get_shape(out).n_elems();
+			for (size_t i = 0; i < n; ++i)
+			{
+				outptr[i] = std::cos(inptr[i]);
+			}
+		});
 }
 
 /// Given reference to output array, and input vector ref,
 /// make output elements take tangent of inputs
 template <typename T>
-void tan (T* out, DataArg<T> in)
+void tan (TensorT<T>& out, DataArg<T> in)
 {
-	unary<T>(out, in.shape_, in, [](const T& src) { return std::tan(src); });
+	unary<T>(out, in,
+		[](TensorT<T>& out, const TensorT<T>& src)
+		{
+			T* outptr = out.data();
+			const T* inptr = src.data();
+			size_t n = get_shape(out).n_elems();
+			for (size_t i = 0; i < n; ++i)
+			{
+				outptr[i] = std::tan(inptr[i]);
+			}
+		});
 }
 
 /// Given reference to output array, and input vector ref,
 /// make output elements take exponent of inputs
 template <typename T>
-void exp (T* out, DataArg<T> in)
+void exp (TensorT<T>& out, DataArg<T> in)
 {
-	unary<T>(out, in.shape_, in, [](const T& src) { return std::exp(src); });
+	unary<T>(out, in,
+		[](TensorT<T>& out, const TensorT<T>& src)
+		{ out = src.exp(); });
 }
 
 /// Given reference to output array, and input vector ref,
 /// make output elements take natural log of inputs
 template <typename T>
-void log (T* out, DataArg<T> in)
+void log (TensorT<T>& out, DataArg<T> in)
 {
-	unary<T>(out, in.shape_, in, [](const T& src) { return std::log(src); });
+	unary<T>(out, in,
+		[](TensorT<T>& out, const TensorT<T>& src)
+		{ out = src.log(); });
 }
 
 /// Given reference to output array, and input vector ref,
 /// make output elements take square root of inputs
 template <typename T>
-void sqrt (T* out, DataArg<T> in)
+void sqrt (TensorT<T>& out, DataArg<T> in)
 {
-	unary<T>(out, in.shape_, in, [](const T& src) { return std::sqrt(src); });
+	unary<T>(out, in,
+		[](TensorT<T>& out, const TensorT<T>& src)
+		{ out = src.sqrt(); });
 }
 
 /// Given reference to output array, and input vector ref,
 /// make output elements take rounded values of inputs
 template <typename T>
-void round (T* out, DataArg<T> in)
+void round (TensorT<T>& out, DataArg<T> in)
 {
-	unary<T>(out, in.shape_, in, [](const T& src) { return std::round(src); });
+	unary<T>(out, in,
+		[](TensorT<T>& out, const TensorT<T>& src)
+		{ out = src.round(); });
 }
 
 /// Generic binary operation assuming identity mapping
 template <typename T>
-void binary (T* out, ade::Shape& outshape, DataArg<T> a, DataArg<T> b,
-	std::function<T(const T&,const T&)> f)
+inline void binary (TensorT<T>& out, DataArg<T> a, DataArg<T> b,
+	std::function<void(TensorT<T>&,const TensorT<T>&,const TensorT<T>&)> f)
 {
-	T* aptr = a.data_.get();
-	T* bptr = b.data_.get();
-	// avoid tmpdata by checking if it's needed
-	// tmpdata not needed if neither a nor b are pushing
-	if (false == (a.push_ || b.push_))
+	ade::Shape outshape = get_shape(out);
+	TensorT<T>* lhs = nullptr;
+	TensorT<T>* rhs = nullptr;
+
+	if (is_identity(a.mapper_))
 	{
-		ade::CoordT coord;
-		ade::CoordT acoord;
-		ade::CoordT bcoord;
-		for (ade::NElemT i = 0, n = outshape.n_elems(); i < n; ++i)
-		{
-			coord = ade::coordinate(outshape, i);
-			a.mapper_->forward(acoord.begin(), coord.begin());
-			b.mapper_->forward(bcoord.begin(), coord.begin());
-			out[i] = f(
-				aptr[ade::index(a.shape_, acoord)],
-				bptr[ade::index(b.shape_, bcoord)]);
-		}
+		lhs = &a.data_;
 	}
-	else // a.push_ || b.push_
+	else // map coordinates
 	{
-		std::vector<T> tmpdata(outshape.n_elems());
-		ade::CoordT coord;
+		lhs = new TensorT<T>(out.dimensions());
+		lhs->setZero();
+		ade::Shape inshape = get_shape(a.data_);
+
+		T* ptr = lhs->data();
+		const T* inptr = a.data_.data();
 		if (a.push_)
 		{
-			for (ade::NElemT i = 0, n = a.shape_.n_elems(); i < n; ++i)
+			ade::CoordT coord;
+			for (ade::NElemT i = 0, n = inshape.n_elems(); i < n; ++i)
 			{
 				a.mapper_->forward(coord.begin(),
-					ade::coordinate(a.shape_, i).begin());
-				tmpdata[ade::index(outshape, coord)] = aptr[i];
+					ade::coordinate(inshape, i).begin());
+				ptr[ade::index(outshape, coord)] = inptr[i];
 			}
 		}
 		else
 		{
+			ade::CoordT coord;
 			for (ade::NElemT i = 0, n = outshape.n_elems(); i < n; ++i)
 			{
 				a.mapper_->forward(coord.begin(),
 					ade::coordinate(outshape, i).begin());
-				tmpdata[i] = aptr[ade::index(a.shape_, coord)];
+				ptr[i] = inptr[ade::index(inshape, coord)];
 			}
 		}
+	}
+
+	if (is_identity(b.mapper_))
+	{
+		rhs = &b.data_;
+	}
+	else // map coordinates
+	{
+		rhs = new TensorT<T>(out.dimensions());
+		rhs->setZero();
+		ade::Shape inshape = get_shape(b.data_);
+
+		T* ptr = rhs->data();
+		const T* inptr = b.data_.data();
 		if (b.push_)
 		{
-			for (ade::NElemT i = 0, n = b.shape_.n_elems(); i < n; ++i)
+			ade::CoordT coord;
+			for (ade::NElemT i = 0, n = inshape.n_elems(); i < n; ++i)
 			{
 				b.mapper_->forward(coord.begin(),
-					ade::coordinate(b.shape_, i).begin());
-				ade::NElemT outidx = ade::index(outshape, coord);
-				out[outidx] = f(tmpdata[outidx], bptr[i]);
+					ade::coordinate(inshape, i).begin());
+				ptr[ade::index(outshape, coord)] = inptr[i];
 			}
 		}
 		else
 		{
+			ade::CoordT coord;
 			for (ade::NElemT i = 0, n = outshape.n_elems(); i < n; ++i)
 			{
 				b.mapper_->forward(coord.begin(),
 					ade::coordinate(outshape, i).begin());
-				out[i] = f(tmpdata[i], bptr[ade::index(b.shape_, coord)]);
+				ptr[i] = inptr[ade::index(inshape, coord)];
 			}
 		}
+	}
+
+	f(out, *lhs, *rhs);
+	if (lhs != &a.data_)
+	{
+		delete lhs;
+	}
+	if (rhs != &b.data_)
+	{
+		delete rhs;
 	}
 }
 
@@ -239,157 +320,242 @@ void binary (T* out, ade::Shape& outshape, DataArg<T> a, DataArg<T> b,
 /// same index apply std::pow operator
 /// Only accept 2 arguments
 template <typename T>
-void pow (T* out, ade::Shape& outshape, DataArg<T> a, DataArg<T> b)
+void pow (TensorT<T>& out, DataArg<T> a, DataArg<T> b)
 {
-	binary<T>(out, outshape, a, b,
-	[](const T& b, const T& x) { return std::pow(b, x); });
+	return binary<T>(out, a, b,
+		[](TensorT<T>& out, const TensorT<T>& b, const TensorT<T>& x)
+		{
+			T* outptr = out.data();
+			const T* bptr = b.data();
+			const T* xptr = x.data();
+			size_t n = get_shape(out).n_elems();
+			for (size_t i = 0; i < n; ++i)
+			{
+				outptr[i] = std::pow(bptr[i], xptr[i]);
+			}
+		});
 }
 
 /// Given arguments a, and b, for every pair of mapped elements sharing the
 /// same index subtract
 /// Only accept 2 arguments
 template <typename T>
-void sub (T* out, ade::Shape& outshape, DataArg<T> a, DataArg<T> b)
+void sub (TensorT<T>& out, DataArg<T> a, DataArg<T> b)
 {
-	binary<T>(out, outshape, a, b,
-	[](const T& a, const T& b) { return a - b; });
+	return binary<T>(out, a, b,
+		[](TensorT<T>& out, const TensorT<T>& a, const TensorT<T>& b)
+		{
+			out = a - b;
+		});
 }
 
 /// Given arguments a, and b, for every pair of mapped elements sharing the
 /// same index divide
 /// Only accept 2 arguments
 template <typename T>
-void div (T* out, ade::Shape& outshape, DataArg<T> a, DataArg<T> b)
+void div (TensorT<T>& out, DataArg<T> a, DataArg<T> b)
 {
-	binary<T>(out, outshape, a, b,
-	[](const T& a, const T& b) { return a / b; });
+	return binary<T>(out, a, b,
+		[](TensorT<T>& out, const TensorT<T>& a, const TensorT<T>& b)
+		{
+			out = a / b;
+		});
 }
 
 /// Given arguments a, and b, for every pair of mapped elements sharing the
 /// same index apply == operator
 /// Only accept 2 arguments
 template <typename T>
-void eq (T* out, ade::Shape& outshape, DataArg<T> a, DataArg<T> b)
+void eq (TensorT<T>& out, DataArg<T> a, DataArg<T> b)
 {
-	binary<T>(out, outshape, a, b,
-	[](const T& a, const T& b) { return a == b; });
+	return binary<T>(out, a, b,
+		[](TensorT<T>& out, const TensorT<T>& a, const TensorT<T>& b)
+		{
+			T* outptr = out.data();
+			const T* aptr = a.data();
+			const T* bptr = b.data();
+			size_t n = get_shape(out).n_elems();
+			for (size_t i = 0; i < n; ++i)
+			{
+				outptr[i] = aptr[i] == bptr[i];
+			}
+		});
 }
 
 /// Given arguments a, and b, for every pair of mapped elements sharing the
 /// same index apply != operator
 /// Only accept 2 arguments
 template <typename T>
-void neq (T* out, ade::Shape& outshape, DataArg<T> a, DataArg<T> b)
+void neq (TensorT<T>& out, DataArg<T> a, DataArg<T> b)
 {
-	binary<T>(out, outshape, a, b,
-	[](const T& a, const T& b) { return a != b; });
+	return binary<T>(out, a, b,
+		[](TensorT<T>& out, const TensorT<T>& a, const TensorT<T>& b)
+		{
+			T* outptr = out.data();
+			const T* aptr = a.data();
+			const T* bptr = b.data();
+			size_t n = get_shape(out).n_elems();
+			for (size_t i = 0; i < n; ++i)
+			{
+				outptr[i] = aptr[i] != bptr[i];
+			}
+		});
 }
 
 /// Given arguments a, and b, for every pair of mapped elements sharing the
 /// same index apply < operator
 /// Only accept 2 arguments
 template <typename T>
-void lt (T* out, ade::Shape& outshape, DataArg<T> a, DataArg<T> b)
+void lt (TensorT<T>& out, DataArg<T> a, DataArg<T> b)
 {
-	binary<T>(out, outshape, a, b,
-	[](const T& a, const T& b) { return a < b; });
+	return binary<T>(out, a, b,
+		[](TensorT<T>& out, const TensorT<T>& a, const TensorT<T>& b)
+		{
+			T* outptr = out.data();
+			const T* aptr = a.data();
+			const T* bptr = b.data();
+			size_t n = get_shape(out).n_elems();
+			for (size_t i = 0; i < n; ++i)
+			{
+				outptr[i] = aptr[i] < bptr[i];
+			}
+		});
 }
 
 /// Given arguments a, and b, for every pair of mapped elements sharing the
 /// same index apply > operator
 /// Only accept 2 arguments
 template <typename T>
-void gt (T* out, ade::Shape& outshape, DataArg<T> a, DataArg<T> b)
+void gt (TensorT<T>& out, DataArg<T> a, DataArg<T> b)
 {
-	binary<T>(out, outshape, a, b,
-	[](const T& a, const T& b) { return a > b; });
+	return binary<T>(out, a, b,
+		[](TensorT<T>& out, const TensorT<T>& a, const TensorT<T>& b)
+		{
+			T* outptr = out.data();
+			const T* aptr = a.data();
+			const T* bptr = b.data();
+			size_t n = get_shape(out).n_elems();
+			for (size_t i = 0; i < n; ++i)
+			{
+				outptr[i] = aptr[i] > bptr[i];
+			}
+		});
 }
 
 /// Given arguments a, and b, for every pair of mapped elements sharing the
 /// same index apply std::uniform_distributon function
 /// Only accept 2 arguments
 template <typename T>
-void rand_uniform (T* out,
-	ade::Shape& outshape, DataArg<T> a, DataArg<T> b)
+void rand_uniform (TensorT<T>& out,
+	DataArg<T> a, DataArg<T> b)
 {
-	binary<T>(out, outshape, a, b,
-	[](const T& a, const T& b)
-	{
-		std::uniform_int_distribution<T> dist(a, b);
-		return dist(get_engine());
-	});
+	binary<T>(out, a, b,
+		[](TensorT<T>& out, const TensorT<T>& a, const TensorT<T>& b)
+		{
+			T* outptr = out.data();
+			const T* aptr = a.data();
+			const T* bptr = b.data();
+			size_t n = get_shape(out).n_elems();
+			for (size_t i = 0; i < n; ++i)
+			{
+				std::uniform_int_distribution<T> dist(aptr[i], bptr[i]);
+				outptr[i] = dist(get_engine());
+			}
+		});
 }
 
 template <>
-void rand_uniform<double> (double* out,
-	ade::Shape& outshape, DataArg<double> a, DataArg<double> b);
+void rand_uniform<double> (TensorT<double>& out,
+	DataArg<double> a, DataArg<double> b);
 
 template <>
-void rand_uniform<float> (float* out,
-	ade::Shape& outshape, DataArg<float> a, DataArg<float> b);
+void rand_uniform<float> (TensorT<float>& out,
+	DataArg<float> a, DataArg<float> b);
 
 /// Given arguments a, and b, for every pair of mapped elements sharing the
 /// same index apply std::normal_distribution function
 /// Only accept 2 arguments
 template <typename T>
-void rand_normal (T* out, ade::Shape& outshape, DataArg<T> a, DataArg<T> b)
+void rand_normal (TensorT<T>& out, DataArg<T> a, DataArg<T> b)
 {
 	throw std::bad_function_call();
 }
 
 template <>
-void rand_normal<double> (double* out,
-	ade::Shape& outshape, DataArg<double> a, DataArg<double> b);
+void rand_normal<double> (TensorT<double>& out,
+	DataArg<double> a, DataArg<double> b);
 
 template <>
-void rand_normal<float> (float* out,
-	ade::Shape& outshape, DataArg<float> a, DataArg<float> b);
+void rand_normal<float> (TensorT<float>& out,
+	DataArg<float> a, DataArg<float> b);
 
 /// Generic n-nary operation
 template <typename T>
-void nnary (T* out, ade::Shape& outshape, DataArgsT<T> args,
-	std::function<void(T&, const T&)> acc)
+inline void nnary (TensorT<T>& out, DataArgsT<T> args,
+	std::function<void(T&,const T&)> acc,
+	std::function<void(TensorT<T>&,const TensorT<T>&)> tensacc)
 {
+	ade::Shape outshape = get_shape(out);
 	ade::NElemT nout = outshape.n_elems();
 	bool visited[nout];
 	std::memset(visited, false, nout);
-	ade::CoordT coord;
-	for (DataArg<T>& arg : args)
+
+	for (size_t i = 0, n = args.size(); i < n; ++i)
 	{
-		T* argptr = arg.data_.get();
-		if (arg.push_)
+		auto& arg = args[i];
+		if (is_identity(arg.mapper_))
 		{
-			for (ade::NElemT i = 0, n = arg.shape_.n_elems(); i < n; ++i)
+			if (i == 0)
 			{
-				arg.mapper_->forward(coord.begin(),
-					ade::coordinate(arg.shape_, i).begin());
-				ade::NElemT outidx = ade::index(outshape, coord);
-				if (visited[outidx])
-				{
-					acc(out[outidx], argptr[i]);
-				}
-				else
-				{
-					out[outidx] = argptr[i];
-					visited[outidx] = true;
-				}
+				out = arg.data_;
+				std::memset(visited, true, nout);
+			}
+			else
+			{
+				tensacc(out, arg.data_);
 			}
 		}
-		else
+		else // map coordinates
 		{
-			for (ade::NElemT i = 0, n = outshape.n_elems(); i < n; ++i)
+			ade::CoordT coord;
+			ade::Shape inshape = get_shape(arg.data_);
+
+			T* ptr = out.data();
+			const T* argptr = arg.data_.data();
+			if (arg.push_)
 			{
-				arg.mapper_->forward(coord.begin(),
-					ade::coordinate(outshape, i).begin());
-				ade::NElemT inidx = ade::index(arg.shape_, coord);
-				if (visited[i])
+				for (ade::NElemT i = 0, n = inshape.n_elems(); i < n; ++i)
 				{
-					acc(out[i], argptr[inidx]);
+					arg.mapper_->forward(coord.begin(),
+						ade::coordinate(inshape, i).begin());
+					ade::NElemT outidx = ade::index(outshape, coord);
+					if (visited[outidx])
+					{
+						acc(ptr[outidx], argptr[i]);
+					}
+					else
+					{
+						ptr[outidx] = argptr[i];
+						visited[outidx] = true;
+					}
 				}
-				else
+			}
+			else
+			{
+				for (ade::NElemT i = 0, n = outshape.n_elems(); i < n; ++i)
 				{
-					out[i] = argptr[inidx];
-					visited[i] = true;
+					arg.mapper_->forward(coord.begin(),
+						ade::coordinate(outshape, i).begin());
+					ade::NElemT inidx = ade::index(inshape, coord);
+					if (visited[i])
+					{
+						acc(ptr[i], argptr[inidx]);
+					}
+					else
+					{
+						ptr[i] = argptr[inidx];
+						visited[i] = true;
+					}
 				}
 			}
 		}
@@ -400,50 +566,74 @@ void nnary (T* out, ade::Shape& outshape, DataArgsT<T> args,
 /// Given arguments, for every mapped index i in range [0:max_nelems],
 /// sum all elements for all arguments
 template <typename T>
-void add (T* out, ade::Shape& outshape, DataArgsT<T> args)
+void add (TensorT<T>& out, DataArgsT<T> args)
 {
-	nnary<T>(out, outshape, args,
-		[](T& out, const T& val) { out += val; });
+	nnary<T>(out, args,
+		[](T& out, const T& val) { out += val; },
+		[](TensorT<T>& out, const TensorT<T>& val) { out += val; });
 }
 
 /// Given arguments, for every mapped index i in range [0:max_nelems],
 /// multiply all elements for all arguments
 template <typename T>
-void mul (T* out, ade::Shape& outshape, DataArgsT<T> args)
+void mul (TensorT<T>& out, DataArgsT<T> args)
 {
-	nnary<T>(out, outshape, args,
-		[](T& out, const T& val) { out *= val; });
+	nnary<T>(out, args,
+		[](T& out, const T& val) { out *= val; },
+		[](TensorT<T>& out, const TensorT<T>& val) { out *= val; });
 }
 
 /// Given arguments, for every mapped index i in range [0:max_nelems],
 /// take the minimum all elements for all arguments
 template <typename T>
-void min (T* out, ade::Shape& outshape, DataArgsT<T> args)
+void min (TensorT<T>& out, DataArgsT<T> args)
 {
-	nnary<T>(out, outshape, args,
-		[](T& out, const T& val) { out = std::min(out, val); });
+	nnary<T>(out, args,
+		[](T& out, const T& val) { out = std::min(out, val); },
+		[](TensorT<T>& out, const TensorT<T>& val)
+		{
+			T* outptr = out.data();
+			const T* valptr = val.data();
+			size_t n = get_shape(out).n_elems();
+			for (size_t i = 0; i < n; ++i)
+			{
+				outptr[i] = std::min(outptr[i], valptr[i]);
+			}
+		});
 }
 
 /// Given arguments, for every mapped index i in range [0:max_nelems],
 /// take the maximum all elements for all arguments
 template <typename T>
-void max (T* out, ade::Shape& outshape, DataArgsT<T> args)
+void max (TensorT<T>& out, DataArgsT<T> args)
 {
-	nnary<T>(out, outshape, args,
-		[](T& out, const T& val) { out = std::max(out, val); });
+	nnary<T>(out, args,
+		[](T& out, const T& val) { out = std::max(out, val); },
+		[](TensorT<T>& out, const TensorT<T>& val)
+		{
+			T* outptr = out.data();
+			const T* valptr = val.data();
+			size_t n = get_shape(out).n_elems();
+			for (size_t i = 0; i < n; ++i)
+			{
+				outptr[i] = std::max(outptr[i], valptr[i]);
+			}
+		});
 }
 
 template <typename T>
 using  MatrixT = Eigen::Matrix<T,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>;
 
 #define TO_MAT(ARG)\
-Eigen::Map<const MatrixT<T>>(ARG.data_.get(),ARG.shape_.at(1),ARG.shape_.at(0))
+Eigen::Map<const MatrixT<T>>(ARG.data_.data(),\
+	ARG.data_.dimension(1),ARG.data_.dimension(0))
 
 template <typename T>
-void fast_matmul (T* out, ade::Shape& outshape, DataArg<T> a, DataArg<T> b)
+void fast_matmul (TensorT<T>& out, DataArg<T> a, DataArg<T> b)
 {
 	MatrixT<T> mout = TO_MAT(a) * TO_MAT(b);
-	std::memcpy(out, mout.data(), sizeof(T) * outshape.n_elems());
+	out = Eigen::TensorMap<TensorT<T>>(mout.data(), {
+		mout.cols(), mout.rows(), 1, 1, 1, 1, 1, 1});
 }
 
 }

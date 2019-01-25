@@ -28,37 +28,41 @@ using EngineT = std::default_random_engine;
 /// Return global random generator
 EngineT& get_engine (void);
 
+bool is_identity (ade::CoordptrT& coorder);
+
 /// Generic unary operation assuming identity mapping
 template <typename T>
 void unary (T* out, ade::Shape& outshape,
 	DataArg<T> in, std::function<T(const T&)> f)
 {
 	T* inptr = in.data_.get();
-	if (in.mapper_ == ade::identity)
+	if (is_identity(in.mapper_))
 	{
 		for (ade::NElemT i = 0, n = in.shape_.n_elems(); i < n; ++i)
 		{
 			out[i] = f(inptr[i]);
 		}
 	}
-	else if (in.push_)
-	{
-		ade::CoordT coord;
-		for (ade::NElemT i = 0, n = in.shape_.n_elems(); i < n; ++i)
-		{
-			in.mapper_->forward(coord.begin(),
-				ade::coordinate(in.shape_, i).begin());
-			out[ade::index(outshape, coord)] = f(inptr[i]);
-		}
-	}
 	else
 	{
 		ade::CoordT coord;
-		for (ade::NElemT i = 0, n = outshape.n_elems(); i < n; ++i)
+		if (in.push_)
 		{
-			in.mapper_->forward(coord.begin(),
-				ade::coordinate(outshape, i).begin());
-			out[i] = f(inptr[ade::index(in.shape_, coord)]);
+			for (ade::NElemT i = 0, n = in.shape_.n_elems(); i < n; ++i)
+			{
+				in.mapper_->forward(coord.begin(),
+					ade::coordinate(in.shape_, i).begin());
+				out[ade::index(outshape, coord)] = f(inptr[i]);
+			}
+		}
+		else
+		{
+			for (ade::NElemT i = 0, n = outshape.n_elems(); i < n; ++i)
+			{
+				in.mapper_->forward(coord.begin(),
+					ade::coordinate(outshape, i).begin());
+				out[i] = f(inptr[ade::index(in.shape_, coord)]);
+			}
 		}
 	}
 }
@@ -174,26 +178,13 @@ void binary (T* out, ade::Shape& outshape, DataArg<T> a, DataArg<T> b,
 {
 	T* aptr = a.data_.get();
 	T* bptr = b.data_.get();
-	// avoid tmpdata by checking if it's needed
-	// tmpdata not needed if neither a nor b are pushing
-	if (false == (a.push_ || b.push_))
+
+	if (is_identity(a.mapper_))
 	{
-		ade::CoordT coord;
-		ade::CoordT acoord;
-		ade::CoordT bcoord;
-		for (ade::NElemT i = 0, n = outshape.n_elems(); i < n; ++i)
-		{
-			coord = ade::coordinate(outshape, i);
-			a.mapper_->forward(acoord.begin(), coord.begin());
-			b.mapper_->forward(bcoord.begin(), coord.begin());
-			out[i] = f(
-				aptr[ade::index(a.shape_, acoord)],
-				bptr[ade::index(b.shape_, bcoord)]);
-		}
+		std::memcpy(out, aptr, sizeof(T) * a.shape_.n_elems());
 	}
-	else // a.push_ || b.push_
+	else
 	{
-		std::vector<T> tmpdata(outshape.n_elems());
 		ade::CoordT coord;
 		if (a.push_)
 		{
@@ -201,7 +192,7 @@ void binary (T* out, ade::Shape& outshape, DataArg<T> a, DataArg<T> b,
 			{
 				a.mapper_->forward(coord.begin(),
 					ade::coordinate(a.shape_, i).begin());
-				tmpdata[ade::index(outshape, coord)] = aptr[i];
+				out[ade::index(outshape, coord)] = aptr[i];
 			}
 		}
 		else
@@ -210,17 +201,29 @@ void binary (T* out, ade::Shape& outshape, DataArg<T> a, DataArg<T> b,
 			{
 				a.mapper_->forward(coord.begin(),
 					ade::coordinate(outshape, i).begin());
-				tmpdata[i] = aptr[ade::index(a.shape_, coord)];
+				out[i] = aptr[ade::index(a.shape_, coord)];
 			}
 		}
+	}
+
+	if (is_identity(b.mapper_))
+	{
+		for (ade::NElemT i = 0, n = b.shape_.n_elems(); i < n; ++i)
+		{
+			out[i] = f(out[i], bptr[i]);
+		}
+	}
+	else
+	{
+		ade::CoordT coord;
 		if (b.push_)
 		{
 			for (ade::NElemT i = 0, n = b.shape_.n_elems(); i < n; ++i)
 			{
 				b.mapper_->forward(coord.begin(),
 					ade::coordinate(b.shape_, i).begin());
-				ade::NElemT outidx = ade::index(outshape, coord);
-				out[outidx] = f(tmpdata[outidx], bptr[i]);
+				out[ade::index(outshape, coord)] = f(
+					out[ade::index(outshape, coord)], bptr[i]);
 			}
 		}
 		else
@@ -229,7 +232,7 @@ void binary (T* out, ade::Shape& outshape, DataArg<T> a, DataArg<T> b,
 			{
 				b.mapper_->forward(coord.begin(),
 					ade::coordinate(outshape, i).begin());
-				out[i] = f(tmpdata[i], bptr[ade::index(b.shape_, coord)]);
+				out[i] = f(out[i], bptr[ade::index(b.shape_, coord)]);
 			}
 		}
 	}
@@ -348,48 +351,76 @@ void rand_normal<float> (float* out,
 /// Generic n-nary operation
 template <typename T>
 void nnary (T* out, ade::Shape& outshape, DataArgsT<T> args,
-	std::function<void(T&, const T&)> acc)
+	std::function<void(T&,const T&)> acc)
 {
 	ade::NElemT nout = outshape.n_elems();
 	bool visited[nout];
 	std::memset(visited, false, nout);
 	ade::CoordT coord;
-	for (DataArg<T>& arg : args)
+	for (size_t i = 0, n = args.size(); i < n; ++i)
 	{
+		DataArg<T>& arg = args[i];
 		T* argptr = arg.data_.get();
-		if (arg.push_)
+		if (is_identity(arg.mapper_))
 		{
-			for (ade::NElemT i = 0, n = arg.shape_.n_elems(); i < n; ++i)
+			if (i == 0)
 			{
-				arg.mapper_->forward(coord.begin(),
-					ade::coordinate(arg.shape_, i).begin());
-				ade::NElemT outidx = ade::index(outshape, coord);
-				if (visited[outidx])
+				std::memcpy(out, argptr, sizeof(T) * arg.shape_.n_elems());
+				std::memset(visited, true, nout);
+			}
+			else
+			{
+				for (ade::NElemT i = 0, n = arg.shape_.n_elems(); i < n; ++i)
 				{
-					acc(out[outidx], argptr[i]);
-				}
-				else
-				{
-					out[outidx] = argptr[i];
-					visited[outidx] = true;
+					if (visited[i])
+					{
+						acc(out[i], argptr[i]);
+					}
+					else
+					{
+						out[i] = argptr[i];
+						visited[i] = true;
+					}
 				}
 			}
 		}
 		else
 		{
-			for (ade::NElemT i = 0, n = outshape.n_elems(); i < n; ++i)
+			ade::CoordT coord;
+			if (arg.push_)
 			{
-				arg.mapper_->forward(coord.begin(),
-					ade::coordinate(outshape, i).begin());
-				ade::NElemT inidx = ade::index(arg.shape_, coord);
-				if (visited[i])
+				for (ade::NElemT i = 0, n = arg.shape_.n_elems(); i < n; ++i)
 				{
-					acc(out[i], argptr[inidx]);
+					arg.mapper_->forward(coord.begin(),
+						ade::coordinate(arg.shape_, i).begin());
+					ade::NElemT outidx = ade::index(outshape, coord);
+					if (visited[outidx])
+					{
+						acc(out[outidx], argptr[i]);
+					}
+					else
+					{
+						out[outidx] = argptr[i];
+						visited[outidx] = true;
+					}
 				}
-				else
+			}
+			else
+			{
+				for (ade::NElemT i = 0, n = outshape.n_elems(); i < n; ++i)
 				{
-					out[i] = argptr[inidx];
-					visited[i] = true;
+					arg.mapper_->forward(coord.begin(),
+						ade::coordinate(outshape, i).begin());
+					ade::NElemT inidx = ade::index(arg.shape_, coord);
+					if (visited[i])
+					{
+						acc(out[i], argptr[inidx]);
+					}
+					else
+					{
+						out[i] = argptr[inidx];
+						visited[i] = true;
+					}
 				}
 			}
 		}

@@ -55,6 +55,10 @@ class LLOTest(unittest.TestCase):
         def prod(arr):
             return reduce(lambda acc, s: acc * s, arr + [1])
         msg = 'vastly diff arrays:\n{}\n{}'.format(arr1, arr2)
+        if isinstance(arr1, int):
+            arr1 = np.array([arr1])
+        if isinstance(arr2, int):
+            arr2 = np.array([arr2])
         avoidshape = 1 == prod(list(arr1.shape)) and\
             1 == prod(list(arr2.shape))
         s1, s2 = _normalize_shape(arr1, arr2)
@@ -66,7 +70,7 @@ class LLOTest(unittest.TestCase):
         out = api(var)
 
         fout = out.evaluate(dtype=np.dtype(float))
-        self._array_eq(real(data), fout)
+        self._array_close(real(data), fout)
 
         var2 = llo.variable(data, 'var2')
         ex = llo.derive(out, var)

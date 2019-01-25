@@ -185,6 +185,27 @@ struct Variable final : public ade::iLeaf
 		return operator = (ref);
 	}
 
+	template <typename T>
+	Variable& operator = (TensptrT<T> data)
+	{
+		auto inshape = llo::get_shape(data);
+		if (false == inshape.compatible_after(shape(), 0))
+		{
+			logs::fatalf("cannot assign data of incompatible shaped %s to "
+				"internal data of shape %s", inshape.to_string().c_str(),
+				shape().to_string().c_str());
+		}
+		auto dtype = age::get_type<T>();
+		if (dtype != data_.dtype_)
+		{
+			logs::fatalf("cannot assign data of incompatible types %s "
+				"(external) and %s (internal)",
+				age::name_type(dtype).c_str(), age::name_type(data_.dtype_).c_str());
+		}
+		std::memcpy(data_.data_.get(), data.data(), nbytes());
+		return *this;
+	}
+
 	/// Assign generic reference to data source
 	Variable& operator = (GenericRef data)
 	{

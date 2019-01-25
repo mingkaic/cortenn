@@ -21,7 +21,20 @@ ade::Shape p2cshape (std::vector<py::ssize_t>& pyshape)
 		pyshape.rbegin(), pyshape.rend()));
 }
 
-std::vector<ade::DimT> c2pshape (Eigen::Dimensions& cshape)
+std::vector<ade::DimT> c2pshape (const ade::Shape& cshape)
+{
+	auto it = cshape.begin();
+	auto et = cshape.end();
+	while (it != et && *(et-1) == 1)
+	{
+		--et;
+	}
+	std::vector<ade::DimT> fwd(it, et);
+	return std::vector<ade::DimT>(fwd.rbegin(), fwd.rend());
+}
+
+std::vector<ade::DimT> c2pshape (
+	const Eigen::DSizes<long,ade::rank_cap>& cshape)
 {
 	auto it = cshape.begin();
 	auto et = cshape.end();

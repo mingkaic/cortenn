@@ -37,17 +37,17 @@ inline void unary (TensorT<T>& out, DataArg<T> in,
 {
 	if (is_identity(in.mapper_))
 	{
-		f(out, in.data_);
+		f(out, *in.data_);
 	}
 	else
 	{
 		ade::Shape outshape = get_shape(out);
 		// else map coordinates then apply f
 		TensorT<T> temp = get_tensor<T>(nullptr, outshape);
-		ade::Shape inshape = get_shape(in.data_);
+		ade::Shape inshape = get_shape(*in.data_);
 
 		T* tempptr = temp.data();
-		const T* inptr = in.data_.data();
+		const T* inptr = in.data_->data();
 		if (in.push_)
 		{
 			ade::CoordT coord;
@@ -239,16 +239,16 @@ inline void binary (TensorT<T>& out, DataArg<T> a, DataArg<T> b,
 
 	if (is_identity(a.mapper_))
 	{
-		lhs = &a.data_;
+		lhs = a.data_.get();
 	}
 	else // map coordinates
 	{
 		lhs = new TensorT<T>(out.dimensions());
 		lhs->setZero();
-		ade::Shape inshape = get_shape(a.data_);
+		ade::Shape inshape = get_shape(*a.data_);
 
 		T* ptr = lhs->data();
-		const T* inptr = a.data_.data();
+		const T* inptr = a.data_->data();
 		if (a.push_)
 		{
 			ade::CoordT coord;
@@ -273,16 +273,16 @@ inline void binary (TensorT<T>& out, DataArg<T> a, DataArg<T> b,
 
 	if (is_identity(b.mapper_))
 	{
-		rhs = &b.data_;
+		rhs = b.data_.get();
 	}
 	else // map coordinates
 	{
 		rhs = new TensorT<T>(out.dimensions());
 		rhs->setZero();
-		ade::Shape inshape = get_shape(b.data_);
+		ade::Shape inshape = get_shape(*b.data_);
 
 		T* ptr = rhs->data();
-		const T* inptr = b.data_.data();
+		const T* inptr = b.data_->data();
 		if (b.push_)
 		{
 			ade::CoordT coord;
@@ -306,11 +306,11 @@ inline void binary (TensorT<T>& out, DataArg<T> a, DataArg<T> b,
 	}
 
 	f(out, *lhs, *rhs);
-	if (lhs != &a.data_)
+	if (lhs != a.data_.get())
 	{
 		delete lhs;
 	}
-	if (rhs != &b.data_)
+	if (rhs != b.data_.get())
 	{
 		delete rhs;
 	}
@@ -507,21 +507,21 @@ inline void nnary (TensorT<T>& out, DataArgsT<T> args,
 		{
 			if (i == 0)
 			{
-				out = arg.data_;
+				out = *arg.data_;
 				std::memset(visited, true, nout);
 			}
 			else
 			{
-				tensacc(out, arg.data_);
+				tensacc(out, *arg.data_);
 			}
 		}
 		else // map coordinates
 		{
 			ade::CoordT coord;
-			ade::Shape inshape = get_shape(arg.data_);
+			ade::Shape inshape = get_shape(*arg.data_);
 
 			T* ptr = out.data();
-			const T* argptr = arg.data_.data();
+			const T* argptr = arg.data_->data();
 			if (arg.push_)
 			{
 				for (ade::NElemT i = 0, n = inshape.n_elems(); i < n; ++i)
@@ -625,8 +625,8 @@ template <typename T>
 using  MatrixT = Eigen::Matrix<T,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>;
 
 #define TO_MAT(ARG)\
-Eigen::Map<const MatrixT<T>>(ARG.data_.data(),\
-	ARG.data_.dimension(1),ARG.data_.dimension(0))
+Eigen::Map<const MatrixT<T>>(ARG.data_->data(),\
+	ARG.data_->dimension(1),ARG.data_->dimension(0))
 
 template <typename T>
 void fast_matmul (TensorT<T>& out, DataArg<T> a, DataArg<T> b)

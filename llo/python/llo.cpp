@@ -34,12 +34,12 @@ std::vector<ade::DimT> c2pshape (Eigen::Dimensions& cshape)
 }
 
 template <typename T>
-py::array typedata_to_array (llo::TensorT<T>& tdata, py::dtype dtype)
+py::array typedata_to_array (llo::TensptrT<T>& tdata, py::dtype dtype)
 {
-	auto pshape = pyllo::c2pshape(tdata.dimensions());
+	auto pshape = pyllo::c2pshape(tdata->dimensions());
 	return py::array(dtype,
 		py::array::ShapeContainer(pshape.begin(), pshape.end()),
-		tdata.data());
+		tdata->data());
 }
 
 }

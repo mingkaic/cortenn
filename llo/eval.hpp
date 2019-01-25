@@ -66,7 +66,7 @@ struct ShortcutFunctor final : public ade::iFunctor
 	}
 
 	template <typename T>
-	TensorT<T> evaluate (void);
+	TensptrT<T> evaluate (void);
 
 private:
 	ShortcutFunctor (age::_GENERATED_OPCODE opcode,
@@ -134,7 +134,7 @@ struct Evaluator final : public ade::iTraveler
 			default: logs::fatalf("invalid input type %s",
 				age::name_type(intype).c_str());
 		}
-		out_ = get_tensor(data.data(), shape);
+		out_ = get_tensorptr(data.data(), shape);
 	}
 
 	/// Implementation of iTraveler
@@ -164,16 +164,16 @@ struct Evaluator final : public ade::iTraveler
 			};
 		}
 
-		out_ = get_tensor<T>(nullptr, outshape);
-		age::typed_exec<T>(opcode, out_, argdata);
+		out_ = get_tensorptr<T>(nullptr, outshape);
+		age::typed_exec<T>(opcode, *out_, argdata);
 	}
 
 	/// Output data evaluated upon visiting node
-	TensorT<T> out_;
+	TensptrT<T> out_;
 };
 
 template <typename T>
-TensorT<T> ShortcutFunctor::evaluate (void)
+TensptrT<T> ShortcutFunctor::evaluate (void)
 {
 	size_t nargs = entries_.size();
 	DataArgsT<T> argdata(nargs);
@@ -189,14 +189,14 @@ TensorT<T> ShortcutFunctor::evaluate (void)
 	}
 
 	const ade::Shape& outshape = proxy_root_->shape();
-	TensorT<T> out = get_tensor<T>(nullptr, outshape);
-	age::typed_exec<T>(opcode_, out, argdata);
+	TensptrT<T> out = get_tensorptr<T>(nullptr, outshape);
+	age::typed_exec<T>(opcode_, *out, argdata);
 	return out;
 }
 
 /// Evaluate generic data of tens converted to specified type
 template <typename T>
-TensorT<T> eval (ade::iTensor* tens)
+TensptrT<T> eval (ade::iTensor* tens)
 {
 	Evaluator<T> eval;
 	tens->accept(eval);
@@ -205,7 +205,7 @@ TensorT<T> eval (ade::iTensor* tens)
 
 /// Evaluate generic data of tens pointer converted to specified type
 template <typename T>
-TensorT<T> eval (ade::TensptrT tens)
+TensptrT<T> eval (ade::TensptrT tens)
 {
 	Evaluator<T> eval;
 	tens->accept(eval);

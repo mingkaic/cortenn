@@ -46,11 +46,29 @@ ade::Shape get_shape (const TensorT<T>& tens)
 	return ade::Shape(std::vector<ade::DimT>(slist.begin(), slist.end()));
 }
 
+template <typename T>
+using TensptrT = std::shared_ptr<TensorT<T>>;
+
+template <typename T>
+TensptrT<T> get_tensorptr (T* data, const ade::Shape& shape)
+{
+	std::array<Eigen::Index,ade::rank_cap> slist;
+	std::copy(shape.begin(), shape.end(), slist.begin());
+	if (nullptr != data)
+	{
+		return std::make_shared<TensorT<T>>(
+			Eigen::TensorMap<TensorT<T>>(data, slist));
+	}
+	auto out = std::make_shared<TensorT<T>>(slist);
+	out->setZero();
+	return out;
+}
+
 /// Data to pass around when evaluating
 template <typename T>
 struct DataArg
 {
-	TensorT<T> data_;
+	TensptrT<T> data_;
 
 	/// Coordinate mapper
 	ade::CoordptrT mapper_;

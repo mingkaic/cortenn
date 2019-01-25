@@ -188,7 +188,7 @@ struct Variable final : public ade::iLeaf
 	template <typename T>
 	Variable& operator = (TensptrT<T> data)
 	{
-		auto inshape = llo::get_shape(data);
+		auto inshape = llo::get_shape(*data);
 		if (false == inshape.compatible_after(shape(), 0))
 		{
 			logs::fatalf("cannot assign data of incompatible shaped %s to "
@@ -202,7 +202,7 @@ struct Variable final : public ade::iLeaf
 				"(external) and %s (internal)",
 				age::name_type(dtype).c_str(), age::name_type(data_.dtype_).c_str());
 		}
-		std::memcpy(data_.data_.get(), data.data(), nbytes());
+		std::memcpy(data_.data_.get(), data->data(), nbytes());
 		return *this;
 	}
 

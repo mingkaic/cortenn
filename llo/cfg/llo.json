@@ -119,7 +119,7 @@
         },
         "MATMUL": {
             "operation": "llo::fast_matmul(out,in[0],in[1])",
-            "derivative": "llo::grad_fast_matmul(fwd,bwd,args,idx)"
+            "derivative": "llo::grad_matmul(fwd,bwd,idx)"
         }
     },
     "apis": [

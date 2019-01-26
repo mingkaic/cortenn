@@ -56,8 +56,8 @@ ade::TensptrT grad_max (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens)
 	return age::eq(rev_fwd, tens[gradidx]);
 }
 
-ade::TensptrT grad_fast_matmul (ade::iFunctor* fwd,
-	ade::MappedTensor bwd, ade::TensT args, size_t idx)
+ade::TensptrT grad_matmul (ade::iFunctor* fwd,
+	ade::MappedTensor bwd, size_t idx)
 {
 	ade::ArgsT children = fwd->get_children();
 	ade::TensptrT a = children[0].get_tensor();
@@ -183,7 +183,6 @@ ade::TensptrT get_fast_matmul (ade::TensptrT a, ade::TensptrT b)
 			fwd[1][2] = 1.0 / ncommon;
 		}
 	));
-std::cout << a->shape().to_string() << " " << b->shape().to_string() << "\n";
 	return ade::TensptrT(ade::Functor::get(
 		ade::Opcode{"MATMUL", age::MATMUL}, {
 			ade::MappedTensor(a, left_shaper, false, ade::identity),

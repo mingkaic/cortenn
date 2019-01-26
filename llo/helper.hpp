@@ -29,6 +29,9 @@ ade::TensptrT grad_min (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens);
 /// index gradidx and arguments are tens
 ade::TensptrT grad_max (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens);
 
+ade::TensptrT grad_fast_matmul (ade::iFunctor* fwd,
+	ade::MappedTensor bwd, ade::TensT args, size_t idx);
+
 /// Return reduction of tens specified dimension dim using opcode operation
 ade::TensptrT reduce_1d (ade::Opcode opcode, ade::TensptrT tens, uint8_t dim);
 

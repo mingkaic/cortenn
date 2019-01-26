@@ -200,7 +200,7 @@ PYBIND11_MODULE(llo, m)
 			ade::Shape shape = pyllo::p2cshape(info.shape);
 			auto dtype = data.dtype();
 			char kind = dtype.kind();
-			age::_GENERATED_DTYPE age_dtype;
+			age::_GENERATED_DTYPE age_dtype = age::BAD_TYPE;
 			py::ssize_t tbytes = dtype.itemsize();
 			switch (kind)
 			{

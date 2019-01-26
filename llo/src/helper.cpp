@@ -56,6 +56,41 @@ ade::TensptrT grad_max (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens)
 	return age::eq(rev_fwd, tens[gradidx]);
 }
 
+ade::TensptrT grad_fast_matmul (ade::iFunctor* fwd,
+	ade::MappedTensor bwd, ade::TensT args, size_t idx)
+{
+	ade::ArgsT children = fwd->get_children();
+	ade::TensptrT a = children[0].get_tensor();
+	ade::TensptrT b = children[1].get_tensor();
+
+	ade::TensptrT ext_a = age::permute(
+		age::extend(a, 2, {b->shape().at(0)}), {2,1,0});
+	ade::TensptrT ext_b = age::permute(
+		age::extend(b, 2, {a->shape().at(1)}), {0,2,1});
+
+	ade::TensptrT ext;
+	std::vector<uint8_t> perm;
+	if (0 == idx)
+	{
+		ext = ext_a;
+		perm = {2, 1, 0};
+	}
+	else
+	{
+		ext = ext_b;
+		perm = {0, 2, 1};
+	}
+
+	auto ext_bwd = age::extend(bwd.get_tensor(), 2, {a->shape().at(0)});
+
+	return age::reduce_sum(
+		age::permute(
+			age::mul(
+				age::div(age::mul(ext_a, ext_b), ext),
+				ext_bwd
+			), perm), 2);
+}
+
 ade::TensptrT reduce_1d (ade::Opcode opcode, ade::TensptrT tens, uint8_t dim)
 {
 	return ade::TensptrT(ade::Functor::get(opcode, {
@@ -113,11 +148,46 @@ ade::TensptrT matmul (ade::TensptrT a, ade::TensptrT b)
 
 ade::TensptrT get_fast_matmul (ade::TensptrT a, ade::TensptrT b)
 {
-	auto out = matmul(a, b);
-	return ade::TensptrT(ShortcutFunctor::get(age::MATMUL,
-		std::static_pointer_cast<ade::iFunctor>(out), {
-			ade::identity_map(a),
-			ade::identity_map(b),
+	// auto out = matmul(a, b);
+	// return ade::TensptrT(ShortcutFunctor::get(age::MATMUL,
+	// 	std::static_pointer_cast<ade::iFunctor>(out), {
+	// 		ade::identity_map(a),
+	// 		ade::identity_map(b),
+	// 	}));
+	ade::DimT ncommon = a->shape().at(0);
+	ade::DimT nrow = a->shape().at(1);
+	ade::DimT ncol = b->shape().at(0);
+
+	ade::CoordptrT left_shaper(new ade::CoordMap(
+		[&](ade::MatrixT fwd)
+		{
+			for (uint8_t i = 3; i < ade::mat_dim; ++i)
+			{
+				fwd[i][i] = 1;
+			}
+			fwd[2][0] = ncol;
+			fwd[1][1] = 1;
+			fwd[0][2] = 1.0 / ncommon;
+		}
+	));
+
+	ade::CoordptrT right_shaper(new ade::CoordMap(
+		[&](ade::MatrixT fwd)
+		{
+			for (uint8_t i = 3; i < ade::mat_dim; ++i)
+			{
+				fwd[i][i] = 1;
+			}
+			fwd[0][0] = 1;
+			fwd[2][1] = nrow;
+			fwd[1][2] = 1.0 / ncommon;
+		}
+	));
+std::cout << a->shape().to_string() << " " << b->shape().to_string() << "\n";
+	return ade::TensptrT(ade::Functor::get(
+		ade::Opcode{"MATMUL", age::MATMUL}, {
+			ade::MappedTensor(a, left_shaper, false, ade::identity),
+			ade::MappedTensor(b, right_shaper, false, ade::identity),
 		}));
 }
 

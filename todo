@@ -7,10 +7,9 @@ P4 - clarify helper functions
 P4 - formalize codestyle
 
 performance:
-P2 - move fast matrix out of opcodes
-P2 - detect fast matrix shortcut automatically using opt
 P3 - implemented fixed leaf nodes and add corresponding optimizations
 P3 - improve optimization options to decrease equation graph size in opt
+P4 - investigate operation shortcut detection
 P4 - investigate ade graph node reuse mechanism
 P4 - investigate data caching options when evaluating ade graphs
 P4 - implement optimization options to increase data accuracy

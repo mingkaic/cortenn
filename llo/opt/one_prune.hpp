@@ -6,7 +6,7 @@
 ///	Define llo one pruning functions
 ///
 
-#include "opt/graph_editor.hpp"
+#include "opt/graph_edit.hpp"
 
 #include "llo/data.hpp"
 
@@ -15,6 +15,8 @@
 
 namespace llo
 {
+
+ade::TensptrT one_prune_edit (ade::Opcode opcode, ade::ArgsT args);
 
 /// Return tree that prunes one branches in input according to OPCODE
 /// For example, mul(x, 1) is converted to simply x, while abs(1) is 1

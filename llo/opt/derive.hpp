@@ -1,6 +1,4 @@
-#include "llo/opt/zero_prune.hpp"
-#include "llo/opt/one_prune.hpp"
-#include "llo/opt/ops_merge.hpp"
+#include "llo/opt/plugin_opt.hpp"
 
 #include "llo/generated/grader.hpp"
 

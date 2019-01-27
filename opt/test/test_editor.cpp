@@ -6,7 +6,7 @@
 
 #include "dbg/ade.hpp"
 
-#include "opt/graph_editor.hpp"
+#include "opt/graph_edit.hpp"
 
 
 struct MockTensor final : public ade::iLeaf
@@ -77,9 +77,8 @@ TEST(EDITOR, Prune)
 			ade::identity_map(binar2),
 		}));
 
-	opt::EditFuncT pruner = [&](ade::iFunctor* f, ade::ArgsT args)
+	opt::EditFuncT pruner = [&](ade::Opcode opcode, ade::ArgsT args)
 	{
-		auto opcode = f->get_opcode();
 		if (opcode.code_ < 2) // killable
 		{
 			ade::ArgsT filtered;
@@ -100,8 +99,7 @@ TEST(EDITOR, Prune)
 		return leaf;
 	};
 
-	opt::GraphEditor mockpruner(pruner);
-	auto root = mockpruner.edit(repl_binar);
+	auto root = opt::graph_edit(repl_binar, pruner);
 
 	std::unordered_map<ade::iTensor*,std::string> varlabels = {
 		{leaf.get(), "leaf"},

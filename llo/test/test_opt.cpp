@@ -110,7 +110,8 @@ TEST(OPTIMIZATION, zero_prune_graph)
 		" |       `--(NEG[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
 		" |           `--(1([1\\1\\1\\1\\1\\1\\1\\1]))\n" <<
 		" `--(2([1\\1\\1\\1\\1\\1\\1\\1]))";
-	EXPECT_STREQ("", compare_graph(ss, opt_nocascades).c_str());
+	auto compare_str = compare_graph(ss, opt_nocascades);
+	EXPECT_EQ(0, compare_str.size()) << compare_str;
 
 	auto got0 = age::tan(zero);
 	auto opt_cascades = llo::zero_prune(age::pow(nocascades, got0));
@@ -134,7 +135,8 @@ TEST(OPTIMIZATION, ops_merge_singles)
 			" `--(1([1\\1\\1\\1\\1\\1\\1\\1]))\n" <<
 			" `--(2([1\\1\\1\\1\\1\\1\\1\\1]))\n" <<
 			" `--(3([1\\1\\1\\1\\1\\1\\1\\1]))";
-		EXPECT_STREQ("", compare_graph(ss, got1123).c_str());
+		auto compare_str = compare_graph(ss, got1123);
+		EXPECT_EQ(0, compare_str.size()) << compare_str;
 	}
 
 	// don't merge different nnary
@@ -148,7 +150,8 @@ TEST(OPTIMIZATION, ops_merge_singles)
 			" |   `--(1([1\\1\\1\\1\\1\\1\\1\\1]))\n" <<
 			" |   `--(2([1\\1\\1\\1\\1\\1\\1\\1]))\n" <<
 			" `--(3([1\\1\\1\\1\\1\\1\\1\\1]))";
-		EXPECT_STREQ("", compare_graph(ss, got1_12_3).c_str());
+		auto compare_str = compare_graph(ss, got1_12_3);
+		EXPECT_EQ(0, compare_str.size()) << compare_str;
 	}
 
 	// merge single unary argument of nnary
@@ -160,7 +163,8 @@ TEST(OPTIMIZATION, ops_merge_singles)
 			" `--(2([1\\1\\1\\1\\1\\1\\1\\1]))\n" <<
 			" `--(1([1\\1\\1\\1\\1\\1\\1\\1]))\n" <<
 			" `--(3([1\\1\\1\\1\\1\\1\\1\\1]))";
-		EXPECT_STREQ("", compare_graph(ss, got213).c_str());
+		auto compare_str = compare_graph(ss, got213);
+		EXPECT_EQ(0, compare_str.size()) << compare_str;
 	}
 
 	// don't merge single unary argument of non-nnary
@@ -173,7 +177,8 @@ TEST(OPTIMIZATION, ops_merge_singles)
 			" `--(TAN[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
 			" |   `--(1([1\\1\\1\\1\\1\\1\\1\\1]))\n" <<
 			" `--(3([1\\1\\1\\1\\1\\1\\1\\1]))";
-		EXPECT_STREQ("", compare_graph(ss, got2_1_3).c_str());
+		auto compare_str = compare_graph(ss, got2_1_3);
+		EXPECT_EQ(0, compare_str.size()) << compare_str;
 	}
 
 	auto zero = llo::get_variable<double>(ade::Shape({3, 4}), "0");
@@ -187,7 +192,8 @@ TEST(OPTIMIZATION, ops_merge_singles)
 			" `--(1([1\\1\\1\\1\\1\\1\\1\\1]))\n" <<
 			" `--(0([3\\4\\1\\1\\1\\1\\1\\1]))\n" <<
 			" `--(3([1\\1\\1\\1\\1\\1\\1\\1]))";
-		EXPECT_STREQ("", compare_graph(ss, got2103).c_str());
+		auto compare_str = compare_graph(ss, got2103);
+		EXPECT_EQ(0, compare_str.size()) << compare_str;
 	}
 
 	// merge reduced sum
@@ -199,7 +205,8 @@ TEST(OPTIMIZATION, ops_merge_singles)
 			"(SUM[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
 			" `--(1([3\\4\\1\\1\\1\\1\\1\\1]))\n" <<
 			" `--(0([3\\4\\1\\1\\1\\1\\1\\1]))";
-		EXPECT_STREQ("", compare_graph(ss, got10).c_str());
+		auto compare_str = compare_graph(ss, got10);
+		EXPECT_EQ(0, compare_str.size()) << compare_str;
 	}
 
 	// merge redundent double reduced argument
@@ -209,7 +216,8 @@ TEST(OPTIMIZATION, ops_merge_singles)
 		ss <<
 			"(SUM[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
 			" `--(0([3\\4\\1\\1\\1\\1\\1\\1]))\n";
-		EXPECT_STREQ("", compare_graph(ss, got0).c_str());
+		auto compare_str = compare_graph(ss, got0);
+		EXPECT_EQ(0, compare_str.size()) << compare_str;
 	}
 
 	// don't merge non-redundent double reduced argument
@@ -220,7 +228,8 @@ TEST(OPTIMIZATION, ops_merge_singles)
 			"(SUM[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
 			" `--(SUM[3\\1\\1\\1\\1\\1\\1\\1])\n" <<
 			"     `--(0([3\\4\\1\\1\\1\\1\\1\\1]))\n";
-		EXPECT_STREQ("", compare_graph(ss, got_0).c_str());
+		auto compare_str = compare_graph(ss, got_0);
+		EXPECT_EQ(0, compare_str.size()) << compare_str;
 	}
 
 	// don't merge prod-reduced_sum
@@ -232,7 +241,8 @@ TEST(OPTIMIZATION, ops_merge_singles)
 			" `--(SUM[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
 			" |   `--(0([3\\4\\1\\1\\1\\1\\1\\1]))\n" <<
 			" `--(1([1\\1\\1\\1\\1\\1\\1\\1]))\n";
-		EXPECT_STREQ("", compare_graph(ss, got_0_1).c_str());
+		auto compare_str = compare_graph(ss, got_0_1);
+		EXPECT_EQ(0, compare_str.size()) << compare_str;
 	}
 }
 
@@ -290,7 +300,8 @@ TEST(OPTIMIZATION, ops_merge_graph)
 		" `--(SUB[1\\1\\1\\1\\1\\1\\1\\1])\n" <<
 		"     `--(2([1\\1\\1\\1\\1\\1\\1\\1]))\n" <<
 		"     `--(3([1\\1\\1\\1\\1\\1\\1\\1]))";
-	EXPECT_STREQ("", compare_graph(ss, root).c_str());
+	auto compare_str = compare_graph(ss, root);
+	EXPECT_EQ(0, compare_str.size()) << compare_str;
 }
 
 

@@ -17,17 +17,35 @@ static const std::set<age::_GENERATED_OPCODE> nnary = {
 	age::MAX,
 };
 
+static bool is_identity (ade::CoordptrT coorder)
+{
+	if (ade::identity == coorder)
+	{
+		return true;
+	}
+	bool id = true;
+	coorder->access([&id](const ade::MatrixT& m)
+	{
+		for (uint8_t i = 0; id && i < ade::mat_dim; ++i)
+		{
+			for (uint8_t j = 0; id && j < ade::mat_dim; ++j)
+			{
+				id = id && m[i][j] == (i == j);
+			}
+		}
+	});
+	return id;
+}
+
 static bool is_bijective (ade::CoordptrT coorder)
 {
 	return ade::identity == coorder ||
 		coorder->is_bijective();
 }
 
-static ade::TensptrT ops_merge_edit (ade::iFunctor* func, ade::ArgsT args)
+ade::TensptrT ops_merge_edit (ade::Opcode opcode, ade::ArgsT args)
 {
-	ade::Opcode fopcode = func->get_opcode();
-	age::_GENERATED_OPCODE opcode = (age::_GENERATED_OPCODE) fopcode.code_;
-	if (nnary.end() != nnary.find(opcode))
+	if (nnary.end() != nnary.find((age::_GENERATED_OPCODE) opcode.code_))
 	{
 		bool merged = false;
 		ade::ArgsT newchildren;
@@ -47,7 +65,7 @@ static ade::TensptrT ops_merge_edit (ade::iFunctor* func, ade::ArgsT args)
 				arg_op = (age::_GENERATED_OPCODE) f->get_opcode().code_;
 			}
 			bool arg_id = is_bijective(arg_coorder);
-			if (opcode == arg_op && (arg_id || std::all_of(
+			if (opcode.code_ == arg_op && (arg_id || std::all_of(
 				arg_children.begin(), arg_children.end(),
 				[](ade::MappedTensor& mten)
 				{
@@ -92,7 +110,7 @@ static ade::TensptrT ops_merge_edit (ade::iFunctor* func, ade::ArgsT args)
 			}
 			else if (arg_children.size() == 1 &&
 				nnary.end() != nnary.find(arg_op) &&
-				is_bijective(arg_children[0].get_coorder()))
+				arg_children[0].get_coorder()->is_bijective())
 			{
 				auto child = arg_children[0];
 				bool child_io = child.map_io();
@@ -116,9 +134,14 @@ static ade::TensptrT ops_merge_edit (ade::iFunctor* func, ade::ArgsT args)
 				newchildren.push_back(arg);
 			}
 		}
-		if (merged)
+		if (1 == newchildren.size() &&
+			is_identity(newchildren[0].get_coorder()))
 		{
-			return ade::TensptrT(ade::Functor::get(fopcode, newchildren));
+			return newchildren[0].get_tensor();
+		}
+		else if (merged)
+		{
+			return ade::TensptrT(ade::Functor::get(opcode, newchildren));
 		}
 	}
 	return nullptr;
@@ -126,8 +149,7 @@ static ade::TensptrT ops_merge_edit (ade::iFunctor* func, ade::ArgsT args)
 
 ade::TensptrT ops_merge (ade::TensptrT root)
 {
-	opt::GraphEditor opedit(ops_merge_edit);
-	return opedit.edit(root);
+	return opt::graph_edit(root, ops_merge_edit);
 }
 
 }

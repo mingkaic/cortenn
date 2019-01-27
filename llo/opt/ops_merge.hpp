@@ -1,6 +1,6 @@
 #include <stack>
 
-#include "opt/graph_editor.hpp"
+#include "opt/graph_edit.hpp"
 
 #include "llo/generated/codes.hpp"
 
@@ -9,6 +9,8 @@
 
 namespace llo
 {
+
+ade::TensptrT ops_merge_edit (ade::Opcode opcode, ade::ArgsT args);
 
 ade::TensptrT ops_merge (ade::TensptrT root);
 

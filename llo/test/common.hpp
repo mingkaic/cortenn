@@ -12,5 +12,6 @@
 	EXPECT_TRUE(std::equal(ARR.begin(), ARR.end(), ARR2.begin())) <<\
 		"expect list " << arrs.str() << ", got " << arrs2.str() << " instead"; }
 
-#define EXPECT_FATAL(EVENT, MSG) try { EVENT; } catch (std::runtime_error& e) {\
-	EXPECT_STREQ(MSG, e.what()); }
+#define EXPECT_FATAL(EVENT, MSG) try { EVENT; FAIL() << \
+	"did not expect " << #EVENT << " to succeed"; } \
+	catch (std::runtime_error& e) { EXPECT_STREQ(MSG, e.what()); }

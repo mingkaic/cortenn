@@ -421,12 +421,6 @@ TEST(API, Flip)
 	ade::TensptrT src(llo::Variable<double>::get(data, shape));
 	ade::TensptrT dest = age::flip(src, dim);
 
-	ade::TensptrT bad = age::flip(src, baddim);
-	std::stringstream ss;
-	ss << "attempting to flip dimension " <<
-		(int) baddim << " beyond shape rank " << nrank;
-	EXPECT_FATAL(llo::eval<double>(bad), ss.str().c_str())
-
 	llo::TensptrT<double> out = llo::eval<double>(dest);
 	auto gotshape = out->dimensions();
 	ASSERT_ARREQ(slist, gotshape);

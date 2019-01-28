@@ -16,7 +16,7 @@ TEST(DATA, MismatchSize)
 	ade::Shape shape(slist);
 	std::vector<double> data = {
 		41, 29, 86, 43, 12, 55, 68, 87, 16, 92, 26, 28,
-		13, 1, 62, 9, 27, 10, 23, 70, 80, 67, 96, 22
+		13, 1, 62, 9, 27, 10, 23, 70, 80, 67, 96, 22, 24
 	};
 
 	std::stringstream ss;

@@ -48,10 +48,9 @@ void load_graph (GraphInfo& out, const cortenn::Graph& in,
 			const cortenn::Source& source = node.source();
 			std::string sstr = source.shape();
 			ade::Shape shape(std::vector<ade::DimT>(sstr.begin(), sstr.end()));
-			size_t tcode = source.typecode();
 			std::string data = source.data();
 			ade::TensptrT leaf = dataloader(data.c_str(),
-				shape, tcode, src_label);
+				shape, source.typecode(), src_label, source.is_const());
 			invec.push_back(leaf);
 			if (false == pb_labels.empty())
 			{

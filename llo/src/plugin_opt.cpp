@@ -1,5 +1,6 @@
 #include "opt/graph_edit.hpp"
 
+#include "llo/opt/const_merge.hpp"
 #include "llo/opt/ops_merge.hpp"
 #include "llo/opt/one_prune.hpp"
 #include "llo/opt/zero_prune.hpp"
@@ -12,6 +13,7 @@ namespace llo
 
 static const std::vector<opt::EditFuncT> edits =
 {
+    const_merge_edit,
     zero_prune_edit,
     one_prune_edit,
     ops_merge_edit,

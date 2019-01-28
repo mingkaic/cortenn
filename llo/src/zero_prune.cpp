@@ -5,6 +5,8 @@
 
 #include "llo/opt/zero_prune.hpp"
 
+#include "llo/constant.hpp"
+
 #ifdef LLO_ZERO_PRUNE_HPP
 
 namespace llo
@@ -18,8 +20,8 @@ ade::TensptrT zero_prune_edit (ade::Opcode opcode, ade::ArgsT args)
 	std::vector<bool> is_zero(n, false);
 	for (size_t i = 0; i < n; ++i)
 	{
-		auto var = dynamic_cast<llo::iVariable*>(args[i].get_tensor().get());
-		is_zero[i] = nullptr != var && "0" == var->get_label();
+		auto cst = dynamic_cast<llo::Constant*>(args[i].get_tensor().get());
+		is_zero[i] = nullptr != cst && 0 == cst->at<double>(0);;
 		has_zero = has_zero || is_zero[i];
 	}
 	if (has_zero)
@@ -33,19 +35,19 @@ ade::TensptrT zero_prune_edit (ade::Opcode opcode, ade::ArgsT args)
 			case age::SQRT:
 			case age::ROUND:
 			case age::PROD:
-				return ade::TensptrT(llo::get_scalar(0, args[0].shape()));
+				return ade::TensptrT(llo::Constant::get(0, args[0].shape()));
 			case age::COS:
 			case age::EXP:
-				return ade::TensptrT(llo::get_scalar(1, args[0].shape()));
+				return ade::TensptrT(llo::Constant::get(1, args[0].shape()));
 			case age::LOG:
 				logs::fatal("cannot LOG by zero");
 			case age::POW:
 				if (is_zero[0])
 				{
-					return ade::TensptrT(llo::get_scalar(0, args[0].shape()));
+					return ade::TensptrT(llo::Constant::get(0, args[0].shape()));
 				}
 				// else if is_zero[1]
-				return ade::TensptrT(llo::get_scalar(1, args[1].shape()));
+				return ade::TensptrT(llo::Constant::get(1, args[1].shape()));
 			case age::SUM:
 			{
 				ade::ArgsT filtered;
@@ -58,14 +60,14 @@ ade::TensptrT zero_prune_edit (ade::Opcode opcode, ade::ArgsT args)
 				}
 				if (filtered.empty())
 				{
-					return ade::TensptrT(llo::get_scalar(0, args[0].shape()));
+					return ade::TensptrT(llo::Constant::get(0, args[0].shape()));
 				}
 				return ade::TensptrT(ade::Functor::get(ade::Opcode{"SUM", age::SUM}, filtered));
 			}
 			case age::SUB:
 				if (is_zero[0] && is_zero[1])
 				{
-					return ade::TensptrT(llo::get_scalar(0, args[0].shape()));
+					return ade::TensptrT(llo::Constant::get(0, args[0].shape()));
 				}
 				else if (is_zero[0])
 				{
@@ -79,7 +81,7 @@ ade::TensptrT zero_prune_edit (ade::Opcode opcode, ade::ArgsT args)
 					logs::fatal("cannot DIV by zero");
 				}
 				// else if is_zero[0]
-				return ade::TensptrT(llo::get_scalar(0, args[0].shape()));
+				return ade::TensptrT(llo::Constant::get(0, args[0].shape()));
 			case age::MIN:
 			case age::MAX:
 			case age::EQ:

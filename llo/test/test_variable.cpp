@@ -1,12 +1,12 @@
 
-#ifndef DISABLE_DATA_TEST
+#ifndef DISABLE_VARIABLE_TEST
 
 
 #include "gtest/gtest.h"
 
 #include "llo/test/common.hpp"
 
-#include "llo/data.hpp"
+#include "llo/variable.hpp"
 #include "llo/eval.hpp"
 
 
@@ -22,7 +22,7 @@ TEST(DATA, MismatchSize)
 	std::stringstream ss;
 	ss << "cannot create variable with data size " << data.size() <<
 		" against shape " << shape.to_string();
-	EXPECT_FATAL(llo::get_variable<double>(data, shape), ss.str().c_str());
+	EXPECT_FATAL(llo::Variable<double>::get(data, shape), ss.str().c_str());
 }
 
 
@@ -37,7 +37,7 @@ TEST(DATA, SourceRetype)
 		6, 78, 18, 100, 11, 52, 66, 55, 30,
 		80, 81, 36, 26, 63, 78, 80, 31, 37
 	};
-	ade::TensptrT ptr = llo::get_variable<double>(data, shape);
+	ade::TensptrT ptr(llo::Variable<double>::get(data, shape));
 
 	llo::TensptrT<uint16_t> gd = llo::eval<uint16_t>(ptr);
 	auto gotslist = gd->dimensions();
@@ -56,7 +56,7 @@ TEST(DATA, PlaceHolder)
 	std::vector<ade::DimT> slist = {2, 5, 2};
 	ade::Shape shape(slist);
 	size_t n = shape.n_elems();
-	llo::VarptrT<double> pl(llo::get_variable<double>(shape));
+	llo::VarptrT<double> pl(llo::Variable<double>::get(shape));
 
 	llo::TensptrT<double> uninit_gd = llo::eval<double>(ade::TensptrT(pl));
 	auto uninit_slist = uninit_gd->dimensions();
@@ -85,4 +85,4 @@ TEST(DATA, PlaceHolder)
 }
 
 
-#endif // DISABLE_DATA_TEST
+#endif // DISABLE_VARIABLE_TEST

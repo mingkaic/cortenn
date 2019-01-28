@@ -48,6 +48,7 @@ genrule(
         "generated/grader.hpp",
         "generated/grader.cpp",
         "generated/opmap.hpp",
+        "generated/convert.hpp",
         "generated/pyapi.cpp",
     ],
     tools = ["//pybinder:pyagen"],
@@ -67,6 +68,7 @@ cc_library(
         "//llo:generated/codes.hpp",
         "//llo:generated/grader.hpp",
         "//llo:generated/opmap.hpp",
+        "//llo:generated/convert.hpp",
     ],
     srcs = glob(["src/*.cpp"]) + [
         "//llo:generated/api.cpp",
@@ -76,7 +78,6 @@ cc_library(
     copts = ["-std=c++14"],
     deps = [
         "//opt:opt",
-        # "//coord:coord",
         "@com_github_mingkaic_tenncor//bwd:bwd",
         "@com_github_eigenteam_eigen//:eigen",
     ],

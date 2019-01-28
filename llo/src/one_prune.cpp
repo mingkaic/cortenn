@@ -5,6 +5,8 @@
 
 #include "llo/opt/one_prune.hpp"
 
+#include "llo/constant.hpp"
+
 #ifdef LLO_ONE_PRUNE_HPP
 
 namespace llo
@@ -18,8 +20,8 @@ ade::TensptrT one_prune_edit (ade::Opcode opcode, ade::ArgsT args)
 	std::vector<bool> is_one(n, false);
 	for (size_t i = 0; i < n; ++i)
 	{
-		auto var = dynamic_cast<llo::iVariable*>(args[i].get_tensor().get());
-		is_one[i] = nullptr != var && "1" == var->get_label();
+		auto cst = dynamic_cast<llo::Constant*>(args[i].get_tensor().get());
+		is_one[i] = nullptr != cst && 1 == cst->at<double>(0);
 		has_one = has_one || is_one[i];
 	}
 	if (has_one)
@@ -29,13 +31,13 @@ ade::TensptrT one_prune_edit (ade::Opcode opcode, ade::ArgsT args)
 			case age::ABS:
 			case age::SQRT:
 			case age::ROUND:
-				return ade::TensptrT(llo::get_scalar(1, args[0].shape()));
+				return ade::TensptrT(llo::Constant::get(1, args[0].shape()));
 			case age::LOG:
-				return ade::TensptrT(llo::get_scalar(0, args[0].shape()));
+				return ade::TensptrT(llo::Constant::get(0, args[0].shape()));
 			case age::POW:
 				if (is_one[0])
 				{
-					return ade::TensptrT(llo::get_scalar(1, args[0].shape()));
+					return ade::TensptrT(llo::Constant::get(1, args[0].shape()));
 				}
 				// else if is_one[1]
 				if (ade::identity == args[0].get_coorder())
@@ -56,7 +58,7 @@ ade::TensptrT one_prune_edit (ade::Opcode opcode, ade::ArgsT args)
 				}
 				if (filtered.empty())
 				{
-					return ade::TensptrT(llo::get_scalar(1, args[0].shape()));
+					return ade::TensptrT(llo::Constant::get(1, args[0].shape()));
 				}
 				return ade::TensptrT(ade::Functor::get(
 					ade::Opcode{"PROD", age::PROD}, filtered));

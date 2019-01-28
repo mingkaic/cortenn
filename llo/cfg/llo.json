@@ -1,11 +1,12 @@
 {
     "includes": {
         "grader.hpp": [
-            "\"llo/data.hpp\"",
+            "\"llo/constant.hpp\"",
+            "\"llo/variable.hpp\"",
             "\"llo/helper.hpp\""
         ],
         "api.cpp": [
-            "\"llo/data.hpp\"",
+            "\"llo/variable.hpp\"",
             "\"llo/helper.hpp\""
         ],
         "opmap.hpp": ["\"llo/operator.hpp\""]
@@ -26,7 +27,7 @@
         "sum": "SUM",
         "data_out": "llo::TensorT<T>&",
         "data_in": "llo::DataArgsT<T>&",
-        "scalarize": "llo::get_scalar(scalar,shape)"
+        "scalarize": "ade::LeafptrT(llo::Variable<T>::get(scalar,shape))"
     },
     "opcodes": {
         "ABS": {
@@ -35,7 +36,7 @@
         },
         "NEG": {
             "operation": "llo::neg(out,in[0])",
-            "derivative": "llo::mtens_mul(neg(llo::get_scalar(1,args[0]->shape())),bwd)"
+            "derivative": "llo::mtens_mul(neg(ade::TensptrT(llo::Constant::get(1,args[0]->shape()))),bwd)"
         },
         "SIN": {
             "operation": "llo::sin(out,in[0])",
@@ -47,7 +48,7 @@
         },
         "TAN": {
             "operation": "llo::tan(out,in[0])",
-            "derivative": "llo::mtens_mul(div(llo::get_scalar(1,args[0]->shape()),pow(cos(args[0]),llo::get_scalar(2,args[0]->shape()))),bwd)"
+            "derivative": "llo::mtens_mul(div(ade::TensptrT(llo::Constant::get(1,args[0]->shape())),pow(cos(args[0]),ade::TensptrT(llo::Constant::get(2,args[0]->shape())))),bwd)"
         },
         "EXP": {
             "operation": "llo::exp(out,in[0])",
@@ -55,27 +56,27 @@
         },
         "LOG": {
             "operation": "llo::log(out,in[0])",
-            "derivative": "llo::mtens_mul(div(llo::get_scalar(1,args[0]->shape()),args[0]),bwd)"
+            "derivative": "llo::mtens_mul(div(ade::TensptrT(llo::Constant::get(1,args[0]->shape())),args[0]),bwd)"
         },
         "SQRT": {
             "operation": "llo::sqrt(out,in[0])",
-            "derivative": "llo::mtens_mul(div(llo::get_scalar(1,args[0]->shape()),mul(llo::get_scalar(2,args[0]->shape()),sqrt(args[0]))),bwd)"
+            "derivative": "llo::mtens_mul(div(ade::TensptrT(llo::Constant::get(1,args[0]->shape())),mul(ade::TensptrT(llo::Constant::get(2,args[0]->shape())),sqrt(args[0]))),bwd)"
         },
         "ROUND": {
             "operation": "llo::round(out,in[0])",
-            "derivative": "llo::mtens_mul(llo::get_scalar(1,args[0]->shape()),bwd)"
+            "derivative": "llo::mtens_mul(ade::TensptrT(llo::Constant::get(1,args[0]->shape())),bwd)"
         },
         "POW": {
             "operation": "llo::pow(out,in[0],in[1])",
-            "derivative": "llo::mtens_mul(idx == 0?mul(args[1],pow(args[0],sub(args[1],llo::get_scalar(1,args[0]->shape())))) : mul(log(args[0]),pow(args[0],args[1])),bwd)"
+            "derivative": "llo::mtens_mul(idx == 0?mul(args[1],pow(args[0],sub(args[1],ade::TensptrT(llo::Constant::get(1,args[0]->shape()))))):mul(log(args[0]),pow(args[0],args[1])),bwd)"
         },
         "SUM": {
             "operation": "llo::add(out,in)",
-            "derivative": "mul(llo::get_scalar(1,args[0]->shape()),ade::TensptrT(ade::Functor::get(ade::Opcode{\"SUM\",SUM},{bwd})))"
+            "derivative": "mul(ade::TensptrT(llo::Constant::get(1,args[0]->shape())),ade::TensptrT(ade::Functor::get(ade::Opcode{\"SUM\",SUM},{bwd})))"
         },
         "SUB": {
             "operation": "llo::sub(out,in[0],in[1])",
-            "derivative": "llo::mtens_mul(idx == 0?llo::get_scalar(1,args[0]->shape()) : neg(llo::get_scalar(1,args[0]->shape())),bwd)"
+            "derivative": "llo::mtens_mul(idx == 0?ade::TensptrT(llo::Constant::get(1,args[0]->shape())):ade::TensptrT(llo::Constant::get(-1,args[0]->shape())),bwd)"
         },
         "PROD": {
             "operation": "llo::mul(out,in)",
@@ -83,7 +84,7 @@
         },
         "DIV": {
             "operation": "llo::div(out,in[0],in[1])",
-            "derivative": "llo::mtens_mul(idx == 0?div(llo::get_scalar(1,args[0]->shape()),args[1]) : div(div(neg(args[0]),args[1]),args[1]),bwd)"
+            "derivative": "llo::mtens_mul(idx == 0?div(ade::TensptrT(llo::Constant::get(1,args[0]->shape())),args[1]):div(div(neg(args[0]),args[1]),args[1]),bwd)"
         },
         "MIN": {
             "operation": "llo::min(out,in)",
@@ -95,27 +96,27 @@
         },
         "EQ": {
             "operation": "llo::eq(out,in[0],in[1])",
-            "derivative": "llo::mtens_mul(llo::get_scalar(0,args[0]->shape()),bwd)"
+            "derivative": "llo::mtens_mul(ade::TensptrT(llo::Constant::get(0,args[0]->shape())),bwd)"
         },
         "NEQ": {
             "operation": "llo::neq(out,in[0],in[1])",
-            "derivative": "llo::mtens_mul(llo::get_scalar(0,args[0]->shape()),bwd)"
+            "derivative": "llo::mtens_mul(ade::TensptrT(llo::Constant::get(0,args[0]->shape())),bwd)"
         },
         "LT": {
             "operation": "llo::lt(out,in[0],in[1])",
-            "derivative": "llo::mtens_mul(llo::get_scalar(0,args[0]->shape()),bwd)"
+            "derivative": "llo::mtens_mul(ade::TensptrT(llo::Constant::get(0,args[0]->shape())),bwd)"
         },
         "GT": {
             "operation": "llo::gt(out,in[0],in[1])",
-            "derivative": "llo::mtens_mul(llo::get_scalar(0,args[0]->shape()),bwd)"
+            "derivative": "llo::mtens_mul(ade::TensptrT(llo::Constant::get(0,args[0]->shape())),bwd)"
         },
         "RAND_UNIF": {
             "operation": "llo::rand_uniform(out,in[0],in[1])",
-            "derivative": "llo::mtens_mul(llo::get_scalar(0,args[0]->shape()),bwd)"
+            "derivative": "llo::mtens_mul(ade::TensptrT(llo::Constant::get(0,args[0]->shape())),bwd)"
         },
         "RAND_NORM": {
             "operation": "llo::rand_normal(out,in[0],in[1])",
-            "derivative": "llo::mtens_mul(llo::get_scalar(0,args[0]->shape()),bwd)"
+            "derivative": "llo::mtens_mul(ade::TensptrT(llo::Constant::get(0,args[0]->shape())),bwd)"
         },
         "MATMUL": {
             "operation": "llo::fast_matmul(out,in[0],in[1])",
@@ -333,7 +334,7 @@
                 "dtype": "ade::TensptrT",
                 "name": "arg"
             }],
-            "out": "llo::get_scalar(arg->shape().n_elems(), ade::Shape(), \"n_elems\")"
+            "out": "ade::TensptrT(llo::Variable<ade::NElemT>::get(arg->shape().n_elems(), ade::Shape(), \"n_elems\"))"
         },
         {
             "name": "n_dims",
@@ -344,7 +345,7 @@
                 "dtype": "uint8_t",
                 "name": "rank"
             }],
-            "out": "llo::get_scalar(arg->shape().at(rank), ade::Shape(), \"n_dims\")"
+            "out": "ade::TensptrT(llo::Variable<ade::DimT>::get(arg->shape().at(rank), ade::Shape(), \"n_dims\"))"
         },
         {
             "name": "sum",

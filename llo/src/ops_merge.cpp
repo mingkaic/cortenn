@@ -1,10 +1,8 @@
 #include <set>
 
-// #include "coord/coord.hpp"
-
 #include "llo/opt/ops_merge.hpp"
 
-#ifdef LLO_OPMERGE_HPP
+#ifdef LLO_OPS_MERGE_HPP
 
 namespace llo
 {

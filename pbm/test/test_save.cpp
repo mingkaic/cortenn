@@ -96,9 +96,9 @@ TEST(SAVE, SaveGraph)
 	}
 
 	pbm::GraphSaver saver(
-		[](const char* in, size_t nelems, size_t typecode)
+		[](bool& is_const, ade::iLeaf* leaf)
 		{
-			return std::string(nelems, 0);
+			return std::string(leaf->shape().n_elems(), 0);
 		});
 	for (auto& root : roots)
 	{

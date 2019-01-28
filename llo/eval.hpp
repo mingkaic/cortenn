@@ -34,7 +34,7 @@ struct Evaluator final : public ade::iTraveler
 		age::_GENERATED_DTYPE intype =
 			(age::_GENERATED_DTYPE) leaf->type_code();
 		const ade::Shape& shape = leaf->shape();
-		out_ = raw_to_matrix<T>(ptr, intype, shape);
+		out_ = raw_to_tensorptr<T>(ptr, intype, shape);
 	}
 
 	/// Implementation of iTraveler

@@ -8,17 +8,19 @@
 
 #include "llo/test/common.hpp"
 
-#include "llo/generated/api.hpp"
-
 #include "llo/opt/zero_prune.hpp"
 #include "llo/opt/ops_merge.hpp"
+
+#include "llo/generated/api.hpp"
+
+#include "llo/constant.hpp"
 
 
 TEST(OPTIMIZATION, zero_prune_singles)
 {
-	auto zero = llo::get_scalar(0, ade::Shape());
-	auto one = llo::get_scalar(1, ade::Shape());
-	auto two = llo::get_scalar(2, ade::Shape());
+	ade::TensptrT zero(llo::Constant::get(0, ade::Shape()));
+	ade::TensptrT one(llo::Constant::get(1, ade::Shape()));
+	ade::TensptrT two(llo::Constant::get(2, ade::Shape()));
 
 	auto got0 = llo::zero_prune(age::sin(zero));
 	EXPECT_STREQ("0([1\\1\\1\\1\\1\\1\\1\\1])", got0->to_string().c_str());
@@ -70,9 +72,9 @@ TEST(OPTIMIZATION, zero_prune_singles)
 
 TEST(OPTIMIZATION, zero_prune_graph)
 {
-	auto zero = llo::get_scalar(0, ade::Shape());
-	auto one = llo::get_scalar(1, ade::Shape());
-	auto two = llo::get_scalar(2, ade::Shape());
+	ade::TensptrT zero(llo::Constant::get(0, ade::Shape()));
+	ade::TensptrT one(llo::Constant::get(1, ade::Shape()));
+	ade::TensptrT two(llo::Constant::get(2, ade::Shape()));
 
 	auto got1 = age::cos(zero);
 	auto got3 = age::sum({one, zero, two});
@@ -121,9 +123,9 @@ TEST(OPTIMIZATION, zero_prune_graph)
 
 TEST(OPTIMIZATION, ops_merge_singles)
 {
-	auto one = llo::get_scalar(1, ade::Shape());
-	auto two = llo::get_scalar(2, ade::Shape());
-	auto three = llo::get_scalar(3, ade::Shape());
+	ade::TensptrT one(llo::Constant::get(1, ade::Shape()));
+	ade::TensptrT two(llo::Constant::get(2, ade::Shape()));
+	ade::TensptrT three(llo::Constant::get(3, ade::Shape()));
 
 	// merge same consecutive nnary
 	auto got1123 = llo::ops_merge(age::sum({one, age::add(one, two), three}));
@@ -181,7 +183,7 @@ TEST(OPTIMIZATION, ops_merge_singles)
 		EXPECT_EQ(0, compare_str.size()) << compare_str;
 	}
 
-	auto zero = llo::get_variable<double>(ade::Shape({3, 4}), "0");
+	ade::TensptrT zero(llo::Variable<double>::get(ade::Shape({3, 4}), "0"));
 	// merge reduced argument
 	auto got2103 = llo::ops_merge(age::sum({two, one, age::reduce_sum(zero), three}));
 	{
@@ -197,7 +199,7 @@ TEST(OPTIMIZATION, ops_merge_singles)
 	}
 
 	// merge reduced sum
-	auto shaped_one = llo::get_scalar<double>(1, ade::Shape({3, 4}));
+	ade::TensptrT shaped_one(llo::Constant::get(1, ade::Shape({3, 4})));
 	auto got10 = llo::ops_merge(age::reduce_sum(age::sum({shaped_one, zero})));
 	{
 		std::stringstream ss;
@@ -249,10 +251,10 @@ TEST(OPTIMIZATION, ops_merge_singles)
 
 TEST(OPTIMIZATION, ops_merge_graph)
 {
-	auto zero = llo::get_variable<double>(ade::Shape({3, 4}), "0");
-	auto one = llo::get_scalar(1, ade::Shape());
-	auto two = llo::get_scalar(2, ade::Shape());
-	auto three = llo::get_scalar(3, ade::Shape());
+	ade::TensptrT zero(llo::Variable<double>::get(ade::Shape({3, 4}), "0"));
+	ade::TensptrT one(llo::Constant::get(1, ade::Shape()));
+	ade::TensptrT two(llo::Constant::get(2, ade::Shape()));
+	ade::TensptrT three(llo::Constant::get(3, ade::Shape()));
 
 	auto got1 = age::cos(three);
 	auto got3 = age::prod({one, three, two});

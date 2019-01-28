@@ -14,13 +14,30 @@
 
 #include "Eigen/Core"
 
-#include "llo/data.hpp"
+#include "llo/variable.hpp"
 
 #ifndef LLO_OPERATOR_HPP
 #define LLO_OPERATOR_HPP
 
 namespace llo
 {
+
+/// Data to pass around when evaluating
+template <typename T>
+struct DataArg
+{
+	TensptrT<T> data_;
+
+	/// Coordinate mapper
+	ade::CoordptrT mapper_;
+
+	/// True if the coordinate mapper accepts input coordinates,
+	/// False if it accepts output coordinates
+	bool push_;
+};
+
+template <typename T>
+using DataArgsT = std::vector<DataArg<T>>;
 
 /// RNG engine used
 using EngineT = std::default_random_engine;

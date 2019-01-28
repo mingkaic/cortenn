@@ -76,12 +76,12 @@ private:
 	void save_data (cortenn::Source& out, ade::iLeaf* in)
 	{
 		const ade::Shape& shape = in->shape();
-		char* data = (char*) in->data();
-		size_t nelems = shape.n_elems();
 		size_t tcode = in->type_code();
+		bool is_const = false;
 		out.set_shape(std::string(shape.begin(), shape.end()));
-		out.set_data(saver_(data, nelems, tcode));
+		out.set_data(saver_(is_const, in));
 		out.set_typecode(tcode);
+		out.set_is_const(is_const);
 	}
 
 	/// Data serialization functor

@@ -8,7 +8,7 @@
 
 #include "opt/graph_edit.hpp"
 
-#include "llo/data.hpp"
+#include "llo/variable.hpp"
 
 #ifndef LLO_ZERO_PRUNE_HPP
 #define LLO_ZERO_PRUNE_HPP

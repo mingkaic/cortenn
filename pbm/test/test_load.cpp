@@ -50,7 +50,7 @@ TEST(LOAD, LoadGraph)
 	pbm::GraphInfo graphinfo;
 	pbm::load_graph(graphinfo, graph,
 		[](const char* pb, ade::Shape shape,
-			size_t typecode, std::string label)
+			size_t typecode, std::string label, bool is_const)
 		{
 			return ade::TensptrT(new MockTensor(shape));
 		});

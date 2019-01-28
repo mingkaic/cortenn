@@ -1,5 +1,6 @@
 #include "ade/ileaf.hpp"
 
+#include "llo/constant.hpp"
 #include "llo/serialize.hpp"
 
 #ifdef LLO_SERIALIZE_HPP
@@ -18,9 +19,13 @@ bool is_big_endian(void)
 	return twob.bytes[0] == 0;
 }
 
-std::string serialize (const char* in, size_t nelems, size_t typecode)
+std::string serialize (bool& is_const, ade::iLeaf* leaf)
 {
-	size_t nbytes = age::type_size((age::_GENERATED_DTYPE) typecode);
+	is_const = nullptr != dynamic_cast<llo::Constant*>(leaf);
+
+	char* data = (char*) leaf->data();
+	size_t nelems = leaf->shape().n_elems();
+	size_t nbytes = age::type_size((age::_GENERATED_DTYPE) leaf->type_code());
 	if (is_big_endian() && nbytes > 1)
 	{
 		size_t totalbytes = nelems * nbytes;
@@ -29,48 +34,48 @@ std::string serialize (const char* in, size_t nelems, size_t typecode)
 		{
 			size_t elemi = i / nbytes;
 			size_t outi = (elemi + 1) * nbytes - (i % nbytes);
-			out[outi] = in[i];
+			out[outi] = data[i];
 		}
 		return out;
 	}
-	return std::string(in, nelems * nbytes);
+	return std::string(data, nelems * nbytes);
 }
 
-inline ade::TensptrT variable_from_code (const char* cptr,
+inline ade::iLeaf* variable_from_code (const char* cptr,
 	age::_GENERATED_DTYPE dtype, ade::Shape shape, std::string label)
 {
 	switch (dtype)
 	{
 		case age::DOUBLE:
-			return ade::TensptrT(new Variable<double>(
-				(double*) cptr, shape, label));
+			return Variable<double>::get(
+				(double*) cptr, shape, label);
 		case age::FLOAT:
-			return ade::TensptrT(new Variable<float>(
-				(float*) cptr, shape, label));
+			return Variable<float>::get(
+				(float*) cptr, shape, label);
 		case age::INT8:
-			return ade::TensptrT(new Variable<int8_t>(
-				(int8_t*) cptr, shape, label));
+			return Variable<int8_t>::get(
+				(int8_t*) cptr, shape, label);
 		case age::INT16:
-			return ade::TensptrT(new Variable<int16_t>(
-				(int16_t*) cptr, shape, label));
+			return Variable<int16_t>::get(
+				(int16_t*) cptr, shape, label);
 		case age::INT32:
-			return ade::TensptrT(new Variable<int32_t>(
-				(int32_t*) cptr, shape, label));
+			return Variable<int32_t>::get(
+				(int32_t*) cptr, shape, label);
 		case age::INT64:
-			return ade::TensptrT(new Variable<int64_t>(
-				(int64_t*) cptr, shape, label));
+			return Variable<int64_t>::get(
+				(int64_t*) cptr, shape, label);
 		case age::UINT8:
-			return ade::TensptrT(new Variable<uint8_t>(
-				(uint8_t*) cptr, shape, label));
+			return Variable<uint8_t>::get(
+				(uint8_t*) cptr, shape, label);
 		case age::UINT16:
-			return ade::TensptrT(new Variable<uint16_t>(
-				(uint16_t*) cptr, shape, label));
+			return Variable<uint16_t>::get(
+				(uint16_t*) cptr, shape, label);
 		case age::UINT32:
-			return ade::TensptrT(new Variable<uint32_t>(
-				(uint32_t*) cptr, shape, label));
+			return Variable<uint32_t>::get(
+				(uint32_t*) cptr, shape, label);
 		case age::UINT64:
-			return ade::TensptrT(new Variable<uint64_t>(
-				(uint64_t*) cptr, shape, label));
+			return Variable<uint64_t>::get(
+				(uint64_t*) cptr, shape, label);
 		default:
 			logs::fatalf("unknown dtype \"%s\"",
 				age::name_type(dtype).c_str());
@@ -78,7 +83,7 @@ inline ade::TensptrT variable_from_code (const char* cptr,
 }
 
 ade::TensptrT deserialize (const char* pb, ade::Shape shape,
-	size_t typecode, std::string label)
+	size_t typecode, std::string label, bool is_const)
 {
 	age::_GENERATED_DTYPE gencode = (age::_GENERATED_DTYPE) typecode;
 	size_t nbytes = age::type_size(gencode);
@@ -92,9 +97,13 @@ ade::TensptrT deserialize (const char* pb, ade::Shape shape,
 			size_t outi = (elemi + 1) * nbytes - (i % nbytes);
 			out[outi] = pb[i];
 		}
-		return variable_from_code(out.c_str(), gencode, shape, label);
+		return ade::TensptrT(is_const ?
+			llo::Constant::get(out.c_str(), gencode, shape) :
+			variable_from_code(out.c_str(), gencode, shape, label));
 	}
-	return variable_from_code(pb, gencode, shape, label);
+	return ade::TensptrT(is_const ?
+		llo::Constant::get(pb, gencode, shape) :
+		variable_from_code(pb, gencode, shape, label));
 }
 
 }

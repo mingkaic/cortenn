@@ -1,4 +1,4 @@
-#include "llo/data.hpp"
+#include "llo/variable.hpp"
 
 #ifndef LLO_PLUGIN_OPT_HPP
 #define LLO_PLUGIN_OPT_HPP

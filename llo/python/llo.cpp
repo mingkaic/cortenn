@@ -6,7 +6,7 @@
 
 #include "ade/ade.hpp"
 
-#include "llo/data.hpp"
+#include "llo/variable.hpp"
 #include "llo/eval.hpp"
 #include "llo/opt/derive.hpp"
 
@@ -120,12 +120,13 @@ PYBIND11_MODULE(llo, m)
 		py::arg("dtype") = py::dtype::of<double>());
 
 	// ==== variable ====
-	py::class_<llo::iVariable,llo::iVarptrT> variable(m, "Variable", tensor);
+	py::class_<llo::iVariable,std::shared_ptr<llo::iVariable>> variable(
+		m, "Variable", tensor);
 
 	py::implicitly_convertible<ade::iTensor,llo::iVariable>();
 
 	m.def("variable",
-	[](py::array data, std::string label) -> llo::iVarptrT
+	[](py::array data, std::string label) -> std::shared_ptr<llo::iVariable>
 	{
 		py::buffer_info info = data.request();
 		ade::Shape shape = pyllo::p2cshape(info.shape);
@@ -141,14 +142,18 @@ PYBIND11_MODULE(llo, m)
 					case 4: // float32
 					{
 						float* dptr = static_cast<float*>(info.ptr);
-						return llo::get_variable(std::vector<float>(dptr, dptr + n),
-							shape, label);
+						return std::shared_ptr<llo::iVariable>(
+							llo::Variable<float>::get(
+								std::vector<float>(dptr, dptr + n),
+								shape, label));
 					}
 					case 8: // float64
 					{
 						double* dptr = static_cast<double*>(info.ptr);
-						return llo::get_variable(std::vector<double>(dptr, dptr + n),
-							shape, label);
+						return std::shared_ptr<llo::iVariable>(
+							llo::Variable<double>::get(
+								std::vector<double>(dptr, dptr + n),
+								shape, label));
 					}
 					default:
 						logs::fatalf("unsupported float type with %d bytes", tbytes);
@@ -160,26 +165,34 @@ PYBIND11_MODULE(llo, m)
 					case 1: // int8
 					{
 						int8_t* dptr = static_cast<int8_t*>(info.ptr);
-						return llo::get_variable(std::vector<int8_t>(dptr, dptr + n),
-							shape, label);
+						return std::shared_ptr<llo::iVariable>(
+							llo::Variable<int8_t>::get(
+								std::vector<int8_t>(dptr, dptr + n),
+								shape, label));
 					}
 					case 2: // int16
 					{
 						int16_t* dptr = static_cast<int16_t*>(info.ptr);
-						return llo::get_variable(std::vector<int16_t>(dptr, dptr + n),
-							shape, label);
+						return std::shared_ptr<llo::iVariable>(
+							llo::Variable<int16_t>::get(
+								std::vector<int16_t>(dptr, dptr + n),
+								shape, label));
 					}
 					case 4: // int32
 					{
 						int32_t* dptr = static_cast<int32_t*>(info.ptr);
-						return llo::get_variable(std::vector<int32_t>(dptr, dptr + n),
-							shape, label);
+						return std::shared_ptr<llo::iVariable>(
+							llo::Variable<int32_t>::get(
+								std::vector<int32_t>(dptr, dptr + n),
+								shape, label));
 					}
 					case 8: // int64
 					{
 						int64_t* dptr = static_cast<int64_t*>(info.ptr);
-						return llo::get_variable(std::vector<int64_t>(dptr, dptr + n),
-							shape, label);
+						return std::shared_ptr<llo::iVariable>(
+							llo::Variable<int64_t>::get(
+								std::vector<int64_t>(dptr, dptr + n),
+								shape, label));
 					}
 					default:
 						logs::fatalf("unsupported integer type with %d bytes", tbytes);

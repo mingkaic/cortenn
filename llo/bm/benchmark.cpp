@@ -57,7 +57,7 @@ static void NAME(benchmark::State& state)\
 		state.PauseTiming();\
 		ade::Shape shape = rand_shape(n);\
 		std::vector<double> data = random_data(shape.n_elems(), -35, 35);\
-		llo::VarptrT<double> var = llo::get_variable(data, shape, "var");\
+		llo::VarptrT<double> var(llo::Variable<double>::get(data, shape, "var"));\
 		ade::TensptrT out = FUNC(var);\
 		state.ResumeTiming();\
 		llo::eval<T>(out);\
@@ -76,7 +76,7 @@ static void NAME(benchmark::State& state)\
 		state.PauseTiming();\
 		ade::Shape shape = rand_shape(n);\
 		std::vector<double> data = random_data(shape.n_elems(), 0, 35);\
-		llo::VarptrT<double> var = llo::get_variable(data, shape, "var");\
+		llo::VarptrT<double> var(llo::Variable<double>::get(data, shape, "var"));\
 		ade::TensptrT out = FUNC(var);\
 		state.ResumeTiming();\
 		llo::eval<T>(out);\
@@ -123,8 +123,8 @@ static void NAME(benchmark::State& state)\
 		ade::Shape shape = rand_shape(n);\
 		std::vector<double> data = random_data(shape.n_elems(), 1, 4);\
 		std::vector<double> data2 = random_data(shape.n_elems(), 1, 4);\
-		llo::VarptrT<double> var = llo::get_variable(data, shape, "var");\
-		llo::VarptrT<double> var2 = llo::get_variable(data2, shape, "var2");\
+		llo::VarptrT<double> var(llo::Variable<double>::get(data, shape, "var"));\
+		llo::VarptrT<double> var2(llo::Variable<double>::get(data2, shape, "var2"));\
 		ade::TensptrT out = FUNC(var, var2);\
 		state.ResumeTiming();\
 		llo::eval<T>(out);\
@@ -177,8 +177,8 @@ static void BM_Matmul(benchmark::State& state)
 		ade::Shape rightshape({right_dim, common_dim});
 		std::vector<double> data = random_data(leftshape.n_elems(), -35, 35);
 		std::vector<double> data2 = random_data(rightshape.n_elems(), -35, 35);
-		llo::VarptrT<double> var = llo::get_variable(data, leftshape, "var");
-		llo::VarptrT<double> var2 = llo::get_variable(data2, rightshape, "var2");
+		llo::VarptrT<double> var(llo::Variable<double>::get(data, leftshape, "var"));
+		llo::VarptrT<double> var2(llo::Variable<double>::get(data2, rightshape, "var2"));
 		ade::TensptrT out = age::fast_matmul(var, var2);
 		state.ResumeTiming();
 		llo::eval<T>(out);

@@ -1,7 +1,5 @@
 ''' Extension to generate Pybind11 API file '''
 
-import os
-
 import age.templates.template as template
 
 FILENAME = 'pyapi'

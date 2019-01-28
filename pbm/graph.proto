@@ -9,6 +9,7 @@ message Source
 	bytes shape = 1;
     bytes data = 2;
     uint32 typecode = 3;
+    bool is_const = 4;
 }
 
 message NodeArg

@@ -131,7 +131,7 @@ static void unary_generic (UnaryOpF op,
 		56, 50, 19, 13, 12, 10, 31, 40, 60, 54, 6, 83
 	};
 
-	ade::TensptrT src = llo::get_variable<double>(data, shape);
+	ade::TensptrT src(llo::Variable<double>::get(data, shape));
 	ade::TensptrT dest = op(src);
 
 	llo::TensptrT<double> out = llo::eval<double>(dest);
@@ -158,7 +158,7 @@ static void unary_elementary (UnaryOpF op,
 		82, 52, 47, 16, 7, 85, 37, 2, 8, 52, 62, 43
 	};
 
-	ade::TensptrT src = llo::get_variable<double>(data, shape);
+	ade::TensptrT src(llo::Variable<double>::get(data, shape));
 	ade::TensptrT dest = op(src);
 
 	llo::TensptrT<double> out = llo::eval<double>(dest);
@@ -206,8 +206,8 @@ static void binary_elementary (BinaryOpF op,
 		0.0504231590, 0.8494357051, 0.0908431573, 0.1567913571, 0.1211327459, 0.5269402648
 	};
 
-	ade::TensptrT src = llo::get_variable<double>(data, shape);
-	ade::TensptrT src2 = llo::get_variable<double>(data2, shape);
+	ade::TensptrT src(llo::Variable<double>::get(data, shape));
+	ade::TensptrT src2(llo::Variable<double>::get(data2, shape));
 	ade::TensptrT dest = op(src, src2);
 
 	llo::TensptrT<double> out = llo::eval<double>(dest);
@@ -276,8 +276,8 @@ static void binary_elementary_int (BinaryOpF op,
 		1, 3, 1, 3, 1, 0, 2, 1, 2, 2, 0, 1
 	};
 
-	ade::TensptrT src = llo::get_variable<int32_t>(data, shape);
-	ade::TensptrT src2 = llo::get_variable<int32_t>(data2, shape);
+	ade::TensptrT src(llo::Variable<int32_t>::get(data, shape));
+	ade::TensptrT src2(llo::Variable<int32_t>::get(data2, shape));
 	ade::TensptrT dest = op(src, src2);
 
 	llo::TensptrT<int32_t> out = llo::eval<int32_t>(dest);
@@ -418,7 +418,7 @@ TEST(API, Flip)
 		7, 22, 56, 50, 19, 13, 12, 10, 31, 40
 	};
 
-	ade::TensptrT src = llo::get_variable<double>(data, shape);
+	ade::TensptrT src(llo::Variable<double>::get(data, shape));
 	ade::TensptrT dest = age::flip(src, dim);
 
 	ade::TensptrT bad = age::flip(src, baddim);
@@ -733,7 +733,7 @@ TEST(API, Permute)
 		75, 64, 30, 17, 90, 79, 21, 54, 6, 7, 69, 53
 	};
 
-	ade::TensptrT src = llo::get_variable<double>(data, shape);
+	ade::TensptrT src(llo::Variable<double>::get(data, shape));
 	ade::TensptrT dest = age::permute(src, pidx);
 
 	llo::TensptrT<double> out = llo::eval<double>(dest);
@@ -777,7 +777,7 @@ TEST(API, Extend)
 		51, 42, 9, 43, 37, 36, 65, 95, 10, 33
 	};
 
-	ade::TensptrT src = llo::get_variable<double>(data, shape);
+	ade::TensptrT src(llo::Variable<double>::get(data, shape));
 	ade::TensptrT dest = age::extend(src, slist.size(), ext);
 
 	llo::TensptrT<double> out = llo::eval<double>(dest);
@@ -841,8 +841,8 @@ TEST(API, Matmul)
 		23+77, 23+77, 23+77, 23+77,
 	};
 
-	ade::TensptrT a = llo::get_variable<int32_t>(data, ashape);
-	ade::TensptrT b = llo::get_variable<int32_t>(data2, bshape);
+	ade::TensptrT a(llo::Variable<int32_t>::get(data, ashape));
+	ade::TensptrT b(llo::Variable<int32_t>::get(data2, bshape));
 	ade::TensptrT dest = age::fast_matmul(a, b);
 
 	llo::TensptrT<int32_t> out = llo::eval<int32_t>(dest);
@@ -858,7 +858,7 @@ TEST(API, Matmul)
 	MatVecT ddc = create_2d(out);
 	EXPECT_TRUE(freivald(dda, ddb, ddc));
 
-	ade::TensptrT c = llo::get_variable<int32_t>(data3, cshape);
+	ade::TensptrT c(llo::Variable<int32_t>::get(data3, cshape));
 	ade::TensptrT dest2 = age::fast_matmul(c, c);
 	ade::TensptrT gsame = llo::derive(dest2, c.get());
 	llo::TensptrT<int32_t> gout = llo::eval<int32_t>(gsame);
@@ -949,8 +949,8 @@ TEST(API, Convolution)
 		42,44,46,
 	};
 
-	ade::TensptrT img = llo::get_variable<double>(data, shape);
-	ade::TensptrT kernel = llo::get_variable<double>(data2, kshape);
+	ade::TensptrT img(llo::Variable<double>::get(data, shape));
+	ade::TensptrT kernel(llo::Variable<double>::get(data2, kshape));
 	ade::TensptrT dest = age::convolution(img, kernel);
 
 	llo::TensptrT<double> out = llo::eval<double>(dest);
@@ -994,8 +994,8 @@ TEST(API, RandUniform)
 	double hi = 3.2234;
 	double lo = 0.2547977589;
 
-	ade::TensptrT src = llo::get_variable<double>({lo}, ade::Shape());
-	ade::TensptrT src2 = llo::get_variable<double>({hi}, ade::Shape());
+	ade::TensptrT src(llo::Variable<double>::get(lo, ade::Shape()));
+	ade::TensptrT src2(llo::Variable<double>::get(hi, ade::Shape()));
 	ade::TensptrT dest(ade::Functor::get(ade::Opcode{"RAND_UNIF",age::RAND_UNIF}, {
 		ade::extend_map(src, 0, slist),
 		ade::extend_map(src2, 0, slist)
@@ -1034,8 +1034,8 @@ TEST(API, RandNormal)
 	double expected_mean = 3.2234;
 	double stdev = 1.2547977589;
 
-	ade::TensptrT src = llo::get_variable<double>({expected_mean}, ade::Shape());
-	ade::TensptrT src2 = llo::get_variable<double>({stdev}, ade::Shape());
+	ade::TensptrT src(llo::Variable<double>::get(expected_mean, ade::Shape()));
+	ade::TensptrT src2(llo::Variable<double>::get(stdev, ade::Shape()));
 	ade::TensptrT dest(ade::Functor::get(ade::Opcode{"RAND_NORM",age::RAND_NORM}, {
 		ade::extend_map(src, 0, slist),
 		ade::extend_map(src2, 0, slist)

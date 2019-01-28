@@ -22,11 +22,11 @@ namespace pbm
 using TensT = std::vector<ade::TensptrT>;
 
 /// Data serialization functor
-using DataSaverT = std::function<std::string(const char*,size_t,size_t)>;
+using DataSaverT = std::function<std::string(bool&,ade::iLeaf*)>;
 
 /// Data deserialization functor
 using DataLoaderT = std::function<ade::TensptrT(const char*,ade::Shape,\
-	size_t,std::string)>;
+	size_t,std::string,bool)>;
 
 /// String list type used for paths
 using StringsT = std::list<std::string>;

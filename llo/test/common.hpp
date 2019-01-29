@@ -14,4 +14,5 @@
 
 #define EXPECT_FATAL(EVENT, MSG) try { EVENT; FAIL() << \
 	"did not expect " << #EVENT << " to succeed"; } \
-	catch (std::runtime_error& e) { EXPECT_STREQ(MSG, e.what()); }
+	catch (std::runtime_error& e) { EXPECT_STREQ(MSG, e.what()); }\
+	catch (std::exception& e) { FAIL() << "unexpected throw " << e.what(); }

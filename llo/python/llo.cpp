@@ -6,9 +6,11 @@
 
 #include "ade/ade.hpp"
 
+#include "llo/opt/derive.hpp"
+
+#include "llo/constant.hpp"
 #include "llo/variable.hpp"
 #include "llo/eval.hpp"
-#include "llo/opt/derive.hpp"
 
 namespace py = pybind11;
 

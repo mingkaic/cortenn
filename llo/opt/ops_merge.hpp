@@ -10,7 +10,7 @@
 namespace llo
 {
 
-static const std::set<age::_GENERATED_OPCODE> nnary = {
+static const std::set<age::_GENERATED_OPCODE> nnary_codes = {
 	age::SUM,
 	age::PROD,
 	age::MIN,

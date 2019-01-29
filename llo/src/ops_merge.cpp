@@ -33,7 +33,7 @@ static bool is_bijective (ade::CoordptrT coorder)
 
 ade::TensptrT ops_merge_edit (ade::Opcode opcode, ade::ArgsT args)
 {
-	if (nnary.end() != nnary.find((age::_GENERATED_OPCODE) opcode.code_))
+	if (nnary_codes.end() != nnary_codes.find((age::_GENERATED_OPCODE) opcode.code_))
 	{
 		bool merged = false;
 		ade::ArgsT newchildren;
@@ -97,7 +97,7 @@ ade::TensptrT ops_merge_edit (ade::Opcode opcode, ade::ArgsT args)
 				merged = true;
 			}
 			else if (arg_children.size() == 1 &&
-				nnary.end() != nnary.find(arg_op) &&
+				nnary_codes.end() != nnary_codes.find(arg_op) &&
 				arg_children[0].get_coorder()->is_bijective())
 			{
 				auto child = arg_children[0];

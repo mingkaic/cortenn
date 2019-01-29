@@ -25,8 +25,8 @@ ade::TensptrT const_merge_edit (ade::Opcode opcode, ade::ArgsT args)
 		return ade::TensptrT(Constant::get(
 			(char*) tens->data(), age::DOUBLE, temp->shape()));
 	}
-	else if (nnary.find((age::_GENERATED_OPCODE) opcode.code_) != nnary.end() &&
-		cargs.size() > 2)
+	else if (nnary_codes.find((age::_GENERATED_OPCODE)
+		opcode.code_) != nnary_codes.end() && cargs.size() > 2)
 	{
 		ade::TensptrT temp(ade::Functor::get(opcode, args));
 		auto tens = llo::eval<double>(temp);

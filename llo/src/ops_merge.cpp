@@ -1,19 +1,9 @@
-#include <set>
-
 #include "llo/opt/ops_merge.hpp"
 
 #ifdef LLO_OPS_MERGE_HPP
 
 namespace llo
 {
-
-// todo: make bool array once generator expresses number of OPCODEs
-static const std::set<age::_GENERATED_OPCODE> nnary = {
-	age::SUM,
-	age::PROD,
-	age::MIN,
-	age::MAX,
-};
 
 static bool is_identity (ade::CoordptrT coorder)
 {

@@ -1,3 +1,5 @@
+#include <set>
+
 #include "opt/graph_edit.hpp"
 
 #include "llo/generated/codes.hpp"
@@ -7,6 +9,13 @@
 
 namespace llo
 {
+
+static const std::set<age::_GENERATED_OPCODE> nnary = {
+	age::SUM,
+	age::PROD,
+	age::MIN,
+	age::MAX,
+};
 
 ade::TensptrT ops_merge_edit (ade::Opcode opcode, ade::ArgsT args);
 

@@ -2,11 +2,10 @@
     "includes": {
         "grader.hpp": [
             "\"llo/constant.hpp\"",
-            "\"llo/variable.hpp\"",
             "\"llo/helper.hpp\""
         ],
         "api.cpp": [
-            "\"llo/variable.hpp\"",
+            "\"llo/constant.hpp\"",
             "\"llo/helper.hpp\""
         ],
         "opmap.hpp": ["\"llo/operator.hpp\""]
@@ -27,7 +26,7 @@
         "sum": "SUM",
         "data_out": "llo::TensorT<T>&",
         "data_in": "llo::DataArgsT<T>&",
-        "scalarize": "ade::LeafptrT(llo::Variable<T>::get(scalar,shape))"
+        "scalarize": "ade::LeafptrT(llo::Constant::get(scalar,shape))"
     },
     "opcodes": {
         "ABS": {
@@ -334,7 +333,7 @@
                 "dtype": "ade::TensptrT",
                 "name": "arg"
             }],
-            "out": "ade::TensptrT(llo::Variable<ade::NElemT>::get(arg->shape().n_elems(), ade::Shape(), \"n_elems\"))"
+            "out": "ade::TensptrT(llo::Constant::get(arg->shape().n_elems(), ade::Shape()))"
         },
         {
             "name": "n_dims",
@@ -345,7 +344,7 @@
                 "dtype": "uint8_t",
                 "name": "rank"
             }],
-            "out": "ade::TensptrT(llo::Variable<ade::DimT>::get(arg->shape().at(rank), ade::Shape(), \"n_dims\"))"
+            "out": "ade::TensptrT(llo::Constant::get(arg->shape().at(rank), ade::Shape()))"
         },
         {
             "name": "sum",

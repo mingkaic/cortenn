@@ -25,14 +25,14 @@ struct Constant final : public ade::iLeaf
 		return new Constant(data, dtype, shape);
 	}
 
-    template <typename T>
-    static Constant* get (T scalar, ade::Shape shape)
-    {
-        size_t n = shape.n_elems();
-        T buffer[n];
-        std::fill(buffer, buffer + n, scalar);
-        return new Constant((char*) buffer, age::get_type<T>(), shape);
-    }
+	template <typename T>
+	static Constant* get (T scalar, ade::Shape shape)
+	{
+		size_t n = shape.n_elems();
+		T buffer[n];
+		std::fill(buffer, buffer + n, scalar);
+		return new Constant((char*) buffer, age::get_type<T>(), shape);
+	}
 
 	Constant (const Constant& other) = delete;
 
@@ -73,19 +73,19 @@ struct Constant final : public ade::iLeaf
 		return dtype_;
 	}
 
-    template <typename T>
-    T at (size_t i) const
-    {
-        std::vector<T> out;
-        age::type_convert(out, (void*) &data_[i * age::type_size(dtype_)],
-            dtype_, 1);
-        return out[0];
-    }
+	template <typename T>
+	T at (size_t i) const
+	{
+		std::vector<T> out;
+		age::type_convert(out, (void*) &data_[i * age::type_size(dtype_)],
+			dtype_, 1);
+		return out[0];
+	}
 
 private:
 	Constant (const char* data, age::_GENERATED_DTYPE dtype, ade::Shape shape) :
 		data_(data, shape.n_elems() * age::type_size(dtype)),
-        shape_(shape), dtype_(dtype) {}
+		shape_(shape), dtype_(dtype) {}
 
 	/// Smartpointer to a block of untyped data
 	std::string data_;

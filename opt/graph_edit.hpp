@@ -15,7 +15,7 @@ namespace opt
 {
 
 /// Edit functor type
-using EditFuncT = std::function<ade::TensptrT(ade::Opcode,ade::ArgsT)>;
+using EditFuncT = std::function<ade::TensptrT(bool&,ade::Opcode&,ade::ArgsT&)>;
 
 /// For some target extractable from iLeaf, prune graph such that reduces the
 /// length of branches to target from root

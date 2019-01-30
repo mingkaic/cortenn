@@ -12,8 +12,8 @@
 namespace llo
 {
 
-// todo: change this to target fixed value instead of looking at label
-ade::TensptrT one_prune_edit (ade::Opcode opcode, ade::ArgsT args)
+ade::TensptrT one_prune_edit (bool& is_optimized,
+	ade::Opcode& opcode, ade::ArgsT& args)
 {
 	size_t n = args.size();
 	bool has_one = false;
@@ -44,8 +44,10 @@ ade::TensptrT one_prune_edit (ade::Opcode opcode, ade::ArgsT args)
 				{
 					return args[0].get_tensor();
 				}
-				return ade::TensptrT(ade::Functor::get(
-					ade::Opcode{"SUM", age::SUM}, {args[0]}));
+				is_optimized = true;
+				opcode = ade::Opcode{"SUM", age::SUM};
+				args = {args[0]};
+				return nullptr;
 			case age::PROD:
 			{
 				ade::ArgsT filtered;
@@ -60,8 +62,10 @@ ade::TensptrT one_prune_edit (ade::Opcode opcode, ade::ArgsT args)
 				{
 					return ade::TensptrT(llo::Constant::get(1, args[0].shape()));
 				}
-				return ade::TensptrT(ade::Functor::get(
-					ade::Opcode{"PROD", age::PROD}, filtered));
+				is_optimized = true;
+				opcode = ade::Opcode{"PROD", age::PROD};
+				args = filtered;
+				return nullptr;
 			}
 			case age::DIV:
 				if (is_one[1])
@@ -70,8 +74,10 @@ ade::TensptrT one_prune_edit (ade::Opcode opcode, ade::ArgsT args)
 					{
 						return args[0].get_tensor();
 					}
-					return ade::TensptrT(ade::Functor::get(
-						ade::Opcode{"SUM", age::SUM}, {args[0]}));
+					is_optimized = true;
+					opcode = ade::Opcode{"SUM", age::SUM};
+					args = {args[0]};
+					return nullptr;
 				}
 				// else if is_one[0]
 				break;

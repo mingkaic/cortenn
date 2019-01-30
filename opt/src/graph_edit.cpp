@@ -54,13 +54,14 @@ ade::TensptrT graph_edit (ade::TensptrT root, EditFuncT edit)
 			}
 		}
 		auto opcode = func->get_opcode();
-		auto optimized = edit(opcode, children);
+		bool is_optimized = false;
+		auto optimized = edit(is_optimized, opcode, children);
 		// only record optimization if changed
 		if (nullptr != optimized)
 		{
 			opt_graph.emplace(func, optimized);
 		}
-		else if (changed)
+		else if (changed || is_optimized)
 		{
 			opt_graph.emplace(func, ade::TensptrT(
 				ade::Functor::get(opcode, children)));

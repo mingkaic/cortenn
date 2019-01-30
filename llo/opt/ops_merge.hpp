@@ -17,7 +17,8 @@ static const std::set<age::_GENERATED_OPCODE> nnary_codes = {
 	age::MAX,
 };
 
-ade::TensptrT ops_merge_edit (ade::Opcode opcode, ade::ArgsT args);
+ade::TensptrT ops_merge_edit (bool& is_optimized,
+	ade::Opcode& opcode, ade::ArgsT& args);
 
 ade::TensptrT ops_merge (ade::TensptrT root);
 

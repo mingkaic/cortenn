@@ -77,27 +77,30 @@ TEST(EDITOR, Prune)
 			ade::identity_map(binar2),
 		}));
 
-	opt::EditFuncT pruner = [&](ade::Opcode opcode, ade::ArgsT args)
-	{
-		if (opcode.code_ < 2) // killable
+	opt::EditFuncT pruner =
+		[&](bool& is_optimized, 
+			ade::Opcode& opcode, ade::ArgsT& args) -> ade::TensptrT
 		{
-			ade::ArgsT filtered;
-			for (auto arg : args)
+			if (opcode.code_ < 2) // killable
 			{
-				ade::iTensor* tens = arg.get_tensor().get();
-				if (tens != leaf.get() && tens != leaf2.get())
+				ade::ArgsT filtered;
+				for (auto arg : args)
 				{
-					filtered.push_back(arg);
+					ade::iTensor* tens = arg.get_tensor().get();
+					if (tens != leaf.get() && tens != leaf2.get())
+					{
+						filtered.push_back(arg);
+					}
 				}
+				args = filtered;
 			}
-			args = filtered;
-		}
-		if (args.size() > 0)
-		{
-			return ade::TensptrT(ade::Functor::get(opcode, args));
-		}
-		return leaf;
-	};
+			if (args.size() > 0)
+			{
+				is_optimized = true;
+				return nullptr;
+			}
+			return leaf;
+		};
 
 	auto root = opt::graph_edit(repl_binar, pruner);
 

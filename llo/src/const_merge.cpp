@@ -9,7 +9,8 @@
 namespace llo
 {
 
-ade::TensptrT const_merge_edit (ade::Opcode opcode, ade::ArgsT args)
+ade::TensptrT const_merge_edit (bool& is_optimized,
+	ade::Opcode& opcode, ade::ArgsT& args)
 {
 	ade::ArgsT cargs;
 	std::copy_if(args.begin(), args.end(), std::back_inserter(cargs),
@@ -33,6 +34,7 @@ ade::TensptrT const_merge_edit (ade::Opcode opcode, ade::ArgsT args)
 		ade::TensptrT carg(Constant::get(
 			(char*) tens->data(), age::DOUBLE, temp->shape()));
 
+		// assert nnary functions are independent of order
 		ade::ArgsT vargs;
 		std::copy_if(args.begin(), args.end(), std::back_inserter(vargs),
 			[](ade::MappedTensor& arg)
@@ -41,7 +43,9 @@ ade::TensptrT const_merge_edit (ade::Opcode opcode, ade::ArgsT args)
 					arg.get_tensor().get());
 			});
 		vargs.push_back(ade::identity_map(carg));
-		return ade::TensptrT(ade::Functor::get(opcode, vargs));
+		is_optimized = true;
+		args = vargs;
+		return nullptr;
 	}
 	return nullptr;
 }

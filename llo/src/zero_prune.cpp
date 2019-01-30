@@ -13,7 +13,8 @@ namespace llo
 {
 
 // todo: change this to target fixed value instead of looking at label
-ade::TensptrT zero_prune_edit (ade::Opcode opcode, ade::ArgsT args)
+ade::TensptrT zero_prune_edit (bool& is_optimized,
+	ade::Opcode& opcode, ade::ArgsT& args)
 {
 	size_t n = args.size();
 	bool has_zero = false;
@@ -62,7 +63,10 @@ ade::TensptrT zero_prune_edit (ade::Opcode opcode, ade::ArgsT args)
 				{
 					return ade::TensptrT(llo::Constant::get(0, args[0].shape()));
 				}
-				return ade::TensptrT(ade::Functor::get(ade::Opcode{"SUM", age::SUM}, filtered));
+				is_optimized = true;
+				opcode = ade::Opcode{"SUM", age::SUM};
+				args = filtered;
+				return nullptr;
 			}
 			case age::SUB:
 				if (is_zero[0] && is_zero[1])
@@ -71,7 +75,10 @@ ade::TensptrT zero_prune_edit (ade::Opcode opcode, ade::ArgsT args)
 				}
 				else if (is_zero[0])
 				{
-					return ade::TensptrT(ade::Functor::get(ade::Opcode{"NEG", age::NEG}, {args[1]}));
+					is_optimized = true;
+					opcode = ade::Opcode{"NEG", age::NEG};
+					args = {args[1]};
+					return nullptr;
 				}
 				// else if is_zero[1]
 				return args[0].get_tensor();

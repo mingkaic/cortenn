@@ -12,6 +12,8 @@ namespace llo
 /// Derive root with respect to target and optimized
 ade::TensptrT derive (ade::TensptrT root, ade::iTensor* target);
 
+ade::TensT multi_derive (ade::TensptrT root, std::vector<ade::iTensor*> targets);
+
 }
 
 #endif // LLO_DERIVE_HPP

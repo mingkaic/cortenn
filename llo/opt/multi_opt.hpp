@@ -13,7 +13,7 @@
 namespace llo
 {
 
-ade::TensptrT multi_optimize (ade::TensptrT root,
+ade::TensT multi_optimize (ade::TensT roots,
 	std::vector<opt::EditFuncT> edits = {
 		const_merge_edit,
 		zero_prune_edit,

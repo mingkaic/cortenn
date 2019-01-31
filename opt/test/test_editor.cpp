@@ -102,7 +102,7 @@ TEST(EDITOR, Prune)
 			return leaf;
 		};
 
-	auto root = opt::graph_edit(repl_binar, pruner);
+	auto root = opt::graph_edit({repl_binar}, pruner)[0];
 
 	std::unordered_map<ade::iTensor*,std::string> varlabels = {
 		{leaf.get(), "leaf"},

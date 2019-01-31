@@ -138,9 +138,9 @@ ade::TensptrT ops_merge_edit (bool& is_optimized,
 	return nullptr;
 }
 
-ade::TensptrT ops_merge (ade::TensptrT root)
+ade::TensT ops_merge (ade::TensT roots)
 {
-	return opt::graph_edit(root, ops_merge_edit);
+	return opt::graph_edit(roots, ops_merge_edit);
 }
 
 }

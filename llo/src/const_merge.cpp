@@ -50,9 +50,9 @@ ade::TensptrT const_merge_edit (bool& is_optimized,
 	return nullptr;
 }
 
-ade::TensptrT const_merge (ade::TensptrT root)
+ade::TensT const_merge (ade::TensT roots)
 {
-	return opt::graph_edit(root, const_merge_edit);
+	return opt::graph_edit(roots, const_merge_edit);
 }
 
 }

@@ -11,7 +11,7 @@ namespace llo
 ade::TensptrT const_merge_edit (bool& is_optimized,
 	ade::Opcode& opcode, ade::ArgsT& args);
 
-ade::TensptrT const_merge (ade::TensptrT root);
+ade::TensT const_merge (ade::TensT roots);
 
 }
 

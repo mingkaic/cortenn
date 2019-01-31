@@ -21,7 +21,7 @@ ade::TensptrT one_prune_edit (bool& is_optimized,
 
 /// Return tree that prunes one branches in input according to OPCODE
 /// For example, mul(x, 1) is converted to simply x, while abs(1) is 1
-ade::TensptrT one_prune (ade::TensptrT root);
+ade::TensT one_prune (ade::TensT roots);
 
 }
 

@@ -22,7 +22,7 @@ using EditFuncT = std::function<ade::TensptrT(bool&,ade::Opcode&,ade::ArgsT&)>;
 /// For example, prune zeros branches by reducing f(x) * 0 to 0,
 /// repeat for every instance of multiplication by zero in graph
 /// Prune graph of root Tensptr
-ade::TensptrT graph_edit (ade::TensptrT root, EditFuncT edit);
+ade::TensT graph_edit (ade::TensT roots, EditFuncT edit);
 
 }
 

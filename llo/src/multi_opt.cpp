@@ -5,10 +5,10 @@
 namespace llo
 {
 
-ade::TensptrT multi_optimize (ade::TensptrT root,
+ade::TensT multi_optimize (ade::TensT roots,
 	std::vector<opt::EditFuncT> edits)
 {
-	return opt::graph_edit(root,
+	return opt::graph_edit(roots,
 		[&edits](bool& is_optimized,
 			ade::Opcode& opcode, ade::ArgsT& args) -> ade::TensptrT
 		{

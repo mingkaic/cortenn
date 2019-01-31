@@ -140,21 +140,32 @@ static bool func_equals (ade::iFunctor* lhs, ade::iFunctor* rhs,
     return true;
 }
 
-ade::TensptrT ops_reuse (ade::TensptrT root)
+ade::TensT ops_reuse (ade::TensT roots)
 {
+    std::unordered_map<ade::iTensor*,ade::TensptrT> smart_map;
 	ade::GraphStat stat;
-	root->accept(stat);
+    for (ade::TensptrT& root : roots)
+    {
+        smart_map.emplace(root.get(), root);
+	    root->accept(stat);
+    }
 	if (stat.graphsize_.size() == 0)
 	{
-		return root;
+		return roots;
 	}
 
-    std::vector<std::list<ade::iTensor*>> tens(stat.graphsize_[root.get()] + 1);
+    size_t max_graphsize = 0;
+    for (ade::TensptrT& root : roots)
+    {
+        max_graphsize = std::max(max_graphsize, stat.graphsize_[root.get()] + 1);
+    }
+
+    std::vector<std::list<ade::iTensor*>> tens(max_graphsize);
     for (std::pair<ade::iTensor*,size_t> graphpair : stat.graphsize_)
     {
         ade::iTensor* ten = graphpair.first;
         size_t index = graphpair.second;
-        if (root.get() == ten)
+        if (smart_map.end() != smart_map.find(ten))
         {
             tens[index].push_front(ten);
         }
@@ -194,9 +205,6 @@ ade::TensptrT ops_reuse (ade::TensptrT root)
         }
     }
 
-    std::unordered_map<ade::iTensor*,ade::TensptrT> smart_map = {
-        {root.get(), root},
-    };
     for (size_t i = 1, n = tens.size(); i < n; ++i)
     {
         std::unordered_map<size_t,std::list<ade::iFunctor*>> hashs;
@@ -231,7 +239,7 @@ ade::TensptrT ops_reuse (ade::TensptrT root)
         }
     }
 
-    return opt::graph_edit(root, [&smart_map, replacement](bool& is_optimized,
+    return opt::graph_edit(roots, [&smart_map, replacement](bool& is_optimized,
 	    ade::Opcode& opcode, ade::ArgsT& args) -> ade::TensptrT
         {
             auto et = replacement.end();

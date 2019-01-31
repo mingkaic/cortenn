@@ -263,6 +263,10 @@ PYBIND11_MODULE(llo, m)
 	llo::derive,
 	"Return derivative of first tensor with respect to second tensor");
 
+	m.def("multi_derive",
+	llo::multi_derive,
+	"Return derivative of root tensor with respect to tensors");
+
 	m.def("seed",
 	[](size_t seed)
 	{

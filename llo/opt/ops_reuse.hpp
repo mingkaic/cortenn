@@ -6,7 +6,7 @@
 namespace llo
 {
 
-ade::TensptrT ops_reuse (ade::TensptrT root);
+ade::TensT ops_reuse (ade::TensT roots);
 
 }
 

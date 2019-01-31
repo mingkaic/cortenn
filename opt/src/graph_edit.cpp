@@ -7,13 +7,16 @@
 namespace opt
 {
 
-ade::TensptrT graph_edit (ade::TensptrT root, EditFuncT edit)
+ade::TensT graph_edit (ade::TensT roots, EditFuncT edit)
 {
 	ade::GraphStat stat;
-	root->accept(stat);
+	for (auto& root : roots)
+	{
+		root->accept(stat);
+	}
 	if (stat.graphsize_.size() == 0)
 	{
-		return root;
+		return roots;
 	}
 	std::unordered_map<ade::iTensor*,size_t> funcsize;
 	std::copy_if(stat.graphsize_.begin(), stat.graphsize_.end(),
@@ -68,12 +71,15 @@ ade::TensptrT graph_edit (ade::TensptrT root, EditFuncT edit)
 		}
 	}
 
-	auto it = opt_graph.find(root.get());
-	if (opt_graph.end() == it)
+	for (auto& root : roots)
 	{
-		return root;
+		auto it = opt_graph.find(root.get());
+		if (opt_graph.end() != it)
+		{
+			root = it->second;
+		}
 	}
-	return it->second;
+	return roots;
 }
 
 }

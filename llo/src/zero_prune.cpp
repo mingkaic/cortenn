@@ -117,9 +117,9 @@ ade::TensptrT zero_prune_edit (bool& is_optimized,
 	return nullptr;
 }
 
-ade::TensptrT zero_prune (ade::TensptrT root)
+ade::TensT zero_prune (ade::TensT roots)
 {
-	return opt::graph_edit(root, zero_prune_edit);
+	return opt::graph_edit(roots, zero_prune_edit);
 }
 
 }

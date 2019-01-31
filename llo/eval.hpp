@@ -11,6 +11,7 @@
 
 #include "llo/generated/opmap.hpp"
 
+#include "llo/cache.hpp"
 #include "llo/operator.hpp"
 
 #ifndef LLO_EVAL_HPP
@@ -27,6 +28,9 @@ namespace llo
 template <typename T>
 struct Evaluator final : public ade::iTraveler
 {
+	Evaluator (CacheSpace<T>* caches = nullptr) :
+		caches_(caches) {}
+
 	/// Implementation of iTraveler
 	void visit (ade::iLeaf* leaf) override
 	{
@@ -40,6 +44,13 @@ struct Evaluator final : public ade::iTraveler
 	/// Implementation of iTraveler
 	void visit (ade::iFunctor* func) override
 	{
+		bool is_cache_target = nullptr != caches_ &&
+			caches_->has_value(func);
+		if (is_cache_target && (out_ = caches_->get(func)))
+		{
+			return;
+		}
+
 		age::_GENERATED_OPCODE opcode = (age::_GENERATED_OPCODE)
 			func->get_opcode().code_;
 
@@ -49,7 +60,7 @@ struct Evaluator final : public ade::iTraveler
 		DataArgsT<T> argdata(nargs);
 		for (uint8_t i = 0; i < nargs; ++i)
 		{
-			Evaluator<T> evaler;
+			Evaluator<T> evaler(caches_);
 			children[i].get_tensor()->accept(evaler);
 			argdata[i] = DataArg<T>{
 				evaler.out_,
@@ -60,10 +71,18 @@ struct Evaluator final : public ade::iTraveler
 
 		out_ = get_tensorptr<T>(nullptr, outshape);
 		age::typed_exec<T>(opcode, *out_, argdata);
+
+		if (is_cache_target)
+		{
+			caches_->set(func, out_);
+		}
 	}
 
 	/// Output data evaluated upon visiting node
 	TensptrT<T> out_;
+
+private:
+	CacheSpace<T>* caches_;
 };
 
 /// Evaluate generic data of tens converted to specified type

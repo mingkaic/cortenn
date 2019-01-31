@@ -7,8 +7,8 @@ P4 - clarify helper functions
 P4 - formalize codestyle
 
 performance:
-P2 - implement llo graph session: data caching options mechanism
-P3 - improve llo plugin optimization configuration options
+P2 - improve data caching mechanism with session info
+P3 - implement reduction using Eigen
 P4 - investigate operation shortcut detection
 P4 - implement optimization options to increase data accuracy
 P4 - implement convolution using Eigen

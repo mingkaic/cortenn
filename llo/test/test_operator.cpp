@@ -4,7 +4,7 @@
 
 #include "gtest/gtest.h"
 
-#include "llo/test/common.hpp"
+#include "testutil/common.hpp"
 
 #include "llo/operator.hpp"
 

@@ -78,7 +78,7 @@ TEST(EDITOR, Prune)
 		}));
 
 	opt::EditFuncT pruner =
-		[&](bool& is_optimized, 
+		[&](bool& is_optimized,
 			ade::Opcode& opcode, ade::ArgsT& args) -> ade::TensptrT
 		{
 			if (opcode.code_ < 2) // killable

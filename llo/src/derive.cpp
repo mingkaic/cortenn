@@ -11,7 +11,7 @@ ade::TensptrT derive (ade::TensptrT root, ade::iTensor* target)
 	root->accept(grader);
 	auto it = grader.derivatives_.find(root.get());
 	assert(grader.derivatives_.end() != it);
-	return multi_optimize(it->second);
+	return ops_reuse(multi_optimize(it->second));
 }
 
 }

@@ -6,7 +6,7 @@
 
 #include "dbg/ade.hpp"
 
-#include "llo/test/common.hpp"
+#include "testutil/common.hpp"
 
 #include "llo/opt/zero_prune.hpp"
 #include "llo/opt/ops_merge.hpp"

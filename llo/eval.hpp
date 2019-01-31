@@ -21,8 +21,8 @@ namespace llo
 
 /// Visitor implementation to evaluate ade nodes according to ctx and dtype
 /// Given a global context containing ade-llo association maps, get data from
-/// llo::Sources when possible, otherwise treat native ade::iTensors as zeroes
-/// Additionally, Evaluator attempts to get meta-data from llo::FuncWrapper
+/// Sources when possible, otherwise treat native ade::iTensors as zeroes
+/// Additionally, Evaluator attempts to get meta-data from FuncWrapper
 /// before checking native ade::Functor
 template <typename T>
 struct Evaluator final : public ade::iTraveler

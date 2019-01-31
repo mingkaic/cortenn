@@ -1,4 +1,5 @@
 #include "llo/opt/multi_opt.hpp"
+#include "llo/opt/ops_reuse.hpp"
 
 #include "llo/generated/grader.hpp"
 

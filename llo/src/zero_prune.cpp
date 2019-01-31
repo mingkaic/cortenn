@@ -6,11 +6,21 @@
 #include "llo/opt/zero_prune.hpp"
 
 #include "llo/constant.hpp"
+#include "llo/eval.hpp"
 
 #ifdef LLO_ZERO_PRUNE_HPP
 
 namespace llo
 {
+
+static bool const_is_zero (Constant* cst)
+{
+	Evaluator<double> eval;
+	cst->accept(eval);
+	double* ptr = eval.out_->data();
+	return std::all_of(ptr, ptr + cst->shape().n_elems(),
+		[](double d) { return 0 == d; });
+}
 
 // todo: change this to target fixed value instead of looking at label
 ade::TensptrT zero_prune_edit (bool& is_optimized,
@@ -21,8 +31,8 @@ ade::TensptrT zero_prune_edit (bool& is_optimized,
 	std::vector<bool> is_zero(n, false);
 	for (size_t i = 0; i < n; ++i)
 	{
-		auto cst = dynamic_cast<llo::Constant*>(args[i].get_tensor().get());
-		is_zero[i] = nullptr != cst && 0 == cst->at<double>(0);;
+		auto cst = dynamic_cast<Constant*>(args[i].get_tensor().get());
+		is_zero[i] = nullptr != cst && const_is_zero(cst);
 		has_zero = has_zero || is_zero[i];
 	}
 	if (has_zero)
@@ -36,19 +46,19 @@ ade::TensptrT zero_prune_edit (bool& is_optimized,
 			case age::SQRT:
 			case age::ROUND:
 			case age::PROD:
-				return ade::TensptrT(llo::Constant::get(0, args[0].shape()));
+				return ade::TensptrT(Constant::get(0, args[0].shape()));
 			case age::COS:
 			case age::EXP:
-				return ade::TensptrT(llo::Constant::get(1, args[0].shape()));
+				return ade::TensptrT(Constant::get(1, args[0].shape()));
 			case age::LOG:
 				logs::fatal("cannot LOG by zero");
 			case age::POW:
 				if (is_zero[0])
 				{
-					return ade::TensptrT(llo::Constant::get(0, args[0].shape()));
+					return ade::TensptrT(Constant::get(0, args[0].shape()));
 				}
 				// else if is_zero[1]
-				return ade::TensptrT(llo::Constant::get(1, args[1].shape()));
+				return ade::TensptrT(Constant::get(1, args[1].shape()));
 			case age::SUM:
 			{
 				ade::ArgsT filtered;
@@ -61,7 +71,7 @@ ade::TensptrT zero_prune_edit (bool& is_optimized,
 				}
 				if (filtered.empty())
 				{
-					return ade::TensptrT(llo::Constant::get(0, args[0].shape()));
+					return ade::TensptrT(Constant::get(0, args[0].shape()));
 				}
 				is_optimized = true;
 				opcode = ade::Opcode{"SUM", age::SUM};
@@ -71,7 +81,7 @@ ade::TensptrT zero_prune_edit (bool& is_optimized,
 			case age::SUB:
 				if (is_zero[0] && is_zero[1])
 				{
-					return ade::TensptrT(llo::Constant::get(0, args[0].shape()));
+					return ade::TensptrT(Constant::get(0, args[0].shape()));
 				}
 				else if (is_zero[0])
 				{
@@ -88,7 +98,7 @@ ade::TensptrT zero_prune_edit (bool& is_optimized,
 					logs::fatal("cannot DIV by zero");
 				}
 				// else if is_zero[0]
-				return ade::TensptrT(llo::Constant::get(0, args[0].shape()));
+				return ade::TensptrT(Constant::get(0, args[0].shape()));
 			case age::MIN:
 			case age::MAX:
 			case age::EQ:

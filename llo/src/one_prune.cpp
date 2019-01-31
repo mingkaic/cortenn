@@ -6,11 +6,21 @@
 #include "llo/opt/one_prune.hpp"
 
 #include "llo/constant.hpp"
+#include "llo/eval.hpp"
 
 #ifdef LLO_ONE_PRUNE_HPP
 
 namespace llo
 {
+
+static bool const_is_one (Constant* cst)
+{
+	Evaluator<double> eval;
+	cst->accept(eval);
+	double* ptr = eval.out_->data();
+	return std::all_of(ptr, ptr + cst->shape().n_elems(),
+		[](double d) { return 1 == d; });
+}
 
 ade::TensptrT one_prune_edit (bool& is_optimized,
 	ade::Opcode& opcode, ade::ArgsT& args)
@@ -20,8 +30,8 @@ ade::TensptrT one_prune_edit (bool& is_optimized,
 	std::vector<bool> is_one(n, false);
 	for (size_t i = 0; i < n; ++i)
 	{
-		auto cst = dynamic_cast<llo::Constant*>(args[i].get_tensor().get());
-		is_one[i] = nullptr != cst && 1 == cst->at<double>(0);
+		auto cst = dynamic_cast<Constant*>(args[i].get_tensor().get());
+		is_one[i] = nullptr != cst && const_is_one(cst);
 		has_one = has_one || is_one[i];
 	}
 	if (has_one)
@@ -31,13 +41,13 @@ ade::TensptrT one_prune_edit (bool& is_optimized,
 			case age::ABS:
 			case age::SQRT:
 			case age::ROUND:
-				return ade::TensptrT(llo::Constant::get(1, args[0].shape()));
+				return ade::TensptrT(Constant::get(1, args[0].shape()));
 			case age::LOG:
-				return ade::TensptrT(llo::Constant::get(0, args[0].shape()));
+				return ade::TensptrT(Constant::get(0, args[0].shape()));
 			case age::POW:
 				if (is_one[0])
 				{
-					return ade::TensptrT(llo::Constant::get(1, args[0].shape()));
+					return ade::TensptrT(Constant::get(1, args[0].shape()));
 				}
 				// else if is_one[1]
 				if (ade::identity == args[0].get_coorder())
@@ -60,7 +70,7 @@ ade::TensptrT one_prune_edit (bool& is_optimized,
 				}
 				if (filtered.empty())
 				{
-					return ade::TensptrT(llo::Constant::get(1, args[0].shape()));
+					return ade::TensptrT(Constant::get(1, args[0].shape()));
 				}
 				is_optimized = true;
 				opcode = ade::Opcode{"PROD", age::PROD};

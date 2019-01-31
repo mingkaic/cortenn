@@ -21,7 +21,7 @@ bool is_big_endian(void)
 
 std::string serialize (bool& is_const, ade::iLeaf* leaf)
 {
-	is_const = nullptr != dynamic_cast<llo::Constant*>(leaf);
+	is_const = nullptr != dynamic_cast<Constant*>(leaf);
 
 	char* data = (char*) leaf->data();
 	size_t nelems = leaf->shape().n_elems();
@@ -98,11 +98,11 @@ ade::TensptrT deserialize (const char* pb, ade::Shape shape,
 			out[outi] = pb[i];
 		}
 		return ade::TensptrT(is_const ?
-			llo::Constant::get(out.c_str(), gencode, shape) :
+			Constant::get(out.c_str(), gencode, shape) :
 			variable_from_code(out.c_str(), gencode, shape, label));
 	}
 	return ade::TensptrT(is_const ?
-		llo::Constant::get(pb, gencode, shape) :
+		Constant::get(pb, gencode, shape) :
 		variable_from_code(pb, gencode, shape, label));
 }
 

@@ -16,13 +16,13 @@ ade::TensptrT const_merge_edit (bool& is_optimized,
 	std::copy_if(args.begin(), args.end(), std::back_inserter(cargs),
 		[](ade::MappedTensor& arg)
 		{
-			return nullptr != dynamic_cast<llo::Constant*>(
+			return nullptr != dynamic_cast<Constant*>(
 				arg.get_tensor().get());
 		});
 	if (cargs.size() == args.size())
 	{
 		ade::TensptrT temp(ade::Functor::get(opcode, args));
-		auto tens = llo::eval<double>(temp);
+		auto tens = eval<double>(temp);
 		return ade::TensptrT(Constant::get(
 			(char*) tens->data(), age::DOUBLE, temp->shape()));
 	}
@@ -30,7 +30,7 @@ ade::TensptrT const_merge_edit (bool& is_optimized,
 		opcode.code_) != nnary_codes.end() && cargs.size() > 2)
 	{
 		ade::TensptrT temp(ade::Functor::get(opcode, args));
-		auto tens = llo::eval<double>(temp);
+		auto tens = eval<double>(temp);
 		ade::TensptrT carg(Constant::get(
 			(char*) tens->data(), age::DOUBLE, temp->shape()));
 
@@ -39,7 +39,7 @@ ade::TensptrT const_merge_edit (bool& is_optimized,
 		std::copy_if(args.begin(), args.end(), std::back_inserter(vargs),
 			[](ade::MappedTensor& arg)
 			{
-				return nullptr == dynamic_cast<llo::Constant*>(
+				return nullptr == dynamic_cast<Constant*>(
 					arg.get_tensor().get());
 			});
 		vargs.push_back(ade::identity_map(carg));

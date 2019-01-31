@@ -106,8 +106,8 @@ cc_test(
     copts = ["-std=c++14"],
     deps = [
         "//llo:llo",
-        "@gtest//:gtest",
         "@com_github_mingkaic_tenncor//dbg:dbg",
+        "@com_github_mingkaic_tenncor//testutil:testutil",
     ],
     linkstatic = True,
 )

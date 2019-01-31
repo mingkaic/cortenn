@@ -8,7 +8,6 @@ P4 - formalize codestyle
 
 performance:
 P2 - implement llo graph session: data caching options mechanism
-P2 - implement llo graph session: node reuse mechanism
 P3 - improve llo plugin optimization configuration options
 P4 - investigate operation shortcut detection
 P4 - implement optimization options to increase data accuracy

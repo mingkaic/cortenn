@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['stringst',['StringsT',['../namespacepbm.html#a4b3659bb9fe2c247d9742a6be341e1f2',1,'pbm']]]
+  ['pathedmapt',['PathedMapT',['../namespacepbm.html#a955cdbd7419581e6e76661a56ac279b3',1,'pbm']]]
 ];

@@ -15,7 +15,7 @@ namespace llo
 {
 
 /// Return product of lhs with mapped rhs
-ade::TensptrT mtens_mul (ade::TensptrT lhs, ade::MappedTensor rhs);
+ade::TensptrT mtens_mul (ade::TensptrT lhs, ade::FuncArg rhs);
 
 /// Return the gradient for prod operation assuming the target derived wrt is
 /// index gradidx and arguments are tens
@@ -30,7 +30,7 @@ ade::TensptrT grad_min (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens);
 ade::TensptrT grad_max (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens);
 
 ade::TensptrT grad_matmul (ade::iFunctor* fwd,
-	ade::MappedTensor bwd, size_t idx);
+	ade::FuncArg bwd, size_t idx);
 
 /// Return reduction of tens specified dimension dim using opcode operation
 ade::TensptrT reduce_1d (ade::Opcode opcode, ade::TensptrT tens, uint8_t dim);

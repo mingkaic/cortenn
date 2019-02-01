@@ -77,8 +77,6 @@ $(function() {
 Include dependency graph for helper.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="helper_8hpp__incl.png" border="0" usemap="#llo_2helper_8hpp" alt=""/></div>
-<map name="llo_2helper_8hpp" id="llo_2helper_8hpp">
-</map>
 </div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
@@ -98,15 +96,17 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a7398e1235a7ae023f87c6198a75418d0"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a7398e1235a7ae023f87c6198a75418d0">llo::mtens_mul</a> (ade::TensptrT lhs, ade::MappedTensor rhs)</td></tr>
-<tr class="memdesc:a7398e1235a7ae023f87c6198a75418d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return product of lhs with mapped rhs.  <a href="namespacello.html#a7398e1235a7ae023f87c6198a75418d0">More...</a><br /></td></tr>
-<tr class="separator:a7398e1235a7ae023f87c6198a75418d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a191ffa502ed37dc9bd06183a4de5d5f0"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a191ffa502ed37dc9bd06183a4de5d5f0">llo::mtens_mul</a> (ade::TensptrT lhs, ade::FuncArg rhs)</td></tr>
+<tr class="memdesc:a191ffa502ed37dc9bd06183a4de5d5f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return product of lhs with mapped rhs.  <a href="namespacello.html#a191ffa502ed37dc9bd06183a4de5d5f0">More...</a><br /></td></tr>
+<tr class="separator:a191ffa502ed37dc9bd06183a4de5d5f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6cb4e632643824f43f0afdbd52cb948f"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a6cb4e632643824f43f0afdbd52cb948f">llo::grad_prod</a> (ade::iFunctor *fwd, size_t gradidx, ade::TensT tens)</td></tr>
 <tr class="separator:a6cb4e632643824f43f0afdbd52cb948f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28d51d7aedcf040e9b83a627342ebe33"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a28d51d7aedcf040e9b83a627342ebe33">llo::grad_min</a> (ade::iFunctor *fwd, size_t gradidx, ade::TensT tens)</td></tr>
 <tr class="separator:a28d51d7aedcf040e9b83a627342ebe33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afdf9eee2940ca0aae6ddab4582dd9c00"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#afdf9eee2940ca0aae6ddab4582dd9c00">llo::grad_max</a> (ade::iFunctor *fwd, size_t gradidx, ade::TensT tens)</td></tr>
 <tr class="separator:afdf9eee2940ca0aae6ddab4582dd9c00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a787ae97446c964623b857756c9580f3f"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a787ae97446c964623b857756c9580f3f">llo::grad_matmul</a> (ade::iFunctor *fwd, ade::FuncArg bwd, size_t idx)</td></tr>
+<tr class="separator:a787ae97446c964623b857756c9580f3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6906ba9944277db0c7a72cd803a7490"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#ae6906ba9944277db0c7a72cd803a7490">llo::reduce_1d</a> (ade::Opcode opcode, ade::TensptrT tens, uint8_t dim)</td></tr>
 <tr class="memdesc:ae6906ba9944277db0c7a72cd803a7490"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return reduction of tens specified dimension dim using opcode operation.  <a href="namespacello.html#ae6906ba9944277db0c7a72cd803a7490">More...</a><br /></td></tr>
 <tr class="separator:ae6906ba9944277db0c7a72cd803a7490"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -119,6 +119,8 @@ Functions</h2></td></tr>
 <tr class="memitem:a652364aa1f9f70a86b2fb805f055c7cc"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a652364aa1f9f70a86b2fb805f055c7cc">llo::convolution</a> (ade::TensptrT img, ade::TensptrT kernel)</td></tr>
 <tr class="memdesc:a652364aa1f9f70a86b2fb805f055c7cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return convolution operation on img with kernel.  <a href="namespacello.html#a652364aa1f9f70a86b2fb805f055c7cc">More...</a><br /></td></tr>
 <tr class="separator:a652364aa1f9f70a86b2fb805f055c7cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98c7227c1ecf1154fdbbf21c96a3aad9"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a98c7227c1ecf1154fdbbf21c96a3aad9">llo::get_fast_matmul</a> (ade::TensptrT a, ade::TensptrT b)</td></tr>
+<tr class="separator:a98c7227c1ecf1154fdbbf21c96a3aad9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

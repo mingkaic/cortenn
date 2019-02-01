@@ -1,5 +1,10 @@
 <map id="llo/src/zero_prune.cpp" name="llo/src/zero_prune.cpp">
-<area shape="rect" id="node5" href="$zero__prune_8hpp.html" title="llo/opt/zero_prune.hpp" alt="" coords="280,79,434,104"/>
-<area shape="rect" id="node6" href="$graph__editor_8hpp.html" title="opt/graph_editor.hpp" alt="" coords="58,152,202,177"/>
-<area shape="rect" id="node8" href="$llo_2data_8hpp.html" title="llo/data.hpp" alt="" coords="312,152,402,177"/>
+<area shape="rect" id="node5" href="$zero__prune_8hpp.html" title="llo/opt/zero_prune.hpp" alt="" coords="938,79,1092,104"/>
+<area shape="rect" id="node15" href="$constant_8hpp.html" title="llo/constant.hpp" alt="" coords="294,79,409,104"/>
+<area shape="rect" id="node18" href="$eval_8hpp.html" title="llo/eval.hpp" alt="" coords="543,79,632,104"/>
+<area shape="rect" id="node6" href="$graph__edit_8hpp.html" title="opt/graph_edit.hpp" alt="" coords="1053,152,1186,177"/>
+<area shape="rect" id="node8" href="$variable_8hpp.html" title="llo/variable.hpp" alt="" coords="812,225,923,251"/>
+<area shape="rect" id="node11" href="$tensor_8hpp.html" title="llo/tensor.hpp" alt="" coords="753,299,854,324"/>
+<area shape="rect" id="node21" href="$cache_8hpp.html" title="llo/cache.hpp" alt="" coords="737,152,837,177"/>
+<area shape="rect" id="node22" href="$operator_8hpp.html" title="llo/operator.hpp" alt="" coords="600,152,713,177"/>
 </map>

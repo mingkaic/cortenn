@@ -1,21 +1,14 @@
 var searchData=
 [
-  ['rand_5fbinom',['rand_binom',['../namespacello.html#a7c719d1c80cf4b57c3068f5bf2a39a72',1,'llo']]],
-  ['rand_5fbinom_3c_20double_20_3e',['rand_binom&lt; double &gt;',['../namespacello.html#a7d2d8a9bdf1e3566cf5357c198de9c5b',1,'llo']]],
-  ['rand_5fbinom_3c_20float_20_3e',['rand_binom&lt; float &gt;',['../namespacello.html#a6590c80bbbd9bfc8936575b95758cf32',1,'llo']]],
-  ['rand_5fnormal',['rand_normal',['../namespacello.html#ad1c7348a56a9534c6ff9baa65ebb43dc',1,'llo']]],
-  ['rand_5fnormal_3c_20double_20_3e',['rand_normal&lt; double &gt;',['../namespacello.html#a1b742c2923ceb0fc9a1877ab20cabbdb',1,'llo']]],
-  ['rand_5fnormal_3c_20float_20_3e',['rand_normal&lt; float &gt;',['../namespacello.html#a502ebfee3eb91123ca56a38862c62801',1,'llo']]],
-  ['rand_5funiform',['rand_uniform',['../namespacello.html#adbeb24b7f0ff24b9ad4a4d62801585ff',1,'llo']]],
-  ['rand_5funiform_3c_20double_20_3e',['rand_uniform&lt; double &gt;',['../namespacello.html#a629e4865c5521554995d7b88847695de',1,'llo']]],
-  ['rand_5funiform_3c_20float_20_3e',['rand_uniform&lt; float &gt;',['../namespacello.html#a1d9acac2589dd4ed27c9f32d31e81c93',1,'llo']]],
-  ['readme_2emd',['README.md',['../_r_e_a_d_m_e_8md.html',1,'']]],
-  ['readme_5fllo_2emd',['README_LLO.md',['../_r_e_a_d_m_e___l_l_o_8md.html',1,'']]],
-  ['readme_5fopt_2emd',['README_OPT.md',['../_r_e_a_d_m_e___o_p_t_8md.html',1,'']]],
-  ['readme_5fpbm_2emd',['README_PBM.md',['../_r_e_a_d_m_e___p_b_m_8md.html',1,'']]],
-  ['readme_5fpy_2emd',['README_PY.md',['../_r_e_a_d_m_e___p_y_8md.html',1,'']]],
-  ['reduce',['reduce',['../namespacello.html#abdf021d900da5a0822bcfb49315cc1a7',1,'llo']]],
-  ['reduce_5f1d',['reduce_1d',['../namespacello.html#ae6906ba9944277db0c7a72cd803a7490',1,'llo']]],
-  ['roots_5f',['roots_',['../structpbm_1_1_graph_info.html#ad415f1f762db303c520b2f88d8b656c4',1,'pbm::GraphInfo']]],
-  ['round',['round',['../namespacello.html#af2a4ec16dc83e924a43ac86a3893b411',1,'llo']]]
+  ['pbm_20_28protobuf_20marshaller_29',['PBM (Protobuf Marshaller)',['../md_pbm__r_e_a_d_m_e__p_b_m.html',1,'']]],
+  ['pybinder',['Pybinder',['../md_pybinder__r_e_a_d_m_e__p_y.html',1,'']]],
+  ['p2cshape',['p2cshape',['../namespacepyllo.html#a6b3db39d1842d7ba7ec3ea39f49566ef',1,'pyllo']]],
+  ['pathedmapt',['PathedMapT',['../namespacepbm.html#a955cdbd7419581e6e76661a56ac279b3',1,'pbm']]],
+  ['pathedtens',['PathedTens',['../structpbm_1_1_pathed_tens.html',1,'pbm']]],
+  ['pbm',['pbm',['../namespacepbm.html',1,'']]],
+  ['pbm_5fload_5fhpp',['PBM_LOAD_HPP',['../load_8hpp.html#af09098d601e68ce455d72ed197fb9d1e',1,'load.hpp']]],
+  ['pow',['pow',['../namespacello.html#ab2f11cd76bd54389a8e0d34f25684b0c',1,'llo']]],
+  ['push_5f',['push_',['../structllo_1_1_data_arg.html#a88dd83b7fc12bbfb97c799b1ec722ed2',1,'llo::DataArg']]],
+  ['pybind11_5fmodule',['PYBIND11_MODULE',['../llo_8cpp.html#ad2b457d981fbb939599137f6d4b17c04',1,'llo.cpp']]],
+  ['pyllo',['pyllo',['../namespacepyllo.html',1,'']]]
 ];

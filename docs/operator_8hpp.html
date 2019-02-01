@@ -66,7 +66,9 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
@@ -77,13 +79,15 @@ $(function() {
 <code>#include &lt;cmath&gt;</code><br />
 <code>#include &lt;functional&gt;</code><br />
 <code>#include &lt;random&gt;</code><br />
-<code>#include &quot;<a class="el" href="llo_2data_8hpp_source.html">llo/data.hpp</a>&quot;</code><br />
+<code>#include &quot;Eigen/Core&quot;</code><br />
+<code>#include &quot;<a class="el" href="variable_8hpp_source.html">llo/variable.hpp</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for operator.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="operator_8hpp__incl.png" border="0" usemap="#llo_2operator_8hpp" alt=""/></div>
 <map name="llo_2operator_8hpp" id="llo_2operator_8hpp">
-<area shape="rect" id="node6" href="llo_2data_8hpp.html" title="llo/data.hpp" alt="" coords="364,79,454,104"/>
+<area shape="rect" id="node7" href="variable_8hpp.html" title="llo/variable.hpp" alt="" coords="476,79,587,104"/>
+<area shape="rect" id="node10" href="tensor_8hpp.html" title="llo/tensor.hpp" alt="" coords="604,152,705,177"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -91,159 +95,194 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="operator_8hpp__dep__incl.png" border="0" usemap="#llo_2operator_8hppdep" alt=""/></div>
 <map name="llo_2operator_8hppdep" id="llo_2operator_8hppdep">
-<area shape="rect" id="node2" href="eval_8hpp.html" title="llo/eval.hpp" alt="" coords="122,79,211,104"/>
-<area shape="rect" id="node6" href="operator_8cpp.html" title="llo/src/operator.cpp" alt="" coords="236,79,370,104"/>
+<area shape="rect" id="node2" href="eval_8hpp.html" title="llo/eval.hpp" alt="" coords="370,79,459,104"/>
+<area shape="rect" id="node9" href="operator_8cpp.html" title="llo/src/operator.cpp" alt="" coords="484,79,618,104"/>
 <area shape="rect" id="node3" href="llo_8hpp.html" title="llo/llo.hpp" alt="" coords="5,152,83,177"/>
 <area shape="rect" id="node4" href="llo_8cpp.html" title="llo/python/llo.cpp" alt="" coords="107,152,227,177"/>
-<area shape="rect" id="node5" href="eval_8cpp.html" title="llo/src/eval.cpp" alt="" coords="251,152,360,177"/>
+<area shape="rect" id="node5" href="const__merge_8cpp.html" title="llo/src/const_merge.cpp" alt="" coords="251,152,413,177"/>
+<area shape="rect" id="node6" href="helper_8cpp.html" title="llo/src/helper.cpp" alt="" coords="437,152,558,177"/>
+<area shape="rect" id="node7" href="one__prune_8cpp.html" title="llo/src/one_prune.cpp" alt="" coords="582,152,731,177"/>
+<area shape="rect" id="node8" href="zero__prune_8cpp.html" title="llo/src/zero_prune.cpp" alt="" coords="755,152,907,177"/>
 </map>
 </div>
 </div>
 <p><a href="operator_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_data_arg.html">llo::DataArg&lt; T &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data to pass around when evaluating.  <a href="structllo_1_1_data_arg.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespacello"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html">llo</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:ab960ea12707ab64a74edae08f7bbe8d4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="operator_8hpp.html#ab960ea12707ab64a74edae08f7bbe8d4">TO_MAT</a>(ARG)</td></tr>
+<tr class="separator:ab960ea12707ab64a74edae08f7bbe8d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
+<tr class="memitem:a0a19e0c06ff14ec39848072612ed8be0"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a0a19e0c06ff14ec39848072612ed8be0"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a0a19e0c06ff14ec39848072612ed8be0">llo::DataArgsT</a> = std::vector&lt; DataArg&lt; T &gt; &gt;</td></tr>
+<tr class="separator:a0a19e0c06ff14ec39848072612ed8be0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80fc8a112cc3f147a818d53f6045ac0b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a80fc8a112cc3f147a818d53f6045ac0b">llo::EngineT</a> = std::default_random_engine</td></tr>
 <tr class="memdesc:a80fc8a112cc3f147a818d53f6045ac0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">RNG engine used.  <a href="namespacello.html#a80fc8a112cc3f147a818d53f6045ac0b">More...</a><br /></td></tr>
 <tr class="separator:a80fc8a112cc3f147a818d53f6045ac0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8cf2ce5ebddb37c1118a6a09c45bdca"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ae8cf2ce5ebddb37c1118a6a09c45bdca"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#ae8cf2ce5ebddb37c1118a6a09c45bdca">llo::MatrixT</a> = Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor &gt;</td></tr>
+<tr class="separator:ae8cf2ce5ebddb37c1118a6a09c45bdca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a61884656c3aa93b200183b6047ef40dd"><td class="memItemLeft" align="right" valign="top">EngineT &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a61884656c3aa93b200183b6047ef40dd">llo::get_engine</a> (void)</td></tr>
 <tr class="memdesc:a61884656c3aa93b200183b6047ef40dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return global random generator.  <a href="namespacello.html#a61884656c3aa93b200183b6047ef40dd">More...</a><br /></td></tr>
 <tr class="separator:a61884656c3aa93b200183b6047ef40dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc00e45b50d07b6444490730f901947e"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:acc00e45b50d07b6444490730f901947e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#acc00e45b50d07b6444490730f901947e">llo::unary</a> (T *out, ade::Shape &amp;outshape, VecRef&lt; T &gt; in, std::function&lt; T(const T &amp;)&gt; f)</td></tr>
-<tr class="memdesc:acc00e45b50d07b6444490730f901947e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic unary operation assuming identity mapping.  <a href="namespacello.html#acc00e45b50d07b6444490730f901947e">More...</a><br /></td></tr>
-<tr class="separator:acc00e45b50d07b6444490730f901947e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af3ffcdedba093a42da3e937e945aba30"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:af3ffcdedba093a42da3e937e945aba30"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#af3ffcdedba093a42da3e937e945aba30">llo::abs</a> (T *out, VecRef&lt; T &gt; in)</td></tr>
-<tr class="separator:af3ffcdedba093a42da3e937e945aba30"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4eccdc385167ad9aa81ea1f64df7b236"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
-<tr class="memitem:a4eccdc385167ad9aa81ea1f64df7b236"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a4eccdc385167ad9aa81ea1f64df7b236">llo::abs&lt; uint8_t &gt;</a> (uint8_t *out, VecRef&lt; uint8_t &gt; in)</td></tr>
-<tr class="separator:a4eccdc385167ad9aa81ea1f64df7b236"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3225c21e361f4174c5cb7b0b7517cd35"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
-<tr class="memitem:a3225c21e361f4174c5cb7b0b7517cd35"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a3225c21e361f4174c5cb7b0b7517cd35">llo::abs&lt; uint16_t &gt;</a> (uint16_t *out, VecRef&lt; uint16_t &gt; in)</td></tr>
-<tr class="separator:a3225c21e361f4174c5cb7b0b7517cd35"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a9fcb6f5c2acaf81fe507d88f4d1545"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
-<tr class="memitem:a3a9fcb6f5c2acaf81fe507d88f4d1545"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a3a9fcb6f5c2acaf81fe507d88f4d1545">llo::abs&lt; uint32_t &gt;</a> (uint32_t *out, VecRef&lt; uint32_t &gt; in)</td></tr>
-<tr class="separator:a3a9fcb6f5c2acaf81fe507d88f4d1545"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6cc677bc649f2d5d28b13ee527a84623"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
-<tr class="memitem:a6cc677bc649f2d5d28b13ee527a84623"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a6cc677bc649f2d5d28b13ee527a84623">llo::abs&lt; uint64_t &gt;</a> (uint64_t *out, VecRef&lt; uint64_t &gt; in)</td></tr>
-<tr class="separator:a6cc677bc649f2d5d28b13ee527a84623"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2523a51704ba46880ed6b0ed38aa0259"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a2523a51704ba46880ed6b0ed38aa0259"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a2523a51704ba46880ed6b0ed38aa0259">llo::neg</a> (T *out, VecRef&lt; T &gt; in)</td></tr>
-<tr class="separator:a2523a51704ba46880ed6b0ed38aa0259"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6580f013947aa53d8e53e6fbd2722afa"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
-<tr class="memitem:a6580f013947aa53d8e53e6fbd2722afa"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a6580f013947aa53d8e53e6fbd2722afa">llo::neg&lt; uint8_t &gt;</a> (uint8_t *out, VecRef&lt; uint8_t &gt; in)</td></tr>
-<tr class="separator:a6580f013947aa53d8e53e6fbd2722afa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a26997fff05dbe6209d720e66cb7c2693"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
-<tr class="memitem:a26997fff05dbe6209d720e66cb7c2693"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a26997fff05dbe6209d720e66cb7c2693">llo::neg&lt; uint16_t &gt;</a> (uint16_t *out, VecRef&lt; uint16_t &gt; in)</td></tr>
-<tr class="separator:a26997fff05dbe6209d720e66cb7c2693"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc26536b3f54b814ca59d94fa87d2728"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
-<tr class="memitem:acc26536b3f54b814ca59d94fa87d2728"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#acc26536b3f54b814ca59d94fa87d2728">llo::neg&lt; uint32_t &gt;</a> (uint32_t *out, VecRef&lt; uint32_t &gt; in)</td></tr>
-<tr class="separator:acc26536b3f54b814ca59d94fa87d2728"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d20723f32966a0b8341676f61f7aa4f"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
-<tr class="memitem:a9d20723f32966a0b8341676f61f7aa4f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a9d20723f32966a0b8341676f61f7aa4f">llo::neg&lt; uint64_t &gt;</a> (uint64_t *out, VecRef&lt; uint64_t &gt; in)</td></tr>
-<tr class="separator:a9d20723f32966a0b8341676f61f7aa4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3fdd352e3c757f8bdac73998cbb7ad4e"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a3fdd352e3c757f8bdac73998cbb7ad4e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a3fdd352e3c757f8bdac73998cbb7ad4e">llo::bit_not</a> (T *out, VecRef&lt; T &gt; in)</td></tr>
-<tr class="separator:a3fdd352e3c757f8bdac73998cbb7ad4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ada6615379c84d32f577bf21ffd4d77"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a7ada6615379c84d32f577bf21ffd4d77"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a7ada6615379c84d32f577bf21ffd4d77">llo::sin</a> (T *out, VecRef&lt; T &gt; in)</td></tr>
-<tr class="separator:a7ada6615379c84d32f577bf21ffd4d77"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a999fe26a576045e8a45b416b7708c51a"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a999fe26a576045e8a45b416b7708c51a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a999fe26a576045e8a45b416b7708c51a">llo::cos</a> (T *out, VecRef&lt; T &gt; in)</td></tr>
-<tr class="separator:a999fe26a576045e8a45b416b7708c51a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2aa244b48aa8b6ebf724a554002c3d0"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ab2aa244b48aa8b6ebf724a554002c3d0"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#ab2aa244b48aa8b6ebf724a554002c3d0">llo::tan</a> (T *out, VecRef&lt; T &gt; in)</td></tr>
-<tr class="separator:ab2aa244b48aa8b6ebf724a554002c3d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea287e4a457edc851dec192ec953d223"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:aea287e4a457edc851dec192ec953d223"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#aea287e4a457edc851dec192ec953d223">llo::exp</a> (T *out, VecRef&lt; T &gt; in)</td></tr>
-<tr class="separator:aea287e4a457edc851dec192ec953d223"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab1380d9ae294bf7d8e3d6cef4ef40396"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ab1380d9ae294bf7d8e3d6cef4ef40396"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#ab1380d9ae294bf7d8e3d6cef4ef40396">llo::log</a> (T *out, VecRef&lt; T &gt; in)</td></tr>
-<tr class="separator:ab1380d9ae294bf7d8e3d6cef4ef40396"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40740fc01ce4d1408ec880d7acadf57d"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a40740fc01ce4d1408ec880d7acadf57d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a40740fc01ce4d1408ec880d7acadf57d">llo::sqrt</a> (T *out, VecRef&lt; T &gt; in)</td></tr>
-<tr class="separator:a40740fc01ce4d1408ec880d7acadf57d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2a4ec16dc83e924a43ac86a3893b411"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:af2a4ec16dc83e924a43ac86a3893b411"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#af2a4ec16dc83e924a43ac86a3893b411">llo::round</a> (T *out, VecRef&lt; T &gt; in)</td></tr>
-<tr class="separator:af2a4ec16dc83e924a43ac86a3893b411"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e10ea5ec51ef72add0a81f7d749e141"><td class="memTemplParams" colspan="2">template&lt;typename OUT , typename ATYPE , typename BTYPE &gt; </td></tr>
-<tr class="memitem:a8e10ea5ec51ef72add0a81f7d749e141"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a8e10ea5ec51ef72add0a81f7d749e141">llo::binary</a> (OUT *out, ade::Shape &amp;outshape, VecRef&lt; ATYPE &gt; a, VecRef&lt; BTYPE &gt; b, std::function&lt; OUT(const ATYPE &amp;, const BTYPE &amp;)&gt; f)</td></tr>
-<tr class="memdesc:a8e10ea5ec51ef72add0a81f7d749e141"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic binary operation assuming identity mapping.  <a href="namespacello.html#a8e10ea5ec51ef72add0a81f7d749e141">More...</a><br /></td></tr>
-<tr class="separator:a8e10ea5ec51ef72add0a81f7d749e141"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa56e03e88d5be448c2d06294014a1ff5"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:aa56e03e88d5be448c2d06294014a1ff5"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#aa56e03e88d5be448c2d06294014a1ff5">llo::pow</a> (T *out, ade::Shape &amp;outshape, VecRef&lt; T &gt; a, VecRef&lt; T &gt; b)</td></tr>
-<tr class="separator:aa56e03e88d5be448c2d06294014a1ff5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d63aab2daa521a780c4afd376cb8db7"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a8d63aab2daa521a780c4afd376cb8db7"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a8d63aab2daa521a780c4afd376cb8db7">llo::sub</a> (T *out, ade::Shape &amp;outshape, VecRef&lt; T &gt; a, VecRef&lt; T &gt; b)</td></tr>
-<tr class="separator:a8d63aab2daa521a780c4afd376cb8db7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b229ad91f79cdc35b02e9a833e6a7ae"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a9b229ad91f79cdc35b02e9a833e6a7ae"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a9b229ad91f79cdc35b02e9a833e6a7ae">llo::div</a> (T *out, ade::Shape &amp;outshape, VecRef&lt; T &gt; a, VecRef&lt; T &gt; b)</td></tr>
-<tr class="separator:a9b229ad91f79cdc35b02e9a833e6a7ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca5851f201d459bb8cc17c0487697560"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:aca5851f201d459bb8cc17c0487697560"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#aca5851f201d459bb8cc17c0487697560">llo::eq</a> (T *out, ade::Shape &amp;outshape, VecRef&lt; T &gt; a, VecRef&lt; T &gt; b)</td></tr>
-<tr class="separator:aca5851f201d459bb8cc17c0487697560"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6719aec5379449c5df745796e3ce677"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ab6719aec5379449c5df745796e3ce677"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#ab6719aec5379449c5df745796e3ce677">llo::neq</a> (T *out, ade::Shape &amp;outshape, VecRef&lt; T &gt; a, VecRef&lt; T &gt; b)</td></tr>
-<tr class="separator:ab6719aec5379449c5df745796e3ce677"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a37ca02223b4f25f1d4f8c99c74a82619"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a37ca02223b4f25f1d4f8c99c74a82619"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a37ca02223b4f25f1d4f8c99c74a82619">llo::lt</a> (T *out, ade::Shape &amp;outshape, VecRef&lt; T &gt; a, VecRef&lt; T &gt; b)</td></tr>
-<tr class="separator:a37ca02223b4f25f1d4f8c99c74a82619"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8ae7b7bbdc2eab5e5eca92ab98914883"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a8ae7b7bbdc2eab5e5eca92ab98914883"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a8ae7b7bbdc2eab5e5eca92ab98914883">llo::gt</a> (T *out, ade::Shape &amp;outshape, VecRef&lt; T &gt; a, VecRef&lt; T &gt; b)</td></tr>
-<tr class="separator:a8ae7b7bbdc2eab5e5eca92ab98914883"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c719d1c80cf4b57c3068f5bf2a39a72"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a7c719d1c80cf4b57c3068f5bf2a39a72"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a7c719d1c80cf4b57c3068f5bf2a39a72">llo::rand_binom</a> (T *out, ade::Shape &amp;outshape, VecRef&lt; T &gt; a, VecRef&lt; double &gt; b)</td></tr>
-<tr class="separator:a7c719d1c80cf4b57c3068f5bf2a39a72"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d2d8a9bdf1e3566cf5357c198de9c5b"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
-<tr class="memitem:a7d2d8a9bdf1e3566cf5357c198de9c5b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a7d2d8a9bdf1e3566cf5357c198de9c5b">llo::rand_binom&lt; double &gt;</a> (double *out, ade::Shape &amp;outshape, VecRef&lt; double &gt; a, VecRef&lt; double &gt; b)</td></tr>
-<tr class="separator:a7d2d8a9bdf1e3566cf5357c198de9c5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6590c80bbbd9bfc8936575b95758cf32"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
-<tr class="memitem:a6590c80bbbd9bfc8936575b95758cf32"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a6590c80bbbd9bfc8936575b95758cf32">llo::rand_binom&lt; float &gt;</a> (float *out, ade::Shape &amp;outshape, VecRef&lt; float &gt; a, VecRef&lt; double &gt; b)</td></tr>
-<tr class="separator:a6590c80bbbd9bfc8936575b95758cf32"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adbeb24b7f0ff24b9ad4a4d62801585ff"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:adbeb24b7f0ff24b9ad4a4d62801585ff"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#adbeb24b7f0ff24b9ad4a4d62801585ff">llo::rand_uniform</a> (T *out, ade::Shape &amp;outshape, VecRef&lt; T &gt; a, VecRef&lt; T &gt; b)</td></tr>
-<tr class="separator:adbeb24b7f0ff24b9ad4a4d62801585ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a629e4865c5521554995d7b88847695de"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
-<tr class="memitem:a629e4865c5521554995d7b88847695de"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a629e4865c5521554995d7b88847695de">llo::rand_uniform&lt; double &gt;</a> (double *out, ade::Shape &amp;outshape, VecRef&lt; double &gt; a, VecRef&lt; double &gt; b)</td></tr>
-<tr class="separator:a629e4865c5521554995d7b88847695de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d9acac2589dd4ed27c9f32d31e81c93"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
-<tr class="memitem:a1d9acac2589dd4ed27c9f32d31e81c93"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a1d9acac2589dd4ed27c9f32d31e81c93">llo::rand_uniform&lt; float &gt;</a> (float *out, ade::Shape &amp;outshape, VecRef&lt; float &gt; a, VecRef&lt; float &gt; b)</td></tr>
-<tr class="separator:a1d9acac2589dd4ed27c9f32d31e81c93"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1c7348a56a9534c6ff9baa65ebb43dc"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ad1c7348a56a9534c6ff9baa65ebb43dc"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#ad1c7348a56a9534c6ff9baa65ebb43dc">llo::rand_normal</a> (T *out, ade::Shape &amp;outshape, VecRef&lt; T &gt; a, VecRef&lt; T &gt; b)</td></tr>
-<tr class="separator:ad1c7348a56a9534c6ff9baa65ebb43dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b742c2923ceb0fc9a1877ab20cabbdb"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
-<tr class="memitem:a1b742c2923ceb0fc9a1877ab20cabbdb"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a1b742c2923ceb0fc9a1877ab20cabbdb">llo::rand_normal&lt; double &gt;</a> (double *out, ade::Shape &amp;outshape, VecRef&lt; double &gt; a, VecRef&lt; double &gt; b)</td></tr>
-<tr class="separator:a1b742c2923ceb0fc9a1877ab20cabbdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a502ebfee3eb91123ca56a38862c62801"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
-<tr class="memitem:a502ebfee3eb91123ca56a38862c62801"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a502ebfee3eb91123ca56a38862c62801">llo::rand_normal&lt; float &gt;</a> (float *out, ade::Shape &amp;outshape, VecRef&lt; float &gt; a, VecRef&lt; float &gt; b)</td></tr>
-<tr class="separator:a502ebfee3eb91123ca56a38862c62801"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c77a8e53c0227e523c81699b9c2aab9"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a8c77a8e53c0227e523c81699b9c2aab9"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a8c77a8e53c0227e523c81699b9c2aab9">llo::nnary</a> (T *out, ade::Shape &amp;outshape, std::vector&lt; VecRef&lt; T &gt;&gt; args, std::function&lt; void(T &amp;, const T &amp;)&gt; acc)</td></tr>
-<tr class="memdesc:a8c77a8e53c0227e523c81699b9c2aab9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic n-nary operation.  <a href="namespacello.html#a8c77a8e53c0227e523c81699b9c2aab9">More...</a><br /></td></tr>
-<tr class="separator:a8c77a8e53c0227e523c81699b9c2aab9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a891db6a8dd93b21745773a877d795044"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a891db6a8dd93b21745773a877d795044"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a891db6a8dd93b21745773a877d795044">llo::add</a> (T *out, ade::Shape &amp;outshape, std::vector&lt; VecRef&lt; T &gt;&gt; args)</td></tr>
-<tr class="separator:a891db6a8dd93b21745773a877d795044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a908f5da99f5702b96e79b3bf63bf1630"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a908f5da99f5702b96e79b3bf63bf1630"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a908f5da99f5702b96e79b3bf63bf1630">llo::mul</a> (T *out, ade::Shape &amp;outshape, std::vector&lt; VecRef&lt; T &gt;&gt; args)</td></tr>
-<tr class="separator:a908f5da99f5702b96e79b3bf63bf1630"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46192797ea05f96e5f1fbc728f43b2c4"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a46192797ea05f96e5f1fbc728f43b2c4"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a46192797ea05f96e5f1fbc728f43b2c4">llo::min</a> (T *out, ade::Shape &amp;outshape, std::vector&lt; VecRef&lt; T &gt;&gt; args)</td></tr>
-<tr class="separator:a46192797ea05f96e5f1fbc728f43b2c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0eba005c4545a4522bac459d42c7c140"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a0eba005c4545a4522bac459d42c7c140"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a0eba005c4545a4522bac459d42c7c140">llo::max</a> (T *out, ade::Shape &amp;outshape, std::vector&lt; VecRef&lt; T &gt;&gt; args)</td></tr>
-<tr class="separator:a0eba005c4545a4522bac459d42c7c140"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc9bc8f035596d99faf27b8280373cf5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#afc9bc8f035596d99faf27b8280373cf5">llo::is_identity</a> (ade::CoordptrT &amp;coorder)</td></tr>
+<tr class="separator:afc9bc8f035596d99faf27b8280373cf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46ed9c7d5f903adc37d37c498ac9f7d1"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a46ed9c7d5f903adc37d37c498ac9f7d1"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a46ed9c7d5f903adc37d37c498ac9f7d1">llo::unary</a> (TensorT&lt; T &gt; &amp;out, DataArg&lt; T &gt; in, std::function&lt; void(TensorT&lt; T &gt; &amp;, const TensorT&lt; T &gt; &amp;)&gt; f)</td></tr>
+<tr class="memdesc:a46ed9c7d5f903adc37d37c498ac9f7d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic unary operation assuming identity mapping.  <a href="namespacello.html#a46ed9c7d5f903adc37d37c498ac9f7d1">More...</a><br /></td></tr>
+<tr class="separator:a46ed9c7d5f903adc37d37c498ac9f7d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24c54c69d4f21e66c64aaa9d5fdafdb9"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a24c54c69d4f21e66c64aaa9d5fdafdb9"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a24c54c69d4f21e66c64aaa9d5fdafdb9">llo::abs</a> (TensorT&lt; T &gt; &amp;out, DataArg&lt; T &gt; in)</td></tr>
+<tr class="separator:a24c54c69d4f21e66c64aaa9d5fdafdb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d69edb2cd92a4e8e412e30bbc517701"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr class="memitem:a0d69edb2cd92a4e8e412e30bbc517701"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a0d69edb2cd92a4e8e412e30bbc517701">llo::abs&lt; uint8_t &gt;</a> (TensorT&lt; uint8_t &gt; &amp;out, DataArg&lt; uint8_t &gt; in)</td></tr>
+<tr class="separator:a0d69edb2cd92a4e8e412e30bbc517701"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b7412c237fd586964af109b31a49838"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr class="memitem:a0b7412c237fd586964af109b31a49838"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a0b7412c237fd586964af109b31a49838">llo::abs&lt; uint16_t &gt;</a> (TensorT&lt; uint16_t &gt; &amp;out, DataArg&lt; uint16_t &gt; in)</td></tr>
+<tr class="separator:a0b7412c237fd586964af109b31a49838"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1148cc32f82e7921eb914c2654ecdaee"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr class="memitem:a1148cc32f82e7921eb914c2654ecdaee"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a1148cc32f82e7921eb914c2654ecdaee">llo::abs&lt; uint32_t &gt;</a> (TensorT&lt; uint32_t &gt; &amp;out, DataArg&lt; uint32_t &gt; in)</td></tr>
+<tr class="separator:a1148cc32f82e7921eb914c2654ecdaee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ed48486a8d91b75a05c237f8f2f364f"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr class="memitem:a4ed48486a8d91b75a05c237f8f2f364f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a4ed48486a8d91b75a05c237f8f2f364f">llo::abs&lt; uint64_t &gt;</a> (TensorT&lt; uint64_t &gt; &amp;out, DataArg&lt; uint64_t &gt; in)</td></tr>
+<tr class="separator:a4ed48486a8d91b75a05c237f8f2f364f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08b1a3a42d568f558e9afaa2910643b3"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a08b1a3a42d568f558e9afaa2910643b3"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a08b1a3a42d568f558e9afaa2910643b3">llo::neg</a> (TensorT&lt; T &gt; &amp;out, DataArg&lt; T &gt; in)</td></tr>
+<tr class="separator:a08b1a3a42d568f558e9afaa2910643b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23b2a125b44e6638bfe2b3a6c4b5bdc6"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr class="memitem:a23b2a125b44e6638bfe2b3a6c4b5bdc6"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a23b2a125b44e6638bfe2b3a6c4b5bdc6">llo::neg&lt; uint8_t &gt;</a> (TensorT&lt; uint8_t &gt; &amp;out, DataArg&lt; uint8_t &gt; in)</td></tr>
+<tr class="separator:a23b2a125b44e6638bfe2b3a6c4b5bdc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68a7692b1e14c29c8b6cf404273f29d1"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr class="memitem:a68a7692b1e14c29c8b6cf404273f29d1"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a68a7692b1e14c29c8b6cf404273f29d1">llo::neg&lt; uint16_t &gt;</a> (TensorT&lt; uint16_t &gt; &amp;out, DataArg&lt; uint16_t &gt; in)</td></tr>
+<tr class="separator:a68a7692b1e14c29c8b6cf404273f29d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5073667f5e17c9876fce6234c83399d"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr class="memitem:af5073667f5e17c9876fce6234c83399d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#af5073667f5e17c9876fce6234c83399d">llo::neg&lt; uint32_t &gt;</a> (TensorT&lt; uint32_t &gt; &amp;out, DataArg&lt; uint32_t &gt; in)</td></tr>
+<tr class="separator:af5073667f5e17c9876fce6234c83399d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeefa047287dcca2de1f09b1e0b029502"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr class="memitem:aeefa047287dcca2de1f09b1e0b029502"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#aeefa047287dcca2de1f09b1e0b029502">llo::neg&lt; uint64_t &gt;</a> (TensorT&lt; uint64_t &gt; &amp;out, DataArg&lt; uint64_t &gt; in)</td></tr>
+<tr class="separator:aeefa047287dcca2de1f09b1e0b029502"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe5cccd0ddf1f4edaab9b5b53e8427b8"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:abe5cccd0ddf1f4edaab9b5b53e8427b8"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#abe5cccd0ddf1f4edaab9b5b53e8427b8">llo::bit_not</a> (TensorT&lt; T &gt; &amp;out, DataArg&lt; T &gt; in)</td></tr>
+<tr class="separator:abe5cccd0ddf1f4edaab9b5b53e8427b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5e0672afba0a53a2a4fa6cbd4e1df23"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ad5e0672afba0a53a2a4fa6cbd4e1df23"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#ad5e0672afba0a53a2a4fa6cbd4e1df23">llo::sin</a> (TensorT&lt; T &gt; &amp;out, DataArg&lt; T &gt; in)</td></tr>
+<tr class="separator:ad5e0672afba0a53a2a4fa6cbd4e1df23"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b2ed816266c3a85f5d1ea013ded16c2"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a2b2ed816266c3a85f5d1ea013ded16c2"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a2b2ed816266c3a85f5d1ea013ded16c2">llo::cos</a> (TensorT&lt; T &gt; &amp;out, DataArg&lt; T &gt; in)</td></tr>
+<tr class="separator:a2b2ed816266c3a85f5d1ea013ded16c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a630728cb2e925eb4baa692f323d09419"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a630728cb2e925eb4baa692f323d09419"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a630728cb2e925eb4baa692f323d09419">llo::tan</a> (TensorT&lt; T &gt; &amp;out, DataArg&lt; T &gt; in)</td></tr>
+<tr class="separator:a630728cb2e925eb4baa692f323d09419"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6024811900b15302ec76aad4ef1566c7"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a6024811900b15302ec76aad4ef1566c7"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a6024811900b15302ec76aad4ef1566c7">llo::exp</a> (TensorT&lt; T &gt; &amp;out, DataArg&lt; T &gt; in)</td></tr>
+<tr class="separator:a6024811900b15302ec76aad4ef1566c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42aa72ef7640c2b19b083c9b02e84dd4"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a42aa72ef7640c2b19b083c9b02e84dd4"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a42aa72ef7640c2b19b083c9b02e84dd4">llo::log</a> (TensorT&lt; T &gt; &amp;out, DataArg&lt; T &gt; in)</td></tr>
+<tr class="separator:a42aa72ef7640c2b19b083c9b02e84dd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7242ee77a10dea84b799bb5a463b4938"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a7242ee77a10dea84b799bb5a463b4938"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a7242ee77a10dea84b799bb5a463b4938">llo::sqrt</a> (TensorT&lt; T &gt; &amp;out, DataArg&lt; T &gt; in)</td></tr>
+<tr class="separator:a7242ee77a10dea84b799bb5a463b4938"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56abed2f8cc56d242f6555501f155fd0"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a56abed2f8cc56d242f6555501f155fd0"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a56abed2f8cc56d242f6555501f155fd0">llo::round</a> (TensorT&lt; T &gt; &amp;out, DataArg&lt; T &gt; in)</td></tr>
+<tr class="separator:a56abed2f8cc56d242f6555501f155fd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4cf0732143a9c5ec50550d847869727"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ac4cf0732143a9c5ec50550d847869727"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#ac4cf0732143a9c5ec50550d847869727">llo::binary</a> (TensorT&lt; T &gt; &amp;out, DataArg&lt; T &gt; a, DataArg&lt; T &gt; b, std::function&lt; void(TensorT&lt; T &gt; &amp;, const TensorT&lt; T &gt; &amp;, const TensorT&lt; T &gt; &amp;)&gt; f)</td></tr>
+<tr class="memdesc:ac4cf0732143a9c5ec50550d847869727"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic binary operation assuming identity mapping.  <a href="namespacello.html#ac4cf0732143a9c5ec50550d847869727">More...</a><br /></td></tr>
+<tr class="separator:ac4cf0732143a9c5ec50550d847869727"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2f11cd76bd54389a8e0d34f25684b0c"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ab2f11cd76bd54389a8e0d34f25684b0c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#ab2f11cd76bd54389a8e0d34f25684b0c">llo::pow</a> (TensorT&lt; T &gt; &amp;out, DataArg&lt; T &gt; a, DataArg&lt; T &gt; b)</td></tr>
+<tr class="separator:ab2f11cd76bd54389a8e0d34f25684b0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25735ae7f72b8255260aa7ff495d7208"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a25735ae7f72b8255260aa7ff495d7208"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a25735ae7f72b8255260aa7ff495d7208">llo::sub</a> (TensorT&lt; T &gt; &amp;out, DataArg&lt; T &gt; a, DataArg&lt; T &gt; b)</td></tr>
+<tr class="separator:a25735ae7f72b8255260aa7ff495d7208"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0cdb90048720de206cf8d48334fbc8e9"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a0cdb90048720de206cf8d48334fbc8e9"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a0cdb90048720de206cf8d48334fbc8e9">llo::div</a> (TensorT&lt; T &gt; &amp;out, DataArg&lt; T &gt; a, DataArg&lt; T &gt; b)</td></tr>
+<tr class="separator:a0cdb90048720de206cf8d48334fbc8e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd9f714eaf6364fa0d2c0bf1eb733ae2"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:acd9f714eaf6364fa0d2c0bf1eb733ae2"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#acd9f714eaf6364fa0d2c0bf1eb733ae2">llo::eq</a> (TensorT&lt; T &gt; &amp;out, DataArg&lt; T &gt; a, DataArg&lt; T &gt; b)</td></tr>
+<tr class="separator:acd9f714eaf6364fa0d2c0bf1eb733ae2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af62fcaac1bb63f7e4f9b8086578650bb"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:af62fcaac1bb63f7e4f9b8086578650bb"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#af62fcaac1bb63f7e4f9b8086578650bb">llo::neq</a> (TensorT&lt; T &gt; &amp;out, DataArg&lt; T &gt; a, DataArg&lt; T &gt; b)</td></tr>
+<tr class="separator:af62fcaac1bb63f7e4f9b8086578650bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace34d8b64b1b6cf733feb5ae03924583"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ace34d8b64b1b6cf733feb5ae03924583"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#ace34d8b64b1b6cf733feb5ae03924583">llo::lt</a> (TensorT&lt; T &gt; &amp;out, DataArg&lt; T &gt; a, DataArg&lt; T &gt; b)</td></tr>
+<tr class="separator:ace34d8b64b1b6cf733feb5ae03924583"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f57d543d53c0fe7766a4e5921b74211"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a5f57d543d53c0fe7766a4e5921b74211"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a5f57d543d53c0fe7766a4e5921b74211">llo::gt</a> (TensorT&lt; T &gt; &amp;out, DataArg&lt; T &gt; a, DataArg&lt; T &gt; b)</td></tr>
+<tr class="separator:a5f57d543d53c0fe7766a4e5921b74211"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c69d68630c024d2e32e05572754a5a4"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a8c69d68630c024d2e32e05572754a5a4"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a8c69d68630c024d2e32e05572754a5a4">llo::rand_uniform</a> (TensorT&lt; T &gt; &amp;out, DataArg&lt; T &gt; a, DataArg&lt; T &gt; b)</td></tr>
+<tr class="separator:a8c69d68630c024d2e32e05572754a5a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f653ea088f1ee0efea0e7e56cf3bbf2"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr class="memitem:a9f653ea088f1ee0efea0e7e56cf3bbf2"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a9f653ea088f1ee0efea0e7e56cf3bbf2">llo::rand_uniform&lt; double &gt;</a> (TensorT&lt; double &gt; &amp;out, DataArg&lt; double &gt; a, DataArg&lt; double &gt; b)</td></tr>
+<tr class="separator:a9f653ea088f1ee0efea0e7e56cf3bbf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abedcbf51d81da53872a7ecd972de8e0c"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr class="memitem:abedcbf51d81da53872a7ecd972de8e0c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#abedcbf51d81da53872a7ecd972de8e0c">llo::rand_uniform&lt; float &gt;</a> (TensorT&lt; float &gt; &amp;out, DataArg&lt; float &gt; a, DataArg&lt; float &gt; b)</td></tr>
+<tr class="separator:abedcbf51d81da53872a7ecd972de8e0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b8a39ae05f5870bdf068ecb0df14cfb"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a7b8a39ae05f5870bdf068ecb0df14cfb"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a7b8a39ae05f5870bdf068ecb0df14cfb">llo::rand_normal</a> (TensorT&lt; T &gt; &amp;out, DataArg&lt; T &gt; a, DataArg&lt; T &gt; b)</td></tr>
+<tr class="separator:a7b8a39ae05f5870bdf068ecb0df14cfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea89be880bf535deb25de53dbebbdf6d"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr class="memitem:aea89be880bf535deb25de53dbebbdf6d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#aea89be880bf535deb25de53dbebbdf6d">llo::rand_normal&lt; double &gt;</a> (TensorT&lt; double &gt; &amp;out, DataArg&lt; double &gt; a, DataArg&lt; double &gt; b)</td></tr>
+<tr class="separator:aea89be880bf535deb25de53dbebbdf6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5854a331d52d5637c35f28b481337a8d"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr class="memitem:a5854a331d52d5637c35f28b481337a8d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a5854a331d52d5637c35f28b481337a8d">llo::rand_normal&lt; float &gt;</a> (TensorT&lt; float &gt; &amp;out, DataArg&lt; float &gt; a, DataArg&lt; float &gt; b)</td></tr>
+<tr class="separator:a5854a331d52d5637c35f28b481337a8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0deca0c30f8e3f30619de66ffd17ec0"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ac0deca0c30f8e3f30619de66ffd17ec0"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#ac0deca0c30f8e3f30619de66ffd17ec0">llo::nnary</a> (TensorT&lt; T &gt; &amp;out, DataArgsT&lt; T &gt; args, std::function&lt; void(T &amp;, const T &amp;)&gt; acc, std::function&lt; void(TensorT&lt; T &gt; &amp;, const TensorT&lt; T &gt; &amp;)&gt; tensacc)</td></tr>
+<tr class="memdesc:ac0deca0c30f8e3f30619de66ffd17ec0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic n-nary operation.  <a href="namespacello.html#ac0deca0c30f8e3f30619de66ffd17ec0">More...</a><br /></td></tr>
+<tr class="separator:ac0deca0c30f8e3f30619de66ffd17ec0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b91f9e56870a3012aed63a25a3d5f74"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a0b91f9e56870a3012aed63a25a3d5f74"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a0b91f9e56870a3012aed63a25a3d5f74">llo::add</a> (TensorT&lt; T &gt; &amp;out, DataArgsT&lt; T &gt; args)</td></tr>
+<tr class="separator:a0b91f9e56870a3012aed63a25a3d5f74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a317f98bfd007bf1d30c3cf63e56208b4"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a317f98bfd007bf1d30c3cf63e56208b4"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a317f98bfd007bf1d30c3cf63e56208b4">llo::mul</a> (TensorT&lt; T &gt; &amp;out, DataArgsT&lt; T &gt; args)</td></tr>
+<tr class="separator:a317f98bfd007bf1d30c3cf63e56208b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76a013de20324d1629a322bbba32a60a"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a76a013de20324d1629a322bbba32a60a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a76a013de20324d1629a322bbba32a60a">llo::min</a> (TensorT&lt; T &gt; &amp;out, DataArgsT&lt; T &gt; args)</td></tr>
+<tr class="separator:a76a013de20324d1629a322bbba32a60a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdfde5bf36887035bce42f44302db7f5"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:acdfde5bf36887035bce42f44302db7f5"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#acdfde5bf36887035bce42f44302db7f5">llo::max</a> (TensorT&lt; T &gt; &amp;out, DataArgsT&lt; T &gt; args)</td></tr>
+<tr class="separator:acdfde5bf36887035bce42f44302db7f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaae8cde342855a200326d40483415c7c"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:aaae8cde342855a200326d40483415c7c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#aaae8cde342855a200326d40483415c7c">llo::fast_matmul</a> (TensorT&lt; T &gt; &amp;out, DataArg&lt; T &gt; a, DataArg&lt; T &gt; b)</td></tr>
+<tr class="separator:aaae8cde342855a200326d40483415c7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="ab960ea12707ab64a74edae08f7bbe8d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab960ea12707ab64a74edae08f7bbe8d4">&#9670;&nbsp;</a></span>TO_MAT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define TO_MAT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">ARG</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">Eigen::Map&lt;const MatrixT&lt;T&gt;&gt;(ARG.data_-&gt;data(),\</div><div class="line">    ARG.data_-&gt;dimension(1),ARG.data_-&gt;dimension(0))</div></div><!-- fragment -->
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

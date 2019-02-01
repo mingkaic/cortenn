@@ -7,7 +7,7 @@
 ///
 
 #include "llo/generated/codes.hpp"
-#include "llo/generated/convert.hpp"
+#include "llo/generated/opmap.hpp"
 
 #include "ade/ileaf.hpp"
 

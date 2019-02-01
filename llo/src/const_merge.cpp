@@ -14,7 +14,7 @@ ade::TensptrT const_merge_edit (bool& is_optimized,
 {
 	ade::ArgsT cargs;
 	std::copy_if(args.begin(), args.end(), std::back_inserter(cargs),
-		[](ade::MappedTensor& arg)
+		[](ade::FuncArg& arg)
 		{
 			return nullptr != dynamic_cast<Constant*>(
 				arg.get_tensor().get());
@@ -37,7 +37,7 @@ ade::TensptrT const_merge_edit (bool& is_optimized,
 		// assert nnary functions are independent of order
 		ade::ArgsT vargs;
 		std::copy_if(args.begin(), args.end(), std::back_inserter(vargs),
-			[](ade::MappedTensor& arg)
+			[](ade::FuncArg& arg)
 			{
 				return nullptr == dynamic_cast<Constant*>(
 					arg.get_tensor().get());

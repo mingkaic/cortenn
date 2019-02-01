@@ -45,10 +45,10 @@ genrule(
         "generated/api.cpp",
         "generated/codes.hpp",
         "generated/codes.cpp",
+        "generated/data.hpp",
         "generated/grader.hpp",
         "generated/grader.cpp",
         "generated/opmap.hpp",
-        "generated/convert.hpp",
         "generated/pyapi.cpp",
     ],
     tools = ["//pybinder:pyagen"],
@@ -66,9 +66,9 @@ cc_library(
     ]) + [
         "//llo:generated/api.hpp",
         "//llo:generated/codes.hpp",
+        "//llo:generated/data.hpp",
         "//llo:generated/grader.hpp",
         "//llo:generated/opmap.hpp",
-        "//llo:generated/convert.hpp",
     ],
     srcs = glob(["src/*.cpp"]) + [
         "//llo:generated/api.cpp",

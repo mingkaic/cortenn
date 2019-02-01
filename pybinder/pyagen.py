@@ -5,11 +5,8 @@ import json
 import os.path
 import sys
 
-import age.templates.template as template
-# import age.generator.internal as internal_plugin
-import pybinder.custom_plugin as custom_plugin
+import age.generator.internal as internal_plugin
 import pybinder.pyapi_plugin as pyapi_plugin
-import pybinder.convert_plugin as convert_plugin
 
 from age.generator.generate import generate
 
@@ -46,7 +43,7 @@ def main(args):
     strip_prefix = args.strip_prefix
 
     generate(fields, outpath=outpath, strip_prefix=strip_prefix,
-        plugins=[custom_plugin, pyapi_plugin, convert_plugin])
+        plugins=[internal_plugin, pyapi_plugin])
 
 if '__main__' == __name__:
     main(sys.argv[1:])

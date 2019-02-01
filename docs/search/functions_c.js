@@ -1,15 +1,11 @@
 var searchData=
 [
-  ['rand_5fbinom',['rand_binom',['../namespacello.html#a7c719d1c80cf4b57c3068f5bf2a39a72',1,'llo']]],
-  ['rand_5fbinom_3c_20double_20_3e',['rand_binom&lt; double &gt;',['../namespacello.html#a7d2d8a9bdf1e3566cf5357c198de9c5b',1,'llo']]],
-  ['rand_5fbinom_3c_20float_20_3e',['rand_binom&lt; float &gt;',['../namespacello.html#a6590c80bbbd9bfc8936575b95758cf32',1,'llo']]],
-  ['rand_5fnormal',['rand_normal',['../namespacello.html#ad1c7348a56a9534c6ff9baa65ebb43dc',1,'llo']]],
-  ['rand_5fnormal_3c_20double_20_3e',['rand_normal&lt; double &gt;',['../namespacello.html#a1b742c2923ceb0fc9a1877ab20cabbdb',1,'llo']]],
-  ['rand_5fnormal_3c_20float_20_3e',['rand_normal&lt; float &gt;',['../namespacello.html#a502ebfee3eb91123ca56a38862c62801',1,'llo']]],
-  ['rand_5funiform',['rand_uniform',['../namespacello.html#adbeb24b7f0ff24b9ad4a4d62801585ff',1,'llo']]],
-  ['rand_5funiform_3c_20double_20_3e',['rand_uniform&lt; double &gt;',['../namespacello.html#a629e4865c5521554995d7b88847695de',1,'llo']]],
-  ['rand_5funiform_3c_20float_20_3e',['rand_uniform&lt; float &gt;',['../namespacello.html#a1d9acac2589dd4ed27c9f32d31e81c93',1,'llo']]],
-  ['reduce',['reduce',['../namespacello.html#abdf021d900da5a0822bcfb49315cc1a7',1,'llo']]],
-  ['reduce_5f1d',['reduce_1d',['../namespacello.html#ae6906ba9944277db0c7a72cd803a7490',1,'llo']]],
-  ['round',['round',['../namespacello.html#af2a4ec16dc83e924a43ac86a3893b411',1,'llo']]]
+  ['nbytes',['nbytes',['../structllo_1_1_variable.html#ac50a79df6f7688f202b5ab5381070065',1,'llo::Variable']]],
+  ['neg',['neg',['../namespacello.html#a08b1a3a42d568f558e9afaa2910643b3',1,'llo']]],
+  ['neg_3c_20uint16_5ft_20_3e',['neg&lt; uint16_t &gt;',['../namespacello.html#a68a7692b1e14c29c8b6cf404273f29d1',1,'llo']]],
+  ['neg_3c_20uint32_5ft_20_3e',['neg&lt; uint32_t &gt;',['../namespacello.html#af5073667f5e17c9876fce6234c83399d',1,'llo']]],
+  ['neg_3c_20uint64_5ft_20_3e',['neg&lt; uint64_t &gt;',['../namespacello.html#aeefa047287dcca2de1f09b1e0b029502',1,'llo']]],
+  ['neg_3c_20uint8_5ft_20_3e',['neg&lt; uint8_t &gt;',['../namespacello.html#a23b2a125b44e6638bfe2b3a6c4b5bdc6',1,'llo']]],
+  ['neq',['neq',['../namespacello.html#af62fcaac1bb63f7e4f9b8086578650bb',1,'llo']]],
+  ['nnary',['nnary',['../namespacello.html#ac0deca0c30f8e3f30619de66ffd17ec0',1,'llo']]]
 ];

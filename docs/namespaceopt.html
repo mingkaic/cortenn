@@ -62,41 +62,71 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
-<a href="#typedef-members">Typedefs</a>  </div>
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">opt Namespace Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structopt_1_1_graph_editor.html">GraphEditor</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a8cbd4508cca3b4920e499d5145001991"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceopt.html#a8cbd4508cca3b4920e499d5145001991">EditFuncT</a> = std::function&lt; ade::TensptrT(ade::iFunctor *, ade::ArgsT)&gt;</td></tr>
-<tr class="memdesc:a8cbd4508cca3b4920e499d5145001991"><td class="mdescLeft">&#160;</td><td class="mdescRight">Edit functor type.  <a href="#a8cbd4508cca3b4920e499d5145001991">More...</a><br /></td></tr>
-<tr class="separator:a8cbd4508cca3b4920e499d5145001991"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bb437415f677133cd47214458d08caf"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceopt.html#a7bb437415f677133cd47214458d08caf">EditFuncT</a> = std::function&lt; ade::TensptrT(bool &amp;, ade::Opcode &amp;, ade::ArgsT &amp;)&gt;</td></tr>
+<tr class="memdesc:a7bb437415f677133cd47214458d08caf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Edit functor type.  <a href="#a7bb437415f677133cd47214458d08caf">More...</a><br /></td></tr>
+<tr class="separator:a7bb437415f677133cd47214458d08caf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:afdb6f6ddd06e038626859368e0f25e73"><td class="memItemLeft" align="right" valign="top">ade::TensT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceopt.html#afdb6f6ddd06e038626859368e0f25e73">graph_edit</a> (ade::TensT roots, <a class="el" href="namespaceopt.html#a7bb437415f677133cd47214458d08caf">EditFuncT</a> edit)</td></tr>
+<tr class="separator:afdb6f6ddd06e038626859368e0f25e73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p><a class="el" href="graph__editor_8hpp.html">graph_editor.hpp</a> opt</p>
+<div class="textblock"><p>graph_editor.hpp opt</p>
 <p>Purpose: Define ade graph pruning functions </p>
 </div><h2 class="groupheader">Typedef Documentation</h2>
-<a id="a8cbd4508cca3b4920e499d5145001991"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8cbd4508cca3b4920e499d5145001991">&#9670;&nbsp;</a></span>EditFuncT</h2>
+<a id="a7bb437415f677133cd47214458d08caf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7bb437415f677133cd47214458d08caf">&#9670;&nbsp;</a></span>EditFuncT</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespaceopt.html#a8cbd4508cca3b4920e499d5145001991">opt::EditFuncT</a> = typedef std::function&lt;ade::TensptrT(ade::iFunctor*,ade::ArgsT)&gt;</td>
+          <td class="memname">using <a class="el" href="namespaceopt.html#a7bb437415f677133cd47214458d08caf">opt::EditFuncT</a> = typedef std::function&lt;ade::TensptrT(bool&amp;,ade::Opcode&amp;,ade::ArgsT&amp;)&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Edit functor type. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="afdb6f6ddd06e038626859368e0f25e73"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afdb6f6ddd06e038626859368e0f25e73">&#9670;&nbsp;</a></span>graph_edit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ade::TensT opt::graph_edit </td>
+          <td>(</td>
+          <td class="paramtype">ade::TensT&#160;</td>
+          <td class="paramname"><em>roots</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceopt.html#a7bb437415f677133cd47214458d08caf">EditFuncT</a>&#160;</td>
+          <td class="paramname"><em>edit</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>For some target extractable from iLeaf, prune graph such that reduces the length of branches to target from root For example, prune zeros branches by reducing f(x) * 0 to 0, repeat for every instance of multiplication by zero in graph Prune graph of root Tensptr </p>
 
 </div>
 </div>

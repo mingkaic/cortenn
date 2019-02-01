@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['pathedtens',['PathedTens',['../structpbm_1_1_pathed_tens.html',1,'pbm']]]
+  ['graphinfo',['GraphInfo',['../structpbm_1_1_graph_info.html',1,'pbm']]],
+  ['graphsaver',['GraphSaver',['../structpbm_1_1_graph_saver.html',1,'pbm']]]
 ];

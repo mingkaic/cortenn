@@ -1,6 +1,16 @@
 <map id="llo/llo.hpp" name="llo/llo.hpp">
-<area shape="rect" id="node2" href="$eval_8hpp.html" title="llo/eval.hpp" alt="" coords="269,79,358,104"/>
-<area shape="rect" id="node15" href="$serialize_8hpp.html" title="llo/serialize.hpp" alt="" coords="433,79,546,104"/>
-<area shape="rect" id="node5" href="$operator_8hpp.html" title="llo/operator.hpp" alt="" coords="339,152,452,177"/>
-<area shape="rect" id="node10" href="$llo_2data_8hpp.html" title="llo/data.hpp" alt="" coords="523,225,613,251"/>
+<area shape="rect" id="node3" href="$eval_8hpp.html" title="llo/eval.hpp" alt="" coords="381,152,470,177"/>
+<area shape="rect" id="node22" href="$serialize_8hpp.html" title="llo/serialize.hpp" alt="" coords="697,79,810,104"/>
+<area shape="rect" id="node23" href="$derive_8hpp.html" title="llo/opt/derive.hpp" alt="" coords="1157,79,1280,104"/>
+<area shape="rect" id="node7" href="$cache_8hpp.html" title="llo/cache.hpp" alt="" coords="617,225,716,251"/>
+<area shape="rect" id="node16" href="$operator_8hpp.html" title="llo/operator.hpp" alt="" coords="286,225,399,251"/>
+<area shape="rect" id="node9" href="$variable_8hpp.html" title="llo/variable.hpp" alt="" coords="698,299,809,324"/>
+<area shape="rect" id="node12" href="$tensor_8hpp.html" title="llo/tensor.hpp" alt="" coords="575,372,675,397"/>
+<area shape="rect" id="node24" href="$multi__opt_8hpp.html" title="llo/opt/multi_opt.hpp" alt="" coords="1064,152,1205,177"/>
+<area shape="rect" id="node32" href="$ops__reuse_8hpp.html" title="llo/opt/ops_reuse.hpp" alt="" coords="1229,152,1378,177"/>
+<area shape="rect" id="node25" href="$const__merge_8hpp.html" title="llo/opt/const_merge.hpp" alt="" coords="1143,225,1307,251"/>
+<area shape="rect" id="node28" href="$ops__merge_8hpp.html" title="llo/opt/ops_merge.hpp" alt="" coords="1331,225,1484,251"/>
+<area shape="rect" id="node30" href="$one__prune_8hpp.html" title="llo/opt/one_prune.hpp" alt="" coords="969,225,1119,251"/>
+<area shape="rect" id="node31" href="$zero__prune_8hpp.html" title="llo/opt/zero_prune.hpp" alt="" coords="791,225,945,251"/>
+<area shape="rect" id="node26" href="$graph__edit_8hpp.html" title="opt/graph_edit.hpp" alt="" coords="996,299,1129,324"/>
 </map>

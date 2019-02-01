@@ -39,7 +39,7 @@ ade::TensptrT ops_merge_edit (bool& is_optimized,
 	{
 		bool merged = false;
 		ade::ArgsT newchildren;
-		for (ade::MappedTensor& arg : args)
+		for (ade::FuncArg& arg : args)
 		{
 			ade::iTensor* argptr = arg.get_tensor().get();
 			auto arg_shaper = arg.get_shaper();
@@ -57,7 +57,7 @@ ade::TensptrT ops_merge_edit (bool& is_optimized,
 			bool arg_id = is_bijective(arg_coorder);
 			if (opcode.code_ == arg_op && (arg_id || std::all_of(
 				arg_children.begin(), arg_children.end(),
-				[](ade::MappedTensor& mten)
+				[](ade::FuncArg& mten)
 				{
 					return is_bijective(mten.get_coorder());
 				})))
@@ -86,7 +86,7 @@ ade::TensptrT ops_merge_edit (bool& is_optimized,
 							ade::CoordptrT(ccoorder->reverse()) :
 							ccoorder;
 					}
-					newchildren.push_back(ade::MappedTensor(
+					newchildren.push_back(ade::FuncArg(
 						child.get_tensor(),
 						ade::CoordptrT(child.get_shaper()->
 							connect(*arg_shaper)),
@@ -108,7 +108,7 @@ ade::TensptrT ops_merge_edit (bool& is_optimized,
 				ccoorder = arg_io != child_io ?
 					ade::CoordptrT(ccoorder->reverse()) :
 					ccoorder;
-				newchildren.push_back(ade::MappedTensor(
+				newchildren.push_back(ade::FuncArg(
 					child.get_tensor(),
 					ade::CoordptrT(child.get_shaper()->
 						connect(*arg_shaper)),

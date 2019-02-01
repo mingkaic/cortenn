@@ -10,7 +10,7 @@
 namespace llo
 {
 
-ade::TensptrT mtens_mul (ade::TensptrT lhs, ade::MappedTensor rhs)
+ade::TensptrT mtens_mul (ade::TensptrT lhs, ade::FuncArg rhs)
 {
 	return ade::TensptrT(ade::Functor::get(ade::Opcode{"PROD", age::PROD}, {
 		ade::identity_map(lhs), rhs
@@ -24,7 +24,7 @@ ade::TensptrT grad_prod (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens)
 		fwd->get_opcode(), fwd_children));
 
 	auto& fwd_child = fwd_children[gradidx];
-	ade::MappedTensor fwd_mapped(fwd_cpy,
+	ade::FuncArg fwd_mapped(fwd_cpy,
 		ade::CoordptrT(fwd_child.get_shaper()->reverse()),
 		!fwd_child.map_io(), fwd_child.get_coorder());
 
@@ -41,7 +41,7 @@ ade::TensptrT grad_min (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens)
 	auto fchildren = fwd->get_children();
 	ade::CoordptrT shaper(fchildren[gradidx].get_shaper()->reverse());
 	ade::TensptrT rev_fwd(ade::Functor::get(ade::Opcode{"SUM",age::SUM},
-		{ade::MappedTensor(fwd_cpy, shaper)}));
+		{ade::FuncArg(fwd_cpy, shaper)}));
 	return age::eq(rev_fwd, tens[gradidx]);
 }
 
@@ -52,12 +52,12 @@ ade::TensptrT grad_max (ade::iFunctor* fwd, size_t gradidx, ade::TensT tens)
 	auto fchildren = fwd->get_children();
 	ade::CoordptrT shaper(fchildren[gradidx].get_shaper()->reverse());
 	ade::TensptrT rev_fwd(ade::Functor::get(ade::Opcode{"SUM",age::SUM},
-		{ade::MappedTensor(fwd_cpy, shaper)}));
+		{ade::FuncArg(fwd_cpy, shaper)}));
 	return age::eq(rev_fwd, tens[gradidx]);
 }
 
 ade::TensptrT grad_matmul (ade::iFunctor* fwd,
-	ade::MappedTensor bwd, size_t idx)
+	ade::FuncArg bwd, size_t idx)
 {
 	ade::ArgsT children = fwd->get_children();
 	ade::TensptrT a = children[0].get_tensor();
@@ -185,8 +185,8 @@ ade::TensptrT get_fast_matmul (ade::TensptrT a, ade::TensptrT b)
 	));
 	return ade::TensptrT(ade::Functor::get(
 		ade::Opcode{"MATMUL", age::MATMUL}, {
-			ade::MappedTensor(a, left_shaper, false, ade::identity),
-			ade::MappedTensor(b, right_shaper, false, ade::identity),
+			ade::FuncArg(a, left_shaper, false, ade::identity),
+			ade::FuncArg(b, right_shaper, false, ade::identity),
 		}));
 }
 
@@ -288,8 +288,8 @@ ade::TensptrT convolution (ade::TensptrT img, ade::TensptrT kernel)
 		}));
 
 	ade::TensptrT prod(ade::Functor::get(ade::Opcode{"PROD", age::PROD}, {
-		ade::MappedTensor(img, img_shaper, false, img_mapper),
-		ade::MappedTensor(kernel, kernel_mapper),
+		ade::FuncArg(img, img_shaper, false, img_mapper),
+		ade::FuncArg(kernel, kernel_mapper),
 	}));
 
 	return age::reduce_sum(prod, 4);

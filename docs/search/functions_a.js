@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['operator_3d',['operator=',['../structllo_1_1_variable.html#ad9b494d214229a166dfe5858ac1315e4',1,'llo::Variable::operator=(const Variable &amp;other)'],['../structllo_1_1_variable.html#a92f4d1aade59f4b48225c85a07af19af',1,'llo::Variable::operator=(Variable &amp;&amp;other)'],['../structllo_1_1_variable.html#aa04ab2870b33eb035e6ad414468b14bc',1,'llo::Variable::operator=(std::vector&lt; T &gt; data)'],['../structllo_1_1_variable.html#afa23c49ccbf3492523cba83238e3c12c',1,'llo::Variable::operator=(GenericRef data)']]],
-  ['ops_5fmerge',['ops_merge',['../namespacello.html#ae0368b1bc9dbb51eab89472dfdd5bc1f',1,'llo']]]
+  ['load_5fcoord',['load_coord',['../namespacepbm.html#aeba4471bf47aaee406e158b5c6445271',1,'pbm']]],
+  ['load_5fgraph',['load_graph',['../namespacepbm.html#a0037ee921475730e5547b03f005e3855',1,'pbm']]],
+  ['log',['log',['../namespacello.html#a42aa72ef7640c2b19b083c9b02e84dd4',1,'llo']]],
+  ['lt',['lt',['../namespacello.html#ace34d8b64b1b6cf733feb5ae03924583',1,'llo']]]
 ];

@@ -1,6 +1,10 @@
 var searchData=
 [
-  ['p2cshape',['p2cshape',['../namespacepyllo.html#a6b3db39d1842d7ba7ec3ea39f49566ef',1,'pyllo']]],
-  ['pow',['pow',['../namespacello.html#aa56e03e88d5be448c2d06294014a1ff5',1,'llo']]],
-  ['pybind11_5fmodule',['PYBIND11_MODULE',['../llo_8cpp.html#ad2b457d981fbb939599137f6d4b17c04',1,'llo.cpp']]]
+  ['matmul',['matmul',['../namespacello.html#a8dbb6866f0276ec91d368d539aea4730',1,'llo']]],
+  ['max',['max',['../namespacello.html#acdfde5bf36887035bce42f44302db7f5',1,'llo']]],
+  ['min',['min',['../namespacello.html#a76a013de20324d1629a322bbba32a60a',1,'llo']]],
+  ['mtens_5fmul',['mtens_mul',['../namespacello.html#a191ffa502ed37dc9bd06183a4de5d5f0',1,'llo']]],
+  ['mul',['mul',['../namespacello.html#a317f98bfd007bf1d30c3cf63e56208b4',1,'llo']]],
+  ['multi_5fderive',['multi_derive',['../namespacello.html#a8446c7f55390393e007ea5c5685551bd',1,'llo']]],
+  ['multi_5foptimize',['multi_optimize',['../namespacello.html#ac6fa6c148b707eb51968e24594431132',1,'llo']]]
 ];

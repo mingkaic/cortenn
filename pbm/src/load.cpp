@@ -79,7 +79,7 @@ void load_graph (GraphInfo& out, const cortenn::Graph& in,
 					shaper = coord;
 				}
 				args.push_back(
-					ade::MappedTensor(arg, shaper, nodearg.fwd(), coord));
+					ade::FuncArg(arg, shaper, nodearg.fwd(), coord));
 				out.roots_.erase(invec[nodearg.idx()]);
 			}
 			ade::TensptrT f(ade::Functor::get(

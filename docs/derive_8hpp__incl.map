@@ -1,6 +1,11 @@
 <map id="llo/opt/derive.hpp" name="llo/opt/derive.hpp">
-<area shape="rect" id="node2" href="$zero__prune_8hpp.html" title="llo/opt/zero_prune.hpp" alt="" coords="300,79,454,104"/>
-<area shape="rect" id="node11" href="$ops__merge_8hpp.html" title="llo/opt/ops_merge.hpp" alt="" coords="478,79,631,104"/>
-<area shape="rect" id="node3" href="$graph__editor_8hpp.html" title="opt/graph_editor.hpp" alt="" coords="483,152,626,177"/>
-<area shape="rect" id="node6" href="$llo_2data_8hpp.html" title="llo/data.hpp" alt="" coords="248,152,338,177"/>
+<area shape="rect" id="node2" href="$multi__opt_8hpp.html" title="llo/opt/multi_opt.hpp" alt="" coords="241,79,382,104"/>
+<area shape="rect" id="node18" href="$ops__reuse_8hpp.html" title="llo/opt/ops_reuse.hpp" alt="" coords="5,79,154,104"/>
+<area shape="rect" id="node3" href="$const__merge_8hpp.html" title="llo/opt/const_merge.hpp" alt="" coords="230,152,394,177"/>
+<area shape="rect" id="node7" href="$ops__merge_8hpp.html" title="llo/opt/ops_merge.hpp" alt="" coords="52,152,206,177"/>
+<area shape="rect" id="node9" href="$one__prune_8hpp.html" title="llo/opt/one_prune.hpp" alt="" coords="418,152,568,177"/>
+<area shape="rect" id="node17" href="$zero__prune_8hpp.html" title="llo/opt/zero_prune.hpp" alt="" coords="592,152,746,177"/>
+<area shape="rect" id="node4" href="$graph__edit_8hpp.html" title="opt/graph_edit.hpp" alt="" coords="332,225,465,251"/>
+<area shape="rect" id="node10" href="$variable_8hpp.html" title="llo/variable.hpp" alt="" coords="551,225,662,251"/>
+<area shape="rect" id="node13" href="$tensor_8hpp.html" title="llo/tensor.hpp" alt="" coords="679,299,779,324"/>
 </map>

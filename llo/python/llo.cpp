@@ -90,7 +90,7 @@ PYBIND11_MODULE(llo, m)
 				auto args = f->get_children();
 				std::transform(args.begin(), args.end(),
 				std::back_inserter(tens),
-				[](ade::MappedTensor& mten)
+				[](ade::FuncArg& mten)
 				{
 					return mten.get_tensor();
 				});

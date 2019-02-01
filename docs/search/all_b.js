@@ -1,11 +1,14 @@
 var searchData=
 [
-  ['nbytes',['nbytes',['../structllo_1_1_variable.html#ae3eb14d0db3deb6845d8566af25365eb',1,'llo::Variable']]],
-  ['neg',['neg',['../namespacello.html#a2523a51704ba46880ed6b0ed38aa0259',1,'llo']]],
-  ['neg_3c_20uint16_5ft_20_3e',['neg&lt; uint16_t &gt;',['../namespacello.html#a26997fff05dbe6209d720e66cb7c2693',1,'llo']]],
-  ['neg_3c_20uint32_5ft_20_3e',['neg&lt; uint32_t &gt;',['../namespacello.html#acc26536b3f54b814ca59d94fa87d2728',1,'llo']]],
-  ['neg_3c_20uint64_5ft_20_3e',['neg&lt; uint64_t &gt;',['../namespacello.html#a9d20723f32966a0b8341676f61f7aa4f',1,'llo']]],
-  ['neg_3c_20uint8_5ft_20_3e',['neg&lt; uint8_t &gt;',['../namespacello.html#a6580f013947aa53d8e53e6fbd2722afa',1,'llo']]],
-  ['neq',['neq',['../namespacello.html#ab6719aec5379449c5df745796e3ce677',1,'llo']]],
-  ['nnary',['nnary',['../namespacello.html#a8c77a8e53c0227e523c81699b9c2aab9',1,'llo']]]
+  ['mapper_5f',['mapper_',['../structllo_1_1_data_arg.html#aa61a42b0ae6f0cce24b1a97ce2416e89',1,'llo::DataArg']]],
+  ['matmul',['matmul',['../namespacello.html#a8dbb6866f0276ec91d368d539aea4730',1,'llo']]],
+  ['matrixt',['MatrixT',['../namespacello.html#ae8cf2ce5ebddb37c1118a6a09c45bdca',1,'llo']]],
+  ['max',['max',['../namespacello.html#acdfde5bf36887035bce42f44302db7f5',1,'llo']]],
+  ['min',['min',['../namespacello.html#a76a013de20324d1629a322bbba32a60a',1,'llo']]],
+  ['mtens_5fmul',['mtens_mul',['../namespacello.html#a191ffa502ed37dc9bd06183a4de5d5f0',1,'llo']]],
+  ['mul',['mul',['../namespacello.html#a317f98bfd007bf1d30c3cf63e56208b4',1,'llo']]],
+  ['multi_5fderive',['multi_derive',['../namespacello.html#a8446c7f55390393e007ea5c5685551bd',1,'llo']]],
+  ['multi_5fopt_2ecpp',['multi_opt.cpp',['../multi__opt_8cpp.html',1,'']]],
+  ['multi_5fopt_2ehpp',['multi_opt.hpp',['../multi__opt_8hpp.html',1,'']]],
+  ['multi_5foptimize',['multi_optimize',['../namespacello.html#ac6fa6c148b707eb51968e24594431132',1,'llo']]]
 ];

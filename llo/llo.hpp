@@ -7,7 +7,6 @@
 ///
 
 #include "llo/generated/api.hpp"
-#include "llo/generated/codes.hpp"
 
 #include "llo/eval.hpp"
 #include "llo/serialize.hpp"

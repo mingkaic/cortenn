@@ -29,7 +29,7 @@ struct CSVEquation final : public ade::iTraveler
 		auto& children = func->get_children();
 		for (size_t i = 0, n = children.size(); i < n; ++i)
 		{
-			const ade::MappedTensor& child = children[i];
+			const ade::FuncArg& child = children[i];
 			auto coorder = child.get_coorder().get();
 			auto tens = child.get_tensor().get();
 			if (is_identity(coorder))

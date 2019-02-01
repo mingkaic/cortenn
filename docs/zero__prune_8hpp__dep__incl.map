@@ -1,6 +1,9 @@
 <map id="llo/opt/zero_prune.hpp" name="llo/opt/zero_prune.hpp">
-<area shape="rect" id="node2" href="$derive_8hpp.html" title="llo/opt/derive.hpp" alt="" coords="76,79,199,104"/>
-<area shape="rect" id="node5" href="$zero__prune_8cpp.html" title="llo/src/zero_prune.cpp" alt="" coords="223,79,375,104"/>
-<area shape="rect" id="node3" href="$llo_8cpp.html" title="llo/python/llo.cpp" alt="" coords="5,152,126,177"/>
-<area shape="rect" id="node4" href="$derive_8cpp.html" title="llo/src/derive.cpp" alt="" coords="150,152,272,177"/>
+<area shape="rect" id="node2" href="$multi__opt_8hpp.html" title="llo/opt/multi_opt.hpp" alt="" coords="174,79,315,104"/>
+<area shape="rect" id="node8" href="$zero__prune_8cpp.html" title="llo/src/zero_prune.cpp" alt="" coords="339,79,491,104"/>
+<area shape="rect" id="node3" href="$derive_8hpp.html" title="llo/opt/derive.hpp" alt="" coords="105,152,228,177"/>
+<area shape="rect" id="node7" href="$multi__opt_8cpp.html" title="llo/src/multi_opt.cpp" alt="" coords="252,152,391,177"/>
+<area shape="rect" id="node4" href="$llo_8hpp.html" title="llo/llo.hpp" alt="" coords="5,225,83,251"/>
+<area shape="rect" id="node5" href="$llo_8cpp.html" title="llo/python/llo.cpp" alt="" coords="107,225,227,251"/>
+<area shape="rect" id="node6" href="$derive_8cpp.html" title="llo/src/derive.cpp" alt="" coords="251,225,373,251"/>
 </map>

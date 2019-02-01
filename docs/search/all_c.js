@@ -1,12 +1,12 @@
 var searchData=
 [
-  ['opt_20_28optimizer_29',['OPT (Optimizer)',['../md_opt__r_e_a_d_m_e__o_p_t.html',1,'']]],
-  ['operator_2ecpp',['operator.cpp',['../operator_8cpp.html',1,'']]],
-  ['operator_2ehpp',['operator.hpp',['../operator_8hpp.html',1,'']]],
-  ['operator_3d',['operator=',['../structllo_1_1_variable.html#ad9b494d214229a166dfe5858ac1315e4',1,'llo::Variable::operator=(const Variable &amp;other)'],['../structllo_1_1_variable.html#a92f4d1aade59f4b48225c85a07af19af',1,'llo::Variable::operator=(Variable &amp;&amp;other)'],['../structllo_1_1_variable.html#aa04ab2870b33eb035e6ad414468b14bc',1,'llo::Variable::operator=(std::vector&lt; T &gt; data)'],['../structllo_1_1_variable.html#afa23c49ccbf3492523cba83238e3c12c',1,'llo::Variable::operator=(GenericRef data)']]],
-  ['ops_5fmerge',['ops_merge',['../namespacello.html#ae0368b1bc9dbb51eab89472dfdd5bc1f',1,'llo']]],
-  ['ops_5fmerge_2ecpp',['ops_merge.cpp',['../ops__merge_8cpp.html',1,'']]],
-  ['ops_5fmerge_2ehpp',['ops_merge.hpp',['../ops__merge_8hpp.html',1,'']]],
-  ['opt',['opt',['../namespaceopt.html',1,'']]],
-  ['out_5f',['out_',['../structllo_1_1_evaluator.html#a1f837101f861c151b928f362028ebc65',1,'llo::Evaluator']]]
+  ['nbytes',['nbytes',['../structllo_1_1_variable.html#ac50a79df6f7688f202b5ab5381070065',1,'llo::Variable']]],
+  ['neg',['neg',['../namespacello.html#a08b1a3a42d568f558e9afaa2910643b3',1,'llo']]],
+  ['neg_3c_20uint16_5ft_20_3e',['neg&lt; uint16_t &gt;',['../namespacello.html#a68a7692b1e14c29c8b6cf404273f29d1',1,'llo']]],
+  ['neg_3c_20uint32_5ft_20_3e',['neg&lt; uint32_t &gt;',['../namespacello.html#af5073667f5e17c9876fce6234c83399d',1,'llo']]],
+  ['neg_3c_20uint64_5ft_20_3e',['neg&lt; uint64_t &gt;',['../namespacello.html#aeefa047287dcca2de1f09b1e0b029502',1,'llo']]],
+  ['neg_3c_20uint8_5ft_20_3e',['neg&lt; uint8_t &gt;',['../namespacello.html#a23b2a125b44e6638bfe2b3a6c4b5bdc6',1,'llo']]],
+  ['neq',['neq',['../namespacello.html#af62fcaac1bb63f7e4f9b8086578650bb',1,'llo']]],
+  ['nnary',['nnary',['../namespacello.html#ac0deca0c30f8e3f30619de66ffd17ec0',1,'llo']]],
+  ['nnary_5fcodes',['nnary_codes',['../namespacello.html#a7e9e6906db269518046e8365ba918eb7',1,'llo']]]
 ];

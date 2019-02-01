@@ -51,7 +51,7 @@ ade::TensT graph_edit (ade::TensT roots, EditFuncT edit)
 			if (opt_graph.end() != it)
 			{
 				changed = true;
-				children[i] = ade::MappedTensor(
+				children[i] = ade::FuncArg(
 					it->second, child.get_shaper(),
 					child.map_io(), child.get_coorder());
 			}

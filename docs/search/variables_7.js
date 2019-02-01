@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['push',['push',['../structllo_1_1_vec_ref.html#aebd667d7d909f51194c997e168fd2bf9',1,'llo::VecRef']]]
+  ['push_5f',['push_',['../structllo_1_1_data_arg.html#a88dd83b7fc12bbfb97c799b1ec722ed2',1,'llo::DataArg']]]
 ];

@@ -32,3 +32,9 @@ pybind_library(
     ],
     visibility = ["//visibility:public"],
 )
+
+py_library(
+    name = "dbg_wrapper",
+    srcs = glob(["*.py"]),
+    deps = ["//dbg:dbg_py"],
+)

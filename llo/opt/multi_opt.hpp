@@ -1,11 +1,7 @@
-#include "opt/graph_edit.hpp"
-
 #include "llo/opt/const_merge.hpp"
 #include "llo/opt/ops_merge.hpp"
 #include "llo/opt/one_prune.hpp"
 #include "llo/opt/zero_prune.hpp"
-
-#include "llo/variable.hpp"
 
 #ifndef LLO_MULTI_OPT_HPP
 #define LLO_MULTI_OPT_HPP

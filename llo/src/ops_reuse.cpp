@@ -79,8 +79,8 @@ static bool func_equals (ade::iFunctor* lhs, ade::iFunctor* rhs,
 		return lhs_children.size() == rhs_children.size() &&
 			std::equal(lhs_children.begin(), lhs_children.end(),
 			rhs_children.begin(),
-			[&replacements, &et](const ade::MappedTensor& lhs,
-				const ade::MappedTensor& rhs)
+			[&replacements, &et](const ade::FuncArg& lhs,
+				const ade::FuncArg& rhs)
 			{
 				auto lhs_tens = lhs.get_tensor().get();
 				auto rhs_tens = rhs.get_tensor().get();
@@ -101,7 +101,7 @@ static bool func_equals (ade::iFunctor* lhs, ade::iFunctor* rhs,
 	}
 	// order doesn't matter
 	std::unordered_map<ade::iTensor*,std::list<ade::CoordptrT>> lhs_map;
-	for (const ade::MappedTensor& lhs_child : lhs_children)
+	for (const ade::FuncArg& lhs_child : lhs_children)
 	{
 		auto lhs_tens = lhs_child.get_tensor().get();
 		auto lit = replacements.find(lhs_tens);
@@ -111,7 +111,7 @@ static bool func_equals (ade::iFunctor* lhs, ade::iFunctor* rhs,
 		}
 		lhs_map[lhs_tens].push_back(lhs_child.get_coorder());
 	}
-	for (const ade::MappedTensor& rhs_child : rhs_children)
+	for (const ade::FuncArg& rhs_child : rhs_children)
 	{
 		auto rhs_tens = rhs_child.get_tensor().get();
 		auto rit = replacements.find(rhs_tens);
@@ -249,7 +249,7 @@ ade::TensT ops_reuse (ade::TensT roots)
 				if (et != it)
 				{
 					is_optimized = true;
-					args[i] = ade::MappedTensor
+					args[i] = ade::FuncArg
 					{
 						smart_map[it->second],
 						args[i].get_shaper(),

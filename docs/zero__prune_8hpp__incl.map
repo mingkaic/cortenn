@@ -1,4 +1,5 @@
 <map id="llo/opt/zero_prune.hpp" name="llo/opt/zero_prune.hpp">
-<area shape="rect" id="node2" href="$graph__editor_8hpp.html" title="opt/graph_editor.hpp" alt="" coords="44,79,187,104"/>
-<area shape="rect" id="node5" href="$llo_2data_8hpp.html" title="llo/data.hpp" alt="" coords="289,79,379,104"/>
+<area shape="rect" id="node2" href="$graph__edit_8hpp.html" title="opt/graph_edit.hpp" alt="" coords="40,79,173,104"/>
+<area shape="rect" id="node4" href="$variable_8hpp.html" title="llo/variable.hpp" alt="" coords="223,79,334,104"/>
+<area shape="rect" id="node7" href="$tensor_8hpp.html" title="llo/tensor.hpp" alt="" coords="377,152,478,177"/>
 </map>

@@ -14,7 +14,7 @@ COVER := bazel coverage --config asan --config gtest
 
 COVERAGE_IGNORE := 'external/*' '**/test/*' '**/genfiles/*'
 
-COVERAGE_PIPE := ./scripts/merge_cov.sh $(COVERAGE_INFO_FILE)
+COVERAGE_PIPE := ./bazel-bin/external/com_github_mingkaic_cppkg/merge_cov $(COVERAGE_INFO_FILE)
 
 TMP_LOGFILE := /tmp/cortenn-test.log
 
@@ -35,7 +35,10 @@ cover_pbm:
 
 # generated coverage files
 
-lcov: coverage
+merge_cov:
+	bazel build @com_github_mingkaic_cppkg//:merge_cov
+
+lcov: merge_cov coverage
 	rm -f $(TMP_LOGFILE)
 	cat bazel-testlogs/opt/test/test.log >> $(TMP_LOGFILE)
 	cat bazel-testlogs/llo/ctest/test.log >> $(TMP_LOGFILE)
@@ -45,19 +48,19 @@ lcov: coverage
 	rm -f $(TMP_LOGFILE)
 	lcov --list $(COVERAGE_INFO_FILE)
 
-lcov_opt: cover_opt
+lcov_opt: merge_cov cover_opt
 	rm -f $(TMP_LOGFILE)
 	cat bazel-testlogs/opt/test/test.log | $(COVERAGE_PIPE)
 	lcov --remove $(COVERAGE_INFO_FILE) $(COVERAGE_IGNORE) -o $(COVERAGE_INFO_FILE)
 	rm -f $(TMP_LOGFILE)
 	lcov --list $(COVERAGE_INFO_FILE)
 
-lcov_llo: cover_llo
+lcov_llo: merge_cov cover_llo
 	cat bazel-testlogs/llo/ctest/test.log | $(COVERAGE_PIPE)
 	lcov --remove $(COVERAGE_INFO_FILE) $(COVERAGE_IGNORE) 'opt/*' -o $(COVERAGE_INFO_FILE)
 	lcov --list $(COVERAGE_INFO_FILE)
 
-lcov_pbm: cover_pbm
+lcov_pbm: merge_cov cover_pbm
 	cat bazel-testlogs/pbm/test/test.log | $(COVERAGE_PIPE)
 	lcov --remove $(COVERAGE_INFO_FILE) $(COVERAGE_IGNORE) -o $(COVERAGE_INFO_FILE)
 	lcov --list $(COVERAGE_INFO_FILE)

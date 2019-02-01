@@ -75,15 +75,19 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;ade/traveler.hpp&quot;</code><br />
+<code>#include &quot;ade/ifunctor.hpp&quot;</code><br />
 <code>#include &quot;llo/generated/opmap.hpp&quot;</code><br />
+<code>#include &quot;<a class="el" href="cache_8hpp_source.html">llo/cache.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="operator_8hpp_source.html">llo/operator.hpp</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for eval.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="eval_8hpp__incl.png" border="0" usemap="#llo_2eval_8hpp" alt=""/></div>
 <map name="llo_2eval_8hpp" id="llo_2eval_8hpp">
-<area shape="rect" id="node4" href="operator_8hpp.html" title="llo/operator.hpp" alt="" coords="339,79,452,104"/>
-<area shape="rect" id="node9" href="llo_2data_8hpp.html" title="llo/data.hpp" alt="" coords="549,152,640,177"/>
+<area shape="rect" id="node5" href="cache_8hpp.html" title="llo/cache.hpp" alt="" coords="479,79,579,104"/>
+<area shape="rect" id="node14" href="operator_8hpp.html" title="llo/operator.hpp" alt="" coords="665,79,778,104"/>
+<area shape="rect" id="node7" href="variable_8hpp.html" title="llo/variable.hpp" alt="" coords="474,152,585,177"/>
+<area shape="rect" id="node10" href="tensor_8hpp.html" title="llo/tensor.hpp" alt="" coords="601,225,702,251"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -93,7 +97,10 @@ This graph shows which files directly or indirectly include this file:</div>
 <map name="llo_2eval_8hppdep" id="llo_2eval_8hppdep">
 <area shape="rect" id="node2" href="llo_8hpp.html" title="llo/llo.hpp" alt="" coords="5,79,83,104"/>
 <area shape="rect" id="node3" href="llo_8cpp.html" title="llo/python/llo.cpp" alt="" coords="107,79,227,104"/>
-<area shape="rect" id="node4" href="eval_8cpp.html" title="llo/src/eval.cpp" alt="" coords="251,79,360,104"/>
+<area shape="rect" id="node4" href="const__merge_8cpp.html" title="llo/src/const_merge.cpp" alt="" coords="251,79,413,104"/>
+<area shape="rect" id="node5" href="helper_8cpp.html" title="llo/src/helper.cpp" alt="" coords="437,79,558,104"/>
+<area shape="rect" id="node6" href="one__prune_8cpp.html" title="llo/src/one_prune.cpp" alt="" coords="582,79,731,104"/>
+<area shape="rect" id="node7" href="zero__prune_8cpp.html" title="llo/src/zero_prune.cpp" alt="" coords="755,79,907,104"/>
 </map>
 </div>
 </div>
@@ -101,7 +108,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_evaluator.html">llo::Evaluator</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_evaluator.html">llo::Evaluator&lt; T &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -116,9 +123,14 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a0713341a41c370371e2cdfb9c776d49c"><td class="memItemLeft" align="right" valign="top">GenericData&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a0713341a41c370371e2cdfb9c776d49c">llo::eval</a> (ade::TensptrT tens, age::_GENERATED_DTYPE dtype)</td></tr>
-<tr class="memdesc:a0713341a41c370371e2cdfb9c776d49c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate generic data of tens converted to specified dtype.  <a href="namespacello.html#a0713341a41c370371e2cdfb9c776d49c">More...</a><br /></td></tr>
-<tr class="separator:a0713341a41c370371e2cdfb9c776d49c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a853e35840c744e2415fd08ca2c69c853"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a853e35840c744e2415fd08ca2c69c853"><td class="memTemplItemLeft" align="right" valign="top">TensptrT&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a853e35840c744e2415fd08ca2c69c853">llo::eval</a> (ade::iTensor *tens)</td></tr>
+<tr class="memdesc:a853e35840c744e2415fd08ca2c69c853"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate generic data of tens converted to specified type.  <a href="namespacello.html#a853e35840c744e2415fd08ca2c69c853">More...</a><br /></td></tr>
+<tr class="separator:a853e35840c744e2415fd08ca2c69c853"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1eb34215e84b8a7020bd6c356e2ab2eb"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a1eb34215e84b8a7020bd6c356e2ab2eb"><td class="memTemplItemLeft" align="right" valign="top">TensptrT&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a1eb34215e84b8a7020bd6c356e2ab2eb">llo::eval</a> (ade::TensptrT tens)</td></tr>
+<tr class="memdesc:a1eb34215e84b8a7020bd6c356e2ab2eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate generic data of tens pointer converted to specified type.  <a href="namespacello.html#a1eb34215e84b8a7020bd6c356e2ab2eb">More...</a><br /></td></tr>
+<tr class="separator:a1eb34215e84b8a7020bd6c356e2ab2eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a5affbea700e701f35920c74c0acdeb41"></a>

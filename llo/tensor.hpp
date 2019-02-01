@@ -3,7 +3,7 @@
 
 #include "ade/shape.hpp"
 
-#include "llo/generated/convert.hpp"
+#include "llo/generated/data.hpp"
 
 #ifndef LLO_TENSOR_HPP
 #define LLO_TENSOR_HPP

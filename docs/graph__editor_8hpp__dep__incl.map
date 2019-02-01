@@ -1,9 +1,0 @@
-<map id="opt/graph_editor.hpp" name="opt/graph_editor.hpp">
-<area shape="rect" id="node2" href="$zero__prune_8hpp.html" title="llo/opt/zero_prune.hpp" alt="" coords="77,79,231,104"/>
-<area shape="rect" id="node7" href="$ops__merge_8hpp.html" title="llo/opt/ops_merge.hpp" alt="" coords="254,79,408,104"/>
-<area shape="rect" id="node3" href="$derive_8hpp.html" title="llo/opt/derive.hpp" alt="" coords="181,152,304,177"/>
-<area shape="rect" id="node6" href="$zero__prune_8cpp.html" title="llo/src/zero_prune.cpp" alt="" coords="5,152,158,177"/>
-<area shape="rect" id="node4" href="$llo_8cpp.html" title="llo/python/llo.cpp" alt="" coords="111,225,231,251"/>
-<area shape="rect" id="node5" href="$derive_8cpp.html" title="llo/src/derive.cpp" alt="" coords="256,225,377,251"/>
-<area shape="rect" id="node8" href="$ops__merge_8cpp.html" title="llo/src/ops_merge.cpp" alt="" coords="328,152,480,177"/>
-</map>

@@ -23,7 +23,7 @@ PYBIND11_MODULE(dbg, m)
 	"Print graph of root tensor to stdout",
 	py::arg("root"), py::arg("showshape") = false);
 
-	m.def("print_csv",
+	m.def("print_graphcsv",
 	[](ade::TensptrT root, bool showshape)
 	{
 		CSVEquation ceq;
@@ -47,7 +47,7 @@ PYBIND11_MODULE(dbg, m)
 	"Return graph of root tensor as string",
 	py::arg("root"), py::arg("showshape") = false);
 
-	m.def("csv_to_str",
+	m.def("graph_to_csvstr",
 	[](ade::TensptrT root, bool showshape)
 	{
 		std::stringstream ss;
@@ -80,7 +80,7 @@ PYBIND11_MODULE(dbg, m)
 	"Stream graph of root tensor to file",
 	py::arg("root"), py::arg("filename"), py::arg("showshape") = false);
 
-	m.def("csv_to_file",
+	m.def("graph_to_csvfile",
 	[](ade::TensptrT root, std::string filename, bool showshape)
 	{
 		std::ofstream outstr(filename);

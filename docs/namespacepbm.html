@@ -87,12 +87,12 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a8fdfbc53d17d97799b9bf964dddccced"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepbm.html#a8fdfbc53d17d97799b9bf964dddccced">TensT</a> = std::vector&lt; ade::TensptrT &gt;</td></tr>
 <tr class="memdesc:a8fdfbc53d17d97799b9bf964dddccced"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tensptr vector type.  <a href="#a8fdfbc53d17d97799b9bf964dddccced">More...</a><br /></td></tr>
 <tr class="separator:a8fdfbc53d17d97799b9bf964dddccced"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a98a0c941943a8ea186975b9eb102a991"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepbm.html#a98a0c941943a8ea186975b9eb102a991">DataSaverT</a> = std::function&lt; std::string(const char *, size_t, size_t)&gt;</td></tr>
-<tr class="memdesc:a98a0c941943a8ea186975b9eb102a991"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data serialization functor.  <a href="#a98a0c941943a8ea186975b9eb102a991">More...</a><br /></td></tr>
-<tr class="separator:a98a0c941943a8ea186975b9eb102a991"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a06155a5439c0c77b969ed34d5da6cbfd"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepbm.html#a06155a5439c0c77b969ed34d5da6cbfd">DataLoaderT</a> = std::function&lt; ade::TensptrT(const char *, ade::Shape, size_t, std::string)&gt;</td></tr>
-<tr class="memdesc:a06155a5439c0c77b969ed34d5da6cbfd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data deserialization functor.  <a href="#a06155a5439c0c77b969ed34d5da6cbfd">More...</a><br /></td></tr>
-<tr class="separator:a06155a5439c0c77b969ed34d5da6cbfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4fdebf957a8e62a457da87a426e1350b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepbm.html#a4fdebf957a8e62a457da87a426e1350b">DataSaverT</a> = std::function&lt; std::string(bool &amp;, ade::iLeaf *)&gt;</td></tr>
+<tr class="memdesc:a4fdebf957a8e62a457da87a426e1350b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data serialization functor.  <a href="#a4fdebf957a8e62a457da87a426e1350b">More...</a><br /></td></tr>
+<tr class="separator:a4fdebf957a8e62a457da87a426e1350b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7781b29a60c63cb49abcd791423efd2"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepbm.html#ac7781b29a60c63cb49abcd791423efd2">DataLoaderT</a> = std::function&lt; ade::TensptrT(const char *, ade::Shape, size_t, std::string, bool)&gt;</td></tr>
+<tr class="memdesc:ac7781b29a60c63cb49abcd791423efd2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data deserialization functor.  <a href="#ac7781b29a60c63cb49abcd791423efd2">More...</a><br /></td></tr>
+<tr class="separator:ac7781b29a60c63cb49abcd791423efd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b3659bb9fe2c247d9742a6be341e1f2"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepbm.html#a4b3659bb9fe2c247d9742a6be341e1f2">StringsT</a> = std::list&lt; std::string &gt;</td></tr>
 <tr class="memdesc:a4b3659bb9fe2c247d9742a6be341e1f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">String list type used for paths.  <a href="#a4b3659bb9fe2c247d9742a6be341e1f2">More...</a><br /></td></tr>
 <tr class="separator:a4b3659bb9fe2c247d9742a6be341e1f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -102,26 +102,26 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a0037ee921475730e5547b03f005e3855"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepbm.html#a0037ee921475730e5547b03f005e3855">load_graph</a> (<a class="el" href="structpbm_1_1_graph_info.html">GraphInfo</a> &amp;out, const cortenn::Graph &amp;in, <a class="el" href="namespacepbm.html#a06155a5439c0c77b969ed34d5da6cbfd">DataLoaderT</a> dataloader)</td></tr>
+<tr class="memitem:a0037ee921475730e5547b03f005e3855"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepbm.html#a0037ee921475730e5547b03f005e3855">load_graph</a> (<a class="el" href="structpbm_1_1_graph_info.html">GraphInfo</a> &amp;out, const cortenn::Graph &amp;in, <a class="el" href="namespacepbm.html#ac7781b29a60c63cb49abcd791423efd2">DataLoaderT</a> dataloader)</td></tr>
 <tr class="memdesc:a0037ee921475730e5547b03f005e3855"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return graph info through out available from in graph.  <a href="#a0037ee921475730e5547b03f005e3855">More...</a><br /></td></tr>
 <tr class="separator:a0037ee921475730e5547b03f005e3855"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeba4471bf47aaee406e158b5c6445271"><td class="memItemLeft" align="right" valign="top">static ade::CoordptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepbm.html#aeba4471bf47aaee406e158b5c6445271">load_coord</a> (const google::protobuf::RepeatedField&lt; double &gt; &amp;coord)</td></tr>
 <tr class="separator:aeba4471bf47aaee406e158b5c6445271"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>data.hpp pbm</p>
+<div class="textblock"><p><a class="el" href="data_8hpp.html">data.hpp</a> pbm</p>
 <p>Purpose: Define functions for marshaling equation graph</p>
 <p><a class="el" href="save_8hpp.html">save.hpp</a> pbm</p>
 <p>Purpose: Define functions for marshaling equation graph </p>
 </div><h2 class="groupheader">Typedef Documentation</h2>
-<a id="a06155a5439c0c77b969ed34d5da6cbfd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a06155a5439c0c77b969ed34d5da6cbfd">&#9670;&nbsp;</a></span>DataLoaderT</h2>
+<a id="ac7781b29a60c63cb49abcd791423efd2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7781b29a60c63cb49abcd791423efd2">&#9670;&nbsp;</a></span>DataLoaderT</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespacepbm.html#a06155a5439c0c77b969ed34d5da6cbfd">pbm::DataLoaderT</a> = typedef std::function&lt;ade::TensptrT(const char*,ade::Shape, size_t,std::string)&gt;</td>
+          <td class="memname">using <a class="el" href="namespacepbm.html#ac7781b29a60c63cb49abcd791423efd2">pbm::DataLoaderT</a> = typedef std::function&lt;ade::TensptrT(const char*,ade::Shape, size_t,std::string,bool)&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -130,14 +130,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a98a0c941943a8ea186975b9eb102a991"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a98a0c941943a8ea186975b9eb102a991">&#9670;&nbsp;</a></span>DataSaverT</h2>
+<a id="a4fdebf957a8e62a457da87a426e1350b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4fdebf957a8e62a457da87a426e1350b">&#9670;&nbsp;</a></span>DataSaverT</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespacepbm.html#a98a0c941943a8ea186975b9eb102a991">pbm::DataSaverT</a> = typedef std::function&lt;std::string(const char*,size_t,size_t)&gt;</td>
+          <td class="memname">using <a class="el" href="namespacepbm.html#a4fdebf957a8e62a457da87a426e1350b">pbm::DataSaverT</a> = typedef std::function&lt;std::string(bool&amp;,ade::iLeaf*)&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -242,7 +242,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespacepbm.html#a06155a5439c0c77b969ed34d5da6cbfd">DataLoaderT</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacepbm.html#ac7781b29a60c63cb49abcd791423efd2">DataLoaderT</a>&#160;</td>
           <td class="paramname"><em>dataloader</em>&#160;</td>
         </tr>
         <tr>

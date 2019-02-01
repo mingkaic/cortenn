@@ -264,7 +264,17 @@ PYBIND11_MODULE(llo, m)
 	"Return derivative of first tensor with respect to second tensor");
 
 	m.def("multi_derive",
-	llo::multi_derive,
+	[](ade::TensptrT root, py::tuple wrts)
+	{
+		size_t n = wrts.size();
+		std::vector<ade::iTensor*> wrts_vec(n);
+		for (size_t i = 0; i < n; ++i)
+		{
+			wrts_vec[i] = wrts[i].cast<ade::iTensor*>();
+		}
+		ade::TensT grads = llo::multi_derive(root, wrts_vec);
+		return py::make_tuple(grads);
+	},
 	"Return derivative of root tensor with respect to tensors");
 
 	m.def("seed",

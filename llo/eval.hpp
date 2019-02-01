@@ -87,18 +87,20 @@ private:
 
 /// Evaluate generic data of tens converted to specified type
 template <typename T>
-TensptrT<T> eval (ade::iTensor* tens)
+TensptrT<T> eval (ade::iTensor* tens,
+	CacheSpace<T>* caches = nullptr)
 {
-	Evaluator<T> eval;
+	Evaluator<T> eval(caches);
 	tens->accept(eval);
 	return eval.out_;
 }
 
 /// Evaluate generic data of tens pointer converted to specified type
 template <typename T>
-TensptrT<T> eval (ade::TensptrT tens)
+TensptrT<T> eval (ade::TensptrT tens,
+	CacheSpace<T>* caches = nullptr)
 {
-	Evaluator<T> eval;
+	Evaluator<T> eval(caches);
 	tens->accept(eval);
 	return eval.out_;
 }

@@ -8,15 +8,6 @@
 namespace llo
 {
 
-// todo: investigate whether to reverse dependency between cache and evaluator
-template <typename T>
-struct CacheBucket final
-{
-	TensptrT<T> tens_;
-
-	std::unordered_set<ade::iLeaf*> descendents_;
-};
-
 // todo: make path intersection finder more efficient
 template <typename T>
 struct CacheSpace final
@@ -28,33 +19,45 @@ struct CacheSpace final
 
 	void set (ade::iFunctor* key, TensptrT<T> value)
 	{
-		auto it = caches_.find(key);
-		if (caches_.end() != it)
-		{
-			it->second.tens_ = value;
-		}
+		caches_.emplace(key, value);
+		need_update_.erase(key);
 	}
 
 	/// Return nullptr if key value needs updating
 	TensptrT<T> get (ade::iFunctor* key) const
 	{
 		auto it = caches_.find(key);
-		if (caches_.end() == it)
+		if (caches_.end() == it ||
+			need_update_.end() != need_update_.find(key))
 		{
 			return nullptr;
 		}
-		// todo: add session info to determine whether to update key
-		return it->second.tens_;
+		return it->second;
 	}
 
+	/// Return true if cache contains value to functor key
+	///	or the key needs updating
 	bool has_value (ade::iFunctor* key) const
 	{
-		return caches_.end() != caches_.find(key);
+		return caches_.end() != caches_.find(key) ||
+			need_update_.end() != need_update_.find(key);
 	}
 
 	void add_equation (ade::TensT roots)
 	{
 		add_caches(roots);
+	}
+
+	void mark_update (std::vector<llo::iVariable*> updates)
+	{
+		for (llo::iVariable* var : updates)
+		{
+			auto it = ancestors_.find(var);
+			if (ancestors_.end() != it)
+			{
+				need_update_.insert(it.second.begin(), it.second.end());
+			}
+		}
 	}
 
 private:
@@ -66,55 +69,61 @@ private:
 			root->accept(stat);
 		}
 		llo::iVariable* var;
+		std::unordered_map<llo::iVariable*,ade::PathFinder> variables;
 		for (auto& gpair : stat.graphsize_)
 		{
 			if (gpair.second == 0 &&
 				(var = dynamic_cast<llo::iVariable*>(gpair.first)))
 			{
-				if (variables_.end() == variables_.find(var))
+				if (variables.end() == variables.find(var))
 				{
-					variables_.emplace(var, ade::PathFinder(var));
+					variables.emplace(var, ade::PathFinder(var));
 				}
 			}
 		}
 
 		for (auto& root : roots)
 		{
-			for (auto& varpair : variables_)
+			for (auto& varpair : variables)
 			{
 				root->accept(varpair.second);
 			}
 		}
 
 		// calculate path intersections
-		for (auto& varpair : variables_)
+		std::unordered_map<ade::iFunctor*,
+			std::unordered_set<llo::iVariable*>> descendents_;
+		for (auto& varpair : variables)
 		{
 			for (auto ppair : varpair.second.parents_)
 			{
 				auto f = static_cast<ade::iFunctor*>(ppair.first);
-				caches_[f].descendents_.emplace(varpair.first);
+				descendents_[f].emplace(varpair.first);
 			}
 		}
 
-		// remove all cache buckets with a single descendent
-		auto it = caches_.begin(), et = caches_.end();
-		while (it != et)
+		// add to cache buckets for functors with more than a single descendent
+		for (auto it = descendents_.begin(), et = descendents_.end();
+			it != et; ++it)
 		{
-			if (2 > it.second.descendents_.size())
+			if (2 > it->second.size())
 			{
-				it = caches_.erase(it);
-			}
-			else
-			{
-				++it;
+				for (llo::iVariable* var : it->second)
+				{
+					ancestors_[var].emplace(it->first);
+				}
 			}
 		}
 	}
 
-	// hide caches_ to ensure target consistency
-	std::unordered_map<ade::iFunctor*,CacheBucket<T>> caches_;
+	std::unordered_set<ade::iFunctor*> need_update_;
 
-	std::unordered_map<llo::iVariable*,ade::PathFinder> variables_;
+	// hide caches_ to ensure target consistency
+	std::unordered_map<ade::iFunctor*,TensptrT<T>> caches_;
+
+	std::unordered_map<llo::iVariable*,
+		std::unordered_set<ade::iFunctor*>> ancestors_;
+
 };
 
 }

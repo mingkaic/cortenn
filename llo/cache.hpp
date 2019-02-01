@@ -19,8 +19,11 @@ struct CacheSpace final
 
 	void set (ade::iFunctor* key, TensptrT<T> value)
 	{
-		caches_.emplace(key, value);
-		need_update_.erase(key);
+		if (caches_.end() != caches_.find(key))
+		{
+			caches_[key] = value;
+			need_update_.erase(key);
+		}
 	}
 
 	/// Return nullptr if key value needs updating
@@ -39,8 +42,7 @@ struct CacheSpace final
 	///	or the key needs updating
 	bool has_value (ade::iFunctor* key) const
 	{
-		return caches_.end() != caches_.find(key) ||
-			need_update_.end() != need_update_.find(key);
+		return caches_.end() != caches_.find(key);
 	}
 
 	void add_equation (ade::TensT roots)
@@ -55,7 +57,7 @@ struct CacheSpace final
 			auto it = ancestors_.find(var);
 			if (ancestors_.end() != it)
 			{
-				need_update_.insert(it.second.begin(), it.second.end());
+				need_update_.insert(it->second.begin(), it->second.end());
 			}
 		}
 	}
@@ -106,8 +108,12 @@ private:
 		for (auto it = descendents_.begin(), et = descendents_.end();
 			it != et; ++it)
 		{
-			if (2 > it->second.size())
+			if (1 < it->second.size())
 			{
+				if (caches_.end() == caches_.find(it->first))
+				{
+					caches_.emplace(it->first, nullptr);
+				}
 				for (llo::iVariable* var : it->second)
 				{
 					ancestors_[var].emplace(it->first);

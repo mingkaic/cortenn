@@ -7,6 +7,7 @@ P4 - clarify helper functions
 P4 - formalize codestyle
 
 performance:
+P2 - improve data caching mechanism with session info
 P3 - implement reduction using Eigen
 P4 - investigate operation shortcut detection
 P4 - implement optimization options to increase data accuracy

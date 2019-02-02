@@ -108,7 +108,7 @@ private:
 		for (auto it = descendents_.begin(), et = descendents_.end();
 			it != et; ++it)
 		{
-			if (1 < it->second.size() && it->first->get_children().size() > 1)
+			if (1 < it->second.size())
 			{
 				if (caches_.end() == caches_.find(it->first))
 				{

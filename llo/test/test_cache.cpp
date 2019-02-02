@@ -31,16 +31,12 @@ TEST(CACHE, CacheLocations)
 
 	auto cached_f = age::prod({nocache_f, src2});
 
-	auto nocached_u = age::abs(cached_f);
-
 	llo::CacheSpace<double> caches({cached_f});
 
 	EXPECT_FALSE(caches.has_value(
 		static_cast<ade::iFunctor*>(nocache_f.get())));
 	EXPECT_TRUE(caches.has_value(
 		static_cast<ade::iFunctor*>(cached_f.get())));
-	EXPECT_FALSE(caches.has_value(
-		static_cast<ade::iFunctor*>(nocached_u.get())));
 }
 
 
@@ -61,13 +57,12 @@ TEST(CACHE, CacheMark)
 
 	auto nocache_f = age::sum({src, cst});
 	auto cached_f = age::prod({nocache_f, src2});
-	auto nocached_u = age::abs(cached_f);
 	auto f = static_cast<ade::iFunctor*>(cached_f.get());
 
 	llo::CacheSpace<double> caches({cached_f});
 	EXPECT_EQ(nullptr, caches.get(f));
 
-	auto out = llo::eval(nocached_u, &caches);
+	auto out = llo::eval(cached_f, &caches);
 	std::vector<double> got_result;
 	{
 		auto gotshape = out->dimensions();

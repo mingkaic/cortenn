@@ -23,7 +23,7 @@ _styles = {
     },
     'edges': {
         'style': 'dashed',
-        'color': 'white',
+        # 'color': 'white',
         'arrowhead': 'open',
         'fontname': 'Courier',
         'fontsize': '12',
@@ -59,14 +59,14 @@ def read_graph(lines):
     edges = defaultdict(list)
     for line in lines:
         cols = line.split(',')
-        if len(cols) != 3: # ignore ill-formatted lines
+        if len(cols) != 4: # ignore ill-formatted lines
             continue # todo: warn
-        observer, subject, order = tuple(col for col in cols)
+        observer, subject, order, color = tuple(col for col in cols)
         obs = _str_clean(observer)
         sub = _str_clean(subject)
         nodes.add(obs)
         nodes.add(sub)
-        edges[obs].append((sub, order))
+        edges[obs].append((sub, order, color))
     return (nodes, edges)
 
 def print_graph(callgraph, outname):
@@ -77,8 +77,8 @@ def print_graph(callgraph, outname):
         g1.node(node)
 
     for observer in edges:
-        for subject, idx in edges[observer]:
-            g1.edge(observer, subject, idx)
+        for subject, idx, color in edges[observer]:
+            g1.edge(observer, subject, idx, color=color)
 
     _apply_styles(g1, _styles)
     g1.render(outname, view=True)

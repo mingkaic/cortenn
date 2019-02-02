@@ -2,6 +2,9 @@
 #include <sstream>
 
 #include "pybind11/pybind11.h"
+#include "pybind11/stl.h"
+
+#include "ade/ade.hpp"
 
 #include "dbg/ade.hpp"
 #include "dbg/ade_csv.hpp"
@@ -60,6 +63,22 @@ PYBIND11_MODULE(dbg, m)
 	"Return csv of graph edges as string",
 	py::arg("root"), py::arg("showshape") = false);
 
+	m.def("multigraph_to_csvstr",
+	[](ade::TensT roots, bool showshape)
+	{
+		std::stringstream ss;
+		CSVEquation ceq;
+		ceq.showshape_ = showshape;
+		for (auto& root : roots)
+		{
+			root->accept(ceq);
+		}
+		ceq.to_stream(ss);
+		return ss.str();
+	},
+	"Return csv of graph edges of multiple roots as string",
+	py::arg("roots"), py::arg("showshape") = false);
+
 	// ==== to file functions ====
 	m.def("graph_to_file",
 	[](ade::TensptrT root, std::string filename, bool showshape)
@@ -98,4 +117,26 @@ PYBIND11_MODULE(dbg, m)
 	},
 	"Stream csv of graph edges to file",
 	py::arg("root"), py::arg("filename"), py::arg("showshape") = false);
+
+	m.def("multigraph_to_csvfile",
+	[](ade::TensT roots, std::string filename, bool showshape)
+	{
+		std::ofstream outstr(filename);
+		if (outstr.is_open())
+		{
+			CSVEquation ceq;
+			ceq.showshape_ = showshape;
+			for (auto& root : roots)
+			{
+				root->accept(ceq);
+			}
+			ceq.to_stream(outstr);
+		}
+		else
+		{
+			logs::warnf("failed to write csv to file '%s'", filename.c_str());
+		}
+	},
+	"Return csv of graph edges of multiple roots to file",
+	py::arg("roots"), py::arg("filename"), py::arg("showshape") = false);
 }

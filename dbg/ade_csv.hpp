@@ -11,11 +11,27 @@ void multiline_replace (std::string& multiline);
 
 bool is_identity (ade::iCoordMap* coorder);
 
+enum NODE_TYPE
+{
+	VARIABLE = 0,
+	FUNCTOR,
+	CACHED_FUNC,
+};
+
+using GetTypeFuncT = std::function<NODE_TYPE(ade::iFunctor*)>;
+
 struct CSVEquation final : public ade::iTraveler
 {
+	CSVEquation (GetTypeFuncT get_ftype =
+		[](ade::iFunctor* func) { return FUNCTOR; }) :
+		get_ftype_(get_ftype) {}
+
 	void visit (ade::iLeaf* leaf) override
 	{
-		nodes_.emplace(leaf, leaf->to_string());
+		nodes_.emplace(leaf, Node{
+			leaf->to_string(),
+			VARIABLE,
+		});
 	}
 
 	void visit (ade::iFunctor* func) override
@@ -25,7 +41,10 @@ struct CSVEquation final : public ade::iTraveler
 		{
 			funcstr += func->shape().to_string();
 		}
-		nodes_.emplace(func, funcstr);
+		nodes_.emplace(func, Node{
+			funcstr,
+			get_ftype_(func),
+		});
 		auto& children = func->get_children();
 		for (size_t i = 0, n = children.size(); i < n; ++i)
 		{
@@ -56,7 +75,7 @@ struct CSVEquation final : public ade::iTraveler
 	{
 		std::vector<ade::iTensor*> vecnodes(nodes_.size());
 		std::transform(nodes_.begin(), nodes_.end(), vecnodes.begin(),
-			[](std::pair<ade::iTensor*,std::string> nodepair)
+			[](std::pair<ade::iTensor*,Node> nodepair)
 			{
 				return nodepair.first;
 			});
@@ -74,27 +93,32 @@ struct CSVEquation final : public ade::iTraveler
 			it != et; ++it, ++i)
 		{
 			const Edge& edge = *it;
+			std::string color = nodes_[edge.child_].ntype_ == CACHED_FUNC ?
+				"red" : "white";
 			if (nullptr == edge.coorder_)
 			{
 				out << nodeidces[edge.func_] << label_delim
-					<< nodes_[edge.func_] << ','
+					<< nodes_[edge.func_].label_ << ','
 					<< nodeidces[edge.child_] << label_delim
-					<< nodes_[edge.child_] << ','
-					<< edge.child_idx_ << '\n';
+					<< nodes_[edge.child_].label_ << ','
+					<< edge.child_idx_ << ','
+					<< color << '\n';
 			}
 			else
 			{
 				out << nodeidces[edge.func_] << label_delim
-					<< nodes_[edge.func_] << ','
+					<< nodes_[edge.func_].label_ << ','
 					<< nnodes + i << label_delim
 					<< coorders_[edge.coorder_] << ','
-					<< edge.child_idx_ << '\n';
+					<< edge.child_idx_ << ','
+					<< color << '\n';
 
 				out << nnodes + i << label_delim
 					<< coorders_[edge.coorder_] << ','
 					<< nodeidces[edge.child_] << label_delim
-					<< nodes_[edge.child_] << ','
-					<< edge.child_idx_ << '\n';
+					<< nodes_[edge.child_].label_ << ','
+					<< edge.child_idx_ << ','
+					<< color << '\n';
 			}
 		}
 	}
@@ -130,6 +154,13 @@ private:
 		size_t child_idx_;
 	};
 
+	struct Node
+	{
+		std::string label_;
+
+		NODE_TYPE ntype_;
+	};
+
 	struct EdgeHash
 	{
 		size_t operator() (const Edge& edge) const
@@ -144,9 +175,11 @@ private:
 		}
 	};
 
-	std::unordered_map<ade::iTensor*,std::string> nodes_;
+	std::unordered_map<ade::iTensor*,Node> nodes_;
 
 	std::unordered_map<ade::iCoordMap*,std::string> coorders_;
 
 	std::unordered_set<Edge,EdgeHash> edges_;
+
+	GetTypeFuncT get_ftype_;
 };

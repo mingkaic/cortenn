@@ -73,8 +73,6 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_cache_bucket.html">CacheBucket</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_cache_space.html">CacheSpace</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_constant.html">Constant</a></td></tr>
@@ -85,6 +83,11 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_evaluator.html">Evaluator</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1i_variable.html">iVariable</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_l_l_o_loader.html">LLOLoader</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unmarshal cortenn::Source as <a class="el" href="structllo_1_1_variable.html" title="Leaf node containing data. ">Variable</a> containing context of source.  <a href="structllo_1_1_l_l_o_loader.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_l_l_o_saver.html">LLOSaver</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_variable.html">Variable</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Leaf node containing data.  <a href="structllo_1_1_variable.html#details">More...</a><br /></td></tr>
@@ -101,6 +104,8 @@ Typedefs</h2></td></tr>
 <tr class="memitem:ae8cf2ce5ebddb37c1118a6a09c45bdca"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:ae8cf2ce5ebddb37c1118a6a09c45bdca"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#ae8cf2ce5ebddb37c1118a6a09c45bdca">MatrixT</a> = Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor &gt;</td></tr>
 <tr class="separator:ae8cf2ce5ebddb37c1118a6a09c45bdca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5baea0c89ffe9eb6ffa354c77d26eabf"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a5baea0c89ffe9eb6ffa354c77d26eabf">EditFuncT</a> = std::function&lt; ade::TensptrT(bool &amp;, ade::Opcode &amp;, ade::ArgsT &amp;)&gt;</td></tr>
+<tr class="separator:a5baea0c89ffe9eb6ffa354c77d26eabf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac68b9114f4c1dc1f5640f0ffa2212253"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:ac68b9114f4c1dc1f5640f0ffa2212253"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#ac68b9114f4c1dc1f5640f0ffa2212253">TensorT</a> = Eigen::Tensor&lt; T, ade::rank_cap, Eigen::RowMajor &gt;</td></tr>
 <tr class="separator:ac68b9114f4c1dc1f5640f0ffa2212253"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -114,14 +119,14 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a853e35840c744e2415fd08ca2c69c853"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a853e35840c744e2415fd08ca2c69c853"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacello.html#a5fac8cd024599b642058e9b709dedae8">TensptrT</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a853e35840c744e2415fd08ca2c69c853">eval</a> (ade::iTensor *tens)</td></tr>
-<tr class="memdesc:a853e35840c744e2415fd08ca2c69c853"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate generic data of tens converted to specified type.  <a href="#a853e35840c744e2415fd08ca2c69c853">More...</a><br /></td></tr>
-<tr class="separator:a853e35840c744e2415fd08ca2c69c853"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1eb34215e84b8a7020bd6c356e2ab2eb"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a1eb34215e84b8a7020bd6c356e2ab2eb"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacello.html#a5fac8cd024599b642058e9b709dedae8">TensptrT</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a1eb34215e84b8a7020bd6c356e2ab2eb">eval</a> (ade::TensptrT tens)</td></tr>
-<tr class="memdesc:a1eb34215e84b8a7020bd6c356e2ab2eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate generic data of tens pointer converted to specified type.  <a href="#a1eb34215e84b8a7020bd6c356e2ab2eb">More...</a><br /></td></tr>
-<tr class="separator:a1eb34215e84b8a7020bd6c356e2ab2eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae680847a16bc985b444cdc17821bd912"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ae680847a16bc985b444cdc17821bd912"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacello.html#a5fac8cd024599b642058e9b709dedae8">TensptrT</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#ae680847a16bc985b444cdc17821bd912">eval</a> (ade::iTensor *tens, <a class="el" href="structllo_1_1_cache_space.html">CacheSpace</a>&lt; T &gt; *caches=nullptr)</td></tr>
+<tr class="memdesc:ae680847a16bc985b444cdc17821bd912"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate generic data of tens converted to specified type.  <a href="#ae680847a16bc985b444cdc17821bd912">More...</a><br /></td></tr>
+<tr class="separator:ae680847a16bc985b444cdc17821bd912"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a661f6a0a719fb2d04f04ae5ad74b994b"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a661f6a0a719fb2d04f04ae5ad74b994b"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacello.html#a5fac8cd024599b642058e9b709dedae8">TensptrT</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a661f6a0a719fb2d04f04ae5ad74b994b">eval</a> (ade::TensptrT tens, <a class="el" href="structllo_1_1_cache_space.html">CacheSpace</a>&lt; T &gt; *caches=nullptr)</td></tr>
+<tr class="memdesc:a661f6a0a719fb2d04f04ae5ad74b994b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate generic data of tens pointer converted to specified type.  <a href="#a661f6a0a719fb2d04f04ae5ad74b994b">More...</a><br /></td></tr>
+<tr class="separator:a661f6a0a719fb2d04f04ae5ad74b994b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a191ffa502ed37dc9bd06183a4de5d5f0"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a191ffa502ed37dc9bd06183a4de5d5f0">mtens_mul</a> (ade::TensptrT lhs, ade::FuncArg rhs)</td></tr>
 <tr class="memdesc:a191ffa502ed37dc9bd06183a4de5d5f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return product of lhs with mapped rhs.  <a href="#a191ffa502ed37dc9bd06183a4de5d5f0">More...</a><br /></td></tr>
 <tr class="separator:a191ffa502ed37dc9bd06183a4de5d5f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -150,8 +155,6 @@ Functions</h2></td></tr>
 <tr class="memitem:a61884656c3aa93b200183b6047ef40dd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacello.html#a80fc8a112cc3f147a818d53f6045ac0b">EngineT</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a61884656c3aa93b200183b6047ef40dd">get_engine</a> (void)</td></tr>
 <tr class="memdesc:a61884656c3aa93b200183b6047ef40dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return global random generator.  <a href="#a61884656c3aa93b200183b6047ef40dd">More...</a><br /></td></tr>
 <tr class="separator:a61884656c3aa93b200183b6047ef40dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc9bc8f035596d99faf27b8280373cf5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#afc9bc8f035596d99faf27b8280373cf5">is_identity</a> (ade::CoordptrT &amp;coorder)</td></tr>
-<tr class="separator:afc9bc8f035596d99faf27b8280373cf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46ed9c7d5f903adc37d37c498ac9f7d1"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a46ed9c7d5f903adc37d37c498ac9f7d1"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a46ed9c7d5f903adc37d37c498ac9f7d1">unary</a> (<a class="el" href="namespacello.html#ac68b9114f4c1dc1f5640f0ffa2212253">TensorT</a>&lt; T &gt; &amp;out, <a class="el" href="structllo_1_1_data_arg.html">DataArg</a>&lt; T &gt; in, std::function&lt; void(<a class="el" href="namespacello.html#ac68b9114f4c1dc1f5640f0ffa2212253">TensorT</a>&lt; T &gt; &amp;, const <a class="el" href="namespacello.html#ac68b9114f4c1dc1f5640f0ffa2212253">TensorT</a>&lt; T &gt; &amp;)&gt; f)</td></tr>
 <tr class="memdesc:a46ed9c7d5f903adc37d37c498ac9f7d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic unary operation assuming identity mapping.  <a href="#a46ed9c7d5f903adc37d37c498ac9f7d1">More...</a><br /></td></tr>
@@ -281,8 +284,8 @@ Functions</h2></td></tr>
 <tr class="separator:a085b001fb98e1ae2f31926f84cac56a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8446c7f55390393e007ea5c5685551bd"><td class="memItemLeft" align="right" valign="top">ade::TensT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a8446c7f55390393e007ea5c5685551bd">multi_derive</a> (ade::TensptrT root, std::vector&lt; ade::iTensor *&gt; targets)</td></tr>
 <tr class="separator:a8446c7f55390393e007ea5c5685551bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6fa6c148b707eb51968e24594431132"><td class="memItemLeft" align="right" valign="top">ade::TensT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#ac6fa6c148b707eb51968e24594431132">multi_optimize</a> (ade::TensT roots, std::vector&lt; <a class="el" href="namespaceopt.html#a7bb437415f677133cd47214458d08caf">opt::EditFuncT</a> &gt; edits={ <a class="el" href="namespacello.html#ade63103cecf2330140492dec84ada411">const_merge_edit</a>, <a class="el" href="namespacello.html#a0d2ebfcfe5a9609d83d6ac4bc61bc620">zero_prune_edit</a>, <a class="el" href="namespacello.html#a61e972e3ed120456bb9f0fa725e2d0fd">one_prune_edit</a>, <a class="el" href="namespacello.html#a923bc3d1e5dc591a840b94d00b334883">ops_merge_edit</a>, })</td></tr>
-<tr class="separator:ac6fa6c148b707eb51968e24594431132"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac56c6042ea69452c7f74d6e0522dd0c1"><td class="memItemLeft" align="right" valign="top">ade::TensT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#ac56c6042ea69452c7f74d6e0522dd0c1">multi_optimize</a> (ade::TensT roots, std::vector&lt; <a class="el" href="namespacello.html#a5baea0c89ffe9eb6ffa354c77d26eabf">EditFuncT</a> &gt; edits={ <a class="el" href="namespacello.html#ade63103cecf2330140492dec84ada411">const_merge_edit</a>, <a class="el" href="namespacello.html#a0d2ebfcfe5a9609d83d6ac4bc61bc620">zero_prune_edit</a>, <a class="el" href="namespacello.html#a61e972e3ed120456bb9f0fa725e2d0fd">one_prune_edit</a>, <a class="el" href="namespacello.html#a923bc3d1e5dc591a840b94d00b334883">ops_merge_edit</a>, })</td></tr>
+<tr class="separator:ac56c6042ea69452c7f74d6e0522dd0c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61e972e3ed120456bb9f0fa725e2d0fd"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a61e972e3ed120456bb9f0fa725e2d0fd">one_prune_edit</a> (bool &amp;is_optimized, ade::Opcode &amp;opcode, ade::ArgsT &amp;args)</td></tr>
 <tr class="separator:a61e972e3ed120456bb9f0fa725e2d0fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:affe761bbc98db596dbec38d74aeffd52"><td class="memItemLeft" align="right" valign="top">ade::TensT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#affe761bbc98db596dbec38d74aeffd52">one_prune</a> (ade::TensT roots)</td></tr>
@@ -297,12 +300,8 @@ Functions</h2></td></tr>
 <tr class="separator:a0d2ebfcfe5a9609d83d6ac4bc61bc620"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d5da9e4382811f81ab0fb8451734634"><td class="memItemLeft" align="right" valign="top">ade::TensT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a4d5da9e4382811f81ab0fb8451734634">zero_prune</a> (ade::TensT roots)</td></tr>
 <tr class="separator:a4d5da9e4382811f81ab0fb8451734634"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac08c33df9aba89fa02640c46dbcb7be"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#aac08c33df9aba89fa02640c46dbcb7be">serialize</a> (bool &amp;is_const, ade::iLeaf *leaf)</td></tr>
-<tr class="memdesc:aac08c33df9aba89fa02640c46dbcb7be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Marshal data to cortenn::Source.  <a href="#aac08c33df9aba89fa02640c46dbcb7be">More...</a><br /></td></tr>
-<tr class="separator:aac08c33df9aba89fa02640c46dbcb7be"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4167a9233bd5413331db6ba2a96677ea"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a4167a9233bd5413331db6ba2a96677ea">deserialize</a> (const char *pb, ade::Shape shape, size_t typecode, std::string label, bool is_const)</td></tr>
-<tr class="memdesc:a4167a9233bd5413331db6ba2a96677ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unmarshal cortenn::Source as <a class="el" href="structllo_1_1_variable.html" title="Leaf node containing data. ">Variable</a> containing context of source.  <a href="#a4167a9233bd5413331db6ba2a96677ea">More...</a><br /></td></tr>
-<tr class="separator:a4167a9233bd5413331db6ba2a96677ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd5fb3d7049228d1ae3473c1a251e401"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#abd5fb3d7049228d1ae3473c1a251e401">is_big_endian</a> (void)</td></tr>
+<tr class="separator:abd5fb3d7049228d1ae3473c1a251e401"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a69711edbbdb61866a9fa554e20cbd8f6"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a69711edbbdb61866a9fa554e20cbd8f6"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacello.html#ac68b9114f4c1dc1f5640f0ffa2212253">TensorT</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacello.html#a69711edbbdb61866a9fa554e20cbd8f6">get_tensor</a> (T *data, const ade::Shape &amp;shape)</td></tr>
 <tr class="separator:a69711edbbdb61866a9fa554e20cbd8f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -347,6 +346,20 @@ template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="namespacello.html#a0a19e0c06ff14ec39848072612ed8be0">llo::DataArgsT</a> = typedef std::vector&lt;<a class="el" href="structllo_1_1_data_arg.html">DataArg</a>&lt;T&gt; &gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5baea0c89ffe9eb6ffa354c77d26eabf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5baea0c89ffe9eb6ffa354c77d26eabf">&#9670;&nbsp;</a></span>EditFuncT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacello.html#a5baea0c89ffe9eb6ffa354c77d26eabf">llo::EditFuncT</a> = typedef std::function&lt;ade::TensptrT(bool&amp;,ade::Opcode&amp;,ade::ArgsT&amp;)&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -844,54 +857,6 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a4167a9233bd5413331db6ba2a96677ea"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4167a9233bd5413331db6ba2a96677ea">&#9670;&nbsp;</a></span>deserialize()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ade::TensptrT llo::deserialize </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>pb</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">ade::Shape&#160;</td>
-          <td class="paramname"><em>shape</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>typecode</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>label</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>is_const</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Unmarshal cortenn::Source as <a class="el" href="structllo_1_1_variable.html" title="Leaf node containing data. ">Variable</a> containing context of source. </p>
-
-</div>
-</div>
 <a id="a0cdb90048720de206cf8d48334fbc8e9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0cdb90048720de206cf8d48334fbc8e9">&#9670;&nbsp;</a></span>div()</h2>
 
@@ -966,8 +931,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a853e35840c744e2415fd08ca2c69c853"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a853e35840c744e2415fd08ca2c69c853">&#9670;&nbsp;</a></span>eval() <span class="overload">[1/2]</span></h2>
+<a id="ae680847a16bc985b444cdc17821bd912"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae680847a16bc985b444cdc17821bd912">&#9670;&nbsp;</a></span>eval() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -978,8 +943,18 @@ template&lt;typename T &gt; </div>
           <td class="memname"><a class="el" href="namespacello.html#a5fac8cd024599b642058e9b709dedae8">TensptrT</a>&lt;T&gt; llo::eval </td>
           <td>(</td>
           <td class="paramtype">ade::iTensor *&#160;</td>
-          <td class="paramname"><em>tens</em></td><td>)</td>
+          <td class="paramname"><em>tens</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="structllo_1_1_cache_space.html">CacheSpace</a>&lt; T &gt; *&#160;</td>
+          <td class="paramname"><em>caches</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -988,8 +963,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a1eb34215e84b8a7020bd6c356e2ab2eb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1eb34215e84b8a7020bd6c356e2ab2eb">&#9670;&nbsp;</a></span>eval() <span class="overload">[2/2]</span></h2>
+<a id="a661f6a0a719fb2d04f04ae5ad74b994b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a661f6a0a719fb2d04f04ae5ad74b994b">&#9670;&nbsp;</a></span>eval() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1000,8 +975,18 @@ template&lt;typename T &gt; </div>
           <td class="memname"><a class="el" href="namespacello.html#a5fac8cd024599b642058e9b709dedae8">TensptrT</a>&lt;T&gt; llo::eval </td>
           <td>(</td>
           <td class="paramtype">ade::TensptrT&#160;</td>
-          <td class="paramname"><em>tens</em></td><td>)</td>
+          <td class="paramname"><em>tens</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="structllo_1_1_cache_space.html">CacheSpace</a>&lt; T &gt; *&#160;</td>
+          <td class="paramname"><em>caches</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1389,20 +1374,28 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="afc9bc8f035596d99faf27b8280373cf5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afc9bc8f035596d99faf27b8280373cf5">&#9670;&nbsp;</a></span>is_identity()</h2>
+<a id="abd5fb3d7049228d1ae3473c1a251e401"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd5fb3d7049228d1ae3473c1a251e401">&#9670;&nbsp;</a></span>is_big_endian()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool llo::is_identity </td>
+          <td class="memname">static bool llo::is_big_endian </td>
           <td>(</td>
-          <td class="paramtype">ade::CoordptrT &amp;&#160;</td>
-          <td class="paramname"><em>coorder</em></td><td>)</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -1656,8 +1649,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="ac6fa6c148b707eb51968e24594431132"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac6fa6c148b707eb51968e24594431132">&#9670;&nbsp;</a></span>multi_optimize()</h2>
+<a id="ac56c6042ea69452c7f74d6e0522dd0c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac56c6042ea69452c7f74d6e0522dd0c1">&#9670;&nbsp;</a></span>multi_optimize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1671,7 +1664,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="namespaceopt.html#a7bb437415f677133cd47214458d08caf">opt::EditFuncT</a> &gt;&#160;</td>
+          <td class="paramtype">std::vector&lt; <a class="el" href="namespacello.html#a5baea0c89ffe9eb6ffa354c77d26eabf">EditFuncT</a> &gt;&#160;</td>
           <td class="paramname"><em>edits</em> = <code>{&#160;<a class="el" href="namespacello.html#ade63103cecf2330140492dec84ada411">const_merge_edit</a>,&#160;<a class="el" href="namespacello.html#a0d2ebfcfe5a9609d83d6ac4bc61bc620">zero_prune_edit</a>,&#160;<a class="el" href="namespacello.html#a61e972e3ed120456bb9f0fa725e2d0fd">one_prune_edit</a>,&#160;<a class="el" href="namespacello.html#a923bc3d1e5dc591a840b94d00b334883">ops_merge_edit</a>,&#160;}</code>&#160;</td>
         </tr>
         <tr>
@@ -2444,36 +2437,6 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 <p>Given reference to output array, and input vector ref, make output elements take rounded values of inputs </p>
-
-</div>
-</div>
-<a id="aac08c33df9aba89fa02640c46dbcb7be"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aac08c33df9aba89fa02640c46dbcb7be">&#9670;&nbsp;</a></span>serialize()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string llo::serialize </td>
-          <td>(</td>
-          <td class="paramtype">bool &amp;&#160;</td>
-          <td class="paramname"><em>is_const</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">ade::iLeaf *&#160;</td>
-          <td class="paramname"><em>leaf</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Marshal data to cortenn::Source. </p>
 
 </div>
 </div>

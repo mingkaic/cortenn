@@ -407,11 +407,9 @@ TEST(API, Round)
 
 TEST(API, Flip)
 {
-	int32_t nrank = 3;
 	std::vector<ade::DimT> slist = {2, 5, 2};
 	ade::Shape shape(slist);
 	uint8_t dim = 1;
-	uint8_t baddim = 3;
 	ade::NElemT n = shape.n_elems();
 	std::vector<double> data = {
 		22, 15, 74, 38, 61, 95, 62, 81, 99, 76,
@@ -683,6 +681,57 @@ TEST(API, Rmin)
 				}
 			}
 		});
+	unary_generic(
+		[](ade::TensptrT& src) { return age::reduce_min(src, 1, 2); },
+		[](llo::TensptrT<double>& out, ade::Shape& shape, std::vector<double>& data)
+		{
+			std::vector<ade::DimT> expect_list(shape.begin(), shape.end());
+			expect_list[1] = 1;
+			ade::Shape gotshape = llo::get_shape(*out);
+			EXPECT_ARREQ(expect_list, gotshape);
+
+			ade::CoordT coord;
+			ade::DimT d = shape.at(1);
+			double* got = (double*) out->data();
+			for (size_t i = 0, n = gotshape.n_elems(); i < n; ++i)
+			{
+				coord = ade::coordinate(gotshape, i);
+				double acc = data[ade::index(shape, coord)];
+				for (size_t j = 1; j < d; ++j)
+				{
+					coord[1] = j;
+					acc = std::min(acc, data[ade::index(shape, coord)]);
+				}
+				EXPECT_DOUBLE_EQ(acc, got[i]);
+			}
+		},
+		[](double* gout, std::vector<double>& og)
+		{
+			ade::Shape inshape({2, 3, 4});
+			ade::Shape outshape({2, 1, 4});
+			ade::CoordT coord;
+			ade::DimT d = 3;
+			size_t m = og.size();
+			size_t n = outshape.n_elems();
+			std::vector<double> expect(m, 0);
+			for (size_t i = 0; i < n; ++i)
+			{
+				coord = ade::coordinate(outshape, i);
+				size_t min_idx = ade::index(inshape, coord);
+				for (size_t j = 1; j < d; ++j)
+				{
+					coord[1] = j;
+					size_t idx = ade::index(inshape, coord);
+					if (og[min_idx] > og[idx])
+					{
+						min_idx = idx;
+					}
+				}
+				expect[min_idx] = 1;
+			}
+			std::vector<double> got(gout, gout + m);
+			EXPECT_ARREQ(expect, got);
+		});
 }
 
 
@@ -712,6 +761,57 @@ TEST(API, Rmax)
 					EXPECT_EQ(0, gout[i]);
 				}
 			}
+		});
+	unary_generic(
+		[](ade::TensptrT& src) { return age::reduce_max(src, 1, 2); },
+		[](llo::TensptrT<double>& out, ade::Shape& shape, std::vector<double>& data)
+		{
+			std::vector<ade::DimT> expect_list(shape.begin(), shape.end());
+			expect_list[1] = 1;
+			ade::Shape gotshape = llo::get_shape(*out);
+			EXPECT_ARREQ(expect_list, gotshape);
+
+			ade::CoordT coord;
+			ade::DimT d = shape.at(1);
+			double* got = (double*) out->data();
+			for (size_t i = 0, n = gotshape.n_elems(); i < n; ++i)
+			{
+				coord = ade::coordinate(gotshape, i);
+				double acc = data[ade::index(shape, coord)];
+				for (size_t j = 1; j < d; ++j)
+				{
+					coord[1] = j;
+					acc = std::max(acc, data[ade::index(shape, coord)]);
+				}
+				EXPECT_DOUBLE_EQ(acc, got[i]);
+			}
+		},
+		[](double* gout, std::vector<double>& og)
+		{
+			ade::Shape inshape({2, 3, 4});
+			ade::Shape outshape({2, 1, 4});
+			ade::CoordT coord;
+			ade::DimT d = 3;
+			size_t m = og.size();
+			size_t n = outshape.n_elems();
+			std::vector<double> expect(m, 0);
+			for (size_t i = 0; i < n; ++i)
+			{
+				coord = ade::coordinate(outshape, i);
+				size_t max_idx = ade::index(inshape, coord);
+				for (size_t j = 1; j < d; ++j)
+				{
+					coord[1] = j;
+					size_t idx = ade::index(inshape, coord);
+					if (og[max_idx] < og[idx])
+					{
+						max_idx = idx;
+					}
+				}
+				expect[max_idx] = 1;
+			}
+			std::vector<double> got(gout, gout + m);
+			EXPECT_ARREQ(expect, got);
 		});
 }
 

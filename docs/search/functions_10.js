@@ -1,13 +1,7 @@
 var searchData=
 [
-  ['save',['save',['../structpbm_1_1_graph_saver.html#ac64f9b07ab780e9cfc9380c4a4202127',1,'pbm::GraphSaver']]],
-  ['save_5fcoord',['save_coord',['../structpbm_1_1_graph_saver.html#a7907e458be3170091bd6303007f80762',1,'pbm::GraphSaver']]],
-  ['save_5fdata',['save_data',['../structpbm_1_1_graph_saver.html#ad2ea7632ae8a2f18bf20231e33e28061',1,'pbm::GraphSaver']]],
-  ['serialize',['serialize',['../namespacello.html#aac08c33df9aba89fa02640c46dbcb7be',1,'llo']]],
-  ['set',['set',['../structllo_1_1_cache_space.html#ac9352f6d2e82b9bc2a35f196634fb200',1,'llo::CacheSpace']]],
-  ['set_5flabelled',['set_labelled',['../structpbm_1_1_pathed_tens.html#a2752eaf099d564b6fca95df9dfcda777',1,'pbm::PathedTens::set_labelled(StringsT path, ade::TensptrT tens)'],['../structpbm_1_1_pathed_tens.html#a7b8f2299d16fcf3e1af3b2b78b198cf3',1,'pbm::PathedTens::set_labelled(StringsT::iterator path_begin, StringsT::iterator path_end, ade::TensptrT tens)']]],
-  ['shape',['shape',['../structllo_1_1_constant.html#a89e5a7316e33a1a87af266018c3a8ef5',1,'llo::Constant::shape()'],['../structllo_1_1_variable.html#a6b78397a2a7cd0395cd91d798746d59b',1,'llo::Variable::shape()']]],
-  ['sin',['sin',['../namespacello.html#ad5e0672afba0a53a2a4fa6cbd4e1df23',1,'llo']]],
-  ['sqrt',['sqrt',['../namespacello.html#a7242ee77a10dea84b799bb5a463b4938',1,'llo']]],
-  ['sub',['sub',['../namespacello.html#a25735ae7f72b8255260aa7ff495d7208',1,'llo']]]
+  ['tan',['tan',['../namespacello.html#a630728cb2e925eb4baa692f323d09419',1,'llo']]],
+  ['to_5fstring',['to_string',['../structllo_1_1_constant.html#a16da51e98c8d251360015497fe8e3128',1,'llo::Constant::to_string()'],['../structllo_1_1i_variable.html#a5ee906b11094f4f630e72e08a9f274ce',1,'llo::iVariable::to_string()']]],
+  ['type_5fcode',['type_code',['../structllo_1_1_constant.html#ae70fd175a2922384cd22d403df573a39',1,'llo::Constant::type_code()'],['../structllo_1_1_variable.html#a6960ddf68079a94122a667b5575e8659',1,'llo::Variable::type_code()']]],
+  ['typedata_5fto_5farray',['typedata_to_array',['../namespacepyllo.html#a1a248a1c15b1adaedd2ef35e97879787',1,'pyllo']]]
 ];

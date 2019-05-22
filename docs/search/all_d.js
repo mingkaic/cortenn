@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['opt_20_28optimizer_29',['OPT (Optimizer)',['../md_opt__r_e_a_d_m_e__o_p_t.html',1,'']]],
   ['one_5fprune',['one_prune',['../namespacello.html#affe761bbc98db596dbec38d74aeffd52',1,'llo']]],
   ['one_5fprune_2ecpp',['one_prune.cpp',['../one__prune_8cpp.html',1,'']]],
   ['one_5fprune_2ehpp',['one_prune.hpp',['../one__prune_8hpp.html',1,'']]],
@@ -15,6 +14,5 @@ var searchData=
   ['ops_5freuse',['ops_reuse',['../namespacello.html#a06a31158e0a34120dae0ea1a424572a0',1,'llo']]],
   ['ops_5freuse_2ecpp',['ops_reuse.cpp',['../ops__reuse_8cpp.html',1,'']]],
   ['ops_5freuse_2ehpp',['ops_reuse.hpp',['../ops__reuse_8hpp.html',1,'']]],
-  ['opt',['opt',['../namespaceopt.html',1,'']]],
   ['out_5f',['out_',['../structllo_1_1_evaluator.html#ac315acdde9a93e70a177548cbe2aff40',1,'llo::Evaluator']]]
 ];

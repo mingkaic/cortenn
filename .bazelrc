@@ -1,4 +1,11 @@
 
+# ------ ALL SETTINGS ------
+
+run --incompatible_disallow_dict_plus=false
+build --incompatible_disallow_dict_plus=false
+test --incompatible_disallow_dict_plus=false
+coverage --incompatible_disallow_dict_plus=false
+
 # ------ TEST SETTINGS ------
 
 # === ALL TESTS ===

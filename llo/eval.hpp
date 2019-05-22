@@ -70,7 +70,7 @@ struct Evaluator final : public ade::iTraveler
 		}
 
 		out_ = get_tensorptr<T>(nullptr, outshape);
-		age::typed_exec<T>(opcode, *out_, outshape, argdata);
+		age::typed_exec<T>(*out_, opcode, outshape, argdata);
 
 		if (is_cache_target)
 		{

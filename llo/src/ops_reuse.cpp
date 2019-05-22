@@ -58,7 +58,7 @@ static bool coorder_equal (ade::CoordptrT lhs, ade::CoordptrT rhs)
 }
 
 static bool func_equals (ade::iFunctor* lhs, ade::iFunctor* rhs,
-	const std::unordered_map<ade::iTensor*,ade::iTensor*>& replacements)
+	const std::unordered_map<ade::iTensor*,ade::iTensor*>& orig2new)
 {
 	auto& lhs_shape = lhs->shape();
 	auto& rhs_shape = rhs->shape();
@@ -68,76 +68,53 @@ static bool func_equals (ade::iFunctor* lhs, ade::iFunctor* rhs,
 		return false;
 	}
 
-	auto et = replacements.end();
+	auto et = orig2new.end();
 	auto& lhs_children = lhs->get_children();
 	auto& rhs_children = rhs->get_children();
+	auto arg_equal =
+		[&orig2new,&et](
+			const ade::FuncArg& lhs,
+			const ade::FuncArg& rhs)
+		{
+			auto lhs_tens = lhs.get_tensor().get();
+			auto rhs_tens = rhs.get_tensor().get();
+			auto lit = orig2new.find(lhs_tens);
+			auto rit = orig2new.find(rhs_tens);
+			if (lit != et)
+			{
+				lhs_tens = lit->second;
+			}
+			if (rit != et)
+			{
+				rhs_tens = rit->second;
+			}
+			return lhs_tens == rhs_tens &&
+				coorder_equal(lhs.get_coorder(), rhs.get_coorder());
+		};
 	if (nnary_codes.end() == nnary_codes.find(
 		(age::_GENERATED_OPCODE) lhs->get_opcode().code_))
 	{
 		// order matters
 		// child check is expensive so check size before equality
-		return lhs_children.size() == rhs_children.size() &&
-			std::equal(lhs_children.begin(), lhs_children.end(),
-			rhs_children.begin(),
-			[&replacements, &et](const ade::FuncArg& lhs,
-				const ade::FuncArg& rhs)
-			{
-				auto lhs_tens = lhs.get_tensor().get();
-				auto rhs_tens = rhs.get_tensor().get();
-				auto et = replacements.end();
-				auto lit = replacements.find(lhs_tens);
-				auto rit = replacements.find(rhs_tens);
-				if (lit != et)
-				{
-					lhs_tens = lit->second;
-				}
-				if (rit != et)
-				{
-					rhs_tens = rit->second;
-				}
-				return lhs_tens == rhs_tens &&
-					coorder_equal(lhs.get_coorder(), rhs.get_coorder());
-			});
+		return std::equal(lhs_children.begin(), lhs_children.end(),
+			rhs_children.begin(), arg_equal);
 	}
-	// order doesn't matter
-	std::unordered_map<ade::iTensor*,std::list<ade::CoordptrT>> lhs_map;
-	for (const ade::FuncArg& lhs_child : lhs_children)
+	size_t nchildren = lhs_children.size();
+	if (nchildren != rhs_children.size())
 	{
-		auto lhs_tens = lhs_child.get_tensor().get();
-		auto lit = replacements.find(lhs_tens);
-		if (lit != et)
-		{
-			lhs_tens = lit->second;
-		}
-		lhs_map[lhs_tens].push_back(lhs_child.get_coorder());
+		return false;
 	}
-	for (const ade::FuncArg& rhs_child : rhs_children)
-	{
-		auto rhs_tens = rhs_child.get_tensor().get();
-		auto rit = replacements.find(rhs_tens);
-		if (rit != et)
+	auto rit = rhs_children.begin();
+	auto ret = rhs_children.end();
+	return std::all_of(lhs_children.begin(), lhs_children.end(),
+		[&](const ade::FuncArg& lhs_child)
 		{
-			rhs_tens = rit->second;
-		}
-		auto it = lhs_map.find(rhs_tens);
-		if (lhs_map.end() == it)
-		{
-			return false;
-		}
-		auto rhs_coord = rhs_child.get_coorder();
-		auto cit = it->second.begin();
-		auto cet = it->second.end();
-		while (cit != cet && false == coorder_equal(*cit, rhs_coord))
-		{
-			++cit;
-		}
-		if (cit == cet)
-		{
-			return false; // coordinates don't match
-		}
-		it->second.erase(cit);
-	}
-	return true;
+			return std::any_of(rit, ret,
+				[&](const ade::FuncArg& rhs_child)
+				{
+					return arg_equal(lhs_child, rhs_child);
+				});
+		});
 }
 
 ade::TensT ops_reuse (ade::TensT roots)
@@ -157,14 +134,16 @@ ade::TensT ops_reuse (ade::TensT roots)
 	size_t max_graphsize = 0;
 	for (ade::TensptrT& root : roots)
 	{
-		max_graphsize = std::max(max_graphsize, stat.graphsize_[root.get()] + 1);
+		max_graphsize = std::max(max_graphsize,
+			stat.graphsize_[root.get()].upper_ + 1);
 	}
 
 	std::vector<std::list<ade::iTensor*>> tens(max_graphsize);
-	for (std::pair<ade::iTensor*,size_t> graphpair : stat.graphsize_)
+	for (std::pair<ade::iTensor*,ade::NumRange<size_t>> graphpair :
+		stat.graphsize_)
 	{
 		ade::iTensor* ten = graphpair.first;
-		size_t index = graphpair.second;
+		size_t index = graphpair.second.upper_;
 		if (smart_map.end() != smart_map.find(ten))
 		{
 			tens[index].push_front(ten);
@@ -176,7 +155,7 @@ ade::TensT ops_reuse (ade::TensT roots)
 	}
 
 	// assert stat.graphsize_.size() > 0, hence tens.size() > 0
-	std::unordered_map<ade::iTensor*,ade::iTensor*> replacement;
+	std::unordered_map<ade::iTensor*,ade::iTensor*> orig2new;
 	{
 		std::unordered_map<size_t,std::list<Constant*>> hashs;
 		for (ade::iTensor* leaf : tens[0])
@@ -192,7 +171,7 @@ ade::TensT ops_reuse (ade::TensT roots)
 				{
 					if (const_equals(cst, potential_eq))
 					{
-						replacement.emplace(cst, potential_eq);
+						orig2new.emplace(cst, potential_eq);
 						not_found = false;
 						break;
 					}
@@ -225,9 +204,9 @@ ade::TensT ops_reuse (ade::TensT roots)
 			auto& potential_eqs = hashs[hashidx];
 			for (ade::iFunctor* potential_eq : potential_eqs)
 			{
-				if (func_equals(func, potential_eq, replacement))
+				if (func_equals(func, potential_eq, orig2new))
 				{
-					replacement.emplace(func, potential_eq);
+					orig2new.emplace(func, potential_eq);
 					not_found = false;
 					break;
 				}
@@ -238,28 +217,68 @@ ade::TensT ops_reuse (ade::TensT roots)
 			}
 		}
 	}
+	std::unordered_map<ade::iTensor*,std::vector<ade::iTensor*>> new2origs;
+	for (auto& replace_pair : orig2new)
+	{
+		new2origs[replace_pair.second].push_back(replace_pair.first);
+	}
 
-	return opt::graph_edit(roots, [&smart_map, replacement](bool& is_optimized,
-		ade::Opcode& opcode, ade::ArgsT& args) -> ade::TensptrT
+	for (size_t i = 1, n = tens.size(); i < n; ++i)
+	{
+		for (ade::iTensor* ten : tens[i])
 		{
-			auto et = replacement.end();
-			for (size_t i = 0, n = args.size(); i < n; ++i)
+			// only update functors that are not replaced
+			if (orig2new.end() == orig2new.find(ten))
 			{
-				auto it = replacement.find(args[i].get_tensor().get());
-				if (et != it)
+				auto func = static_cast<ade::iFunctor*>(ten);
+				bool changed = false;
+				ade::ArgsT children = func->get_children();
+				for (size_t i = 0, n = children.size(); i < n; ++i)
 				{
-					is_optimized = true;
-					args[i] = ade::FuncArg
+					auto it = orig2new.find(children[i].get_tensor().get());
+					if (orig2new.end() != it)
 					{
-						smart_map[it->second],
-						args[i].get_shaper(),
-						args[i].map_io(),
-						args[i].get_coorder(),
-					};
+						changed = true;
+						children[i] = ade::FuncArg
+						{
+							smart_map[it->second],
+							children[i].get_shaper(),
+							children[i].map_io(),
+							children[i].get_coorder(),
+						};
+					}
+				}
+				if (changed)
+				{
+					auto f = ade::Functor::get(func->get_opcode(), children);
+					ade::TensptrT optimized(f);
+					// update smart and orig2new
+					smart_map.emplace(f, optimized);
+					auto it = new2origs.find(func);
+					if (new2origs.end() != it)
+					{
+						// reference new updated functor instead of old one
+						for (ade::iTensor* orig : it->second)
+						{
+							orig2new[orig] = f;
+						}
+					}
+					orig2new[func] = f;
+					new2origs[f].push_back(func);
 				}
 			}
-			return nullptr;
-		});
+		}
+	}
+
+	for (auto& root : roots)
+	{
+		auto rit = orig2new.find(root.get());
+		if (orig2new.end() != rit)
+		{
+			root = smart_map[rit->second];
+		}
+	}
+	return roots;
 }
 
 }

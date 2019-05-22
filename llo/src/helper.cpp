@@ -148,12 +148,6 @@ ade::TensptrT matmul (ade::TensptrT a, ade::TensptrT b)
 
 ade::TensptrT get_fast_matmul (ade::TensptrT a, ade::TensptrT b)
 {
-	// auto out = matmul(a, b);
-	// return ade::TensptrT(ShortcutFunctor::get(age::MATMUL,
-	// 	std::static_pointer_cast<ade::iFunctor>(out), {
-	// 		ade::identity_map(a),
-	// 		ade::identity_map(b),
-	// 	}));
 	ade::DimT ncommon = a->shape().at(0);
 	ade::DimT nrow = a->shape().at(1);
 	ade::DimT ncol = b->shape().at(0);

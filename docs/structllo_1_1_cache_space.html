@@ -90,6 +90,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a09c224cec34ad1bea38fcb5f63a93229"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab0b0b7ab95a565f0d71b346afa67ddf0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_cache_space.html#ab0b0b7ab95a565f0d71b346afa67ddf0">add_equation</a> (ade::TensT roots)</td></tr>
 <tr class="separator:ab0b0b7ab95a565f0d71b346afa67ddf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ba2feb5d2c958b662d743b67842d925"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_cache_space.html#a5ba2feb5d2c958b662d743b67842d925">mark_update</a> (std::vector&lt; <a class="el" href="structllo_1_1i_variable.html">llo::iVariable</a> *&gt; updates)</td></tr>
+<tr class="separator:a5ba2feb5d2c958b662d743b67842d925"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -98,10 +100,12 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a79e003be6a6394f81ce0e4b54e45f1cd"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; ade::iFunctor *, <a class="el" href="structllo_1_1_cache_bucket.html">CacheBucket</a>&lt; T &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_cache_space.html#a79e003be6a6394f81ce0e4b54e45f1cd">caches_</a></td></tr>
-<tr class="separator:a79e003be6a6394f81ce0e4b54e45f1cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3d8e962b5ea7505f16011085825938be"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="structllo_1_1i_variable.html">llo::iVariable</a> *, ade::PathFinder &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_cache_space.html#a3d8e962b5ea7505f16011085825938be">variables_</a></td></tr>
-<tr class="separator:a3d8e962b5ea7505f16011085825938be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af459ebace5d800b8ed338b7f0a9b2aab"><td class="memItemLeft" align="right" valign="top">std::unordered_set&lt; ade::iFunctor * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_cache_space.html#af459ebace5d800b8ed338b7f0a9b2aab">need_update_</a></td></tr>
+<tr class="separator:af459ebace5d800b8ed338b7f0a9b2aab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d380a204a5f14218bfd56e7164014b7"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; ade::iFunctor *, <a class="el" href="namespacello.html#a5fac8cd024599b642058e9b709dedae8">TensptrT</a>&lt; T &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_cache_space.html#a0d380a204a5f14218bfd56e7164014b7">caches_</a></td></tr>
+<tr class="separator:a0d380a204a5f14218bfd56e7164014b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13fae99e459293c5eb9142bdc8e4b493"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="structllo_1_1i_variable.html">llo::iVariable</a> *, std::unordered_set&lt; ade::iFunctor * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_cache_space.html#a13fae99e459293c5eb9142bdc8e4b493">ancestors_</a></td></tr>
+<tr class="separator:a13fae99e459293c5eb9142bdc8e4b493"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a83b910a32e85f3fe2c4390df564a3cd5"></a>
@@ -244,6 +248,35 @@ template&lt;typename T&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Return true if cache contains value to functor key or the key needs updating </p>
+
+</div>
+</div>
+<a id="a5ba2feb5d2c958b662d743b67842d925"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ba2feb5d2c958b662d743b67842d925">&#9670;&nbsp;</a></span>mark_update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="structllo_1_1_cache_space.html">llo::CacheSpace</a>&lt; T &gt;::mark_update </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; <a class="el" href="structllo_1_1i_variable.html">llo::iVariable</a> *&gt;&#160;</td>
+          <td class="paramname"><em>updates</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -286,8 +319,8 @@ template&lt;typename T&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a79e003be6a6394f81ce0e4b54e45f1cd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a79e003be6a6394f81ce0e4b54e45f1cd">&#9670;&nbsp;</a></span>caches_</h2>
+<a id="a13fae99e459293c5eb9142bdc8e4b493"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13fae99e459293c5eb9142bdc8e4b493">&#9670;&nbsp;</a></span>ancestors_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -298,7 +331,7 @@ template&lt;typename T&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_map&lt;ade::iFunctor*,<a class="el" href="structllo_1_1_cache_bucket.html">CacheBucket</a>&lt;T&gt; &gt; <a class="el" href="structllo_1_1_cache_space.html">llo::CacheSpace</a>&lt; T &gt;::caches_</td>
+          <td class="memname">std::unordered_map&lt;<a class="el" href="structllo_1_1i_variable.html">llo::iVariable</a>*, std::unordered_set&lt;ade::iFunctor*&gt; &gt; <a class="el" href="structllo_1_1_cache_space.html">llo::CacheSpace</a>&lt; T &gt;::ancestors_</td>
         </tr>
       </table>
   </td>
@@ -310,8 +343,8 @@ template&lt;typename T&gt; </div>
 
 </div>
 </div>
-<a id="a3d8e962b5ea7505f16011085825938be"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3d8e962b5ea7505f16011085825938be">&#9670;&nbsp;</a></span>variables_</h2>
+<a id="a0d380a204a5f14218bfd56e7164014b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d380a204a5f14218bfd56e7164014b7">&#9670;&nbsp;</a></span>caches_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -322,7 +355,31 @@ template&lt;typename T&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_map&lt;<a class="el" href="structllo_1_1i_variable.html">llo::iVariable</a>*,ade::PathFinder&gt; <a class="el" href="structllo_1_1_cache_space.html">llo::CacheSpace</a>&lt; T &gt;::variables_</td>
+          <td class="memname">std::unordered_map&lt;ade::iFunctor*,<a class="el" href="namespacello.html#a5fac8cd024599b642058e9b709dedae8">TensptrT</a>&lt;T&gt; &gt; <a class="el" href="structllo_1_1_cache_space.html">llo::CacheSpace</a>&lt; T &gt;::caches_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af459ebace5d800b8ed338b7f0a9b2aab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af459ebace5d800b8ed338b7f0a9b2aab">&#9670;&nbsp;</a></span>need_update_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_set&lt;ade::iFunctor*&gt; <a class="el" href="structllo_1_1_cache_space.html">llo::CacheSpace</a>&lt; T &gt;::need_update_</td>
         </tr>
       </table>
   </td>

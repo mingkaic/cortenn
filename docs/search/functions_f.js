@@ -1,13 +1,11 @@
 var searchData=
 [
-  ['rand_5fnormal',['rand_normal',['../namespacello.html#a7b8a39ae05f5870bdf068ecb0df14cfb',1,'llo']]],
-  ['rand_5fnormal_3c_20double_20_3e',['rand_normal&lt; double &gt;',['../namespacello.html#aea89be880bf535deb25de53dbebbdf6d',1,'llo']]],
-  ['rand_5fnormal_3c_20float_20_3e',['rand_normal&lt; float &gt;',['../namespacello.html#a5854a331d52d5637c35f28b481337a8d',1,'llo']]],
-  ['rand_5funiform',['rand_uniform',['../namespacello.html#a8c69d68630c024d2e32e05572754a5a4',1,'llo']]],
-  ['rand_5funiform_3c_20double_20_3e',['rand_uniform&lt; double &gt;',['../namespacello.html#a9f653ea088f1ee0efea0e7e56cf3bbf2',1,'llo']]],
-  ['rand_5funiform_3c_20float_20_3e',['rand_uniform&lt; float &gt;',['../namespacello.html#abedcbf51d81da53872a7ecd972de8e0c',1,'llo']]],
-  ['raw_5fto_5ftensorptr',['raw_to_tensorptr',['../namespacello.html#a63bc089ce3a8444b7f2278e71361f5f4',1,'llo']]],
-  ['reduce',['reduce',['../namespacello.html#abdf021d900da5a0822bcfb49315cc1a7',1,'llo']]],
-  ['reduce_5f1d',['reduce_1d',['../namespacello.html#ae6906ba9944277db0c7a72cd803a7490',1,'llo']]],
-  ['round',['round',['../namespacello.html#a56abed2f8cc56d242f6555501f155fd0',1,'llo']]]
+  ['save_5fcoorder',['save_coorder',['../structllo_1_1_l_l_o_saver.html#ad2eca38b3d184b25106f9570160b415c',1,'llo::LLOSaver']]],
+  ['save_5fleaf',['save_leaf',['../structllo_1_1_l_l_o_saver.html#a728d164ce30743975e9db2d0d5cfe9e1',1,'llo::LLOSaver']]],
+  ['save_5fshaper',['save_shaper',['../structllo_1_1_l_l_o_saver.html#ae107ef818ddb768192827ea697f87518',1,'llo::LLOSaver']]],
+  ['set',['set',['../structllo_1_1_cache_space.html#ac9352f6d2e82b9bc2a35f196634fb200',1,'llo::CacheSpace']]],
+  ['shape',['shape',['../structllo_1_1_constant.html#a89e5a7316e33a1a87af266018c3a8ef5',1,'llo::Constant::shape()'],['../structllo_1_1_variable.html#a6b78397a2a7cd0395cd91d798746d59b',1,'llo::Variable::shape()']]],
+  ['sin',['sin',['../namespacello.html#ad5e0672afba0a53a2a4fa6cbd4e1df23',1,'llo']]],
+  ['sqrt',['sqrt',['../namespacello.html#a7242ee77a10dea84b799bb5a463b4938',1,'llo']]],
+  ['sub',['sub',['../namespacello.html#a25735ae7f72b8255260aa7ff495d7208',1,'llo']]]
 ];

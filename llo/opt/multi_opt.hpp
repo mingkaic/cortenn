@@ -9,8 +9,10 @@
 namespace llo
 {
 
+using EditFuncT = std::function<ade::TensptrT(bool&,ade::Opcode&,ade::ArgsT&)>;
+
 ade::TensT multi_optimize (ade::TensT roots,
-	std::vector<opt::EditFuncT> edits = {
+	std::vector<EditFuncT> edits = {
 		const_merge_edit,
 		zero_prune_edit,
 		one_prune_edit,

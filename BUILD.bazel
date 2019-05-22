@@ -10,10 +10,7 @@ filegroup(
     name = "srcs",
     srcs = [
         "//llo:srcs",
-        "//opt:srcs",
-        "//pbm:srcs",
         "//pybinder:srcs",
-        "//graphmgr:srcs",
         "BUILD.bazel",
     ],
 )

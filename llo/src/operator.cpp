@@ -5,26 +5,6 @@
 namespace llo
 {
 
-bool is_identity (ade::CoordptrT& coorder)
-{
-	if (ade::identity == coorder)
-	{
-		return true;
-	}
-	bool id = true;
-	coorder->access([&id](const ade::MatrixT& m)
-	{
-		for (uint8_t i = 0; id && i < ade::mat_dim; ++i)
-		{
-			for (uint8_t j = 0; id && j < ade::mat_dim; ++j)
-			{
-				id = id && m[i][j] == (i == j);
-			}
-		}
-	});
-	return id;
-}
-
 EngineT& get_engine (void)
 {
 	static EngineT engine;

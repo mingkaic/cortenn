@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['stringst',['StringsT',['../namespacepbm.html#a4b3659bb9fe2c247d9742a6be341e1f2',1,'pbm']]]
+  ['varptrt',['VarptrT',['../namespacello.html#add9dbfda15326f2307bbe582b2abd93d',1,'llo']]]
 ];

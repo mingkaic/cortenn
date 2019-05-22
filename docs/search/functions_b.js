@@ -1,10 +1,11 @@
 var searchData=
 [
-  ['matmul',['matmul',['../namespacello.html#a8dbb6866f0276ec91d368d539aea4730',1,'llo']]],
-  ['max',['max',['../namespacello.html#acdfde5bf36887035bce42f44302db7f5',1,'llo']]],
-  ['min',['min',['../namespacello.html#a76a013de20324d1629a322bbba32a60a',1,'llo']]],
-  ['mtens_5fmul',['mtens_mul',['../namespacello.html#a191ffa502ed37dc9bd06183a4de5d5f0',1,'llo']]],
-  ['mul',['mul',['../namespacello.html#a317f98bfd007bf1d30c3cf63e56208b4',1,'llo']]],
-  ['multi_5fderive',['multi_derive',['../namespacello.html#a8446c7f55390393e007ea5c5685551bd',1,'llo']]],
-  ['multi_5foptimize',['multi_optimize',['../namespacello.html#ac6fa6c148b707eb51968e24594431132',1,'llo']]]
+  ['nbytes',['nbytes',['../structllo_1_1_variable.html#ac50a79df6f7688f202b5ab5381070065',1,'llo::Variable']]],
+  ['neg',['neg',['../namespacello.html#a08b1a3a42d568f558e9afaa2910643b3',1,'llo']]],
+  ['neg_3c_20uint16_5ft_20_3e',['neg&lt; uint16_t &gt;',['../namespacello.html#a68a7692b1e14c29c8b6cf404273f29d1',1,'llo']]],
+  ['neg_3c_20uint32_5ft_20_3e',['neg&lt; uint32_t &gt;',['../namespacello.html#af5073667f5e17c9876fce6234c83399d',1,'llo']]],
+  ['neg_3c_20uint64_5ft_20_3e',['neg&lt; uint64_t &gt;',['../namespacello.html#aeefa047287dcca2de1f09b1e0b029502',1,'llo']]],
+  ['neg_3c_20uint8_5ft_20_3e',['neg&lt; uint8_t &gt;',['../namespacello.html#a23b2a125b44e6638bfe2b3a6c4b5bdc6',1,'llo']]],
+  ['neq',['neq',['../namespacello.html#af62fcaac1bb63f7e4f9b8086578650bb',1,'llo']]],
+  ['nnary',['nnary',['../namespacello.html#ac0deca0c30f8e3f30619de66ffd17ec0',1,'llo']]]
 ];

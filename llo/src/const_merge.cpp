@@ -29,7 +29,7 @@ ade::TensptrT const_merge_edit (bool& is_optimized,
 	else if (nnary_codes.find((age::_GENERATED_OPCODE)
 		opcode.code_) != nnary_codes.end() && cargs.size() > 2)
 	{
-		ade::TensptrT temp(ade::Functor::get(opcode, args));
+		ade::TensptrT temp(ade::Functor::get(opcode, cargs));
 		auto tens = eval<double>(temp);
 		ade::TensptrT carg(Constant::get(
 			(char*) tens->data(), age::DOUBLE, temp->shape()));
@@ -52,7 +52,21 @@ ade::TensptrT const_merge_edit (bool& is_optimized,
 
 ade::TensT const_merge (ade::TensT roots)
 {
-	return opt::graph_edit(roots, const_merge_edit);
+	return opt::graph_edit(roots,
+		[](ade::Opcode& opcode,
+			ade::ArgsT& args, bool changed) -> ade::TensptrT
+		{
+			bool is_optimized = false;
+			if (auto out = const_merge_edit(is_optimized, opcode, args))
+			{
+				return out;
+			}
+			if (changed || is_optimized)
+			{
+				return ade::TensptrT(ade::Functor::get(opcode, args));
+			}
+			return nullptr;
+		});
 }
 
 }

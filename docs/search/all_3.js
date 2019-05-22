@@ -1,17 +1,16 @@
 var searchData=
 [
-  ['data',['data',['../structllo_1_1_constant.html#ac878069e148c475bed1e5e7a145cc68f',1,'llo::Constant::data(void) override'],['../structllo_1_1_constant.html#af1d48bde9d37c459528bf6dfddf44c8f',1,'llo::Constant::data(void) const override'],['../structllo_1_1_variable.html#a76eaeddc728004ea26f40432335e5f28',1,'llo::Variable::data(void) override'],['../structllo_1_1_variable.html#abc913865227f1041c8faee54486c04e9',1,'llo::Variable::data(void) const override']]],
-  ['data_2ehpp',['data.hpp',['../data_8hpp.html',1,'']]],
-  ['data_5f',['data_',['../structllo_1_1_constant.html#ac6e29776c55ef07de2407e0024461741',1,'llo::Constant::data_()'],['../structllo_1_1_data_arg.html#aedb8aded65343e67b75fb3ea8038e9e9',1,'llo::DataArg::data_()'],['../structllo_1_1_variable.html#a5f2ea2c6fc159b4cd3be9ed38bc494ae',1,'llo::Variable::data_()']]],
-  ['dataarg',['DataArg',['../structllo_1_1_data_arg.html',1,'llo']]],
-  ['dataargst',['DataArgsT',['../namespacello.html#a0a19e0c06ff14ec39848072612ed8be0',1,'llo']]],
-  ['dataloadert',['DataLoaderT',['../namespacepbm.html#ac7781b29a60c63cb49abcd791423efd2',1,'pbm']]],
-  ['datasavert',['DataSaverT',['../namespacepbm.html#a4fdebf957a8e62a457da87a426e1350b',1,'pbm']]],
-  ['derive',['derive',['../namespacello.html#a085b001fb98e1ae2f31926f84cac56a0',1,'llo']]],
-  ['derive_2ecpp',['derive.cpp',['../derive_8cpp.html',1,'']]],
-  ['derive_2ehpp',['derive.hpp',['../derive_8hpp.html',1,'']]],
-  ['descendents_5f',['descendents_',['../structllo_1_1_cache_bucket.html#ad001134fe079b35159bfa1ad91474fb8',1,'llo::CacheBucket']]],
-  ['deserialize',['deserialize',['../namespacello.html#a4167a9233bd5413331db6ba2a96677ea',1,'llo']]],
-  ['div',['div',['../namespacello.html#a0cdb90048720de206cf8d48334fbc8e9',1,'llo']]],
-  ['dtype_5f',['dtype_',['../structllo_1_1_constant.html#adb10b257a694e83a92f4d86bbc9d831a',1,'llo::Constant']]]
+  ['c2pshape',['c2pshape',['../namespacepyllo.html#a3ae76c6893fa1d715ec3d77670ed3bb2',1,'pyllo::c2pshape(const ade::Shape &amp;cshape)'],['../namespacepyllo.html#a0501f82cca65e35216a3add29eace3dd',1,'pyllo::c2pshape(const Eigen::DSizes&lt; long, ade::rank_cap &gt; &amp;cshape)']]],
+  ['cache_2ehpp',['cache.hpp',['../cache_8hpp.html',1,'']]],
+  ['caches_5f',['caches_',['../structllo_1_1_cache_space.html#a0d380a204a5f14218bfd56e7164014b7',1,'llo::CacheSpace::caches_()'],['../structllo_1_1_evaluator.html#a856d7a7762aa325953a3e00a21a3a7b4',1,'llo::Evaluator::caches_()']]],
+  ['cachespace',['CacheSpace',['../structllo_1_1_cache_space.html',1,'llo::CacheSpace&lt; T &gt;'],['../structllo_1_1_cache_space.html#a83b910a32e85f3fe2c4390df564a3cd5',1,'llo::CacheSpace::CacheSpace()']]],
+  ['const_5fmerge',['const_merge',['../namespacello.html#add86bace91fd43351d23633a4170f2ce',1,'llo']]],
+  ['const_5fmerge_2ecpp',['const_merge.cpp',['../const__merge_8cpp.html',1,'']]],
+  ['const_5fmerge_2ehpp',['const_merge.hpp',['../const__merge_8hpp.html',1,'']]],
+  ['const_5fmerge_5fedit',['const_merge_edit',['../namespacello.html#ade63103cecf2330140492dec84ada411',1,'llo']]],
+  ['constant',['Constant',['../structllo_1_1_constant.html',1,'llo::Constant'],['../structllo_1_1_constant.html#ac39f133a90cd047a1f28db1311831904',1,'llo::Constant::Constant(const Constant &amp;other)=delete'],['../structllo_1_1_constant.html#af7af5dc56855379dd0da19f1f158fef8',1,'llo::Constant::Constant(Constant &amp;&amp;other)=delete'],['../structllo_1_1_constant.html#a154e21783a14ed4bc2ebaed5751a26fd',1,'llo::Constant::Constant(const char *data, age::_GENERATED_DTYPE dtype, ade::Shape shape)']]],
+  ['constant_2ehpp',['constant.hpp',['../constant_8hpp.html',1,'']]],
+  ['convolution',['convolution',['../namespacello.html#a652364aa1f9f70a86b2fb805f055c7cc',1,'llo']]],
+  ['cos',['cos',['../namespacello.html#a2b2ed816266c3a85f5d1ea013ded16c2',1,'llo']]],
+  ['cortenn',['Cortenn',['../index.html',1,'']]]
 ];

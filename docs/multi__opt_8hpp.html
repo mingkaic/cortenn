@@ -67,6 +67,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">multi_opt.hpp File Reference</div>  </div>
@@ -82,12 +83,11 @@ Include dependency graph for multi_opt.hpp:</div>
 <div class="center"><img src="multi__opt_8hpp__incl.png" border="0" usemap="#llo_2opt_2multi__opt_8hpp" alt=""/></div>
 <map name="llo_2opt_2multi__opt_8hpp" id="llo_2opt_2multi__opt_8hpp">
 <area shape="rect" id="node2" href="const__merge_8hpp.html" title="llo/opt/const_merge.hpp" alt="" coords="183,79,346,104"/>
-<area shape="rect" id="node6" href="ops__merge_8hpp.html" title="llo/opt/ops_merge.hpp" alt="" coords="5,79,159,104"/>
-<area shape="rect" id="node8" href="one__prune_8hpp.html" title="llo/opt/one_prune.hpp" alt="" coords="548,79,698,104"/>
-<area shape="rect" id="node16" href="zero__prune_8hpp.html" title="llo/opt/zero_prune.hpp" alt="" coords="370,79,524,104"/>
-<area shape="rect" id="node3" href="graph__edit_8hpp.html" title="opt/graph_edit.hpp" alt="" coords="309,152,442,177"/>
-<area shape="rect" id="node9" href="variable_8hpp.html" title="llo/variable.hpp" alt="" coords="568,152,679,177"/>
-<area shape="rect" id="node12" href="tensor_8hpp.html" title="llo/tensor.hpp" alt="" coords="697,225,798,251"/>
+<area shape="rect" id="node5" href="ops__merge_8hpp.html" title="llo/opt/ops_merge.hpp" alt="" coords="5,79,159,104"/>
+<area shape="rect" id="node7" href="one__prune_8hpp.html" title="llo/opt/one_prune.hpp" alt="" coords="548,79,698,104"/>
+<area shape="rect" id="node15" href="zero__prune_8hpp.html" title="llo/opt/zero_prune.hpp" alt="" coords="370,79,524,104"/>
+<area shape="rect" id="node8" href="variable_8hpp.html" title="llo/variable.hpp" alt="" coords="542,152,653,177"/>
+<area shape="rect" id="node11" href="tensor_8hpp.html" title="llo/tensor.hpp" alt="" coords="670,225,771,251"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -110,10 +110,15 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespacello"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html">llo</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a5baea0c89ffe9eb6ffa354c77d26eabf"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#a5baea0c89ffe9eb6ffa354c77d26eabf">llo::EditFuncT</a> = std::function&lt; ade::TensptrT(bool &amp;, ade::Opcode &amp;, ade::ArgsT &amp;)&gt;</td></tr>
+<tr class="separator:a5baea0c89ffe9eb6ffa354c77d26eabf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ac6fa6c148b707eb51968e24594431132"><td class="memItemLeft" align="right" valign="top">ade::TensT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#ac6fa6c148b707eb51968e24594431132">llo::multi_optimize</a> (ade::TensT roots, std::vector&lt; <a class="el" href="namespaceopt.html#a7bb437415f677133cd47214458d08caf">opt::EditFuncT</a> &gt; edits={ const_merge_edit, zero_prune_edit, one_prune_edit, ops_merge_edit, })</td></tr>
-<tr class="separator:ac6fa6c148b707eb51968e24594431132"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac56c6042ea69452c7f74d6e0522dd0c1"><td class="memItemLeft" align="right" valign="top">ade::TensT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacello.html#ac56c6042ea69452c7f74d6e0522dd0c1">llo::multi_optimize</a> (ade::TensT roots, std::vector&lt; EditFuncT &gt; edits={ const_merge_edit, zero_prune_edit, one_prune_edit, ops_merge_edit, })</td></tr>
+<tr class="separator:ac56c6042ea69452c7f74d6e0522dd0c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

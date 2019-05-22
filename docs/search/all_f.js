@@ -9,11 +9,8 @@ var searchData=
   ['raw_5fto_5ftensorptr',['raw_to_tensorptr',['../namespacello.html#a63bc089ce3a8444b7f2278e71361f5f4',1,'llo']]],
   ['readme_2emd',['README.md',['../_r_e_a_d_m_e_8md.html',1,'']]],
   ['readme_5fllo_2emd',['README_LLO.md',['../_r_e_a_d_m_e___l_l_o_8md.html',1,'']]],
-  ['readme_5fopt_2emd',['README_OPT.md',['../_r_e_a_d_m_e___o_p_t_8md.html',1,'']]],
-  ['readme_5fpbm_2emd',['README_PBM.md',['../_r_e_a_d_m_e___p_b_m_8md.html',1,'']]],
   ['readme_5fpy_2emd',['README_PY.md',['../_r_e_a_d_m_e___p_y_8md.html',1,'']]],
   ['reduce',['reduce',['../namespacello.html#abdf021d900da5a0822bcfb49315cc1a7',1,'llo']]],
   ['reduce_5f1d',['reduce_1d',['../namespacello.html#ae6906ba9944277db0c7a72cd803a7490',1,'llo']]],
-  ['roots_5f',['roots_',['../structpbm_1_1_graph_info.html#ad415f1f762db303c520b2f88d8b656c4',1,'pbm::GraphInfo']]],
   ['round',['round',['../namespacello.html#a56abed2f8cc56d242f6555501f155fd0',1,'llo']]]
 ];

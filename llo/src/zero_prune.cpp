@@ -22,7 +22,6 @@ static bool const_is_zero (Constant* cst)
 		[](double d) { return 0 == d; });
 }
 
-// todo: change this to target fixed value instead of looking at label
 ade::TensptrT zero_prune_edit (bool& is_optimized,
 	ade::Opcode& opcode, ade::ArgsT& args)
 {
@@ -119,7 +118,21 @@ ade::TensptrT zero_prune_edit (bool& is_optimized,
 
 ade::TensT zero_prune (ade::TensT roots)
 {
-	return opt::graph_edit(roots, zero_prune_edit);
+	return opt::graph_edit(roots,
+		[](ade::Opcode& opcode,
+			ade::ArgsT& args, bool changed) -> ade::TensptrT
+		{
+			bool is_optimized = false;
+			if (auto out = zero_prune_edit(is_optimized, opcode, args))
+			{
+				return out;
+			}
+			if (changed || is_optimized)
+			{
+				return ade::TensptrT(ade::Functor::get(opcode, args));
+			}
+			return nullptr;
+		});
 }
 
 }

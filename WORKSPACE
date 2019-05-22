@@ -5,19 +5,25 @@ workspace(name = "com_github_mingkaic_cortenn")
 load("//:third_party/all.bzl", "dependencies")
 dependencies()
 
-load("@com_github_mingkaic_tenncor//:tenncor.bzl", "dependencies")
+load("@com_github_mingkaic_tenncor//:third_party/all.bzl", "dependencies")
 dependencies()
-
-load("@protobuf_rules//cpp:deps.bzl", "cpp_proto_library")
-cpp_proto_library()
 
 # test dependencies
 
 load("@com_github_mingkaic_cppkg//:gtest.bzl", "gtest_repository")
 gtest_repository(name = "gtest")
 
-git_repository(
-    name = "com_github_google_benchmark",
-    remote = "https://github.com/google/benchmark",
-    commit = "e776aa0275e293707b6a0901e0e8d8a8a3679508",
+load(
+    "@com_github_mingkaic_tenncor//third_party/repos:benchmark.bzl",
+    "benchmark_repository"
 )
+benchmark_repository()
+
+# external dependencies
+
+load("@protobuf_rules//cpp:deps.bzl", "cpp_proto_library", "cpp_grpc_library")
+cpp_proto_library()
+cpp_grpc_library()
+
+load("@com_github_grpc_grpc//bazel:grpc_deps.bzl", "grpc_deps")
+grpc_deps()

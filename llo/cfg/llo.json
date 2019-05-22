@@ -8,7 +8,8 @@
             "\"llo/constant.hpp\"",
             "\"llo/helper.hpp\""
         ],
-        "opmap.hpp": ["\"llo/operator.hpp\""]
+        "opmap.hpp": ["\"llo/operator.hpp\""],
+        "pyapi.cpp": ["\"llo/generated/api.hpp\""]
     },
     "dtypes": {
         "DOUBLE": "double",
@@ -22,11 +23,15 @@
         "INT64": "int64_t",
         "UINT64": "uint64_t"
     },
-    "data": {
-        "sum": "SUM",
-        "data_out": "llo::TensorT<T>&",
-        "data_in": "llo::DataArgsT<T>&",
-        "scalarize": "ade::LeafptrT(llo::Constant::get(scalar,shape))"
+    "signatures": {
+        "data": {
+            "out": "llo::TensorT<T>&",
+            "in": "llo::DataArgsT<T>&"
+        },
+        "grad": {
+            "out": "ade::TensptrT",
+            "in": "ade::FuncArg"
+        }
     },
     "opcodes": {
         "ABS": {
@@ -352,7 +357,7 @@
                 "dtype": "ade::TensT",
                 "name": "arg1"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SUM\",SUM},age::to_args(arg1)))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"SUM\",SUM},ade::to_args(arg1)))"
         },
         {
             "name": "prod",
@@ -360,7 +365,7 @@
                 "dtype": "ade::TensT",
                 "name": "arg1"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"PROD\",PROD},age::to_args(arg1)))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"PROD\",PROD},ade::to_args(arg1)))"
         },
         {
             "name": "min",
@@ -368,7 +373,7 @@
                 "dtype": "ade::TensT",
                 "name": "arg1"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"MIN\",MIN},age::to_args(arg1)))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"MIN\",MIN},ade::to_args(arg1)))"
         },
         {
             "name": "max",
@@ -376,7 +381,7 @@
                 "dtype": "ade::TensT",
                 "name": "arg1"
             }],
-            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"MAX\",MAX},age::to_args(arg1)))"
+            "out": "ade::TensptrT(ade::Functor::get(ade::Opcode{\"MAX\",MAX},ade::to_args(arg1)))"
         },
         {
             "name": "reduce_sum_1d",

@@ -74,7 +74,7 @@ private:
 		std::unordered_map<llo::iVariable*,ade::PathFinder> variables;
 		for (auto& gpair : stat.graphsize_)
 		{
-			if (gpair.second == 0 &&
+			if (gpair.second.upper_ == 0 &&
 				(var = dynamic_cast<llo::iVariable*>(gpair.first)))
 			{
 				if (variables.end() == variables.find(var))

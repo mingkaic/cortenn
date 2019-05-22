@@ -1,4 +1,5 @@
 <map id="llo/serialize.hpp" name="llo/serialize.hpp">
-<area shape="rect" id="node2" href="$variable_8hpp.html" title="llo/variable.hpp" alt="" coords="130,79,241,104"/>
-<area shape="rect" id="node5" href="$tensor_8hpp.html" title="llo/tensor.hpp" alt="" coords="258,152,358,177"/>
+<area shape="rect" id="node5" href="$variable_8hpp.html" title="llo/variable.hpp" alt="" coords="540,79,651,104"/>
+<area shape="rect" id="node12" href="$constant_8hpp.html" title="llo/constant.hpp" alt="" coords="321,79,435,104"/>
+<area shape="rect" id="node8" href="$tensor_8hpp.html" title="llo/tensor.hpp" alt="" coords="737,152,838,177"/>
 </map>

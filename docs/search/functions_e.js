@@ -1,6 +1,13 @@
 var searchData=
 [
-  ['p2cshape',['p2cshape',['../namespacepyllo.html#a6b3db39d1842d7ba7ec3ea39f49566ef',1,'pyllo']]],
-  ['pow',['pow',['../namespacello.html#ab2f11cd76bd54389a8e0d34f25684b0c',1,'llo']]],
-  ['pybind11_5fmodule',['PYBIND11_MODULE',['../llo_8cpp.html#ad2b457d981fbb939599137f6d4b17c04',1,'llo.cpp']]]
+  ['rand_5fnormal',['rand_normal',['../namespacello.html#a7b8a39ae05f5870bdf068ecb0df14cfb',1,'llo']]],
+  ['rand_5fnormal_3c_20double_20_3e',['rand_normal&lt; double &gt;',['../namespacello.html#aea89be880bf535deb25de53dbebbdf6d',1,'llo']]],
+  ['rand_5fnormal_3c_20float_20_3e',['rand_normal&lt; float &gt;',['../namespacello.html#a5854a331d52d5637c35f28b481337a8d',1,'llo']]],
+  ['rand_5funiform',['rand_uniform',['../namespacello.html#a8c69d68630c024d2e32e05572754a5a4',1,'llo']]],
+  ['rand_5funiform_3c_20double_20_3e',['rand_uniform&lt; double &gt;',['../namespacello.html#a9f653ea088f1ee0efea0e7e56cf3bbf2',1,'llo']]],
+  ['rand_5funiform_3c_20float_20_3e',['rand_uniform&lt; float &gt;',['../namespacello.html#abedcbf51d81da53872a7ecd972de8e0c',1,'llo']]],
+  ['raw_5fto_5ftensorptr',['raw_to_tensorptr',['../namespacello.html#a63bc089ce3a8444b7f2278e71361f5f4',1,'llo']]],
+  ['reduce',['reduce',['../namespacello.html#abdf021d900da5a0822bcfb49315cc1a7',1,'llo']]],
+  ['reduce_5f1d',['reduce_1d',['../namespacello.html#ae6906ba9944277db0c7a72cd803a7490',1,'llo']]],
+  ['round',['round',['../namespacello.html#a56abed2f8cc56d242f6555501f155fd0',1,'llo']]]
 ];

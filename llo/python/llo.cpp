@@ -101,22 +101,26 @@ PYBIND11_MODULE(llo, m)
 		.def("evaluate",
 		[](py::object self, py::dtype dtype)
 		{
+			py::array out;
 			char kind = dtype.kind();
 			switch (kind)
 			{
 				case 'f':
 				{
 					auto gdata = llo::eval<double>(self.cast<ade::iTensor*>());
-					return pyllo::typedata_to_array(gdata, dtype);
+					out = pyllo::typedata_to_array(gdata, dtype);
 				}
+					break;
 				case 'i':
 				{
 					auto gdata = llo::eval<int64_t>(self.cast<ade::iTensor*>());
-					return pyllo::typedata_to_array(gdata, dtype);
+					out = pyllo::typedata_to_array(gdata, dtype);
 				}
+					break;
 				default:
 					logs::fatalf("unknown dtype %c", kind);
 			}
+			return out;
 		},
 		"Return calculated data",
 		py::arg("dtype") = py::dtype::of<double>());
@@ -130,6 +134,7 @@ PYBIND11_MODULE(llo, m)
 	m.def("variable",
 	[](py::array data, std::string label) -> std::shared_ptr<llo::iVariable>
 	{
+		std::shared_ptr<llo::iVariable> out;
 		py::buffer_info info = data.request();
 		ade::Shape shape = pyllo::p2cshape(info.shape);
 		size_t n = shape.n_elems();
@@ -144,19 +149,21 @@ PYBIND11_MODULE(llo, m)
 					case 4: // float32
 					{
 						float* dptr = static_cast<float*>(info.ptr);
-						return std::shared_ptr<llo::iVariable>(
+						out = std::shared_ptr<llo::iVariable>(
 							llo::Variable<float>::get(
 								std::vector<float>(dptr, dptr + n),
 								shape, label));
 					}
+						break;
 					case 8: // float64
 					{
 						double* dptr = static_cast<double*>(info.ptr);
-						return std::shared_ptr<llo::iVariable>(
+						out = std::shared_ptr<llo::iVariable>(
 							llo::Variable<double>::get(
 								std::vector<double>(dptr, dptr + n),
 								shape, label));
 					}
+						break;
 					default:
 						logs::fatalf("unsupported float type with %d bytes", tbytes);
 				}
@@ -167,35 +174,39 @@ PYBIND11_MODULE(llo, m)
 					case 1: // int8
 					{
 						int8_t* dptr = static_cast<int8_t*>(info.ptr);
-						return std::shared_ptr<llo::iVariable>(
+						out = std::shared_ptr<llo::iVariable>(
 							llo::Variable<int8_t>::get(
 								std::vector<int8_t>(dptr, dptr + n),
 								shape, label));
 					}
+						break;
 					case 2: // int16
 					{
 						int16_t* dptr = static_cast<int16_t*>(info.ptr);
-						return std::shared_ptr<llo::iVariable>(
+						out = std::shared_ptr<llo::iVariable>(
 							llo::Variable<int16_t>::get(
 								std::vector<int16_t>(dptr, dptr + n),
 								shape, label));
 					}
+						break;
 					case 4: // int32
 					{
 						int32_t* dptr = static_cast<int32_t*>(info.ptr);
-						return std::shared_ptr<llo::iVariable>(
+						out = std::shared_ptr<llo::iVariable>(
 							llo::Variable<int32_t>::get(
 								std::vector<int32_t>(dptr, dptr + n),
 								shape, label));
 					}
+						break;
 					case 8: // int64
 					{
 						int64_t* dptr = static_cast<int64_t*>(info.ptr);
-						return std::shared_ptr<llo::iVariable>(
+						out = std::shared_ptr<llo::iVariable>(
 							llo::Variable<int64_t>::get(
 								std::vector<int64_t>(dptr, dptr + n),
 								shape, label));
 					}
+						break;
 					default:
 						logs::fatalf("unsupported integer type with %d bytes", tbytes);
 				}
@@ -203,6 +214,7 @@ PYBIND11_MODULE(llo, m)
 			default:
 				logs::fatalf("unknown dtype %c", kind);
 		}
+		return out;
 	},
 	"Return labelled variable containing numpy data array");
 

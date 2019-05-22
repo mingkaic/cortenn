@@ -1,6 +1,7 @@
 var searchData=
 [
   ['nbytes',['nbytes',['../structllo_1_1_variable.html#ac50a79df6f7688f202b5ab5381070065',1,'llo::Variable']]],
+  ['need_5fupdate_5f',['need_update_',['../structllo_1_1_cache_space.html#af459ebace5d800b8ed338b7f0a9b2aab',1,'llo::CacheSpace']]],
   ['neg',['neg',['../namespacello.html#a08b1a3a42d568f558e9afaa2910643b3',1,'llo']]],
   ['neg_3c_20uint16_5ft_20_3e',['neg&lt; uint16_t &gt;',['../namespacello.html#a68a7692b1e14c29c8b6cf404273f29d1',1,'llo']]],
   ['neg_3c_20uint32_5ft_20_3e',['neg&lt; uint32_t &gt;',['../namespacello.html#af5073667f5e17c9876fce6234c83399d',1,'llo']]],

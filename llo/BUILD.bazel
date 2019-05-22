@@ -49,6 +49,7 @@ genrule(
         "generated/grader.hpp",
         "generated/grader.cpp",
         "generated/opmap.hpp",
+        "generated/pyapi.hpp",
         "generated/pyapi.cpp",
     ],
     tools = ["//pybinder:pyagen"],
@@ -75,10 +76,11 @@ cc_library(
         "//llo:generated/codes.cpp",
         "//llo:generated/grader.cpp",
     ],
-    copts = ["-std=c++14"],
+    copts = ["-std=c++17"],
     deps = [
-        "//opt:opt",
+        "@com_github_mingkaic_tenncor//opt:opt",
         "@com_github_mingkaic_tenncor//bwd:bwd",
+        "@com_github_mingkaic_tenncor//pbm:pbm",
         "@com_github_eigenteam_eigen//:eigen",
     ],
     visibility = ["//visibility:public"],
@@ -86,7 +88,10 @@ cc_library(
 
 pybind_library(
     name = "age_py",
-    cc_srcs = ["//llo:generated/pyapi.cpp"],
+    cc_srcs = [
+        "//llo:generated/pyapi.hpp",
+        "//llo:generated/pyapi.cpp",
+    ],
     cc_deps = ["//llo:llo"],
 )
 
@@ -103,10 +108,9 @@ pybind_library(
 cc_test(
     name = "ctest",
     srcs = ["//llo:ctest_srcs"],
-    copts = ["-std=c++14"],
+    copts = ["-std=c++17"],
     deps = [
         "//llo:llo",
-        "@com_github_mingkaic_tenncor//dbg:dbg",
         "@com_github_mingkaic_tenncor//testutil:testutil",
     ],
     linkstatic = True,
@@ -127,5 +131,5 @@ cc_binary(
         "//llo:llo",
         "@com_github_google_benchmark//:benchmark",
     ],
-    copts = ["-std=c++14"],
+    copts = ["-std=c++17"],
 )

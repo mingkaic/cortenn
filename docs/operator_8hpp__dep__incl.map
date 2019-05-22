@@ -1,6 +1,7 @@
 <map id="llo/operator.hpp" name="llo/operator.hpp">
 <area shape="rect" id="node2" href="$eval_8hpp.html" title="llo/eval.hpp" alt="" coords="370,79,459,104"/>
 <area shape="rect" id="node9" href="$operator_8cpp.html" title="llo/src/operator.cpp" alt="" coords="484,79,618,104"/>
+<area shape="rect" id="node10" href="$ops__merge_8cpp.html" title="llo/src/ops_merge.cpp" alt="" coords="642,79,793,104"/>
 <area shape="rect" id="node3" href="$llo_8hpp.html" title="llo/llo.hpp" alt="" coords="5,152,83,177"/>
 <area shape="rect" id="node4" href="$llo_8cpp.html" title="llo/python/llo.cpp" alt="" coords="107,152,227,177"/>
 <area shape="rect" id="node5" href="$const__merge_8cpp.html" title="llo/src/const_merge.cpp" alt="" coords="251,152,413,177"/>

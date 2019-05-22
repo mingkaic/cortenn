@@ -15,14 +15,6 @@ This project is a multiplex layer for Tenncor and some data-manipulation library
 This module is implements basic operations for Tenncor's ADE Tensor objects generated through pybinder.
 Additionally, llo also defines data format and (de)serialization methods required by PBM.
 
-- [OPT (Optimizer)](opt/README_OPT.md)
-
-This module specifies graph optimization through ADE's visitor pattern.
-
-- [PBM (Protobuf Marshaller)](pbm/README_PBM.md)
-
-This module marshals any ADE graph, but requires data serialization functors when saving and loading.
-
 - [Pybinder](pybinder/README_PY.md)
 
 This generator extends Tenncor's AGE generator. In this instance, on top of generating the ADE operators specified in LLO, pybinder generates pybind11 binding code.

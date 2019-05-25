@@ -1,0 +1,71 @@
+
+{
+    "includes": {
+        "codes.hpp": [
+            "\"age/test/codes_dep.hpp\""
+        ],
+        "grader.hpp": [
+            "\"age/test/grader_dep.hpp\""
+        ],
+        "opmap.hpp": [
+            "\"age/test/opmap_dep.hpp\""
+        ]
+    },
+    "dtypes": {
+        "SAUSAGES": "Meat",
+        "HASHBROWNS": "Fries"
+    },
+    "signatures": {
+        "data": {
+            "out": "SweetPotato&",
+            "in": "Pomegranate&"
+        },
+        "grad": {
+            "out": "ade::TensptrT",
+            "in": "ade::FuncArg"
+        }
+    },
+    "opcodes": {
+        "EMINEM": {
+            "operation": "knees_weak<T>(in, shape, out)",
+            "derivative": "arms_heavy(idx, args)"
+        },
+        "KHALED": {
+            "operation": "another_one<T>(out, in, shape)",
+            "derivative": "dj_grad(args, idx)"
+        }
+    },
+    "apis": [
+        {
+            "name": "goku",
+            "args": [{
+                "dtype": "size_t",
+                "name": "bardock"
+            }],
+            "out": "cooler(bardock)"
+        },
+        {
+            "name": "vegeta",
+            "args": [{
+                "dtype": "ade::TensptrT",
+                "name": "arg1"
+            }, {
+                "dtype": "uint8_t",
+                "name": "bardock",
+                "default": "5"
+            }],
+            "out": "freeza(arg1, bardock)"
+        },
+        {
+            "name": "vegeta",
+            "args": [{
+                "dtype": "uint8_t",
+                "name": "bardock"
+            }, {
+                "dtype": "ade::TensT",
+                "name": "arrs"
+            }],
+            "out": "freeza(arrs[0], bardock)"
+        }
+    ]
+}

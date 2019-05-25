@@ -90,20 +90,20 @@ Collaboration diagram for llo::LLOLoader:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:adc98257c1146fc5aac912229ce487c52"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_l_l_o_loader.html#adc98257c1146fc5aac912229ce487c52">generate_leaf</a> (const char *pb, ade::Shape shape, size_t typecode, std::string label, bool is_const) override</td></tr>
-<tr class="separator:adc98257c1146fc5aac912229ce487c52"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a006f2994e094c7eff6ce9c72668c3893"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_l_l_o_loader.html#a006f2994e094c7eff6ce9c72668c3893">generate_func</a> (ade::Opcode opcode, ade::ArgsT args) override</td></tr>
-<tr class="separator:a006f2994e094c7eff6ce9c72668c3893"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a453cddb5c5d83bdd93619f385d92076a"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_l_l_o_loader.html#a453cddb5c5d83bdd93619f385d92076a">generate_leaf</a> (const char *pb, ade::Shape shape, std::string typelabel, std::string label, bool is_const) override</td></tr>
+<tr class="separator:a453cddb5c5d83bdd93619f385d92076a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee724ddd409b1bd67ef8d69dbdd6f68b"><td class="memItemLeft" align="right" valign="top">ade::TensptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_l_l_o_loader.html#aee724ddd409b1bd67ef8d69dbdd6f68b">generate_func</a> (std::string opname, ade::ArgsT args) override</td></tr>
+<tr class="separator:aee724ddd409b1bd67ef8d69dbdd6f68b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4847ed16f9a7d88709a50431bb6c1d7"><td class="memItemLeft" align="right" valign="top">ade::CoordptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_l_l_o_loader.html#ae4847ed16f9a7d88709a50431bb6c1d7">generate_shaper</a> (std::vector&lt; double &gt; coord) override</td></tr>
 <tr class="separator:ae4847ed16f9a7d88709a50431bb6c1d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e3f89e4fe94647c1d187a34d7cd2daf"><td class="memItemLeft" align="right" valign="top">ade::CoordptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_l_l_o_loader.html#a3e3f89e4fe94647c1d187a34d7cd2daf">generate_coorder</a> (ade::Opcode opcode, std::vector&lt; double &gt; coord) override</td></tr>
-<tr class="separator:a3e3f89e4fe94647c1d187a34d7cd2daf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a982389f9a0ce38ad1d1c45e9b8646efb"><td class="memItemLeft" align="right" valign="top">ade::CoordptrT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllo_1_1_l_l_o_loader.html#a982389f9a0ce38ad1d1c45e9b8646efb">generate_coorder</a> (std::string opname, std::vector&lt; double &gt; coord) override</td></tr>
+<tr class="separator:a982389f9a0ce38ad1d1c45e9b8646efb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Unmarshal cortenn::Source as <a class="el" href="structllo_1_1_variable.html" title="Leaf node containing data. ">Variable</a> containing context of source. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a3e3f89e4fe94647c1d187a34d7cd2daf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3e3f89e4fe94647c1d187a34d7cd2daf">&#9670;&nbsp;</a></span>generate_coorder()</h2>
+<a id="a982389f9a0ce38ad1d1c45e9b8646efb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a982389f9a0ce38ad1d1c45e9b8646efb">&#9670;&nbsp;</a></span>generate_coorder()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -114,8 +114,8 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">ade::CoordptrT llo::LLOLoader::generate_coorder </td>
           <td>(</td>
-          <td class="paramtype">ade::Opcode&#160;</td>
-          <td class="paramname"><em>opcode</em>, </td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>opname</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -138,8 +138,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a006f2994e094c7eff6ce9c72668c3893"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a006f2994e094c7eff6ce9c72668c3893">&#9670;&nbsp;</a></span>generate_func()</h2>
+<a id="aee724ddd409b1bd67ef8d69dbdd6f68b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee724ddd409b1bd67ef8d69dbdd6f68b">&#9670;&nbsp;</a></span>generate_func()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -150,8 +150,8 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">ade::TensptrT llo::LLOLoader::generate_func </td>
           <td>(</td>
-          <td class="paramtype">ade::Opcode&#160;</td>
-          <td class="paramname"><em>opcode</em>, </td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>opname</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -174,8 +174,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="adc98257c1146fc5aac912229ce487c52"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adc98257c1146fc5aac912229ce487c52">&#9670;&nbsp;</a></span>generate_leaf()</h2>
+<a id="a453cddb5c5d83bdd93619f385d92076a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a453cddb5c5d83bdd93619f385d92076a">&#9670;&nbsp;</a></span>generate_leaf()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -198,8 +198,8 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>typecode</em>, </td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>typelabel</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

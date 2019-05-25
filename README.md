@@ -10,6 +10,14 @@ This project is a multiplex layer for Tenncor and some data-manipulation library
 
 ## Components
 
+- [AGE (ADE Generation Engine)](age/README_AGE.md)
+
+This generator creates glue layer between ADE and data manipulation libraries as well as map operational codes to its respective chain rule.
+
+- [BWD (Backward Operations)](bwd/README_BWD.md)
+
+This library provides traveler for generating partial derivative equations using some set of chain rules.
+
 - [LLO (Low Level Operators)](llo/README_LLO.md)
 
 This module is implements basic operations for Tenncor's ADE Tensor objects generated through pybinder.

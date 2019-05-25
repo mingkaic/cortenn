@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['helper_2ecpp',['helper.cpp',['../helper_8cpp.html',1,'']]],
-  ['helper_2ehpp',['helper.hpp',['../helper_8hpp.html',1,'']]]
+  ['grader_2ecpp',['grader.cpp',['../grader_8cpp.html',1,'']]],
+  ['grader_2ehpp',['grader.hpp',['../grader_8hpp.html',1,'']]]
 ];

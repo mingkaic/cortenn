@@ -7,5 +7,6 @@ var searchData=
   ['shape',['shape',['../structllo_1_1_constant.html#a89e5a7316e33a1a87af266018c3a8ef5',1,'llo::Constant::shape()'],['../structllo_1_1_variable.html#a6b78397a2a7cd0395cd91d798746d59b',1,'llo::Variable::shape()']]],
   ['sin',['sin',['../namespacello.html#ad5e0672afba0a53a2a4fa6cbd4e1df23',1,'llo']]],
   ['sqrt',['sqrt',['../namespacello.html#a7242ee77a10dea84b799bb5a463b4938',1,'llo']]],
-  ['sub',['sub',['../namespacello.html#a25735ae7f72b8255260aa7ff495d7208',1,'llo']]]
+  ['sub',['sub',['../namespacello.html#a25735ae7f72b8255260aa7ff495d7208',1,'llo']]],
+  ['sum_5fopcode',['sum_opcode',['../structage_1_1i_rule_set.html#a5255c4569d7411f5b0f0b58cdc025541',1,'age::iRuleSet']]]
 ];

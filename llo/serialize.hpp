@@ -87,10 +87,10 @@ struct LLOLoader : public pbm::iLoader
 Variable<realtype>::get((realtype*) pb, shape, label));
 
 	ade::TensptrT generate_leaf (const char* pb, ade::Shape shape,
-		size_t typecode, std::string label, bool is_const) override
+		std::string typelabel, std::string label, bool is_const) override
 	{
 		ade::TensptrT out_tens;
-		age::_GENERATED_DTYPE gencode = (age::_GENERATED_DTYPE) typecode;
+		age::_GENERATED_DTYPE gencode = (age::_GENERATED_DTYPE) age::get_type(typelabel);
 		size_t nbytes = age::type_size(gencode);
 		if (is_big_endian() && nbytes > 1)
 		{
@@ -109,7 +109,7 @@ Variable<realtype>::get((realtype*) pb, shape, label));
 			else
 			{
 				pb = out.c_str();
-				TYPE_LOOKUP(_SET_VAL, typecode)
+				TYPE_LOOKUP(_SET_VAL, gencode)
 			}
 		}
 		else if (is_const)
@@ -118,16 +118,16 @@ Variable<realtype>::get((realtype*) pb, shape, label));
 		}
 		else
 		{
-			TYPE_LOOKUP(_SET_VAL, typecode)
+			TYPE_LOOKUP(_SET_VAL, gencode)
 		}
 		return out_tens;
 	}
 
 #undef _SET_VAL
 
-	ade::TensptrT generate_func (ade::Opcode opcode, ade::ArgsT args) override
+	ade::TensptrT generate_func (std::string opname, ade::ArgsT args) override
 	{
-		return ade::TensptrT(ade::Functor::get(opcode, args));
+		return ade::TensptrT(ade::Functor::get(ade::Opcode{opname, age::get_op(opname)}, args));
 	}
 
 	ade::CoordptrT generate_shaper (std::vector<double> coord) override
@@ -150,7 +150,7 @@ Variable<realtype>::get((realtype*) pb, shape, label));
 	}
 
 	ade::CoordptrT generate_coorder (
-		ade::Opcode opcode, std::vector<double> coord) override
+		std::string opname, std::vector<double> coord) override
 	{
 		return generate_shaper(coord);
 	}

@@ -1,5 +1,7 @@
 COVERAGE_INFO_FILE := coverage.info
 
+BWD_TEST := //bwd:test
+
 LLO_CTEST := //llo:ctest
 
 TEST := bazel test
@@ -16,7 +18,10 @@ TMP_LOGFILE := /tmp/cortenn-test.log
 benchmark:
 	bazel run //llo:benchmark
 
-coverage: cover_llo
+coverage: cover_bwd cover_llo
+
+cover_bwd:
+	$(COVER) $(BWD_TEST)
 
 cover_llo:
 	$(COVER) $(LLO_CTEST)
@@ -28,9 +33,17 @@ merge_cov:
 
 lcov: merge_cov coverage
 	rm -f $(TMP_LOGFILE)
+	cat bazel-testlogs/bwd/test/test.log >> $(TMP_LOGFILE)
 	cat bazel-testlogs/llo/ctest/test.log >> $(TMP_LOGFILE)
 	cat $(TMP_LOGFILE) | $(COVERAGE_PIPE)
 	lcov --remove $(COVERAGE_INFO_FILE) $(COVERAGE_IGNORE) -o $(COVERAGE_INFO_FILE)
+	rm -f $(TMP_LOGFILE)
+	lcov --list $(COVERAGE_INFO_FILE)
+
+lcov_bwd: merge_cov cover_bwd
+	rm -f $(TMP_LOGFILE)
+	cat bazel-testlogs/bwd/test/test.log | $(COVERAGE_PIPE)
+	lcov --remove $(COVERAGE_INFO_FILE) $(COVERAGE_IGNORE) 'ade/*' -o $(COVERAGE_INFO_FILE)
 	rm -f $(TMP_LOGFILE)
 	lcov --list $(COVERAGE_INFO_FILE)
 

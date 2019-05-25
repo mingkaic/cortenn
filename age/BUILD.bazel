@@ -1,0 +1,106 @@
+licenses(["notice"])
+
+filegroup(
+    name = "srcs",
+    srcs = glob([
+        "agen.py",
+        "generator/*.py",
+        "templates/*.py",
+    ]) + ["BUILD.bazel"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "ctest_srcs",
+    srcs = glob([
+        "test/*.hpp",
+        "test/*.cpp",
+    ]),
+)
+
+filegroup(
+    name = "ptest_srcs",
+    srcs = glob([
+        "test/*.py",
+    ]),
+)
+
+######### LIBRARIES #########
+
+py_library(
+    name = "age_tmpl",
+    srcs = glob(["templates/*.py"]),
+)
+
+py_library(
+    name = "age_generator",
+    srcs = glob(["plugin/*.py"]),
+    deps = [
+        "//age:age_tmpl",
+        "@com_github_mingkaic_tenncor//gen:gen2",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+######### GENERATOR #########
+
+py_binary(
+    name = "agen",
+    srcs = ["agen.py"],
+    deps = ["//age:age_generator"],
+    visibility = ["//visibility:public"],
+)
+
+######### TEST GEMERATPR #########
+
+py_binary(
+    name = "cagen",
+    srcs = [
+        "test/cagen.py",
+        "test/capi_plugin.py",
+    ],
+    deps = ["//age:age_generator"],
+)
+
+genrule(
+    name = "generated_mock",
+    srcs = ["test/mock.json"],
+    outs = [
+        "generated/api.hpp",
+        "generated/api.cpp",
+        "generated/capi.hpp",
+        "generated/capi.cpp",
+        "generated/codes.hpp",
+        "generated/codes.cpp",
+        "generated/data.hpp",
+        "generated/grader.hpp",
+        "generated/grader.cpp",
+        "generated/opmap.hpp",
+    ],
+    tools = ["//age:cagen"],
+    cmd = "$(location //age:cagen) " +
+        "--cfg $(location :test/mock.json) " +
+        "--out $(@D)/generated " +
+        "--strip_prefix=$$(dirname $(@D))",
+)
+
+######### TEST #########
+
+py_test(
+    name = "ptest",
+    srcs = ["//age:ptest_srcs"],
+    deps = ["//age:age_tmpl"],
+)
+
+cc_test(
+    name = "ctest",
+    srcs = [
+        "//age:ctest_srcs",
+        "//age:generated_mock",
+    ],
+    copts = ["-std=c++17"],
+    deps = [
+        "//bwd:bwd",
+        "@gtest//:gtest",
+    ],
+)

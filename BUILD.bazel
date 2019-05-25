@@ -9,6 +9,8 @@ package(
 filegroup(
     name = "srcs",
     srcs = [
+        "//age:srcs",
+        "//bwd:srcs",
         "//llo:srcs",
         "//pybinder:srcs",
         "BUILD.bazel",

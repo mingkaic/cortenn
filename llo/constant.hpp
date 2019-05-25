@@ -73,6 +73,12 @@ struct Constant final : public ade::iLeaf
 		return dtype_;
 	}
 
+	/// Implementation of iLeaf
+	std::string type_label (void) const override
+	{
+		return age::name_type(dtype_);
+	}
+
 	template <typename T>
 	T at (size_t i) const
 	{

@@ -128,6 +128,12 @@ struct Variable final : public iVariable
 		return age::get_type<T>();
 	}
 
+	/// Implementation of iLeaf
+	std::string type_label (void) const override
+	{
+		return age::name_type(age::get_type<T>());
+	}
+
 	/// Implementation of iVariable
 	void assign (void* input,
 		age::_GENERATED_DTYPE dtype, ade::Shape shape) override

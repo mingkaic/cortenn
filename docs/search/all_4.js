@@ -1,9 +1,10 @@
 var searchData=
 [
-  ['data',['data',['../structllo_1_1_constant.html#ac878069e148c475bed1e5e7a145cc68f',1,'llo::Constant::data(void) override'],['../structllo_1_1_constant.html#af1d48bde9d37c459528bf6dfddf44c8f',1,'llo::Constant::data(void) const override'],['../structllo_1_1_variable.html#a76eaeddc728004ea26f40432335e5f28',1,'llo::Variable::data(void) override'],['../structllo_1_1_variable.html#abc913865227f1041c8faee54486c04e9',1,'llo::Variable::data(void) const override']]],
+  ['data',['data',['../structage_1_1i_rule_set.html#a4e98d8f0dc9192d4ee86ff134bc1e3b3',1,'age::iRuleSet::data()'],['../structllo_1_1_constant.html#ac878069e148c475bed1e5e7a145cc68f',1,'llo::Constant::data(void) override'],['../structllo_1_1_constant.html#af1d48bde9d37c459528bf6dfddf44c8f',1,'llo::Constant::data(void) const override'],['../structllo_1_1_variable.html#a76eaeddc728004ea26f40432335e5f28',1,'llo::Variable::data(void) override'],['../structllo_1_1_variable.html#abc913865227f1041c8faee54486c04e9',1,'llo::Variable::data(void) const override']]],
   ['data_5f',['data_',['../structllo_1_1_constant.html#ac6e29776c55ef07de2407e0024461741',1,'llo::Constant::data_()'],['../structllo_1_1_data_arg.html#aedb8aded65343e67b75fb3ea8038e9e9',1,'llo::DataArg::data_()'],['../structllo_1_1_variable.html#a5f2ea2c6fc159b4cd3be9ed38bc494ae',1,'llo::Variable::data_()']]],
   ['dataarg',['DataArg',['../structllo_1_1_data_arg.html',1,'llo']]],
   ['dataargst',['DataArgsT',['../namespacello.html#a0a19e0c06ff14ec39848072612ed8be0',1,'llo']]],
+  ['derivatives_5f',['derivatives_',['../structage_1_1_grader.html#ae08203140f987f3249debd36cdc1ad72',1,'age::Grader']]],
   ['derive',['derive',['../namespacello.html#a085b001fb98e1ae2f31926f84cac56a0',1,'llo']]],
   ['derive_2ecpp',['derive.cpp',['../derive_8cpp.html',1,'']]],
   ['derive_2ehpp',['derive.hpp',['../derive_8hpp.html',1,'']]],

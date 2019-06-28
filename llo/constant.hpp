@@ -51,8 +51,7 @@ struct Constant final : public ade::iLeaf
 	/// Implementation of iTensor
 	std::string to_string (void) const override
 	{
-		return fmts::to_string(at<double>(0)) +
-			"(" + shape_.to_string() + ")";
+		return fmts::to_string(at<double>(0));
 	}
 
 	/// Implementation of iLeaf
@@ -77,6 +76,11 @@ struct Constant final : public ade::iLeaf
 	std::string type_label (void) const override
 	{
 		return age::name_type(dtype_);
+	}
+
+	virtual size_t nbytes (void) const override
+	{
+		return shape_.n_elems() * age::type_size(dtype_);
 	}
 
 	template <typename T>

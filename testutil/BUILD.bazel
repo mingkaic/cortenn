@@ -1,0 +1,19 @@
+licenses(["notice"])
+
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+######### LIBRARY #########
+
+cc_library(
+    name = "testutil",
+    hdrs = ["common.hpp"],
+    srcs = ["common.cpp"],
+    deps = [
+        "@gtest//:gtest",
+        "@com_github_mingkaic_cppkg//diff:diff",
+        "@com_github_mingkaic_tenncor//dbg:stream_out",
+    ],
+    copts = ["-std=c++17"],
+)

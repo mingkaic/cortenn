@@ -6,6 +6,8 @@
 
 #include "testutil/common.hpp"
 
+#include "exam/exam.hpp"
+
 #include "bwd/grader.hpp"
 
 #include "llo/generated/api.hpp"

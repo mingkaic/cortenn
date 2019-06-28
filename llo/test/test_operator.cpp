@@ -6,6 +6,8 @@
 
 #include "testutil/common.hpp"
 
+#include "exam/exam.hpp"
+
 #include "llo/operator.hpp"
 
 

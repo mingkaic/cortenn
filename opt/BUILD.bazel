@@ -17,15 +17,14 @@ filegroup(
     ]),
 )
 
-######### LIBRARIES #########
+######### LIBRARY #########
 
 cc_library(
-    name = "bwd",
+    name = "opt",
     hdrs = glob(["*.hpp"]),
     srcs = glob(["src/*.cpp"]),
     copts = ["-std=c++17"],
     deps = ["@com_github_mingkaic_tenncor//ade:ade"],
-    linkstatic = True,
     visibility = ["//visibility:public"],
 )
 
@@ -33,11 +32,11 @@ cc_library(
 
 cc_test(
     name = "test",
-    srcs = ["//bwd:test_srcs"],
+    size = "small",
+    srcs = ["//opt:test_srcs"],
     copts = ["-std=c++17"],
     deps = [
-        "//bwd:bwd",
+        "//opt:opt",
         "//testutil:testutil",
-        "@com_github_mingkaic_cppkg//exam:exam",
     ],
 )

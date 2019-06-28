@@ -6,6 +6,8 @@
 
 #include "testutil/common.hpp"
 
+#include "exam/exam.hpp"
+
 #include "llo/variable.hpp"
 #include "llo/eval.hpp"
 

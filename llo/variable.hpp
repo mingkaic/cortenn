@@ -30,7 +30,7 @@ struct iVariable : public ade::iLeaf
 	/// Implementation of iTensor
 	std::string to_string (void) const override
 	{
-		return this->get_label() + "(" + this->shape().to_string() + ")";
+		return this->get_label();
 	}
 };
 
@@ -149,7 +149,7 @@ struct Variable final : public iVariable
 	}
 
 	/// Return number of bytes in data source
-	size_t nbytes (void) const
+	size_t nbytes (void) const override
 	{
 		return sizeof(T) * shape_.n_elems();
 	}
